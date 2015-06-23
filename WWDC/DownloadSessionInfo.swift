@@ -29,6 +29,8 @@ class DownloadSessionInfo: NSObject {
 	private var individualCompletionHandler : (session : WWDCSession) -> Void
     private var sessionInfoCompletionHandler : () -> Void
     
+    private var downloadTasks: [WWDCSession : NSURLSessionDataTask] = [:]
+    
 	init(year: WWDCYear, parsingCompleteHandler:((sessions: [WWDCSession]) -> Void), individualSessionUpdateHandler: ((session: WWDCSession) -> Void), completionHandler: () -> Void) {
         
         self.year = year
@@ -163,9 +165,10 @@ class DownloadSessionInfo: NSObject {
 		let wwdcSessionPage = developerBaseURL+videos2015baseURL+"?id="+wwdcSession.sessionID
 		
 		guard let wwdcSessionPageURL = NSURL(string: wwdcSessionPage) else { return }
-		
-		let urlSession = NSURLSession().dataTaskWithRequest(NSURLRequest(URL: wwdcSessionPageURL)) { [unowned self] (pageData, response, error) -> Void in
+        
+        let urlSessionTask : NSURLSessionDataTask? = NSURLSession.sharedSession().dataTaskWithRequest(NSURLRequest(URL: wwdcSessionPageURL)) { [unowned self] (pageData, response, error) -> Void in
 			
+
 			if let pageData = pageData  {
 				
 				// Debug HMTL For Session Page
@@ -229,7 +232,7 @@ class DownloadSessionInfo: NSObject {
 							
 							dispatch_group_enter(downloadGroup);
 							
-							let codeURLSession = NSURLSession().dataTaskWithURL(NSURL(string: developerBaseURL+link+"/book.json")!) { (jsonData, response, error) -> Void in
+							let codeURLSession = NSURLSession.sharedSession().dataTaskWithURL(NSURL(string: developerBaseURL+link+"/book.json")!) { (jsonData, response, error) -> Void in
 								
 								if let jsonData = jsonData {
 									guard let json = NSString(data: jsonData, encoding: NSUTF8StringEncoding) as? String else { return }
@@ -259,23 +262,32 @@ class DownloadSessionInfo: NSObject {
 					dispatch_group_notify(downloadGroup,dispatch_get_main_queue(),{ [unowned self] in
 							self.fetchFileSizes(wwdcSession) { (success) -> Void in
 								completion(success: true)
+                                
+                                self.downloadTasks[wwdcSession] = nil
 							}
 						})
 				}
 				else {
 					self.fetchFileSizes(wwdcSession) { (success) -> Void in
 						completion(success: true)
+                        
+                        self.downloadTasks[wwdcSession] = nil
+
 					}
 				}
 			}
 			else if let _ = error {
 				print("Failed fetch of Session Info \(wwdcSession.sessionID) - \(wwdcSession.title) - \n \(error)")
 				completion(success: false)
+                
+                self.downloadTasks[wwdcSession] = nil
 			}
-            
+
 		}
+        
+        downloadTasks[wwdcSession] = urlSessionTask
 		
-		urlSession?.resume()
+		urlSessionTask?.resume()
 	}
 	
 	
