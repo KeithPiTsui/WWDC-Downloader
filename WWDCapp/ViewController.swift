@@ -142,7 +142,7 @@ class ViewController: NSViewController, NSURLSessionDelegate, NSURLSessionDataDe
 		
 		myTableView.reloadData()
 		
-		fetchSessionInfoForYear(.WWDC2014)
+		fetchSessionInfoForYear(.WWDC2015)
 	}
 	
 	func fetchSessionInfoForYear(year : WWDCYear) {
