@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		442D010B1B399A9D0081C56C /* FileInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 44776DA81B399950004B9178 /* FileInfo.swift */; };
+		44776DA91B399950004B9178 /* FileInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 44776DA81B399950004B9178 /* FileInfo.swift */; };
 		A90284051B2FBDEA00755CA1 /* DownloadSessionInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = A90284041B2FBDEA00755CA1 /* DownloadSessionInfo.swift */; };
 		A9528F271B34C40E002290D3 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9528F261B34C40E002290D3 /* AppDelegate.swift */; };
 		A9528F291B34C40E002290D3 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9528F281B34C40E002290D3 /* ViewController.swift */; };
@@ -37,6 +39,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		44776DA81B399950004B9178 /* FileInfo.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FileInfo.swift; sourceTree = "<group>"; };
 		A90284041B2FBDEA00755CA1 /* DownloadSessionInfo.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = DownloadSessionInfo.swift; path = WWDC/DownloadSessionInfo.swift; sourceTree = "<group>"; };
 		A9528F241B34C40D002290D3 /* WWDCapp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = WWDCapp.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		A9528F261B34C40E002290D3 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -92,8 +95,8 @@
 				A9528F3E1B34C5D4002290D3 /* WWDCapp-Bridging-Header.h */,
 				A9528F261B34C40E002290D3 /* AppDelegate.swift */,
 				A9528F281B34C40E002290D3 /* ViewController.swift */,
-				A9528F2A1B34C40E002290D3 /* Assets.xcassets */,
 				A9528F2C1B34C40E002290D3 /* Main.storyboard */,
+				A9528F2A1B34C40E002290D3 /* Assets.xcassets */,
 				A9528F2F1B34C40E002290D3 /* Info.plist */,
 			);
 			path = WWDCapp;
@@ -106,6 +109,7 @@
 				A96E4D631B2EB2770030F908 /* WWDCSession.swift */,
 				A9F9BADA1B34689300BEA874 /* BlockWrappers.swift */,
 				A9F9BADB1B34689300BEA874 /* DownloadFileManager.swift */,
+				44776DA81B399950004B9178 /* FileInfo.swift */,
 				A96E4D651B2F62340030F908 /* StringExtras.swift */,
 				A96E4D611B2D44910030F908 /* libxml2.2.dylib */,
 				A983F85A1B2D165A00ED681E /* Hpple */,
@@ -264,6 +268,7 @@
 				A9528F291B34C40E002290D3 /* ViewController.swift in Sources */,
 				A9528F371B34C427002290D3 /* DownloadFileManager.swift in Sources */,
 				A9528F381B34C427002290D3 /* StringExtras.swift in Sources */,
+				442D010B1B399A9D0081C56C /* FileInfo.swift in Sources */,
 				A9528F3D1B34C45D002290D3 /* XPathQuery.m in Sources */,
 				A9528F3C1B34C45D002290D3 /* TFHppleElement.m in Sources */,
 				A9528F3B1B34C45D002290D3 /* TFHpple.m in Sources */,
@@ -281,6 +286,7 @@
 				A983F8581B2D15A700ED681E /* TFHppleElement.m in Sources */,
 				A96E4D661B2F62340030F908 /* StringExtras.swift in Sources */,
 				A96E4D641B2EB2770030F908 /* WWDCSession.swift in Sources */,
+				44776DA91B399950004B9178 /* FileInfo.swift in Sources */,
 				A99B1FEE1B2CC5DD0019067A /* ViewController.swift in Sources */,
 				A983F8591B2D15A700ED681E /* XPathQuery.m in Sources */,
 				A9F9BADD1B34689300BEA874 /* DownloadFileManager.swift in Sources */,

@@ -284,8 +284,8 @@ class DownloadSessionInfo: NSObject {
                             if let hdDownloadLink = link.attributes["href"] as? String {
                                 let file = FileInfo()
                                 file.remoteFileURL = NSURL(string: hdDownloadLink)
-                                file.fileName = sessionID+"-"+title+"-HD.mp4"
-                                file.displayName = sessionID+"-"+title+" HD Video"
+                                file.fileName = cleanSessionID+"-"+title+"-HD.mp4"
+                                file.displayName = cleanSessionID+"-"+title+" HD Video"
                                 guard let directory = wwdcSession.videoDirectory(), let filename = file.fileName  else { return }
                                 file.localFileURL = NSURL(fileURLWithPath: directory.stringByAppendingPathComponent(WWDCSession.sanitizeFileNameString( filename)))
                                 wwdcSession.hdFile = file
@@ -296,8 +296,8 @@ class DownloadSessionInfo: NSObject {
                             if let sdDownloadLink = link.attributes["href"] as? String {
                                 let file = FileInfo()
                                 file.remoteFileURL = NSURL(string: sdDownloadLink)
-                                file.fileName = sessionID+"-"+title+"-SD.mp4"
-                                file.displayName = sessionID+"-"+title+" SD Video"
+                                file.fileName = cleanSessionID+"-"+title+"-SD.mp4"
+                                file.displayName = cleanSessionID+"-"+title+" SD Video"
                                 guard let directory = wwdcSession.videoDirectory(), let filename = file.fileName  else { return }
                                 file.localFileURL = NSURL(fileURLWithPath: directory.stringByAppendingPathComponent(WWDCSession.sanitizeFileNameString( filename)))
                                 wwdcSession.sdFile = file
@@ -308,8 +308,8 @@ class DownloadSessionInfo: NSObject {
                             if let pdfDownloadLink = link.attributes["href"] as? String {
                                 let file = FileInfo()
                                 file.remoteFileURL = NSURL(string: pdfDownloadLink)
-                                file.fileName = sessionID+"-"+title+".pdf"
-                                file.displayName = sessionID+"-"+title+" PDF"
+                                file.fileName = cleanSessionID+"-"+title+".pdf"
+                                file.displayName = cleanSessionID+"-"+title+" PDF"
                                 guard let directory = wwdcSession.pdfDirectory(), let filename = file.fileName  else { return }
                                 file.localFileURL = NSURL(fileURLWithPath: directory.stringByAppendingPathComponent(WWDCSession.sanitizeFileNameString( filename)))
                                 wwdcSession.pdfFile = file

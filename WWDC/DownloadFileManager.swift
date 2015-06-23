@@ -71,11 +71,11 @@ typealias SimpleCompletionHandler = ((success: Bool) -> Void)
         }
 							
         //  Handle Callbacks
-        if let backgroundDownloadHandler = backgroundHandlersForFiles[file] {				// there is a background download available
+        if let backgroundDownloadHandler = backgroundHandlersForFiles[file] {
             backgroundDownloadHandler.addProgressWrapper(progressWrapper)
             backgroundDownloadHandler.addCompletionWrapper(completionWrapper)
         }
-        else {																						// no download at all - create callbacks and start
+        else {
             let callbackWrapper = CallbackWrapper(file: file)
             callbackWrapper.addProgressWrapper(progressWrapper)
             callbackWrapper.addCompletionWrapper(completionWrapper)

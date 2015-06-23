@@ -16,13 +16,13 @@ class ViewController: UIViewController {
         
 		
 	}
-    
+	
     func  downloadPDF(forSessions : Set<WWDCSession> ) {
         
         for wwdcSession in forSessions {
             
             if let file = wwdcSession.pdfFile {
-                
+				
                 let progressWrapper = ProgressWrapper(handler: { (progress) -> Void in
                     
                     

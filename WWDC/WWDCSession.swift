@@ -12,16 +12,6 @@ enum WWDCYear {
     case WWDC2015, WWDC2014
 }
 
-class FileInfo : NSObject {
-    
-    var remoteFileURL : NSURL?
-    var localFileURL : NSURL?
-    
-    var displayName : String?
-    var fileSize : Int?
-    var fileName : String?
-}
-
 func ==(lhs: WWDCSession, rhs: WWDCSession)-> Bool {
     return lhs.title == rhs.title && lhs.sessionID == rhs.sessionID
 }
