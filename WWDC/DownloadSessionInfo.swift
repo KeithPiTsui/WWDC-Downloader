@@ -10,6 +10,10 @@ let developerBaseURL = "https://developer.apple.com"
 
 let videos2015baseURL = "/videos/wwdc/2015/"
 let videos2014baseURL = "/videos/wwdc/2014/"
+let videos2013baseURL = "/videos/wwdc/2013/"
+let videos2012baseURL = "/videos/wwdc/2012/"
+let videos2011baseURL = "/videos/wwdc/2011/"
+let videos2010baseURL = "/videos/wwdc/2010/"
 
 import Foundation
 
@@ -41,9 +45,16 @@ class DownloadSessionInfo: NSObject {
         switch year {
             case .WWDC2015:
                videoURLString = NSURL(string:developerBaseURL+videos2015baseURL)
-            
             case .WWDC2014:
                 videoURLString = NSURL(string:developerBaseURL+videos2014baseURL)
+            case .WWDC2013:
+                videoURLString = NSURL(string:developerBaseURL+videos2013baseURL)
+            case .WWDC2012:
+                videoURLString = NSURL(string:developerBaseURL+videos2012baseURL)
+            case .WWDC2011:
+                videoURLString = NSURL(string:developerBaseURL+videos2011baseURL)
+            case .WWDC2010:
+                videoURLString = NSURL(string:developerBaseURL+videos2010baseURL)
         }
         
         if let videoURLString = videoURLString {
@@ -71,6 +82,14 @@ class DownloadSessionInfo: NSObject {
                 case .WWDC2015:
                     parse2015Doc(doc)
                 case .WWDC2014:
+                    parse2014Doc(doc)
+                case .WWDC2013:
+                    parse2014Doc(doc)
+                case .WWDC2012:
+                    parse2014Doc(doc)
+                case .WWDC2011:
+                    parse2014Doc(doc)
+                case .WWDC2010:
                     parse2014Doc(doc)
             }
             
@@ -114,7 +133,7 @@ class DownloadSessionInfo: NSObject {
         
         print("Finished Parsing Main Page\(year)")
 		
-		self.parsingCompletionHandler(sessions: wwdcSessions)
+		parsingCompletionHandler(sessions: wwdcSessions)
 		
 		print("Fetching Session Info in \(year)...")
 		
@@ -124,7 +143,7 @@ class DownloadSessionInfo: NSObject {
 			
 			dispatch_group_enter(sessionGroup);
 			
-			self.parseAndFetchSession2015(wwdcSession) { [unowned self] (success) -> Void in
+			parseAndFetchSession2015(wwdcSession) { [unowned self] (success) -> Void in
 				
 				self.individualCompletionHandler(session: wwdcSession)
 				
@@ -141,11 +160,11 @@ class DownloadSessionInfo: NSObject {
 	
 	private func parseAndFetchSession2015 (wwdcSession : WWDCSession, completion: (success: Bool) -> Void) {
 		
-		let wwdcSessionPage = developerBaseURL+videos2015baseURL+"/?id="+wwdcSession.sessionID
+		let wwdcSessionPage = developerBaseURL+videos2015baseURL+"?id="+wwdcSession.sessionID
 		
 		guard let wwdcSessionPageURL = NSURL(string: wwdcSessionPage) else { return }
 		
-		let urlSession = NSURLSession().dataTaskWithURL(wwdcSessionPageURL) { [unowned self] (pageData, response, error) -> Void in
+		let urlSession = NSURLSession().dataTaskWithRequest(NSURLRequest(URL: wwdcSessionPageURL)) { [unowned self] (pageData, response, error) -> Void in
 			
 			if let pageData = pageData  {
 				
@@ -253,6 +272,7 @@ class DownloadSessionInfo: NSObject {
 				print("Failed fetch of Session Info \(wwdcSession.sessionID) - \(wwdcSession.title) - \n \(error)")
 				completion(success: false)
 			}
+            
 		}
 		
 		urlSession?.resume()
@@ -356,6 +376,8 @@ class DownloadSessionInfo: NSObject {
 			self.sessionInfoCompletionHandler()
 		})
     }
+    
+    
 	
 	
 	// MARK: - FileSize

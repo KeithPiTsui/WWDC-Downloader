@@ -50,12 +50,24 @@ class ViewController: NSViewController, NSURLSessionDelegate, NSURLSessionDataDe
 		allWWDCSessionsArray.removeAll()
 		myTableView.reloadData()
 
-		if sender.selectedItem?.title == "2015" {
-			fetchSessionInfoForYear(.WWDC2015)
-		}
-		else if sender.selectedItem?.title == "2014" {
-			fetchSessionInfoForYear(.WWDC2014)
-		}
+        guard let title = sender.selectedItem?.title else { return }
+        
+        switch title {
+            case "2015":
+                fetchSessionInfoForYear(.WWDC2015)
+            case "2014":
+                fetchSessionInfoForYear(.WWDC2014)
+            case "2013":
+                fetchSessionInfoForYear(.WWDC2013)
+            case "2012":
+                fetchSessionInfoForYear(.WWDC2012)
+            case "2011":
+                fetchSessionInfoForYear(.WWDC2011)
+            case "2010":
+                fetchSessionInfoForYear(.WWDC2010)
+            default:
+                fetchSessionInfoForYear(.WWDC2015)
+        }
 	}
 	
 	@IBAction func selectDefinition(sender: NSSegmentedControl) {
@@ -130,7 +142,7 @@ class ViewController: NSViewController, NSURLSessionDelegate, NSURLSessionDataDe
 		
 		myTableView.reloadData()
 		
-		fetchSessionInfoForYear(.WWDC2014)
+		fetchSessionInfoForYear(.WWDC2015)
 	}
 	
 	func fetchSessionInfoForYear(year : WWDCYear) {
