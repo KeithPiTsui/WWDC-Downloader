@@ -16,16 +16,22 @@ import Foundation
 class DownloadSessionInfo: NSObject {
     
     // MARK: Initialization
-    
+	
+	var wwdcSessions : [WWDCSession] = []
+	
     private let year : WWDCYear
+	
+	private var parsingCompletionHandler : (sessions: [WWDCSession]) -> Void
+	private var individualCompletionHandler : (session : WWDCSession) -> Void
+    private var sessionInfoCompletionHandler : () -> Void
     
-    private var sessionInfoCompletionHandler : (sessions: Set<WWDCSession>) -> Void
-    
-    init(year: WWDCYear, completionHandler: (sessions: Set<WWDCSession>) -> Void) {
+	init(year: WWDCYear, parsingCompleteHandler:((sessions: [WWDCSession]) -> Void), individualSessionUpdateHandler: ((session: WWDCSession) -> Void), completionHandler: () -> Void) {
         
         self.year = year
+		self.parsingCompletionHandler = parsingCompleteHandler
+		self.individualCompletionHandler = individualSessionUpdateHandler
         self.sessionInfoCompletionHandler = completionHandler
-        
+	
         super.init()
         
         print("Downloading Main Page for \(year)...")
@@ -85,9 +91,6 @@ class DownloadSessionInfo: NSObject {
     
         // find sections
         let sections : [TFHppleElement] = doc.searchWithXPathQuery("//*[@class='inner_v_section']") as! [TFHppleElement]
-        
-        // Create Set of WWDCSession items
-        var wwdcSessionsSet = Set<WWDCSession>()
 		
 		print("Started Parsing Main Page\(year)...")
 
@@ -102,22 +105,29 @@ class DownloadSessionInfo: NSObject {
                     
                     let sessionID = sessionIDLink.stringByReplacingOccurrencesOfString("?id=", withString: "")
                     
-                    wwdcSessionsSet.insert(WWDCSession(sessionID: sessionID, title: sessionTitle, year: .WWDC2015))
+                    wwdcSessions.append(WWDCSession(sessionID: sessionID, title: sessionTitle, year: .WWDC2015))
                 }
             }
         }
+		
+		wwdcSessions.sortInPlace { ($1.sessionID > $0.sessionID) }
         
         print("Finished Parsing Main Page\(year)")
+		
+		self.parsingCompletionHandler(sessions: wwdcSessions)
 		
 		print("Fetching Session Info in \(year)...")
 		
 		let sessionGroup = dispatch_group_create();
 		
-		for wwdcSession in wwdcSessionsSet {
+		for wwdcSession in wwdcSessions {
 			
 			dispatch_group_enter(sessionGroup);
 			
-			self.parseAndFetchSession2015(wwdcSession) { (success) -> Void in
+			self.parseAndFetchSession2015(wwdcSession) { [unowned self] (success) -> Void in
+				
+				self.individualCompletionHandler(session: wwdcSession)
+				
 				dispatch_group_leave(sessionGroup)
 			}
 		}
@@ -125,7 +135,7 @@ class DownloadSessionInfo: NSObject {
 		dispatch_group_notify(sessionGroup,dispatch_get_main_queue(),{ [unowned self] in
 			
 				print("Finished All Session Info in \(self.year)")
-				self.sessionInfoCompletionHandler(sessions: wwdcSessionsSet)
+				self.sessionInfoCompletionHandler()
 			})
 	}
 	
@@ -255,10 +265,6 @@ class DownloadSessionInfo: NSObject {
         
         // find sections
         let sessionSections : [TFHppleElement] = doc.searchWithXPathQuery("//*[@class='session']") as! [TFHppleElement]
-        
-        // Create Set of WWDCSession items
-        var wwdcSessionsSet = Set<WWDCSession>()
-		
 		
 		print("Started Parsing \(year)...")
 
@@ -318,21 +324,28 @@ class DownloadSessionInfo: NSObject {
                     }
                 }
                 
-                wwdcSessionsSet.insert(wwdcSession)
+                wwdcSessions.append(wwdcSession)
             }
         }
-        
+		
+		wwdcSessions.sortInPlace { ($1.sessionID > $0.sessionID) }
+
         print("Finished Parsing \(year)")
 		
+		self.parsingCompletionHandler(sessions: wwdcSessions)
+
 		print("Fetching File Sizes for Sessions in \(year)...")
 		
 		let fileSizeGroup = dispatch_group_create();
 
-		for wwdcSession in wwdcSessionsSet {
+		for wwdcSession in wwdcSessions {
 			
 			dispatch_group_enter(fileSizeGroup);
 
 			self.fetchFileSizes(wwdcSession) { (success) -> Void in
+				
+				self.individualCompletionHandler(session: wwdcSession)
+
 				dispatch_group_leave(fileSizeGroup)
 			}
 		}
@@ -340,7 +353,7 @@ class DownloadSessionInfo: NSObject {
 		dispatch_group_notify(fileSizeGroup,dispatch_get_main_queue(),{ [unowned self] in
 			
 			print("Finished File Sizes in \(self.year)")
-			self.sessionInfoCompletionHandler(sessions: wwdcSessionsSet)
+			self.sessionInfoCompletionHandler()
 		})
     }
 	

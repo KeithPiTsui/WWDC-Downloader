@@ -47,28 +47,13 @@ typealias SimpleCompletionHandler = ((success: Bool) -> Void)
         // Check if it exists locally
 		if fileExistsLocallyForFile(file) {
 
-            if let url = file.localFileURL {
-                do {
-                    if let path = url.path {
-                        let fileAttributes = try NSFileManager.defaultManager().attributesOfItemAtPath(path)
-                        if let size = fileAttributes["NSFileSize"] as? Int {
-                            if size == file.fileSize {
-                                print("Already Downloaded! - \(file.displayName!)")
-                                
-                                if let completionWrapper = completionWrapper {
-                                    completionWrapper.execute(true)
-                                }
-                                return
-                            }
-                        }
-                    }
-                }
-                catch {
-                    print(error)
-                    return
-                }
-            }
-        }
+			if file.isFileAlreadyDownloaded {
+				if let completionWrapper = completionWrapper {
+					completionWrapper.execute(true)
+				}
+				return
+			}
+		}
 							
         //  Handle Callbacks
         if let backgroundDownloadHandler = backgroundHandlersForFiles[file] {
