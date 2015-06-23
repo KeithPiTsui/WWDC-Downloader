@@ -7,13 +7,12 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		A90284051B2FBDEA00755CA1 /* DownloadStartPageOperation.swift in Sources */ = {isa = PBXBuildFile; fileRef = A90284041B2FBDEA00755CA1 /* DownloadStartPageOperation.swift */; };
+		A90284051B2FBDEA00755CA1 /* DownloadSessionInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = A90284041B2FBDEA00755CA1 /* DownloadSessionInfo.swift */; };
 		A9528F271B34C40E002290D3 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9528F261B34C40E002290D3 /* AppDelegate.swift */; };
 		A9528F291B34C40E002290D3 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9528F281B34C40E002290D3 /* ViewController.swift */; };
 		A9528F2B1B34C40E002290D3 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = A9528F2A1B34C40E002290D3 /* Assets.xcassets */; };
 		A9528F2E1B34C40E002290D3 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = A9528F2C1B34C40E002290D3 /* Main.storyboard */; };
-		A9528F331B34C427002290D3 /* GetSessionInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9F9BAD61B31DDD500BEA874 /* GetSessionInfo.swift */; };
-		A9528F341B34C427002290D3 /* DownloadStartPageOperation.swift in Sources */ = {isa = PBXBuildFile; fileRef = A90284041B2FBDEA00755CA1 /* DownloadStartPageOperation.swift */; };
+		A9528F341B34C427002290D3 /* DownloadSessionInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = A90284041B2FBDEA00755CA1 /* DownloadSessionInfo.swift */; };
 		A9528F351B34C427002290D3 /* WWDCSession.swift in Sources */ = {isa = PBXBuildFile; fileRef = A96E4D631B2EB2770030F908 /* WWDCSession.swift */; };
 		A9528F361B34C427002290D3 /* BlockWrappers.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9F9BADA1B34689300BEA874 /* BlockWrappers.swift */; };
 		A9528F371B34C427002290D3 /* DownloadFileManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9F9BADB1B34689300BEA874 /* DownloadFileManager.swift */; };
@@ -33,13 +32,12 @@
 		A99B1FF11B2CC5DD0019067A /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = A99B1FEF1B2CC5DD0019067A /* Main.storyboard */; };
 		A99B1FF31B2CC5DD0019067A /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = A99B1FF21B2CC5DD0019067A /* Assets.xcassets */; };
 		A99B1FF61B2CC5DD0019067A /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = A99B1FF41B2CC5DD0019067A /* LaunchScreen.storyboard */; };
-		A9F9BAD71B31DDD500BEA874 /* GetSessionInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9F9BAD61B31DDD500BEA874 /* GetSessionInfo.swift */; };
 		A9F9BADC1B34689300BEA874 /* BlockWrappers.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9F9BADA1B34689300BEA874 /* BlockWrappers.swift */; };
 		A9F9BADD1B34689300BEA874 /* DownloadFileManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9F9BADB1B34689300BEA874 /* DownloadFileManager.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		A90284041B2FBDEA00755CA1 /* DownloadStartPageOperation.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = DownloadStartPageOperation.swift; path = WWDC/DownloadStartPageOperation.swift; sourceTree = "<group>"; };
+		A90284041B2FBDEA00755CA1 /* DownloadSessionInfo.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = DownloadSessionInfo.swift; path = WWDC/DownloadSessionInfo.swift; sourceTree = "<group>"; };
 		A9528F241B34C40D002290D3 /* WWDCapp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = WWDCapp.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		A9528F261B34C40E002290D3 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		A9528F281B34C40E002290D3 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
@@ -64,7 +62,6 @@
 		A99B1FF21B2CC5DD0019067A /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		A99B1FF51B2CC5DD0019067A /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		A99B1FF71B2CC5DD0019067A /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		A9F9BAD61B31DDD500BEA874 /* GetSessionInfo.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = GetSessionInfo.swift; path = WWDC/GetSessionInfo.swift; sourceTree = "<group>"; };
 		A9F9BADA1B34689300BEA874 /* BlockWrappers.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = BlockWrappers.swift; path = WWDC/BlockWrappers.swift; sourceTree = "<group>"; };
 		A9F9BADB1B34689300BEA874 /* DownloadFileManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = DownloadFileManager.swift; path = WWDC/DownloadFileManager.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -105,8 +102,7 @@
 		A9528F391B34C42E002290D3 /* Common */ = {
 			isa = PBXGroup;
 			children = (
-				A9F9BAD61B31DDD500BEA874 /* GetSessionInfo.swift */,
-				A90284041B2FBDEA00755CA1 /* DownloadStartPageOperation.swift */,
+				A90284041B2FBDEA00755CA1 /* DownloadSessionInfo.swift */,
 				A96E4D631B2EB2770030F908 /* WWDCSession.swift */,
 				A9F9BADA1B34689300BEA874 /* BlockWrappers.swift */,
 				A9F9BADB1B34689300BEA874 /* DownloadFileManager.swift */,
@@ -267,14 +263,13 @@
 			files = (
 				A9528F291B34C40E002290D3 /* ViewController.swift in Sources */,
 				A9528F371B34C427002290D3 /* DownloadFileManager.swift in Sources */,
-				A9528F331B34C427002290D3 /* GetSessionInfo.swift in Sources */,
 				A9528F381B34C427002290D3 /* StringExtras.swift in Sources */,
 				A9528F3D1B34C45D002290D3 /* XPathQuery.m in Sources */,
 				A9528F3C1B34C45D002290D3 /* TFHppleElement.m in Sources */,
 				A9528F3B1B34C45D002290D3 /* TFHpple.m in Sources */,
 				A9528F351B34C427002290D3 /* WWDCSession.swift in Sources */,
 				A9528F361B34C427002290D3 /* BlockWrappers.swift in Sources */,
-				A9528F341B34C427002290D3 /* DownloadStartPageOperation.swift in Sources */,
+				A9528F341B34C427002290D3 /* DownloadSessionInfo.swift in Sources */,
 				A9528F271B34C40E002290D3 /* AppDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -286,14 +281,13 @@
 				A983F8581B2D15A700ED681E /* TFHppleElement.m in Sources */,
 				A96E4D661B2F62340030F908 /* StringExtras.swift in Sources */,
 				A96E4D641B2EB2770030F908 /* WWDCSession.swift in Sources */,
-				A9F9BAD71B31DDD500BEA874 /* GetSessionInfo.swift in Sources */,
 				A99B1FEE1B2CC5DD0019067A /* ViewController.swift in Sources */,
 				A983F8591B2D15A700ED681E /* XPathQuery.m in Sources */,
 				A9F9BADD1B34689300BEA874 /* DownloadFileManager.swift in Sources */,
 				A9F9BADC1B34689300BEA874 /* BlockWrappers.swift in Sources */,
 				A983F8571B2D15A700ED681E /* TFHpple.m in Sources */,
 				A99B1FEC1B2CC5DD0019067A /* AppDelegate.swift in Sources */,
-				A90284051B2FBDEA00755CA1 /* DownloadStartPageOperation.swift in Sources */,
+				A90284051B2FBDEA00755CA1 /* DownloadSessionInfo.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

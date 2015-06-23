@@ -9,25 +9,13 @@
 import UIKit
 
 class ViewController: UIViewController {
-    
-    var sessionFetch : GetSessionInfo?
-    
+	
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view, typically from a nib.
         
-        sessionFetch = GetSessionInfo()
-        
-        if let sessionFetch = sessionFetch {
-            
-            sessionFetch.fetchSessionInfo(.WWDC2014) { [unowned self] (sessions) -> Void in
-                                
-                print ("Count of Sessions with Info - \(sessions.count)")
-                
-                self.downloadPDF(sessions)
-            }
-        }
-    }
+		
+	}
     
     func  downloadPDF(forSessions : Set<WWDCSession> ) {
         

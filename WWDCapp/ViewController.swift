@@ -10,23 +10,19 @@ import Cocoa
 
 class ViewController: NSViewController, NSURLSessionDelegate, NSURLSessionDataDelegate {
 
-    var sessionFetch : GetSessionInfo?
+	var allWWDCSessionsSet : Set<WWDCSession> = []
+
+	private var downloadSessionInfo : DownloadSessionInfo?
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        
-        sessionFetch = GetSessionInfo()
-
-        if let sessionFetch = sessionFetch {
-            
-            sessionFetch.fetchSessionInfo(.WWDC2015) { [unowned self] (sessions) -> Void in
-                
-                print ("Count of Sessions with Info - \(sessions.count)")
-                
-                self.downloadCodeSamples(sessions)
-            }
-        }
-    }
+		
+		downloadSessionInfo = DownloadSessionInfo(year: .WWDC2014, completionHandler: { (sessions) -> Void in
+			
+			print("ALL INFO DOWNLOADED")
+			self.allWWDCSessionsSet = sessions
+		})
+	}
     
     func  downloadPDF(forSessions : Set<WWDCSession> ) {
         
