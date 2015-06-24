@@ -654,10 +654,10 @@
                     <window key="window" title="WWDC Downloader" allowsToolTipsWhenApplicationIsInactive="NO" autorecalculatesKeyViewLoop="NO" oneShot="NO" releasedWhenClosed="NO" showsToolbarButton="NO" visibleAtLaunch="NO" animationBehavior="default" id="IQv-IB-iLA">
                         <windowStyleMask key="styleMask" titled="YES" closable="YES" miniaturizable="YES" resizable="YES"/>
                         <windowPositionMask key="initialPositionMask" leftStrut="YES" rightStrut="YES" topStrut="YES" bottomStrut="YES"/>
-                        <rect key="contentRect" x="396" y="216" width="900" height="620"/>
+                        <rect key="contentRect" x="396" y="216" width="930" height="620"/>
                         <rect key="screenRect" x="0.0" y="0.0" width="1680" height="1027"/>
-                        <value key="minSize" type="size" width="900" height="620"/>
-                        <value key="maxSize" type="size" width="900" height="620"/>
+                        <value key="minSize" type="size" width="930" height="620"/>
+                        <value key="maxSize" type="size" width="930" height="620"/>
                     </window>
                     <connections>
                         <segue destination="XfG-lQ-9wD" kind="relationship" relationship="window.shadowedContentViewController" id="cq2-FE-JQM"/>
@@ -672,239 +672,11 @@
             <objects>
                 <viewController id="XfG-lQ-9wD" customClass="ViewController" customModule="WWDCapp" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" id="m2S-Jp-Qdl">
-                        <rect key="frame" x="0.0" y="0.0" width="900" height="620"/>
+                        <rect key="frame" x="0.0" y="0.0" width="930" height="620"/>
                         <autoresizingMask key="autoresizingMask"/>
                         <subviews>
-                            <scrollView fixedFrame="YES" borderType="line" autohidesScrollers="YES" horizontalLineScroll="32" horizontalPageScroll="10" verticalLineScroll="32" verticalPageScroll="10" usesPredominantAxisScrolling="NO" translatesAutoresizingMaskIntoConstraints="NO" id="DUe-MO-CLA">
-                                <rect key="frame" x="20" y="64" width="860" height="480"/>
-                                <clipView key="contentView" ambiguous="YES" id="Hod-g6-9bx">
-                                    <rect key="frame" x="1" y="1" width="858" height="478"/>
-                                    <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                                    <subviews>
-                                        <tableView verticalHuggingPriority="750" allowsExpansionToolTips="YES" columnAutoresizingStyle="lastColumnOnly" alternatingRowBackgroundColors="YES" columnReordering="NO" columnSelection="YES" columnResizing="NO" multipleSelection="NO" autosaveColumns="NO" rowHeight="30" headerView="LOs-0v-cVF" viewBased="YES" id="SSh-0R-MKF">
-                                            <rect key="frame" x="0.0" y="0.0" width="858" height="455"/>
-                                            <autoresizingMask key="autoresizingMask"/>
-                                            <animations/>
-                                            <size key="intercellSpacing" width="3" height="2"/>
-                                            <color key="backgroundColor" name="controlBackgroundColor" catalog="System" colorSpace="catalog"/>
-                                            <color key="gridColor" name="gridColor" catalog="System" colorSpace="catalog"/>
-                                            <tableColumns>
-                                                <tableColumn identifier="sessionID" width="70" minWidth="40" maxWidth="1000" id="4RA-pQ-ZoD">
-                                                    <tableHeaderCell key="headerCell" lineBreakMode="truncatingTail" borderStyle="border" title="Session No">
-                                                        <font key="font" metaFont="smallSystem"/>
-                                                        <color key="textColor" name="headerTextColor" catalog="System" colorSpace="catalog"/>
-                                                        <color key="backgroundColor" name="headerColor" catalog="System" colorSpace="catalog"/>
-                                                    </tableHeaderCell>
-                                                    <textFieldCell key="dataCell" lineBreakMode="truncatingTail" selectable="YES" editable="YES" title="Text Cell" id="yan-4t-ab9">
-                                                        <font key="font" metaFont="system"/>
-                                                        <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
-                                                        <color key="backgroundColor" name="controlBackgroundColor" catalog="System" colorSpace="catalog"/>
-                                                    </textFieldCell>
-                                                    <tableColumnResizingMask key="resizingMask" resizeWithTable="YES" userResizable="YES"/>
-                                                    <prototypeCellViews>
-                                                        <tableCellView identifier="sessionID" id="I6T-jp-6sv">
-                                                            <rect key="frame" x="1" y="1" width="70" height="30"/>
-                                                            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                                                            <subviews>
-                                                                <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="y3w-TZ-YZi">
-                                                                    <rect key="frame" x="0.0" y="0.0" width="69" height="24"/>
-                                                                    <animations/>
-                                                                    <textFieldCell key="cell" lineBreakMode="truncatingTail" sendsActionOnEndEditing="YES" alignment="center" title="Table View Cell" id="erZ-ME-7Gm">
-                                                                        <font key="font" metaFont="system"/>
-                                                                        <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
-                                                                        <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
-                                                                    </textFieldCell>
-                                                                </textField>
-                                                            </subviews>
-                                                            <animations/>
-                                                            <connections>
-                                                                <outlet property="textField" destination="y3w-TZ-YZi" id="uNZ-ZM-GAg"/>
-                                                            </connections>
-                                                        </tableCellView>
-                                                    </prototypeCellViews>
-                                                </tableColumn>
-                                                <tableColumn identifier="sessionName" width="455" minWidth="40" maxWidth="1000" id="nmD-aK-RqL">
-                                                    <tableHeaderCell key="headerCell" lineBreakMode="truncatingTail" borderStyle="border" title="Session Name">
-                                                        <font key="font" metaFont="smallSystem"/>
-                                                        <color key="textColor" name="headerTextColor" catalog="System" colorSpace="catalog"/>
-                                                        <color key="backgroundColor" name="headerColor" catalog="System" colorSpace="catalog"/>
-                                                    </tableHeaderCell>
-                                                    <textFieldCell key="dataCell" lineBreakMode="truncatingTail" selectable="YES" editable="YES" title="Text Cell" id="n1n-xb-uRU">
-                                                        <font key="font" metaFont="system"/>
-                                                        <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
-                                                        <color key="backgroundColor" name="controlBackgroundColor" catalog="System" colorSpace="catalog"/>
-                                                    </textFieldCell>
-                                                    <tableColumnResizingMask key="resizingMask" resizeWithTable="YES" userResizable="YES"/>
-                                                    <prototypeCellViews>
-                                                        <tableCellView identifier="sessionName" id="AR7-Tv-V89">
-                                                            <rect key="frame" x="74" y="1" width="455" height="30"/>
-                                                            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                                                            <subviews>
-                                                                <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Vfc-ab-Dsz">
-                                                                    <rect key="frame" x="0.0" y="0.0" width="421" height="24"/>
-                                                                    <animations/>
-                                                                    <textFieldCell key="cell" lineBreakMode="truncatingTail" sendsActionOnEndEditing="YES" title="Table View Cell" id="8aE-sP-WBQ">
-                                                                        <font key="font" metaFont="system"/>
-                                                                        <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
-                                                                        <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
-                                                                    </textFieldCell>
-                                                                </textField>
-                                                            </subviews>
-                                                            <animations/>
-                                                            <connections>
-                                                                <outlet property="textField" destination="Vfc-ab-Dsz" id="IyL-Iv-lMN"/>
-                                                            </connections>
-                                                        </tableCellView>
-                                                    </prototypeCellViews>
-                                                </tableColumn>
-                                                <tableColumn identifier="PDF" width="100" minWidth="40" maxWidth="1000" id="XEI-zc-Be8">
-                                                    <tableHeaderCell key="headerCell" lineBreakMode="truncatingTail" borderStyle="border" title="PDF">
-                                                        <font key="font" metaFont="smallSystem"/>
-                                                        <color key="textColor" name="headerTextColor" catalog="System" colorSpace="catalog"/>
-                                                        <color key="backgroundColor" name="headerColor" catalog="System" colorSpace="catalog"/>
-                                                    </tableHeaderCell>
-                                                    <textFieldCell key="dataCell" lineBreakMode="truncatingTail" selectable="YES" editable="YES" title="Text Cell" id="9z8-22-0nQ">
-                                                        <font key="font" metaFont="system"/>
-                                                        <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
-                                                        <color key="backgroundColor" name="controlBackgroundColor" catalog="System" colorSpace="catalog"/>
-                                                    </textFieldCell>
-                                                    <tableColumnResizingMask key="resizingMask" resizeWithTable="YES" userResizable="YES"/>
-                                                    <prototypeCellViews>
-                                                        <tableCellView identifier="PDF" id="XN5-Bl-Ag6" customClass="OneCheckBoxTableViewCell" customModule="WWDCapp" customModuleProvider="target">
-                                                            <rect key="frame" x="532" y="1" width="100" height="30"/>
-                                                            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                                                            <subviews>
-                                                                <button fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="je1-LR-Pjn">
-                                                                    <rect key="frame" x="41" y="11" width="18" height="18"/>
-                                                                    <animations/>
-                                                                    <buttonCell key="cell" type="check" bezelStyle="regularSquare" imagePosition="left" state="on" inset="2" id="Ezl-Vb-mpm">
-                                                                        <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
-                                                                        <font key="font" metaFont="system"/>
-                                                                    </buttonCell>
-                                                                </button>
-                                                                <progressIndicator wantsLayer="YES" fixedFrame="YES" maxValue="100" style="bar" translatesAutoresizingMaskIntoConstraints="NO" id="lZ2-UJ-cEH">
-                                                                    <rect key="frame" x="0.0" y="-7" width="100" height="20"/>
-                                                                    <animations/>
-                                                                </progressIndicator>
-                                                            </subviews>
-                                                            <animations/>
-                                                            <connections>
-                                                                <outlet property="checkBox" destination="je1-LR-Pjn" id="gff-E5-z1C"/>
-                                                                <outlet property="progressView" destination="lZ2-UJ-cEH" id="NuE-dd-yTz"/>
-                                                            </connections>
-                                                        </tableCellView>
-                                                    </prototypeCellViews>
-                                                </tableColumn>
-                                                <tableColumn identifier="Videos" width="100" minWidth="40" maxWidth="1000" id="3Ot-Ee-6sm">
-                                                    <tableHeaderCell key="headerCell" lineBreakMode="truncatingTail" borderStyle="border" title="Video">
-                                                        <font key="font" metaFont="smallSystem"/>
-                                                        <color key="textColor" name="headerTextColor" catalog="System" colorSpace="catalog"/>
-                                                        <color key="backgroundColor" name="headerColor" catalog="System" colorSpace="catalog"/>
-                                                    </tableHeaderCell>
-                                                    <textFieldCell key="dataCell" lineBreakMode="truncatingTail" selectable="YES" editable="YES" title="Text Cell" id="dEO-QR-AeK">
-                                                        <font key="font" metaFont="system"/>
-                                                        <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
-                                                        <color key="backgroundColor" name="controlBackgroundColor" catalog="System" colorSpace="catalog"/>
-                                                    </textFieldCell>
-                                                    <tableColumnResizingMask key="resizingMask" resizeWithTable="YES" userResizable="YES"/>
-                                                    <prototypeCellViews>
-                                                        <tableCellView identifier="Videos" id="T8D-NF-WZ5" customClass="TwoCheckBoxTableViewCell" customModule="WWDCapp" customModuleProvider="target">
-                                                            <rect key="frame" x="635" y="1" width="100" height="30"/>
-                                                            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                                                            <subviews>
-                                                                <button fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="JMf-Xk-se7">
-                                                                    <rect key="frame" x="9" y="11" width="46" height="18"/>
-                                                                    <animations/>
-                                                                    <buttonCell key="cell" type="check" title="SD" bezelStyle="regularSquare" imagePosition="left" state="on" inset="2" id="sVi-au-r1z">
-                                                                        <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
-                                                                        <font key="font" metaFont="system"/>
-                                                                    </buttonCell>
-                                                                </button>
-                                                                <progressIndicator wantsLayer="YES" fixedFrame="YES" maxValue="100" style="bar" translatesAutoresizingMaskIntoConstraints="NO" id="roj-NC-bZe">
-                                                                    <rect key="frame" x="0.0" y="-7" width="100" height="20"/>
-                                                                    <animations/>
-                                                                </progressIndicator>
-                                                                <button fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="r0j-5Z-SXf">
-                                                                    <rect key="frame" x="56" y="11" width="43" height="18"/>
-                                                                    <animations/>
-                                                                    <buttonCell key="cell" type="check" title="HD" bezelStyle="regularSquare" imagePosition="left" state="on" inset="2" id="d08-8E-dEK">
-                                                                        <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
-                                                                        <font key="font" metaFont="system"/>
-                                                                    </buttonCell>
-                                                                </button>
-                                                            </subviews>
-                                                            <animations/>
-                                                            <connections>
-                                                                <outlet property="checkBoxHD" destination="r0j-5Z-SXf" id="SWu-Og-Hh9"/>
-                                                                <outlet property="checkBoxSD" destination="JMf-Xk-se7" id="CKA-sq-IXq"/>
-                                                                <outlet property="progressView" destination="roj-NC-bZe" id="kjd-IF-6gf"/>
-                                                            </connections>
-                                                        </tableCellView>
-                                                    </prototypeCellViews>
-                                                </tableColumn>
-                                                <tableColumn identifier="Code" width="118" minWidth="40" maxWidth="1000" id="vEK-wn-fyf">
-                                                    <tableHeaderCell key="headerCell" lineBreakMode="truncatingTail" borderStyle="border" title="Sample Code">
-                                                        <font key="font" metaFont="smallSystem"/>
-                                                        <color key="textColor" name="headerTextColor" catalog="System" colorSpace="catalog"/>
-                                                        <color key="backgroundColor" name="headerColor" catalog="System" colorSpace="catalog"/>
-                                                    </tableHeaderCell>
-                                                    <textFieldCell key="dataCell" lineBreakMode="truncatingTail" selectable="YES" editable="YES" title="Text Cell" id="4Pu-gq-6WR">
-                                                        <font key="font" metaFont="system"/>
-                                                        <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
-                                                        <color key="backgroundColor" name="controlBackgroundColor" catalog="System" colorSpace="catalog"/>
-                                                    </textFieldCell>
-                                                    <tableColumnResizingMask key="resizingMask" resizeWithTable="YES" userResizable="YES"/>
-                                                    <prototypeCellViews>
-                                                        <tableCellView identifier="Code" id="fVV-S8-xk2" customClass="OneCheckBoxTableViewCell" customModule="WWDCapp" customModuleProvider="target">
-                                                            <rect key="frame" x="738" y="1" width="118" height="30"/>
-                                                            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                                                            <subviews>
-                                                                <button fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Cam-Lz-VWB">
-                                                                    <rect key="frame" x="48" y="11" width="18" height="18"/>
-                                                                    <animations/>
-                                                                    <buttonCell key="cell" type="check" bezelStyle="regularSquare" imagePosition="left" state="on" inset="2" id="kdC-ST-h8a">
-                                                                        <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
-                                                                        <font key="font" metaFont="system"/>
-                                                                    </buttonCell>
-                                                                </button>
-                                                                <progressIndicator wantsLayer="YES" fixedFrame="YES" maxValue="100" style="bar" translatesAutoresizingMaskIntoConstraints="NO" id="nee-rf-5ea">
-                                                                    <rect key="frame" x="0.0" y="-7" width="117" height="20"/>
-                                                                    <animations/>
-                                                                </progressIndicator>
-                                                            </subviews>
-                                                            <animations/>
-                                                            <connections>
-                                                                <outlet property="checkBox" destination="Cam-Lz-VWB" id="z0i-Yz-f5X"/>
-                                                                <outlet property="progressView" destination="nee-rf-5ea" id="EoA-ao-p9T"/>
-                                                            </connections>
-                                                        </tableCellView>
-                                                    </prototypeCellViews>
-                                                </tableColumn>
-                                            </tableColumns>
-                                        </tableView>
-                                    </subviews>
-                                    <animations/>
-                                    <color key="backgroundColor" name="controlBackgroundColor" catalog="System" colorSpace="catalog"/>
-                                </clipView>
-                                <animations/>
-                                <scroller key="horizontalScroller" hidden="YES" wantsLayer="YES" verticalHuggingPriority="750" horizontal="YES" id="EQ4-3v-gQf">
-                                    <rect key="frame" x="1" y="8" width="0.0" height="16"/>
-                                    <autoresizingMask key="autoresizingMask"/>
-                                    <animations/>
-                                </scroller>
-                                <scroller key="verticalScroller" hidden="YES" wantsLayer="YES" verticalHuggingPriority="750" horizontal="NO" id="t7w-2f-sjm">
-                                    <rect key="frame" x="224" y="17" width="15" height="102"/>
-                                    <autoresizingMask key="autoresizingMask"/>
-                                    <animations/>
-                                </scroller>
-                                <tableHeaderView key="headerView" id="LOs-0v-cVF">
-                                    <rect key="frame" x="0.0" y="0.0" width="858" height="23"/>
-                                    <autoresizingMask key="autoresizingMask"/>
-                                    <animations/>
-                                </tableHeaderView>
-                            </scrollView>
                             <button fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="93J-Av-NLB">
-                                <rect key="frame" x="562" y="550" width="79" height="18"/>
+                                <rect key="frame" x="512" y="550" width="73" height="18"/>
                                 <animations/>
                                 <buttonCell key="cell" type="check" title="All PDFs" bezelStyle="regularSquare" imagePosition="left" alignment="left" state="on" inset="2" id="LhK-sT-Te6">
                                     <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
@@ -914,19 +686,30 @@
                                     <action selector="allPDFChecked:" target="XfG-lQ-9wD" id="cDa-eD-91G"/>
                                 </connections>
                             </button>
-                            <button fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="hdC-U3-wYR">
-                                <rect key="frame" x="665" y="550" width="83" height="18"/>
+                            <button fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="hdC-U3-wYR" userLabel="All SD Check Box">
+                                <rect key="frame" x="621" y="550" width="59" height="18"/>
                                 <animations/>
-                                <buttonCell key="cell" type="check" title="All Videos" bezelStyle="regularSquare" imagePosition="left" alignment="left" state="on" inset="2" id="b1W-OQ-tWq">
+                                <buttonCell key="cell" type="check" title="All SD" bezelStyle="regularSquare" imagePosition="left" alignment="left" state="on" inset="2" id="b1W-OQ-tWq">
                                     <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                                     <font key="font" metaFont="system"/>
                                 </buttonCell>
                                 <connections>
-                                    <action selector="allVideoChecked:" target="XfG-lQ-9wD" id="UJq-QG-Mat"/>
+                                    <action selector="allSDChecked:" target="XfG-lQ-9wD" id="AUu-WG-ThP"/>
+                                </connections>
+                            </button>
+                            <button fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="zmt-g5-prI">
+                                <rect key="frame" x="724" y="550" width="60" height="18"/>
+                                <animations/>
+                                <buttonCell key="cell" type="check" title="All HD" bezelStyle="regularSquare" imagePosition="left" alignment="center" state="on" inset="2" id="ktm-KZ-Wit">
+                                    <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
+                                    <font key="font" metaFont="system"/>
+                                </buttonCell>
+                                <connections>
+                                    <action selector="allHDChecked:" target="XfG-lQ-9wD" id="xtg-CH-MOM"/>
                                 </connections>
                             </button>
                             <button fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="l4s-07-jYV">
-                                <rect key="frame" x="778" y="550" width="73" height="18"/>
+                                <rect key="frame" x="829" y="550" width="73" height="18"/>
                                 <animations/>
                                 <buttonCell key="cell" type="check" title="All Code" bezelStyle="regularSquare" imagePosition="left" alignment="left" state="on" inset="2" id="ecJ-BL-mh5">
                                     <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
@@ -955,7 +738,7 @@
                                 </connections>
                             </popUpButton>
                             <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="2Uk-zV-FYf">
-                                <rect key="frame" x="720" y="18" width="160" height="25"/>
+                                <rect key="frame" x="766" y="18" width="160" height="25"/>
                                 <animations/>
                                 <buttonCell key="cell" type="roundTextured" title="Start Download" bezelStyle="texturedRounded" alignment="center" enabled="NO" state="on" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="pOo-Tq-sg7">
                                     <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
@@ -969,29 +752,359 @@
                                 <rect key="frame" x="128" y="581" width="16" height="16"/>
                                 <animations/>
                             </progressIndicator>
-                            <segmentedControl verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="AFl-lI-jjY">
-                                <rect key="frame" x="642" y="578" width="128" height="24"/>
+                            <scrollView fixedFrame="YES" borderType="line" autohidesScrollers="YES" horizontalLineScroll="52" horizontalPageScroll="10" verticalLineScroll="52" verticalPageScroll="10" usesPredominantAxisScrolling="NO" translatesAutoresizingMaskIntoConstraints="NO" id="DUe-MO-CLA">
+                                <rect key="frame" x="20" y="64" width="890" height="480"/>
+                                <clipView key="contentView" ambiguous="YES" drawsBackground="NO" id="Hod-g6-9bx">
+                                    <rect key="frame" x="1" y="1" width="888" height="478"/>
+                                    <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                                    <subviews>
+                                        <tableView verticalHuggingPriority="750" allowsExpansionToolTips="YES" columnAutoresizingStyle="none" alternatingRowBackgroundColors="YES" columnReordering="NO" columnResizing="NO" multipleSelection="NO" emptySelection="NO" autosaveColumns="NO" typeSelect="NO" rowHeight="50" headerView="GLv-Gv-fqk" viewBased="YES" id="SSh-0R-MKF">
+                                            <rect key="frame" x="0.0" y="0.0" width="888" height="461"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                            <animations/>
+                                            <size key="intercellSpacing" width="3" height="2"/>
+                                            <color key="backgroundColor" name="controlBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                            <color key="gridColor" name="gridColor" catalog="System" colorSpace="catalog"/>
+                                            <tableColumns>
+                                                <tableColumn identifier="sessionID" width="70" minWidth="40" maxWidth="1000" id="4RA-pQ-ZoD">
+                                                    <tableHeaderCell key="headerCell" lineBreakMode="truncatingTail" borderStyle="border" title="Session No">
+                                                        <font key="font" metaFont="smallSystem"/>
+                                                        <color key="textColor" name="headerTextColor" catalog="System" colorSpace="catalog"/>
+                                                        <color key="backgroundColor" name="headerColor" catalog="System" colorSpace="catalog"/>
+                                                    </tableHeaderCell>
+                                                    <textFieldCell key="dataCell" lineBreakMode="truncatingTail" selectable="YES" editable="YES" title="Text Cell" id="yan-4t-ab9">
+                                                        <font key="font" metaFont="system"/>
+                                                        <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
+                                                        <color key="backgroundColor" name="controlBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                                    </textFieldCell>
+                                                    <tableColumnResizingMask key="resizingMask" resizeWithTable="YES" userResizable="YES"/>
+                                                    <prototypeCellViews>
+                                                        <tableCellView identifier="sessionID" id="I6T-jp-6sv">
+                                                            <rect key="frame" x="1" y="1" width="70" height="50"/>
+                                                            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                                                            <subviews>
+                                                                <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="y3w-TZ-YZi">
+                                                                    <rect key="frame" x="0.0" y="13" width="70" height="24"/>
+                                                                    <animations/>
+                                                                    <textFieldCell key="cell" lineBreakMode="truncatingTail" sendsActionOnEndEditing="YES" alignment="center" title="Table View Cell" id="erZ-ME-7Gm">
+                                                                        <font key="font" metaFont="system"/>
+                                                                        <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
+                                                                        <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
+                                                                    </textFieldCell>
+                                                                </textField>
+                                                            </subviews>
+                                                            <animations/>
+                                                            <connections>
+                                                                <outlet property="textField" destination="y3w-TZ-YZi" id="uNZ-ZM-GAg"/>
+                                                            </connections>
+                                                        </tableCellView>
+                                                    </prototypeCellViews>
+                                                </tableColumn>
+                                                <tableColumn identifier="sessionName" width="400" minWidth="40" maxWidth="1000" id="nmD-aK-RqL">
+                                                    <tableHeaderCell key="headerCell" lineBreakMode="truncatingTail" borderStyle="border" title="Session Name">
+                                                        <font key="font" metaFont="smallSystem"/>
+                                                        <color key="textColor" name="headerTextColor" catalog="System" colorSpace="catalog"/>
+                                                        <color key="backgroundColor" name="headerColor" catalog="System" colorSpace="catalog"/>
+                                                    </tableHeaderCell>
+                                                    <textFieldCell key="dataCell" lineBreakMode="truncatingTail" selectable="YES" editable="YES" title="Text Cell" id="n1n-xb-uRU">
+                                                        <font key="font" metaFont="system"/>
+                                                        <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
+                                                        <color key="backgroundColor" name="controlBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                                    </textFieldCell>
+                                                    <tableColumnResizingMask key="resizingMask" resizeWithTable="YES" userResizable="YES"/>
+                                                    <prototypeCellViews>
+                                                        <tableCellView identifier="sessionName" id="AR7-Tv-V89">
+                                                            <rect key="frame" x="74" y="1" width="400" height="50"/>
+                                                            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                                                            <subviews>
+                                                                <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Vfc-ab-Dsz">
+                                                                    <rect key="frame" x="0.0" y="13" width="400" height="24"/>
+                                                                    <animations/>
+                                                                    <textFieldCell key="cell" lineBreakMode="truncatingTail" sendsActionOnEndEditing="YES" title="Table View Cell" id="8aE-sP-WBQ">
+                                                                        <font key="font" metaFont="system"/>
+                                                                        <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
+                                                                        <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
+                                                                    </textFieldCell>
+                                                                </textField>
+                                                            </subviews>
+                                                            <animations/>
+                                                            <connections>
+                                                                <outlet property="textField" destination="Vfc-ab-Dsz" id="IyL-Iv-lMN"/>
+                                                            </connections>
+                                                        </tableCellView>
+                                                    </prototypeCellViews>
+                                                </tableColumn>
+                                                <tableColumn identifier="PDF" width="100" minWidth="40" maxWidth="1000" id="XEI-zc-Be8">
+                                                    <tableHeaderCell key="headerCell" lineBreakMode="truncatingTail" borderStyle="border" title="PDF">
+                                                        <font key="font" metaFont="smallSystem"/>
+                                                        <color key="textColor" name="headerTextColor" catalog="System" colorSpace="catalog"/>
+                                                        <color key="backgroundColor" name="headerColor" catalog="System" colorSpace="catalog"/>
+                                                    </tableHeaderCell>
+                                                    <textFieldCell key="dataCell" lineBreakMode="truncatingTail" selectable="YES" editable="YES" title="Text Cell" id="9z8-22-0nQ">
+                                                        <font key="font" metaFont="system"/>
+                                                        <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
+                                                        <color key="backgroundColor" name="controlBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                                    </textFieldCell>
+                                                    <tableColumnResizingMask key="resizingMask" resizeWithTable="YES" userResizable="YES"/>
+                                                    <prototypeCellViews>
+                                                        <tableCellView identifier="PDF" id="XN5-Bl-Ag6" customClass="CheckBoxTableViewCell" customModule="WWDCapp" customModuleProvider="target">
+                                                            <rect key="frame" x="477" y="1" width="100" height="50"/>
+                                                            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                                                            <subviews>
+                                                                <button fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="je1-LR-Pjn">
+                                                                    <rect key="frame" x="41" y="31" width="18" height="18"/>
+                                                                    <animations/>
+                                                                    <buttonCell key="cell" type="check" bezelStyle="regularSquare" imagePosition="left" state="on" inset="2" id="Ezl-Vb-mpm">
+                                                                        <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
+                                                                        <font key="font" metaFont="system"/>
+                                                                    </buttonCell>
+                                                                    <connections>
+                                                                        <action selector="checked:" target="XN5-Bl-Ag6" id="aUO-qm-cbj"/>
+                                                                    </connections>
+                                                                </button>
+                                                                <progressIndicator wantsLayer="YES" fixedFrame="YES" maxValue="1" style="bar" translatesAutoresizingMaskIntoConstraints="NO" id="lZ2-UJ-cEH">
+                                                                    <rect key="frame" x="3" y="2" width="94" height="20"/>
+                                                                    <animations/>
+                                                                </progressIndicator>
+                                                                <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="djj-Az-BU3">
+                                                                    <rect key="frame" x="1" y="14" width="98" height="17"/>
+                                                                    <animations/>
+                                                                    <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" alignment="center" id="Jsd-Oo-x4U">
+                                                                        <font key="font" metaFont="smallSystem"/>
+                                                                        <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                                                                        <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
+                                                                    </textFieldCell>
+                                                                </textField>
+                                                                <button fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="REE-pX-qcw">
+                                                                    <rect key="frame" x="34" y="9" width="32" height="32"/>
+                                                                    <animations/>
+                                                                    <buttonCell key="cell" type="square" bezelStyle="shadowlessSquare" image="tick" imagePosition="overlaps" alignment="center" imageScaling="proportionallyUpOrDown" inset="2" id="XR4-UB-n8S">
+                                                                        <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                                                                        <font key="font" metaFont="system"/>
+                                                                    </buttonCell>
+                                                                </button>
+                                                            </subviews>
+                                                            <animations/>
+                                                            <connections>
+                                                                <outlet property="checkBox" destination="je1-LR-Pjn" id="rSj-S3-DJL"/>
+                                                                <outlet property="downloadComplete" destination="REE-pX-qcw" id="zyg-tb-AAQ"/>
+                                                                <outlet property="label" destination="djj-Az-BU3" id="NFc-31-qba"/>
+                                                                <outlet property="progressView" destination="lZ2-UJ-cEH" id="LVh-hH-wgc"/>
+                                                            </connections>
+                                                        </tableCellView>
+                                                    </prototypeCellViews>
+                                                </tableColumn>
+                                                <tableColumn identifier="SD" width="100" minWidth="40" maxWidth="1000" id="3Ot-Ee-6sm" userLabel="SD">
+                                                    <tableHeaderCell key="headerCell" lineBreakMode="truncatingTail" borderStyle="border" title="SD">
+                                                        <font key="font" metaFont="smallSystem"/>
+                                                        <color key="textColor" name="headerTextColor" catalog="System" colorSpace="catalog"/>
+                                                        <color key="backgroundColor" name="headerColor" catalog="System" colorSpace="catalog"/>
+                                                    </tableHeaderCell>
+                                                    <textFieldCell key="dataCell" lineBreakMode="truncatingTail" selectable="YES" editable="YES" title="Text Cell" id="dEO-QR-AeK">
+                                                        <font key="font" metaFont="system"/>
+                                                        <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
+                                                        <color key="backgroundColor" name="controlBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                                    </textFieldCell>
+                                                    <tableColumnResizingMask key="resizingMask" resizeWithTable="YES" userResizable="YES"/>
+                                                    <prototypeCellViews>
+                                                        <tableCellView identifier="SD" id="lke-Gm-rNp" customClass="CheckBoxTableViewCell" customModule="WWDCapp" customModuleProvider="target">
+                                                            <rect key="frame" x="580" y="1" width="100" height="50"/>
+                                                            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                                                            <subviews>
+                                                                <button fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="KFf-Bl-TwU">
+                                                                    <rect key="frame" x="41" y="31" width="18" height="18"/>
+                                                                    <animations/>
+                                                                    <buttonCell key="cell" type="check" bezelStyle="regularSquare" imagePosition="left" state="on" inset="2" id="thN-CH-sRY">
+                                                                        <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
+                                                                        <font key="font" metaFont="system"/>
+                                                                    </buttonCell>
+                                                                    <connections>
+                                                                        <action selector="checked:" target="lke-Gm-rNp" id="kMU-DS-9gC"/>
+                                                                    </connections>
+                                                                </button>
+                                                                <progressIndicator wantsLayer="YES" fixedFrame="YES" maxValue="1" style="bar" translatesAutoresizingMaskIntoConstraints="NO" id="iuT-PE-Bxv">
+                                                                    <rect key="frame" x="3" y="2" width="94" height="20"/>
+                                                                    <animations/>
+                                                                </progressIndicator>
+                                                                <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="uwa-vg-dVW">
+                                                                    <rect key="frame" x="1" y="14" width="98" height="17"/>
+                                                                    <animations/>
+                                                                    <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" alignment="center" id="rDb-Wk-z0d">
+                                                                        <font key="font" metaFont="smallSystem"/>
+                                                                        <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                                                                        <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
+                                                                    </textFieldCell>
+                                                                </textField>
+                                                                <button fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="c5i-OA-A5W">
+                                                                    <rect key="frame" x="34" y="9" width="32" height="32"/>
+                                                                    <animations/>
+                                                                    <buttonCell key="cell" type="square" bezelStyle="shadowlessSquare" image="tick" imagePosition="only" alignment="center" imageScaling="proportionallyUpOrDown" inset="2" id="WYO-5U-kIc">
+                                                                        <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                                                                        <font key="font" metaFont="system"/>
+                                                                    </buttonCell>
+                                                                </button>
+                                                            </subviews>
+                                                            <animations/>
+                                                            <connections>
+                                                                <outlet property="checkBox" destination="KFf-Bl-TwU" id="Ods-Up-qVb"/>
+                                                                <outlet property="downloadComplete" destination="c5i-OA-A5W" id="Sg9-qB-0mM"/>
+                                                                <outlet property="label" destination="uwa-vg-dVW" id="Hoh-yp-T3X"/>
+                                                                <outlet property="progressView" destination="iuT-PE-Bxv" id="Zby-w9-eQX"/>
+                                                            </connections>
+                                                        </tableCellView>
+                                                    </prototypeCellViews>
+                                                </tableColumn>
+                                                <tableColumn identifier="HD" width="100" minWidth="10" maxWidth="3.4028234663852886e+38" id="ox5-Ij-oYf" userLabel="HD">
+                                                    <tableHeaderCell key="headerCell" lineBreakMode="truncatingTail" borderStyle="border" alignment="left" title="HD">
+                                                        <font key="font" metaFont="smallSystem"/>
+                                                        <color key="textColor" name="headerTextColor" catalog="System" colorSpace="catalog"/>
+                                                        <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                                                    </tableHeaderCell>
+                                                    <textFieldCell key="dataCell" lineBreakMode="truncatingTail" selectable="YES" editable="YES" alignment="left" title="Text Cell" id="cAZ-tX-TIF">
+                                                        <font key="font" metaFont="system"/>
+                                                        <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
+                                                        <color key="backgroundColor" name="controlBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                                    </textFieldCell>
+                                                    <tableColumnResizingMask key="resizingMask" resizeWithTable="YES" userResizable="YES"/>
+                                                    <prototypeCellViews>
+                                                        <tableCellView identifier="HD" id="BRJ-vK-4k4" customClass="CheckBoxTableViewCell" customModule="WWDCapp" customModuleProvider="target">
+                                                            <rect key="frame" x="683" y="1" width="100" height="50"/>
+                                                            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                                                            <subviews>
+                                                                <button fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="NMm-4V-eo0">
+                                                                    <rect key="frame" x="41" y="31" width="18" height="18"/>
+                                                                    <animations/>
+                                                                    <buttonCell key="cell" type="check" bezelStyle="regularSquare" imagePosition="left" state="on" inset="2" id="VkE-UN-1mc">
+                                                                        <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
+                                                                        <font key="font" metaFont="system"/>
+                                                                    </buttonCell>
+                                                                    <connections>
+                                                                        <action selector="checked:" target="BRJ-vK-4k4" id="M2q-hN-r3M"/>
+                                                                    </connections>
+                                                                </button>
+                                                                <progressIndicator wantsLayer="YES" fixedFrame="YES" maxValue="1" style="bar" translatesAutoresizingMaskIntoConstraints="NO" id="YQ9-Gz-LAK">
+                                                                    <rect key="frame" x="3" y="2" width="94" height="20"/>
+                                                                    <animations/>
+                                                                </progressIndicator>
+                                                                <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="RTl-b9-Pcu">
+                                                                    <rect key="frame" x="1" y="14" width="98" height="17"/>
+                                                                    <animations/>
+                                                                    <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" alignment="center" id="A9B-B0-997">
+                                                                        <font key="font" metaFont="smallSystem"/>
+                                                                        <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                                                                        <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
+                                                                    </textFieldCell>
+                                                                </textField>
+                                                                <button fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="i0J-B1-u0v">
+                                                                    <rect key="frame" x="34" y="9" width="32" height="32"/>
+                                                                    <animations/>
+                                                                    <buttonCell key="cell" type="square" bezelStyle="shadowlessSquare" image="tick" imagePosition="overlaps" alignment="center" imageScaling="proportionallyUpOrDown" inset="2" id="zg5-nb-ATt">
+                                                                        <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                                                                        <font key="font" metaFont="system"/>
+                                                                    </buttonCell>
+                                                                </button>
+                                                            </subviews>
+                                                            <animations/>
+                                                            <connections>
+                                                                <outlet property="checkBox" destination="NMm-4V-eo0" id="73N-VP-OTG"/>
+                                                                <outlet property="downloadComplete" destination="i0J-B1-u0v" id="mvf-vY-Tfu"/>
+                                                                <outlet property="label" destination="RTl-b9-Pcu" id="yY2-C0-HeT"/>
+                                                                <outlet property="progressView" destination="YQ9-Gz-LAK" id="WCJ-mv-C4b"/>
+                                                            </connections>
+                                                        </tableCellView>
+                                                    </prototypeCellViews>
+                                                </tableColumn>
+                                                <tableColumn identifier="Code" width="100" minWidth="40" maxWidth="1000" id="vEK-wn-fyf">
+                                                    <tableHeaderCell key="headerCell" lineBreakMode="truncatingTail" borderStyle="border" title="Sample Code">
+                                                        <font key="font" metaFont="smallSystem"/>
+                                                        <color key="textColor" name="headerTextColor" catalog="System" colorSpace="catalog"/>
+                                                        <color key="backgroundColor" name="headerColor" catalog="System" colorSpace="catalog"/>
+                                                    </tableHeaderCell>
+                                                    <textFieldCell key="dataCell" lineBreakMode="truncatingTail" selectable="YES" editable="YES" title="Text Cell" id="4Pu-gq-6WR">
+                                                        <font key="font" metaFont="system"/>
+                                                        <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
+                                                        <color key="backgroundColor" name="controlBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                                    </textFieldCell>
+                                                    <tableColumnResizingMask key="resizingMask" resizeWithTable="YES" userResizable="YES"/>
+                                                    <prototypeCellViews>
+                                                        <tableCellView identifier="Code" id="fVV-S8-xk2" customClass="CheckBoxTableViewCell" customModule="WWDCapp" customModuleProvider="target">
+                                                            <rect key="frame" x="786" y="1" width="100" height="50"/>
+                                                            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                                                            <subviews>
+                                                                <button fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Cam-Lz-VWB">
+                                                                    <rect key="frame" x="41" y="31" width="18" height="18"/>
+                                                                    <animations/>
+                                                                    <buttonCell key="cell" type="check" bezelStyle="regularSquare" imagePosition="left" state="on" inset="2" id="kdC-ST-h8a">
+                                                                        <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
+                                                                        <font key="font" metaFont="system"/>
+                                                                    </buttonCell>
+                                                                    <connections>
+                                                                        <action selector="checked:" target="fVV-S8-xk2" id="Zbh-n0-4we"/>
+                                                                    </connections>
+                                                                </button>
+                                                                <progressIndicator wantsLayer="YES" fixedFrame="YES" maxValue="1" style="bar" translatesAutoresizingMaskIntoConstraints="NO" id="nee-rf-5ea">
+                                                                    <rect key="frame" x="2" y="2" width="100" height="20"/>
+                                                                    <animations/>
+                                                                </progressIndicator>
+                                                                <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="dS8-HG-4eW">
+                                                                    <rect key="frame" x="1" y="15" width="116" height="17"/>
+                                                                    <animations/>
+                                                                    <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" alignment="center" id="gD9-Fu-OyN">
+                                                                        <font key="font" metaFont="smallSystem"/>
+                                                                        <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                                                                        <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
+                                                                    </textFieldCell>
+                                                                </textField>
+                                                                <button fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="8g0-hP-VeM">
+                                                                    <rect key="frame" x="34" y="9" width="32" height="32"/>
+                                                                    <animations/>
+                                                                    <buttonCell key="cell" type="square" bezelStyle="shadowlessSquare" image="tick" imagePosition="overlaps" alignment="center" imageScaling="proportionallyUpOrDown" inset="2" id="KLx-vV-LTK">
+                                                                        <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                                                                        <font key="font" metaFont="system"/>
+                                                                    </buttonCell>
+                                                                </button>
+                                                            </subviews>
+                                                            <animations/>
+                                                            <connections>
+                                                                <outlet property="checkBox" destination="Cam-Lz-VWB" id="R8s-pU-wYu"/>
+                                                                <outlet property="downloadComplete" destination="8g0-hP-VeM" id="siw-vv-G6s"/>
+                                                                <outlet property="label" destination="dS8-HG-4eW" id="2ab-RY-w6D"/>
+                                                                <outlet property="progressView" destination="nee-rf-5ea" id="DaN-cS-yWL"/>
+                                                            </connections>
+                                                        </tableCellView>
+                                                    </prototypeCellViews>
+                                                </tableColumn>
+                                            </tableColumns>
+                                        </tableView>
+                                    </subviews>
+                                    <animations/>
+                                    <nil key="backgroundColor"/>
+                                </clipView>
                                 <animations/>
-                                <segmentedCell key="cell" borderStyle="border" alignment="left" style="rounded" trackingMode="selectOne" id="xtH-81-aY8">
-                                    <font key="font" metaFont="system"/>
-                                    <segments>
-                                        <segment label="SD" width="40"/>
-                                        <segment label="HD" width="40" selected="YES" tag="1"/>
-                                        <segment label="Both" width="40"/>
-                                    </segments>
-                                </segmentedCell>
-                                <connections>
-                                    <action selector="selectDefinition:" target="XfG-lQ-9wD" id="bVv-CL-nni"/>
-                                </connections>
-                            </segmentedControl>
+                                <scroller key="horizontalScroller" hidden="YES" wantsLayer="YES" verticalHuggingPriority="750" horizontal="YES" id="EQ4-3v-gQf">
+                                    <rect key="frame" x="1" y="463" width="886" height="16"/>
+                                    <autoresizingMask key="autoresizingMask"/>
+                                    <animations/>
+                                </scroller>
+                                <scroller key="verticalScroller" hidden="YES" wantsLayer="YES" verticalHuggingPriority="750" horizontal="NO" id="t7w-2f-sjm">
+                                    <rect key="frame" x="224" y="17" width="15" height="102"/>
+                                    <autoresizingMask key="autoresizingMask"/>
+                                    <animations/>
+                                </scroller>
+                                <tableHeaderView key="headerView" id="GLv-Gv-fqk">
+                                    <rect key="frame" x="0.0" y="0.0" width="888" height="17"/>
+                                    <autoresizingMask key="autoresizingMask"/>
+                                    <animations/>
+                                </tableHeaderView>
+                            </scrollView>
                         </subviews>
                         <animations/>
                     </view>
                     <connections>
                         <outlet property="allCodeCheckbox" destination="l4s-07-jYV" id="qO2-o8-qqP"/>
+                        <outlet property="allHDCheckBox" destination="zmt-g5-prI" id="2bs-9y-oPM"/>
                         <outlet property="allPDFCheckBox" destination="93J-Av-NLB" id="Igh-PM-Jug"/>
-                        <outlet property="allVideoCheckBox" destination="hdC-U3-wYR" id="yH2-ej-wAq"/>
-                        <outlet property="definition" destination="AFl-lI-jjY" id="399-ph-JtD"/>
+                        <outlet property="allSDCheckBox" destination="hdC-U3-wYR" id="Y83-Xh-DMa"/>
                         <outlet property="myTableView" destination="SSh-0R-MKF" id="liZ-v1-msq"/>
                         <outlet property="startDownload" destination="2Uk-zV-FYf" id="wan-PT-H8F"/>
                         <outlet property="yearFetchIndicator" destination="HP4-f0-Pcm" id="Pyr-yu-Bl0"/>
@@ -1000,7 +1113,10 @@
                 </viewController>
                 <customObject id="rPt-NT-nkU" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="75" y="1046"/>
+            <point key="canvasLocation" x="20" y="1060"/>
         </scene>
     </scenes>
+    <resources>
+        <image name="tick" width="7.679999828338623" height="7"/>
+    </resources>
 </document>

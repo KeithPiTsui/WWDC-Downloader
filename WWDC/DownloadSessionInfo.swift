@@ -163,36 +163,24 @@ class DownloadSessionInfo: NSObject {
 				let hd : [TFHppleElement] = sessionDoc.searchWithXPathQuery("//*[text()='HD']") as! [TFHppleElement]
 				
 				if let hdDownloadLink = hd.first?.attributes["href"] as? String {
-					let file = FileInfo()
+					let file = FileInfo(session: wwdcSession, fileType: .HD)
 					file.remoteFileURL = NSURL(string: hdDownloadLink)
-					file.fileName = WWDCSession.sanitizeFileNameString(wwdcSession.sessionID+"-"+wwdcSession.title)+"-HD.mp4"
-					file.displayName = wwdcSession.sessionID+"-"+wwdcSession.title+" HD Video"
-					guard let directory = wwdcSession.videoDirectory(), let filename = file.fileName  else { return }
-					file.localFileURL = NSURL(fileURLWithPath: directory.stringByAppendingPathComponent(WWDCSession.sanitizeFileNameString( filename)))
 					wwdcSession.hdFile = file
 				}
 				
 				let sd : [TFHppleElement] = sessionDoc.searchWithXPathQuery("//*[text()='SD']") as! [TFHppleElement]
 				
 				if let sdDownloadLink = sd.first?.attributes["href"] as? String {
-					let file = FileInfo()
+					let file = FileInfo(session: wwdcSession, fileType: .SD)
 					file.remoteFileURL = NSURL(string: sdDownloadLink)
-					file.fileName = WWDCSession.sanitizeFileNameString(wwdcSession.sessionID+"-"+wwdcSession.title)+"-SD.mp4"
-					file.displayName = wwdcSession.sessionID+"-"+wwdcSession.title+" SD Video"
-					guard let directory = wwdcSession.videoDirectory(), let filename = file.fileName  else { return }
-					file.localFileURL = NSURL(fileURLWithPath: directory.stringByAppendingPathComponent(WWDCSession.sanitizeFileNameString( filename)))
 					wwdcSession.sdFile = file
 				}
 				
 				let pdf : [TFHppleElement] = sessionDoc.searchWithXPathQuery("//*[text()='PDF']") as![TFHppleElement]
 				
 				if let pdfDownloadLink = pdf.first?.attributes["href"] as? String {
-					let file = FileInfo()
+					let file = FileInfo(session: wwdcSession, fileType: .PDF)
 					file.remoteFileURL = NSURL(string: pdfDownloadLink)
-					file.fileName = WWDCSession.sanitizeFileNameString(wwdcSession.sessionID+"-"+wwdcSession.title)+".pdf"
-					file.displayName = wwdcSession.sessionID+"-"+wwdcSession.title+" PDF"
-					guard let directory = wwdcSession.pdfDirectory(), let filename = file.fileName  else { return }
-					file.localFileURL = NSURL(fileURLWithPath: directory.stringByAppendingPathComponent(WWDCSession.sanitizeFileNameString( filename)))
 					wwdcSession.pdfFile = file
 				}
 				
@@ -203,8 +191,6 @@ class DownloadSessionInfo: NSObject {
 					let downloadGroup = dispatch_group_create();
 					
 					for sampleCode in sampleCodes {
-						
-						let sampleCodeName = sampleCode.content
 						
 						let child = sampleCode.children as NSArray
 						
@@ -225,19 +211,14 @@ class DownloadSessionInfo: NSObject {
 										
 										let codelink = developerBaseURL+link+"/"+substring+".zip"
 										
-										let file = FileInfo()
+										let file = FileInfo(session: wwdcSession, fileType: .SampleCode)
 										file.remoteFileURL = NSURL(string: codelink)
-										file.displayName = sampleCodeName
-										file.fileName = WWDCSession.sanitizeFileNameString(sampleCodeName)+".zip"
-										guard let directory = wwdcSession.codeDirectory(), let filename = file.fileName  else { return }
-										file.localFileURL = NSURL(fileURLWithPath: directory.stringByAppendingPathComponent(WWDCSession.sanitizeFileNameString( filename)))
 										wwdcSession.sampleCodeArray.append(file)
 									}
 								}
 								dispatch_group_leave(downloadGroup);
 							}
 							codeURLSession?.resume()
-							
 						}
 					}
 					
@@ -293,36 +274,24 @@ class DownloadSessionInfo: NSObject {
                     for link in links {
                         if link.content == "HD" {
                             if let hdDownloadLink = link.attributes["href"] as? String {
-                                let file = FileInfo()
+								let file = FileInfo(session: wwdcSession, fileType: .HD)
                                 file.remoteFileURL = NSURL(string: hdDownloadLink)
-                                file.fileName = cleanSessionID+"-"+title+"-HD.mp4"
-                                file.displayName = cleanSessionID+"-"+title+" HD Video"
-                                guard let directory = wwdcSession.videoDirectory(), let filename = file.fileName  else { return }
-                                file.localFileURL = NSURL(fileURLWithPath: directory.stringByAppendingPathComponent(WWDCSession.sanitizeFileNameString( filename)))
                                 wwdcSession.hdFile = file
                             }
                         }
                         
                         if link.content == "SD" {
                             if let sdDownloadLink = link.attributes["href"] as? String {
-                                let file = FileInfo()
+								let file = FileInfo(session: wwdcSession, fileType: .SD)
                                 file.remoteFileURL = NSURL(string: sdDownloadLink)
-                                file.fileName = cleanSessionID+"-"+title+"-SD.mp4"
-                                file.displayName = cleanSessionID+"-"+title+" SD Video"
-                                guard let directory = wwdcSession.videoDirectory(), let filename = file.fileName  else { return }
-                                file.localFileURL = NSURL(fileURLWithPath: directory.stringByAppendingPathComponent(WWDCSession.sanitizeFileNameString( filename)))
-                                wwdcSession.sdFile = file
+								wwdcSession.sdFile = file
                             }
                         }
                         
                         if link.content == "PDF" {
                             if let pdfDownloadLink = link.attributes["href"] as? String {
-                                let file = FileInfo()
+								let file = FileInfo(session: wwdcSession, fileType: .PDF)
                                 file.remoteFileURL = NSURL(string: pdfDownloadLink)
-                                file.fileName = cleanSessionID+"-"+title+".pdf"
-                                file.displayName = cleanSessionID+"-"+title+" PDF"
-                                guard let directory = wwdcSession.pdfDirectory(), let filename = file.fileName  else { return }
-                                file.localFileURL = NSURL(fileURLWithPath: directory.stringByAppendingPathComponent(WWDCSession.sanitizeFileNameString( filename)))
                                 wwdcSession.pdfFile = file
                             }
                         }
@@ -371,7 +340,7 @@ class DownloadSessionInfo: NSObject {
 		if let hdURL = wwdcSession.hdFile?.remoteFileURL {
 			dispatch_group_enter(fileSizeSessionGroup);
 			
-			fetchFileSize(hdURL, completion: { (result) -> Void in
+			fetchFileSize(hdURL, completion: { (result, code) -> Void in
 				
 					if let filesize = result {
 						wwdcSession.hdFile?.fileSize = filesize
@@ -383,7 +352,7 @@ class DownloadSessionInfo: NSObject {
 		if let sdURL = wwdcSession.sdFile?.remoteFileURL {
 			dispatch_group_enter(fileSizeSessionGroup);
 			
-			fetchFileSize(sdURL, completion: { (result) -> Void in
+			fetchFileSize(sdURL, completion: { (result, code) -> Void in
 				
 					if let filesize = result {
 						wwdcSession.sdFile?.fileSize = filesize
@@ -395,7 +364,7 @@ class DownloadSessionInfo: NSObject {
 		if let pdfURL = wwdcSession.pdfFile?.remoteFileURL {
 			dispatch_group_enter(fileSizeSessionGroup);
 			
-			fetchFileSize(pdfURL, completion: { (result) -> Void in
+			fetchFileSize(pdfURL, completion: { (result, code) -> Void in
 				
 					if let filesize = result {
 						wwdcSession.pdfFile?.fileSize = filesize
@@ -408,20 +377,19 @@ class DownloadSessionInfo: NSObject {
 			for sample in wwdcSession.sampleCodeArray {
 				if let fileURL = sample.remoteFileURL {
 					
-// TODO: 401 returned for HEAD request on Zip Files? Commented out for now....
-//					dispatch_group_enter(fileSizeSessionGroup);
-//					
-//					fetchFileSize(fileURL, completion: { (result) -> Void in
-//						
-//						if let filesize = result {
-//							sample.fileSize = filesize
-//							print("Sample Code FileSize - \(filesize)")
-//						}
-//						else {
-//							print("NO RESULT")
-//						}
-//						dispatch_group_leave(fileSizeSessionGroup);
-//					})
+					dispatch_group_enter(fileSizeSessionGroup);
+					
+					fetchFileSize(fileURL, completion: { (result, code) -> Void in
+						
+						if let filesize = result {
+							sample.fileSize = filesize
+							//print("Sample Code FileSize - \(filesize)")
+						}
+						else {
+							print("File Size - NO RESULT")
+						}
+						dispatch_group_leave(fileSizeSessionGroup);
+					})
 				}
 			}
 		}
@@ -435,7 +403,7 @@ class DownloadSessionInfo: NSObject {
 			})
 	}
 	
-	private func fetchFileSize(url : NSURL, completion: (result: Int?) -> Void) {
+	private func fetchFileSize(url : NSURL, completion: (result: Int?, errorCode:Int?) -> Void) {
 		
 		let request = NSMutableURLRequest(URL: url)
 		request.HTTPMethod = "HEAD"
@@ -445,17 +413,20 @@ class DownloadSessionInfo: NSObject {
 				if let dictionary = hresponse.allHeaderFields as? Dictionary<String,String> {
 					if hresponse.statusCode == 200 {
 						if let size = dictionary["Content-Length"] {
-							completion(result: Int(size))
+							completion(result: Int(size), errorCode:nil)
 							return
 						}
 					}
 					else {
-						DownloadFileManager.sharedManager.fetchHeader(url, completionHandler: { (fileSize) -> Void in
+						DownloadFileManager.sharedManager.fetchHeader(url, completionHandler: { (fileSize, code) -> Void in
 							if let fileSize = fileSize {
-								completion(result: Int(fileSize))
+								completion(result: Int(fileSize), errorCode:nil)
+							}
+							else if let code = code {
+								completion(result: nil, errorCode:code)
 							}
 							else {
-								completion(result: nil)
+								completion(result: nil, errorCode:nil)
 							}
 						})
 					}
@@ -464,5 +435,4 @@ class DownloadSessionInfo: NSObject {
 		}
 		fileSizeTask?.resume()
 	}
-	
 }
