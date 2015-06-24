@@ -759,7 +759,7 @@
                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                     <subviews>
                                         <tableView verticalHuggingPriority="750" allowsExpansionToolTips="YES" columnAutoresizingStyle="none" alternatingRowBackgroundColors="YES" columnReordering="NO" columnResizing="NO" multipleSelection="NO" emptySelection="NO" autosaveColumns="NO" typeSelect="NO" rowHeight="50" headerView="GLv-Gv-fqk" viewBased="YES" id="SSh-0R-MKF">
-                                            <rect key="frame" x="0.0" y="0.0" width="888" height="461"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="888" height="455"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <animations/>
                                             <size key="intercellSpacing" width="3" height="2"/>
@@ -1082,7 +1082,7 @@
                                 </clipView>
                                 <animations/>
                                 <scroller key="horizontalScroller" hidden="YES" wantsLayer="YES" verticalHuggingPriority="750" horizontal="YES" id="EQ4-3v-gQf">
-                                    <rect key="frame" x="1" y="463" width="886" height="16"/>
+                                    <rect key="frame" x="1" y="8" width="0.0" height="16"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                     <animations/>
                                 </scroller>
@@ -1092,11 +1092,42 @@
                                     <animations/>
                                 </scroller>
                                 <tableHeaderView key="headerView" id="GLv-Gv-fqk">
-                                    <rect key="frame" x="0.0" y="0.0" width="888" height="17"/>
+                                    <rect key="frame" x="0.0" y="0.0" width="888" height="23"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                     <animations/>
                                 </tableHeaderView>
                             </scrollView>
+                            <progressIndicator wantsLayer="YES" fixedFrame="YES" maxValue="1" style="bar" translatesAutoresizingMaskIntoConstraints="NO" id="eQd-ix-KJW">
+                                <rect key="frame" x="20" y="13" width="738" height="20"/>
+                                <animations/>
+                            </progressIndicator>
+                            <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="LdI-VT-wO4">
+                                <rect key="frame" x="698" y="27" width="60" height="17"/>
+                                <animations/>
+                                <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" alignment="right" id="O3o-ke-MbV">
+                                    <font key="font" metaFont="smallSystem"/>
+                                    <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                                    <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
+                                </textFieldCell>
+                            </textField>
+                            <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="C8t-xS-mu2">
+                                <rect key="frame" x="677" y="27" width="17" height="17"/>
+                                <animations/>
+                                <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" alignment="right" title="of" id="Kcp-eh-kgB">
+                                    <font key="font" metaFont="smallSystem"/>
+                                    <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                                    <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
+                                </textFieldCell>
+                            </textField>
+                            <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="ang-ho-9A3">
+                                <rect key="frame" x="594" y="27" width="72" height="17"/>
+                                <animations/>
+                                <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" alignment="right" id="zJ5-L6-AYd">
+                                    <font key="font" metaFont="smallSystem"/>
+                                    <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                                    <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
+                                </textFieldCell>
+                            </textField>
                         </subviews>
                         <animations/>
                     </view>
@@ -1105,8 +1136,12 @@
                         <outlet property="allHDCheckBox" destination="zmt-g5-prI" id="2bs-9y-oPM"/>
                         <outlet property="allPDFCheckBox" destination="93J-Av-NLB" id="Igh-PM-Jug"/>
                         <outlet property="allSDCheckBox" destination="hdC-U3-wYR" id="Y83-Xh-DMa"/>
+                        <outlet property="currentlabel" destination="ang-ho-9A3" id="6te-I5-TEb"/>
+                        <outlet property="downloadProgressView" destination="eQd-ix-KJW" id="PoK-x9-or9"/>
                         <outlet property="myTableView" destination="SSh-0R-MKF" id="liZ-v1-msq"/>
+                        <outlet property="oflabel" destination="C8t-xS-mu2" id="IvW-Va-OWf"/>
                         <outlet property="startDownload" destination="2Uk-zV-FYf" id="wan-PT-H8F"/>
+                        <outlet property="totallabel" destination="LdI-VT-wO4" id="NHk-ad-W5R"/>
                         <outlet property="yearFetchIndicator" destination="HP4-f0-Pcm" id="Pyr-yu-Bl0"/>
                         <outlet property="yearSeletor" destination="z5n-9Y-sbk" id="lsd-Ro-ijl"/>
                     </connections>

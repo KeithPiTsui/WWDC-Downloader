@@ -95,6 +95,12 @@ class ViewController: NSViewController, NSURLSessionDelegate, NSURLSessionDataDe
 	
 	@IBOutlet weak var myTableView: NSTableView!
 	
+    @IBOutlet weak var currentlabel: NSTextField!
+    @IBOutlet weak var oflabel: NSTextField!
+    @IBOutlet weak var totallabel: NSTextField!
+
+    @IBOutlet weak var downloadProgressView: NSProgressIndicator!
+
 	
 	var allWWDCSessionsArray : [WWDCSession] = []
 
@@ -103,6 +109,8 @@ class ViewController: NSViewController, NSURLSessionDelegate, NSURLSessionDataDe
 	private var isSessionInfoFetchComplete = false
 	
 	private var isDownloading = false
+    private var filesToDownload : [FileInfo] = []
+    private var totalBytesToDownload : Int64 = 0
 	
 	// MARK: - Init
 	required init?(coder: NSCoder) {
@@ -139,6 +147,8 @@ class ViewController: NSViewController, NSURLSessionDelegate, NSURLSessionDataDe
 		}
 		
 		myTableView.reloadData()
+        
+        updateTotalFileSize()
 	}
 	
 	@IBAction func allSDChecked(sender: NSButton) {
@@ -148,6 +158,8 @@ class ViewController: NSViewController, NSURLSessionDelegate, NSURLSessionDataDe
 		}
 		
 		myTableView.reloadData()
+        
+        updateTotalFileSize()
 	}
 	
 	@IBAction func allHDChecked(sender: NSButton) {
@@ -157,6 +169,8 @@ class ViewController: NSViewController, NSURLSessionDelegate, NSURLSessionDataDe
 		}
 		
 		myTableView.reloadData()
+        
+        updateTotalFileSize()
 	}
 	
 	
@@ -167,6 +181,8 @@ class ViewController: NSViewController, NSURLSessionDelegate, NSURLSessionDataDe
 		}
 		
 		myTableView.reloadData()
+        
+        updateTotalFileSize()
 	}
 	
 	@IBAction func startDownloadButton(sender: NSButton) {
@@ -174,7 +190,7 @@ class ViewController: NSViewController, NSURLSessionDelegate, NSURLSessionDataDe
 		if isDownloading {
 			
 			sender.title = "Start Downloading"
-
+            
 			isDownloading = false
 			
 			stopDownloading()
@@ -182,10 +198,19 @@ class ViewController: NSViewController, NSURLSessionDelegate, NSURLSessionDataDe
 			enableUI()
 			
 			yearFetchIndicator.stopAnimation(nil)
+            
+            filesToDownload.removeAll()
 		}
 		else {
 			
 			sender.title = "Stop Downloading"
+            
+            oflabel.hidden = false
+            currentlabel.hidden = false
+            totallabel.hidden = false
+            downloadProgressView.hidden = false
+            
+            currentlabel.stringValue = NSByteCountFormatter().stringFromByteCount(0)
 			
 			isDownloading = true
 			
@@ -193,27 +218,60 @@ class ViewController: NSViewController, NSURLSessionDelegate, NSURLSessionDataDe
 			
 			yearFetchIndicator.startAnimation(nil)
 			
-			var filesToDownload : [FileInfo] = []
-			
-			for wwdcSession in self.allWWDCSessionsArray {
-				
-				if let file = wwdcSession.sdFile where (wwdcSession.sdFile?.shouldDownloadFile == true && wwdcSession.sdFile?.fileSize > 0) {
-					filesToDownload.append(file)
-				}
-				
-				if let file = wwdcSession.hdFile  where (wwdcSession.hdFile?.shouldDownloadFile == true && wwdcSession.hdFile?.fileSize > 0) {
-					filesToDownload.append(file)
-				}
-				
-				if let file = wwdcSession.pdfFile  where (wwdcSession.pdfFile?.shouldDownloadFile == true && wwdcSession.pdfFile?.fileSize > 0) {
-					filesToDownload.append(file)
-				}
-			}
-			
+            filesToDownload.removeAll()
+            
+            for wwdcSession in self.allWWDCSessionsArray {
+                
+                if let file = wwdcSession.sdFile where (wwdcSession.sdFile?.shouldDownloadFile == true && wwdcSession.sdFile?.fileSize > 0) {
+                    filesToDownload.append(file)
+                }
+                if let file = wwdcSession.hdFile  where (wwdcSession.hdFile?.shouldDownloadFile == true && wwdcSession.hdFile?.fileSize > 0) {
+                    filesToDownload.append(file)
+                }
+                if let file = wwdcSession.pdfFile  where (wwdcSession.pdfFile?.shouldDownloadFile == true && wwdcSession.pdfFile?.fileSize > 0) {
+                    filesToDownload.append(file)
+                }
+            }
+
+			updateTotalProgress()
+            
 			downloadFiles(filesToDownload)
 		}
 	}
-	
+    
+    func updateTotalFileSize() {
+    
+        totalBytesToDownload = 0
+        
+        for wwdcSession in self.allWWDCSessionsArray {
+            
+            if let file = wwdcSession.sdFile where (wwdcSession.sdFile?.shouldDownloadFile == true && wwdcSession.sdFile?.fileSize > 0) {
+                if let fileSize = file.fileSize {
+                    totalBytesToDownload += Int64(fileSize)
+                }
+            }
+            if let file = wwdcSession.hdFile  where (wwdcSession.hdFile?.shouldDownloadFile == true && wwdcSession.hdFile?.fileSize > 0) {
+                if let fileSize = file.fileSize {
+                    totalBytesToDownload += Int64(fileSize)
+                }
+            }
+            if let file = wwdcSession.pdfFile  where (wwdcSession.pdfFile?.shouldDownloadFile == true && wwdcSession.pdfFile?.fileSize > 0) {
+                if let fileSize = file.fileSize {
+                    totalBytesToDownload += Int64(fileSize)
+                }
+            }
+            
+            for sample in wwdcSession.sampleCodeArray {
+                if let fileSize = sample.fileSize {
+                    if sample.shouldDownloadFile == true && fileSize > 0 {
+                        totalBytesToDownload += Int64(fileSize)
+                    }
+                }
+            }
+        }
+        
+        totallabel.stringValue = NSByteCountFormatter().stringFromByteCount(totalBytesToDownload)
+    }
 	
 
 	// MARK: - View
@@ -226,9 +284,13 @@ class ViewController: NSViewController, NSURLSessionDelegate, NSURLSessionDataDe
 		myTableView.allowsColumnSelection = false
 		myTableView.allowsMultipleSelection = false
 		myTableView.allowsEmptySelection = false
-		
+        
+        oflabel.hidden = true
+        currentlabel.hidden = true
 		
 		myTableView.reloadData()
+        
+        updateTotalFileSize()
 		
 		fetchSessionInfoForYear(.WWDC2015)
 	}
@@ -471,6 +533,8 @@ class ViewController: NSViewController, NSURLSessionDelegate, NSURLSessionDataDe
 							self.myTableView.reloadDataForRowIndexes(NSIndexSet(index: index), columnIndexes:NSIndexSet(indexesInRange: NSMakeRange(5,1)))
 						}
 					}
+                    
+                    self.updateTotalProgress()
 				}
 
 			})
@@ -491,6 +555,8 @@ class ViewController: NSViewController, NSURLSessionDelegate, NSURLSessionDataDe
 					if let index = self.allWWDCSessionsArray.indexOf(file.session) {
 						self.myTableView.reloadDataForRowIndexes(NSIndexSet(index: index), columnIndexes:NSIndexSet(indexesInRange: NSMakeRange(0,self.myTableView.numberOfColumns)))
 					}
+                    
+                    self.updateTotalProgress()
 				}
 				
 				dispatch_group_leave(downloadGroup)
@@ -501,11 +567,17 @@ class ViewController: NSViewController, NSURLSessionDelegate, NSURLSessionDataDe
 		
 		dispatch_group_notify(downloadGroup,dispatch_get_main_queue(),{ [unowned self] in
 			
-			self.isDownloading = false
-			
-			self.enableUI()
-			
 			self.yearFetchIndicator.stopAnimation(nil)
+            
+            self.startDownload.title = "Start Downloading"
+            
+            self.isDownloading = false
+            
+            self.stopDownloading()
+            
+            self.enableUI()
+            
+            self.filesToDownload.removeAll()
 			
 			print("Finished All File Downloads")
 		})
@@ -515,6 +587,23 @@ class ViewController: NSViewController, NSURLSessionDelegate, NSURLSessionDataDe
 		
 		DownloadFileManager.sharedManager.stopDownloads()
 	}
+    
+    func updateTotalProgress() {
+
+        var currentDownloadBytes : Int64 = 0
+        
+        for file in filesToDownload {
+            if let fileSize = file.fileSize {
+                currentDownloadBytes += Int64(file.downloadProgress*Float(fileSize))
+            }
+        }
+        
+        currentlabel.stringValue = NSByteCountFormatter().stringFromByteCount(currentDownloadBytes)
+
+        let progress = Double(currentDownloadBytes)/Double(totalBytesToDownload)
+        
+        downloadProgressView.doubleValue = progress
+    }
 	
     override var representedObject: AnyObject? {
         didSet {
