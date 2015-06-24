@@ -11,16 +11,11 @@ let developerBaseURL = "https://developer.apple.com"
 let videos2015baseURL = "/videos/wwdc/2015/"
 let videos2014baseURL = "/videos/wwdc/2014/"
 let videos2013baseURL = "/videos/wwdc/2013/"
-let videos2012baseURL = "/videos/wwdc/2012/"
-let videos2011baseURL = "/videos/wwdc/2011/"
-let videos2010baseURL = "/videos/wwdc/2010/"
 
 import Foundation
 
 class DownloadSessionInfo: NSObject {
     
-    // MARK: Initialization
-	
 	var wwdcSessions : [WWDCSession] = []
 	
     private let year : WWDCYear
@@ -28,9 +23,9 @@ class DownloadSessionInfo: NSObject {
 	private var parsingCompletionHandler : (sessions: [WWDCSession]) -> Void
 	private var individualCompletionHandler : (session : WWDCSession) -> Void
     private var sessionInfoCompletionHandler : () -> Void
-    
-    private var downloadTasks: [WWDCSession : NSURLSessionDataTask] = [:]
-    
+	
+	
+	// MARK: Initialization
 	init(year: WWDCYear, parsingCompleteHandler:((sessions: [WWDCSession]) -> Void), individualSessionUpdateHandler: ((session: WWDCSession) -> Void), completionHandler: () -> Void) {
         
         self.year = year
@@ -51,12 +46,6 @@ class DownloadSessionInfo: NSObject {
                 videoURLString = NSURL(string:developerBaseURL+videos2014baseURL)
             case .WWDC2013:
                 videoURLString = NSURL(string:developerBaseURL+videos2013baseURL)
-            case .WWDC2012:
-                videoURLString = NSURL(string:developerBaseURL+videos2012baseURL)
-            case .WWDC2011:
-                videoURLString = NSURL(string:developerBaseURL+videos2011baseURL)
-            case .WWDC2010:
-                videoURLString = NSURL(string:developerBaseURL+videos2010baseURL)
         }
         
         if let videoURLString = videoURLString {
@@ -69,7 +58,6 @@ class DownloadSessionInfo: NSObject {
                 task.resume()
             }
         }
-        
     }
     
     private func downloadMainPageFinished(data: NSData?, response: NSHTTPURLResponse?, error: NSError?) {
@@ -86,12 +74,6 @@ class DownloadSessionInfo: NSObject {
                 case .WWDC2014:
                     parse2014Doc(doc)
                 case .WWDC2013:
-                    parse2014Doc(doc)
-                case .WWDC2012:
-                    parse2014Doc(doc)
-                case .WWDC2011:
-                    parse2014Doc(doc)
-                case .WWDC2010:
                     parse2014Doc(doc)
             }
             
@@ -262,30 +244,21 @@ class DownloadSessionInfo: NSObject {
 					dispatch_group_notify(downloadGroup,dispatch_get_main_queue(),{ [unowned self] in
 							self.fetchFileSizes(wwdcSession) { (success) -> Void in
 								completion(success: true)
-                                
-                                self.downloadTasks[wwdcSession] = nil
 							}
 						})
 				}
 				else {
 					self.fetchFileSizes(wwdcSession) { (success) -> Void in
 						completion(success: true)
-                        
-                        self.downloadTasks[wwdcSession] = nil
-
 					}
 				}
 			}
 			else if let _ = error {
 				print("Failed fetch of Session Info \(wwdcSession.sessionID) - \(wwdcSession.title) - \n \(error)")
 				completion(success: false)
-                
-                self.downloadTasks[wwdcSession] = nil
 			}
 
 		}
-        
-        downloadTasks[wwdcSession] = urlSessionTask
 		
 		urlSessionTask?.resume()
 	}
@@ -309,7 +282,7 @@ class DownloadSessionInfo: NSObject {
                 let sectionItems = section.searchWithXPathQuery("//*[@class='title']") as! [TFHppleElement]
                 let title = sectionItems[0].content
 
-                let wwdcSession = WWDCSession(sessionID: cleanSessionID, title: title, year: .WWDC2014)
+                let wwdcSession = WWDCSession(sessionID: cleanSessionID, title: title, year: year)
             
                 let aItems = section.searchWithXPathQuery("//*[@class='description active']") as! [TFHppleElement]
                 
@@ -388,8 +361,6 @@ class DownloadSessionInfo: NSObject {
 			self.sessionInfoCompletionHandler()
 		})
     }
-    
-    
 	
 	
 	// MARK: - FileSize
@@ -479,11 +450,17 @@ class DownloadSessionInfo: NSObject {
 						}
 					}
 					else {
-						print("Bad Header Response - \(dictionary)")
+						DownloadFileManager.sharedManager.fetchHeader(url, completionHandler: { (fileSize) -> Void in
+							if let fileSize = fileSize {
+								completion(result: Int(fileSize))
+							}
+							else {
+								completion(result: nil)
+							}
+						})
 					}
 				}
 			}
-			completion(result: nil)
 		}
 		fileSizeTask?.resume()
 	}

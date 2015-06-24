@@ -59,12 +59,6 @@ class ViewController: NSViewController, NSURLSessionDelegate, NSURLSessionDataDe
                 fetchSessionInfoForYear(.WWDC2014)
             case "2013":
                 fetchSessionInfoForYear(.WWDC2013)
-            case "2012":
-                fetchSessionInfoForYear(.WWDC2012)
-            case "2011":
-                fetchSessionInfoForYear(.WWDC2011)
-            case "2010":
-                fetchSessionInfoForYear(.WWDC2010)
             default:
                 fetchSessionInfoForYear(.WWDC2015)
         }
@@ -142,7 +136,7 @@ class ViewController: NSViewController, NSURLSessionDelegate, NSURLSessionDataDe
 		
 		myTableView.reloadData()
 		
-		fetchSessionInfoForYear(.WWDC2015)
+		fetchSessionInfoForYear(.WWDC2013)
 	}
 	
 	func fetchSessionInfoForYear(year : WWDCYear) {

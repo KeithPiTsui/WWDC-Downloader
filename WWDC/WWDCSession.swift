@@ -9,7 +9,7 @@
 import Foundation
 
 enum WWDCYear {
-    case WWDC2015, WWDC2014, WWDC2013, WWDC2012, WWDC2011, WWDC2010
+    case WWDC2015, WWDC2014, WWDC2013
 }
 
 func ==(lhs: WWDCSession, rhs: WWDCSession)-> Bool {
@@ -65,12 +65,6 @@ class WWDCSession : NSObject {
 			yearpath = "/2014"
         case .WWDC2013:
             yearpath = "/2013"
-        case .WWDC2012:
-            yearpath = "/2012"
-        case .WWDC2011:
-            yearpath = "/2011"
-        case .WWDC2010:
-            yearpath = "/2010"
 		}
 		
 		guard let path = yearpath else { return nil }

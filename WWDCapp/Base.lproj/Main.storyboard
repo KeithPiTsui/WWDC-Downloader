@@ -939,17 +939,14 @@
                             <popUpButton verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="z5n-9Y-sbk" userLabel="YearPicker">
                                 <rect key="frame" x="17" y="576" width="106" height="26"/>
                                 <animations/>
-                                <popUpButtonCell key="cell" type="push" title="2015" bezelStyle="rounded" alignment="center" lineBreakMode="truncatingTail" state="on" borderStyle="border" imageScaling="proportionallyDown" inset="2" arrowPosition="arrowAtCenter" preferredEdge="maxX" selectedItem="zVp-6B-6Y7" id="jLu-QC-84C">
+                                <popUpButtonCell key="cell" type="push" bezelStyle="rounded" alignment="center" lineBreakMode="truncatingTail" borderStyle="border" imageScaling="proportionallyDown" inset="2" arrowPosition="arrowAtCenter" preferredEdge="maxX" id="jLu-QC-84C">
                                     <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                                     <font key="font" metaFont="menu"/>
                                     <menu key="menu" id="9wo-nG-J9Z">
                                         <items>
-                                            <menuItem title="2015" state="on" id="zVp-6B-6Y7"/>
+                                            <menuItem title="2015" id="zVp-6B-6Y7"/>
                                             <menuItem title="2014" id="69D-5K-BHW"/>
                                             <menuItem title="2013" id="5bA-6K-yHV"/>
-                                            <menuItem title="2012" id="hCc-Cn-s3o"/>
-                                            <menuItem title="2011" id="Xfu-UF-90o"/>
-                                            <menuItem title="2010" id="4By-BF-JRC"/>
                                         </items>
                                     </menu>
                                 </popUpButtonCell>

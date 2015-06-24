@@ -110,9 +110,9 @@
 			children = (
 				A90284041B2FBDEA00755CA1 /* DownloadSessionInfo.swift */,
 				A96E4D631B2EB2770030F908 /* WWDCSession.swift */,
-				A9F9BADA1B34689300BEA874 /* BlockWrappers.swift */,
 				A9F9BADB1B34689300BEA874 /* DownloadFileManager.swift */,
 				44776DA81B399950004B9178 /* FileInfo.swift */,
+				A9F9BADA1B34689300BEA874 /* BlockWrappers.swift */,
 				A96E4D651B2F62340030F908 /* StringExtras.swift */,
 				A96E4D611B2D44910030F908 /* libxml2.2.dylib */,
 				A983F85A1B2D165A00ED681E /* Hpple */,
