@@ -19,7 +19,7 @@ enum FileType {
 @objc class FileInfo : NSObject {
 	
 	let fileType : FileType
-	let session : WWDCSession
+	unowned let session : WWDCSession
 	
 	var remoteFileURL : NSURL?
 	var fileSize : Int?
