@@ -8,79 +8,6 @@
 
 import Cocoa
 
-class CheckBoxTableViewCell : NSTableCellView {
-	
-	var file : FileInfo?
-	
-	@IBOutlet weak var checkBox: NSButton!
-	@IBOutlet weak var label: NSTextField!
-	
-	@IBOutlet weak var progressView: NSProgressIndicator!
-	
-	@IBOutlet weak var downloadComplete: NSButton!
-	
-	@IBAction func checked(sender: NSButton) {
-		if let file = file {
-			file.shouldDownloadFile = Bool(sender.state)
-		}
-	}
-	
-	func updateCell(isSessionInfoFetchComplete:Bool) {
-		
-		self.downloadComplete.hidden = true
-
-		if let file = file {
-			
-			// visible
-			if let fileSize = file.fileSize {
-				self.checkBox.hidden = false
-				self.label.hidden = false
-				
-				// Progress
-				if file.isFileAlreadyDownloaded {
-					self.progressView.hidden = true
-					self.label.hidden = true
-					self.checkBox.hidden = true
-					self.downloadComplete.hidden = false
-				}
-				else {
-					if file.downloadProgress > 0 {
-						self.progressView.hidden = false
-						self.progressView.doubleValue = Double(file.downloadProgress)
-						self.label.stringValue = NSByteCountFormatter().stringFromByteCount(Int64(file.downloadProgress*Float(fileSize)))
-					}
-					else {
-						self.progressView.hidden = true
-						self.label.stringValue = NSByteCountFormatter().stringFromByteCount(Int64(fileSize))
-					}
-				}				
-			}
-			else {
-				self.checkBox.hidden = true
-				self.label.hidden = true
-				self.progressView.hidden = true
-			}
-			
-			// enabled
-			if (isSessionInfoFetchComplete) {
-				
-				self.checkBox.enabled = true
-				
-				if file.shouldDownloadFile == true {
-					self.checkBox.state = 1
-				}
-				else {
-					self.checkBox.state = 0
-				}
-			}
-			else {
-				self.checkBox.enabled = false
-			}
-		}
-
-	}
-}
-
 class ViewController: NSViewController, NSURLSessionDelegate, NSURLSessionDataDelegate, NSTableViewDataSource, NSTableViewDelegate {
 
 	@IBOutlet weak var yearSeletor: NSPopUpButton!
@@ -119,10 +46,6 @@ class ViewController: NSViewController, NSURLSessionDelegate, NSURLSessionDataDe
 	
 	// MARK: - ACTIONS
 	@IBAction func yearSelected(sender: NSPopUpButton) {
-		
-		isSessionInfoFetchComplete = false
-		allWWDCSessionsArray.removeAll()
-		myTableView.reloadData()
 
         guard let title = sender.selectedItem?.title else { return }
         
@@ -134,7 +57,7 @@ class ViewController: NSViewController, NSURLSessionDelegate, NSURLSessionDataDe
             case "2013":
                 fetchSessionInfoForYear(.WWDC2013)
             default:
-                fetchSessionInfoForYear(.WWDC2015)
+				break
         }
 	}
 	
@@ -255,11 +178,14 @@ class ViewController: NSViewController, NSURLSessionDelegate, NSURLSessionDataDe
         oflabel.hidden = true
         currentlabel.hidden = true
 		
+		allPDFCheckBox.enabled = false
+		allSDCheckBox.enabled = false
+		allHDCheckBox.enabled = false
+		allCodeCheckbox.enabled = false
+		
 		myTableView.reloadData()
         
         updateTotalFileSize()
-		
-		fetchSessionInfoForYear(.WWDC2015)
 	}
 	
 	func disableUI() {
@@ -338,6 +264,10 @@ class ViewController: NSViewController, NSURLSessionDelegate, NSURLSessionDataDe
 	// MARK: Fetch Year Info
 	func fetchSessionInfoForYear(year : WWDCYear) {
 		
+		isSessionInfoFetchComplete = false
+		allWWDCSessionsArray.removeAll()
+		myTableView.reloadData()
+		
 		yearFetchIndicator.startAnimation(nil)
 		
 		disableUI()
@@ -411,14 +341,18 @@ class ViewController: NSViewController, NSURLSessionDelegate, NSURLSessionDataDe
 			
 			let wwdcSession = allWWDCSessionsArray[row]
 		
-			cell.checkBox.hidden = true
-			cell.label.hidden = true
-			cell.progressView.hidden = true
-			cell.downloadComplete.hidden = true
+			cell.resetCell()
 
 			if let file = wwdcSession.pdfFile {
-				cell.file = file
+				cell.fileArray = [file]
 				cell.updateCell(isSessionInfoFetchComplete)
+			}
+			
+			if wwdcSession.isInfoFetchComplete {
+				cell.loadingProgressView.stopAnimation(nil)
+			}
+			else {
+				cell.loadingProgressView.startAnimation(nil)
 			}
 			
 			return cell
@@ -429,14 +363,18 @@ class ViewController: NSViewController, NSURLSessionDelegate, NSURLSessionDataDe
 			
 			let wwdcSession = allWWDCSessionsArray[row]
 			
-			cell.checkBox.hidden = true
-			cell.label.hidden = true
-			cell.progressView.hidden = true
-			cell.downloadComplete.hidden = true
+			cell.resetCell()
 
 			if let file = wwdcSession.sdFile {
-				cell.file = file
+				cell.fileArray = [file]
 				cell.updateCell(isSessionInfoFetchComplete)
+			}
+			
+			if wwdcSession.isInfoFetchComplete {
+				cell.loadingProgressView.stopAnimation(nil)
+			}
+			else {
+				cell.loadingProgressView.startAnimation(nil)
 			}
 			
 			return cell
@@ -447,14 +385,18 @@ class ViewController: NSViewController, NSURLSessionDelegate, NSURLSessionDataDe
 			
 			let wwdcSession = allWWDCSessionsArray[row]
 			
-			cell.checkBox.hidden = true
-			cell.label.hidden = true
-			cell.progressView.hidden = true
-			cell.downloadComplete.hidden = true
+			cell.resetCell()
 
 			if let file = wwdcSession.hdFile {
-				cell.file = file
+				cell.fileArray = [file]
 				cell.updateCell(isSessionInfoFetchComplete)
+			}
+			
+			if wwdcSession.isInfoFetchComplete {
+				cell.loadingProgressView.stopAnimation(nil)
+			}
+			else {
+				cell.loadingProgressView.startAnimation(nil)
 			}
 			
 			return cell
@@ -465,12 +407,19 @@ class ViewController: NSViewController, NSURLSessionDelegate, NSURLSessionDataDe
 			
 			let wwdcSession = allWWDCSessionsArray[row]
 			
-			cell.checkBox.hidden = true
-			cell.label.hidden = true
-			cell.progressView.hidden = true
-			cell.downloadComplete.hidden = true
+			cell.resetCell()
 
-			configureCodeCell(cell, session: wwdcSession)
+			if wwdcSession.sampleCodeArray.count > 0 {
+				cell.fileArray = wwdcSession.sampleCodeArray
+				cell.updateCell(isSessionInfoFetchComplete)
+			}
+			
+			if wwdcSession.isInfoFetchComplete {
+				cell.loadingProgressView.stopAnimation(nil)
+			}
+			else {
+				cell.loadingProgressView.startAnimation(nil)
+			}
 			
 			return cell
 		}
@@ -478,52 +427,6 @@ class ViewController: NSViewController, NSURLSessionDelegate, NSURLSessionDataDe
 			return nil
 		}
 		
-	}
-	
-	func configureCodeCell(cell : CheckBoxTableViewCell, session: WWDCSession) {
-		
-		// visible
-		if session.sampleCodeArray.count > 0 {
-			cell.checkBox.hidden = false
-			cell.label.hidden = false
-
-			var fileSizeTotal : Int = 0
-			
-			for file in session.sampleCodeArray {
-				if let size = file.fileSize {
-					fileSizeTotal += size
-				}
-			}
-			
-			cell.label.stringValue = NSByteCountFormatter().stringFromByteCount(Int64(fileSizeTotal))
-		}
-		else {
-			cell.checkBox.hidden = true
-			cell.label.hidden = true
-			cell.progressView.hidden = true
-		}
-		
-		// enabled
-		if (isSessionInfoFetchComplete) {
-			
-			if session.sampleCodeArray.count > 0 {
-
-				cell.checkBox.enabled = true
-				
-				if session.sampleCodeArray.first?.shouldDownloadFile == true {
-					cell.checkBox.state = 1
-				}
-				else {
-					cell.checkBox.state = 0
-				}
-			}
-			else {
-				cell.checkBox.enabled = false
-			}
-		}
-		else {
-			cell.checkBox.enabled = false
-		}
 	}
 	
 	

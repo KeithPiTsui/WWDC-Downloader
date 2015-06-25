@@ -720,13 +720,14 @@
                                 </connections>
                             </button>
                             <popUpButton verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="z5n-9Y-sbk" userLabel="YearPicker">
-                                <rect key="frame" x="17" y="576" width="106" height="26"/>
+                                <rect key="frame" x="17" y="576" width="125" height="26"/>
                                 <animations/>
                                 <popUpButtonCell key="cell" type="push" bezelStyle="rounded" alignment="center" lineBreakMode="truncatingTail" borderStyle="border" imageScaling="proportionallyDown" inset="2" arrowPosition="arrowAtCenter" preferredEdge="maxX" id="jLu-QC-84C">
                                     <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                                     <font key="font" metaFont="menu"/>
                                     <menu key="menu" id="9wo-nG-J9Z">
                                         <items>
+                                            <menuItem title="Choose Year" state="on" id="ChC-HR-8Rs"/>
                                             <menuItem title="2015" id="zVp-6B-6Y7"/>
                                             <menuItem title="2014" id="69D-5K-BHW"/>
                                             <menuItem title="2013" id="5bA-6K-yHV"/>
@@ -748,10 +749,6 @@
                                     <action selector="startDownloadButton:" target="XfG-lQ-9wD" id="q7T-gH-FQB"/>
                                 </connections>
                             </button>
-                            <progressIndicator wantsLayer="YES" horizontalHuggingPriority="750" verticalHuggingPriority="750" fixedFrame="YES" maxValue="100" displayedWhenStopped="NO" bezeled="NO" indeterminate="YES" controlSize="small" style="spinning" translatesAutoresizingMaskIntoConstraints="NO" id="HP4-f0-Pcm">
-                                <rect key="frame" x="128" y="581" width="16" height="16"/>
-                                <animations/>
-                            </progressIndicator>
                             <scrollView fixedFrame="YES" borderType="line" autohidesScrollers="YES" horizontalLineScroll="52" horizontalPageScroll="10" verticalLineScroll="52" verticalPageScroll="10" usesPredominantAxisScrolling="NO" translatesAutoresizingMaskIntoConstraints="NO" id="DUe-MO-CLA">
                                 <rect key="frame" x="20" y="64" width="890" height="480"/>
                                 <clipView key="contentView" ambiguous="YES" drawsBackground="NO" id="Hod-g6-9bx">
@@ -883,12 +880,18 @@
                                                                         <font key="font" metaFont="system"/>
                                                                     </buttonCell>
                                                                 </button>
+                                                                <progressIndicator wantsLayer="YES" horizontalHuggingPriority="750" verticalHuggingPriority="750" fixedFrame="YES" maxValue="100" displayedWhenStopped="NO" bezeled="NO" indeterminate="YES" controlSize="small" style="spinning" translatesAutoresizingMaskIntoConstraints="NO" id="rlj-5i-n0V">
+                                                                    <rect key="frame" x="42" y="17" width="16" height="16"/>
+                                                                    <animations/>
+                                                                </progressIndicator>
                                                             </subviews>
                                                             <animations/>
                                                             <connections>
                                                                 <outlet property="checkBox" destination="je1-LR-Pjn" id="rSj-S3-DJL"/>
-                                                                <outlet property="downloadComplete" destination="REE-pX-qcw" id="zyg-tb-AAQ"/>
+                                                                <outlet property="downloadCompleteImage" destination="REE-pX-qcw" id="yEg-PC-ghG"/>
+                                                                <outlet property="downloadProgressView" destination="lZ2-UJ-cEH" id="yv0-WK-JFF"/>
                                                                 <outlet property="label" destination="djj-Az-BU3" id="NFc-31-qba"/>
+                                                                <outlet property="loadingProgressView" destination="rlj-5i-n0V" id="ZG6-Kf-vAI"/>
                                                                 <outlet property="progressView" destination="lZ2-UJ-cEH" id="LVh-hH-wgc"/>
                                                             </connections>
                                                         </tableCellView>
@@ -943,12 +946,18 @@
                                                                         <font key="font" metaFont="system"/>
                                                                     </buttonCell>
                                                                 </button>
+                                                                <progressIndicator wantsLayer="YES" horizontalHuggingPriority="750" verticalHuggingPriority="750" fixedFrame="YES" maxValue="100" displayedWhenStopped="NO" bezeled="NO" indeterminate="YES" controlSize="small" style="spinning" translatesAutoresizingMaskIntoConstraints="NO" id="o9h-TZ-POI">
+                                                                    <rect key="frame" x="42" y="17" width="16" height="16"/>
+                                                                    <animations/>
+                                                                </progressIndicator>
                                                             </subviews>
                                                             <animations/>
                                                             <connections>
                                                                 <outlet property="checkBox" destination="KFf-Bl-TwU" id="Ods-Up-qVb"/>
-                                                                <outlet property="downloadComplete" destination="c5i-OA-A5W" id="Sg9-qB-0mM"/>
+                                                                <outlet property="downloadCompleteImage" destination="c5i-OA-A5W" id="snH-oJ-hyt"/>
+                                                                <outlet property="downloadProgressView" destination="iuT-PE-Bxv" id="tYd-Gl-eIi"/>
                                                                 <outlet property="label" destination="uwa-vg-dVW" id="Hoh-yp-T3X"/>
+                                                                <outlet property="loadingProgressView" destination="o9h-TZ-POI" id="Xal-cy-sTA"/>
                                                                 <outlet property="progressView" destination="iuT-PE-Bxv" id="Zby-w9-eQX"/>
                                                             </connections>
                                                         </tableCellView>
@@ -1003,12 +1012,18 @@
                                                                         <font key="font" metaFont="system"/>
                                                                     </buttonCell>
                                                                 </button>
+                                                                <progressIndicator wantsLayer="YES" horizontalHuggingPriority="750" verticalHuggingPriority="750" fixedFrame="YES" maxValue="100" displayedWhenStopped="NO" bezeled="NO" indeterminate="YES" controlSize="small" style="spinning" translatesAutoresizingMaskIntoConstraints="NO" id="Xaz-o6-8u8">
+                                                                    <rect key="frame" x="42" y="17" width="16" height="16"/>
+                                                                    <animations/>
+                                                                </progressIndicator>
                                                             </subviews>
                                                             <animations/>
                                                             <connections>
                                                                 <outlet property="checkBox" destination="NMm-4V-eo0" id="73N-VP-OTG"/>
-                                                                <outlet property="downloadComplete" destination="i0J-B1-u0v" id="mvf-vY-Tfu"/>
+                                                                <outlet property="downloadCompleteImage" destination="i0J-B1-u0v" id="hw2-x7-LKS"/>
+                                                                <outlet property="downloadProgressView" destination="YQ9-Gz-LAK" id="Mym-hI-rUS"/>
                                                                 <outlet property="label" destination="RTl-b9-Pcu" id="yY2-C0-HeT"/>
+                                                                <outlet property="loadingProgressView" destination="Xaz-o6-8u8" id="y0o-8W-VWK"/>
                                                                 <outlet property="progressView" destination="YQ9-Gz-LAK" id="WCJ-mv-C4b"/>
                                                             </connections>
                                                         </tableCellView>
@@ -1063,12 +1078,18 @@
                                                                         <font key="font" metaFont="system"/>
                                                                     </buttonCell>
                                                                 </button>
+                                                                <progressIndicator wantsLayer="YES" horizontalHuggingPriority="750" verticalHuggingPriority="750" fixedFrame="YES" maxValue="100" displayedWhenStopped="NO" bezeled="NO" indeterminate="YES" controlSize="small" style="spinning" translatesAutoresizingMaskIntoConstraints="NO" id="9s2-9m-UxR">
+                                                                    <rect key="frame" x="42" y="17" width="16" height="16"/>
+                                                                    <animations/>
+                                                                </progressIndicator>
                                                             </subviews>
                                                             <animations/>
                                                             <connections>
                                                                 <outlet property="checkBox" destination="Cam-Lz-VWB" id="R8s-pU-wYu"/>
-                                                                <outlet property="downloadComplete" destination="8g0-hP-VeM" id="siw-vv-G6s"/>
+                                                                <outlet property="downloadCompleteImage" destination="8g0-hP-VeM" id="Wkj-IC-oWu"/>
+                                                                <outlet property="downloadProgressView" destination="nee-rf-5ea" id="yhM-qT-sHG"/>
                                                                 <outlet property="label" destination="dS8-HG-4eW" id="2ab-RY-w6D"/>
+                                                                <outlet property="loadingProgressView" destination="9s2-9m-UxR" id="U8u-LB-pem"/>
                                                                 <outlet property="progressView" destination="nee-rf-5ea" id="DaN-cS-yWL"/>
                                                             </connections>
                                                         </tableCellView>
@@ -1128,6 +1149,10 @@
                                     <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                                 </textFieldCell>
                             </textField>
+                            <progressIndicator wantsLayer="YES" horizontalHuggingPriority="750" verticalHuggingPriority="750" fixedFrame="YES" maxValue="100" displayedWhenStopped="NO" bezeled="NO" indeterminate="YES" controlSize="small" style="spinning" translatesAutoresizingMaskIntoConstraints="NO" id="HP4-f0-Pcm">
+                                <rect key="frame" x="147" y="581" width="16" height="16"/>
+                                <animations/>
+                            </progressIndicator>
                         </subviews>
                         <animations/>
                     </view>

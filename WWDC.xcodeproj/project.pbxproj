@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		442D010B1B399A9D0081C56C /* FileInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 44776DA81B399950004B9178 /* FileInfo.swift */; };
 		44776DA91B399950004B9178 /* FileInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 44776DA81B399950004B9178 /* FileInfo.swift */; };
+		4479EA761B3C114600D5558D /* CheckBoxTableCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4479EA751B3C114600D5558D /* CheckBoxTableCell.swift */; };
 		44DBD9EC1B3AC4C60097E20C /* .gitignore in Resources */ = {isa = PBXBuildFile; fileRef = 44DBD9EB1B3AC4C60097E20C /* .gitignore */; };
 		44DBD9ED1B3AC4C60097E20C /* .gitignore in Resources */ = {isa = PBXBuildFile; fileRef = 44DBD9EB1B3AC4C60097E20C /* .gitignore */; };
 		A90284051B2FBDEA00755CA1 /* DownloadSessionInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = A90284041B2FBDEA00755CA1 /* DownloadSessionInfo.swift */; };
@@ -42,6 +43,7 @@
 
 /* Begin PBXFileReference section */
 		44776DA81B399950004B9178 /* FileInfo.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FileInfo.swift; sourceTree = "<group>"; };
+		4479EA751B3C114600D5558D /* CheckBoxTableCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CheckBoxTableCell.swift; sourceTree = "<group>"; };
 		44DBD9EB1B3AC4C60097E20C /* .gitignore */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = .gitignore; sourceTree = "<group>"; };
 		A90284041B2FBDEA00755CA1 /* DownloadSessionInfo.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = DownloadSessionInfo.swift; path = WWDC/DownloadSessionInfo.swift; sourceTree = "<group>"; };
 		A9528F241B34C40D002290D3 /* WWDCapp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = WWDCapp.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -98,6 +100,7 @@
 				A9528F3E1B34C5D4002290D3 /* WWDCapp-Bridging-Header.h */,
 				A9528F261B34C40E002290D3 /* AppDelegate.swift */,
 				A9528F281B34C40E002290D3 /* ViewController.swift */,
+				4479EA751B3C114600D5558D /* CheckBoxTableCell.swift */,
 				A9528F2C1B34C40E002290D3 /* Main.storyboard */,
 				A9528F2A1B34C40E002290D3 /* Assets.xcassets */,
 				A9528F2F1B34C40E002290D3 /* Info.plist */,
@@ -274,6 +277,7 @@
 				A9528F291B34C40E002290D3 /* ViewController.swift in Sources */,
 				A9528F371B34C427002290D3 /* DownloadFileManager.swift in Sources */,
 				A9528F381B34C427002290D3 /* StringExtras.swift in Sources */,
+				4479EA761B3C114600D5558D /* CheckBoxTableCell.swift in Sources */,
 				442D010B1B399A9D0081C56C /* FileInfo.swift in Sources */,
 				A9528F3D1B34C45D002290D3 /* XPathQuery.m in Sources */,
 				A9528F3C1B34C45D002290D3 /* TFHppleElement.m in Sources */,
