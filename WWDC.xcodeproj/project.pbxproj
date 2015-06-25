@@ -94,6 +94,13 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		4FCD057A3AFE451CCAACFA6D /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
 		A9528F251B34C40E002290D3 /* WWDCapp */ = {
 			isa = PBXGroup;
 			children = (
@@ -145,6 +152,7 @@
 				A9528F251B34C40E002290D3 /* WWDCapp */,
 				A99B1FEA1B2CC5DD0019067A /* WWDC */,
 				A99B1FE91B2CC5DD0019067A /* Products */,
+				4FCD057A3AFE451CCAACFA6D /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
