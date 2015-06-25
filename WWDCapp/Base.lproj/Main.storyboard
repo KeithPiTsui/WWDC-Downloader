@@ -961,7 +961,7 @@
                                                         </tableCellView>
                                                     </prototypeCellViews>
                                                 </tableColumn>
-                                                <tableColumn identifier="HD" width="100" minWidth="10" maxWidth="3.4028234663852886e+38" id="ox5-Ij-oYf" userLabel="HD">
+                                                <tableColumn identifier="HD" width="100" minWidth="10" maxWidth="1000" id="ox5-Ij-oYf" userLabel="HD">
                                                     <tableHeaderCell key="headerCell" lineBreakMode="truncatingTail" borderStyle="border" alignment="left" title="HD">
                                                         <font key="font" metaFont="smallSystem"/>
                                                         <color key="textColor" name="headerTextColor" catalog="System" colorSpace="catalog"/>

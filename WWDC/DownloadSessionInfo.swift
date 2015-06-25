@@ -197,27 +197,39 @@ class DownloadSessionInfo: NSObject {
 							
 							let link = item.attributes["href"] as! String
 							
-							dispatch_group_enter(downloadGroup);
-							
-							let codeURLSession = NSURLSession.sharedSession().dataTaskWithURL(NSURL(string: developerBaseURL+link+"/book.json")!) { (jsonData, response, error) -> Void in
-								
-								if let jsonData = jsonData {
-									guard let json = NSString(data: jsonData, encoding: NSUTF8StringEncoding) as? String else { return }
-									
-									let substring = json.stringBetweenString("\"sampleCode\":\"", andString: ".zip\"")
-									
-									if let substring = substring {
-										
-										let codelink = developerBaseURL+link+"/"+substring+".zip"
-										
-										let file = FileInfo(session: wwdcSession, fileType: .SampleCode)
-										file.remoteFileURL = NSURL(string: codelink)
-										wwdcSession.sampleCodeArray.append(file)
-									}
-								}
-								dispatch_group_leave(downloadGroup);
+							// Links not consistant - can either be on samplecode page in or prelease directory
+							if let _ = link.rangeOfString("/sample-code/wwdc/2015/downloads/") {   // link appears to be direct link
+
+								let codelink = developerBaseURL+link
+
+								let file = FileInfo(session: wwdcSession, fileType: .SampleCode)
+								file.remoteFileURL = NSURL(string: codelink)
+								wwdcSession.sampleCodeArray.append(file)
 							}
-							codeURLSession?.resume()
+							else {
+								
+								dispatch_group_enter(downloadGroup);
+								
+								let codeURLSession = NSURLSession.sharedSession().dataTaskWithURL(NSURL(string: developerBaseURL+link+"/book.json")!) { (jsonData, response, error) -> Void in
+									
+									if let jsonData = jsonData {
+										guard let json = NSString(data: jsonData, encoding: NSUTF8StringEncoding) as? String else { return }
+										
+										let substring = json.stringBetweenString("\"sampleCode\":\"", andString: ".zip\"")
+										
+										if let substring = substring {
+											
+											let codelink = developerBaseURL+link+"/"+substring+".zip"
+											
+											let file = FileInfo(session: wwdcSession, fileType: .SampleCode)
+											file.remoteFileURL = NSURL(string: codelink)
+											wwdcSession.sampleCodeArray.append(file)
+										}
+									}
+									dispatch_group_leave(downloadGroup);
+								}
+								codeURLSession?.resume()
+							}
 						}
 					}
 					

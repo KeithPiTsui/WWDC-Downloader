@@ -69,7 +69,7 @@ typealias HeaderCompletionHandler = ((fileSize:Int?, errorCode:Int?) -> Void)
             backgroundDownloadHandler.addCompletionWrapper(completionWrapper)
         }
         else {
-            let callbackWrapper = CallbackWrapper(file: file)
+            let callbackWrapper = CallbackWrapper()
             callbackWrapper.addProgressWrapper(progressWrapper)
             callbackWrapper.addCompletionWrapper(completionWrapper)
             backgroundHandlersForFiles[file] = callbackWrapper
@@ -135,7 +135,7 @@ typealias HeaderCompletionHandler = ((fileSize:Int?, errorCode:Int?) -> Void)
 				fileInfo.downloadProgress = progress
 				
 				if let callback = backgroundHandlersForFiles[fileInfo] {
-					callback.notifyProgress(progress, file: fileInfo)
+					callback.notifyProgress(progress)
 				}
 			}
 		}
@@ -194,10 +194,10 @@ typealias HeaderCompletionHandler = ((fileSize:Int?, errorCode:Int?) -> Void)
 					if let callback = backgroundHandlersForFiles[fileInfo] {
 						
 						if let error = error {
-							callback.notifyCompletion(false, file: fileInfo, error: error)
+							callback.notifyCompletion(false, error: error)
 						}
 						else {
-							callback.notifyCompletion(true, file: fileInfo, error: nil)
+							callback.notifyCompletion(true, error: nil)
 						}
 						
 						self.backgroundHandlersForFiles[fileInfo] = nil
@@ -206,25 +206,6 @@ typealias HeaderCompletionHandler = ((fileSize:Int?, errorCode:Int?) -> Void)
 				}
 			}
 		}
-//		if session == headerSessionManager {
-//			
-//			session.getAllTasksWithCompletionHandler({ [unowned self] (tasks) -> Void in
-//				
-//				for task in tasks {
-//					
-//					if let completionHandler = self.headerRequests[task.taskIdentifier] {
-//						
-//						self.headerRequests[task.taskIdentifier] = nil
-//						
-//						if let error = error {
-//							print("Bad Header Completion - \(error)")
-//						}
-//						
-//						completionHandler(fileSize: nil, errorCode:nil)
-//					}
-//				}
-//			})
-//		}
     }
 
 
@@ -232,16 +213,12 @@ typealias HeaderCompletionHandler = ((fileSize:Int?, errorCode:Int?) -> Void)
 	private class CallbackWrapper {
 		
 		// MARK: Instance Variables
-		
-		let file: FileInfo
 		var progressWrappers: [ProgressWrapper] = []
 		var completionWrappers: [SimpleCompletionWrapper] = []
-		var currentProgress: Float = 0
 		
 		// MARK: - Object Lifecycle Methods
-		
-		init(file: FileInfo) {
-			self.file = file
+		init() {
+			
 		}
 		
 		// MARK: - Helper Methods
@@ -258,11 +235,8 @@ typealias HeaderCompletionHandler = ((fileSize:Int?, errorCode:Int?) -> Void)
 			}
 		}
 		
-        func notifyProgress(progress: Float, file : FileInfo?) {
-            if let file = file {
-                if logFileManager { print(" file DOWNLOAD progress: \(file.displayName!) - \(progress)") }
-            }
-           
+        func notifyProgress(progress: Float) {
+			
 			var wrappersToRemove: [ProgressWrapper] = []
 			for wrapper in progressWrappers {
 				if wrapper.execute(progress) == false {
@@ -277,19 +251,8 @@ typealias HeaderCompletionHandler = ((fileSize:Int?, errorCode:Int?) -> Void)
 			}
 		}
 		
-        func notifyCompletion(success: Bool, file: FileInfo?, error: NSError?) {
-            
-            if (success) {
-                 if let file = file {
-                    if logFileManager { print(" file transfer complete! \(file.displayName!)") }
-                }
-            }
-            else {
-                if let file = file {
-                    if logFileManager { print(" file transfer error! - \(file.displayName!) - \(error)") }
-                }
-            }
-            
+        func notifyCompletion(success: Bool, error: NSError?) {
+			
 			var wrappersToRemove: [SimpleCompletionWrapper] = []
 			for wrapper in completionWrappers {
 				if wrapper.execute(success) == false {

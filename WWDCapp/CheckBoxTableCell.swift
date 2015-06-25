@@ -110,7 +110,6 @@ class CheckBoxTableViewCell : NSTableCellView {
 		
 		if (isYearInfoFetchComplete) {
 			
-			
 			if isAllFilesShouldDownload == true {
 				self.checkBox.state = 1
 			}
