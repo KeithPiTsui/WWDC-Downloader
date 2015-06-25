@@ -33,14 +33,20 @@ class ViewController: NSViewController, NSURLSessionDelegate, NSURLSessionDataDe
 
 	private var downloadSessionInfo : DownloadSessionInfo?
 	
-	private var isSessionInfoFetchComplete = false
+	private var isYearInfoFetchComplete = false
 	
 	private var isDownloading = false
     private var filesToDownload : [FileInfo] = []
     private var totalBytesToDownload : Int64 = 0
 	
+	private let byteFormatter : NSByteCountFormatter
+	
 	// MARK: - Init
 	required init?(coder: NSCoder) {
+	
+		byteFormatter = NSByteCountFormatter()
+		byteFormatter.zeroPadsFractionDigits = true
+		
 		super.init(coder: coder)
 	}
 	
@@ -61,17 +67,15 @@ class ViewController: NSViewController, NSURLSessionDelegate, NSURLSessionDataDe
         }
 	}
 	
-	@IBAction func allCodeChecked(sender: NSButton) {
+	@IBAction func allPDFChecked(sender: NSButton) {
 		
 		for wwdcSession in allWWDCSessionsArray {
-			for code in wwdcSession.sampleCodeArray {
-				code.shouldDownloadFile = Bool(sender.state)
-			}
+			wwdcSession.pdfFile?.shouldDownloadFile = Bool(sender.state)
 		}
 		
-		myTableView.reloadData()
-        
-        updateTotalFileSize()
+		myTableView.reloadDataForRowIndexes(NSIndexSet(indexesInRange: NSMakeRange(0,allWWDCSessionsArray.count)) , columnIndexes:NSIndexSet(index: 2))
+		
+		updateTotalFileSize()
 	}
 	
 	@IBAction func allSDChecked(sender: NSButton) {
@@ -80,8 +84,8 @@ class ViewController: NSViewController, NSURLSessionDelegate, NSURLSessionDataDe
 			wwdcSession.sdFile?.shouldDownloadFile = Bool(sender.state)
 		}
 		
-		myTableView.reloadData()
-        
+		myTableView.reloadDataForRowIndexes(NSIndexSet(indexesInRange: NSMakeRange(0,allWWDCSessionsArray.count)) , columnIndexes:NSIndexSet(index: 3))
+		
         updateTotalFileSize()
 	}
 	
@@ -91,104 +95,162 @@ class ViewController: NSViewController, NSURLSessionDelegate, NSURLSessionDataDe
 			wwdcSession.hdFile?.shouldDownloadFile = Bool(sender.state)
 		}
 		
-		myTableView.reloadData()
-        
+		myTableView.reloadDataForRowIndexes(NSIndexSet(indexesInRange: NSMakeRange(0,allWWDCSessionsArray.count)) , columnIndexes:NSIndexSet(index: 4))
+		
         updateTotalFileSize()
 	}
 	
-	
-	@IBAction func allPDFChecked(sender: NSButton) {
+	@IBAction func allCodeChecked(sender: NSButton) {
 		
 		for wwdcSession in allWWDCSessionsArray {
-			wwdcSession.pdfFile?.shouldDownloadFile = Bool(sender.state)
+			for code in wwdcSession.sampleCodeArray {
+				code.shouldDownloadFile = Bool(sender.state)
+			}
 		}
 		
-		myTableView.reloadData()
-        
-        updateTotalFileSize()
+		myTableView.reloadDataForRowIndexes(NSIndexSet(indexesInRange: NSMakeRange(0,allWWDCSessionsArray.count)) , columnIndexes:NSIndexSet(index: 5))
+		
+		updateTotalFileSize()
+	}
+	
+	
+	@IBAction func singleChecked(sender: NSButton) {
+		
+		let cell = sender.superview as! CheckBoxTableViewCell
+		
+		if let fileArray = cell.fileArray {
+			for file in fileArray {
+				file.shouldDownloadFile = Bool(sender.state)
+			}
+		}
+
+		let index = myTableView.columnForView(cell)
+		
+		if (index >= 0) {
+			myTableView.reloadDataForRowIndexes(NSIndexSet(indexesInRange: NSMakeRange(0,allWWDCSessionsArray.count)) , columnIndexes:NSIndexSet(index: index))
+		}
+		
+		updateTotalFileSize()
+		
+		coordinateAllCheckBoxUI()
+	}
+	
+	private func coordinateAllCheckBoxUI() {
+		
+		var shouldCheckAllPDF = true
+		var shouldCheckAllSD = true
+		var shouldCheckAllHD = true
+		var shouldCheckAllCode = true
+		
+		var countPDF = 0
+		var countSD = 0
+		var countHD = 0
+		var countCode = 0
+
+		for wwdcSession in self.allWWDCSessionsArray {
+			
+			if let file = wwdcSession.pdfFile  where (wwdcSession.pdfFile?.fileSize > 0 && wwdcSession.pdfFile?.isFileAlreadyDownloaded == false) {
+				if file.shouldDownloadFile == false {
+					shouldCheckAllPDF = false
+				}
+				countPDF++
+			}
+			if let file = wwdcSession.sdFile where (wwdcSession.sdFile?.fileSize > 0 && wwdcSession.sdFile?.isFileAlreadyDownloaded == false) {
+				if file.shouldDownloadFile == false {
+					shouldCheckAllSD = false
+				}
+				countSD++
+			}
+			if let file = wwdcSession.hdFile  where (wwdcSession.hdFile?.fileSize > 0 && wwdcSession.hdFile?.isFileAlreadyDownloaded == false) {
+				if file.shouldDownloadFile == false {
+					shouldCheckAllHD = false
+				}
+				countHD++
+			}
+			for sample in wwdcSession.sampleCodeArray where (sample.fileSize > 0 && sample.isFileAlreadyDownloaded == false)  {
+				if sample.shouldDownloadFile == false {
+					shouldCheckAllCode = false
+				}
+				countCode++
+			}
+		}
+
+		print("PDFs-\(countPDF), SD-\(countSD), HD-\(countHD), Code-\(countCode)")
+		
+		if countPDF > 0 {
+			allPDFCheckBox.state = Int(shouldCheckAllPDF)
+			allPDFCheckBox.enabled = true
+		}
+		else {
+			allPDFCheckBox.state = 0
+			allPDFCheckBox.enabled = false
+		}
+		
+		if countSD > 0 {
+			allSDCheckBox.state = Int(shouldCheckAllSD)
+			allSDCheckBox.enabled = true
+		}
+		else {
+			allSDCheckBox.state = 0
+			allSDCheckBox.enabled = false
+		}
+		
+		if countHD > 0 {
+			allHDCheckBox.state = Int(shouldCheckAllHD)
+			allHDCheckBox.enabled = true
+		}
+		else {
+			allHDCheckBox.state = 0
+			allHDCheckBox.enabled = false
+		}
+		
+		if countCode > 0 {
+			allCodeCheckbox.state = Int(shouldCheckAllCode)
+			allCodeCheckbox.enabled = true
+		}
+		else {
+			allCodeCheckbox.state = 0
+			allCodeCheckbox.enabled = false
+		}
 	}
 	
 	@IBAction func startDownloadButton(sender: NSButton) {
 		
 		if isDownloading {
-			
-			sender.title = "Start Downloading"
-            
-			isDownloading = false
-			
-			stopDownloading()
-			
-			enableUI()
-			
-			yearFetchIndicator.stopAnimation(nil)
-            
-            filesToDownload.removeAll()
+			DownloadFileManager.sharedManager.stopDownloads()   // Causes dispatch_group_notify to fire in downloadFiles eventually when tasks finished/cancelled
 		}
 		else {
-			
-			sender.title = "Stop Downloading"
-            
-            oflabel.hidden = false
-            currentlabel.hidden = false
-            totallabel.hidden = false
-            downloadProgressView.hidden = false
-            
-            currentlabel.stringValue = NSByteCountFormatter().stringFromByteCount(0)
-			
-			isDownloading = true
-			
-			disableUI()
-			
-			yearFetchIndicator.startAnimation(nil)
-			
-            filesToDownload.removeAll()
-            
-            for wwdcSession in self.allWWDCSessionsArray {
-                
-                if let file = wwdcSession.sdFile where (wwdcSession.sdFile?.shouldDownloadFile == true && wwdcSession.sdFile?.fileSize > 0) {
-                    filesToDownload.append(file)
-                }
-                if let file = wwdcSession.hdFile  where (wwdcSession.hdFile?.shouldDownloadFile == true && wwdcSession.hdFile?.fileSize > 0) {
-                    filesToDownload.append(file)
-                }
-                if let file = wwdcSession.pdfFile  where (wwdcSession.pdfFile?.shouldDownloadFile == true && wwdcSession.pdfFile?.fileSize > 0) {
-                    filesToDownload.append(file)
-                }
-            }
-
-			updateTotalProgress()
-            
-			downloadFiles(filesToDownload)
+			startDownloading()
 		}
 	}
-    
+	
 	
 
 	// MARK: - View / UI
     override func viewDidLoad() {
         super.viewDidLoad()
 		
-		myTableView.setDelegate(self)
-		myTableView.setDataSource(self)
-		
 		myTableView.allowsColumnSelection = false
 		myTableView.allowsMultipleSelection = false
 		myTableView.allowsEmptySelection = false
-        
-        oflabel.hidden = true
-        currentlabel.hidden = true
-		
-		allPDFCheckBox.enabled = false
-		allSDCheckBox.enabled = false
-		allHDCheckBox.enabled = false
-		allCodeCheckbox.enabled = false
 		
 		myTableView.reloadData()
-        
-        updateTotalFileSize()
+		
+		resetUIForYearFetch()
 	}
 	
-	func disableUI() {
+	func resetUIForYearFetch () {
+		
+		resetAllCheckboxesAndDisable()
+		
+		updateTotalFileSize()
+		
+		resetDownloadUI()
+		
+		startDownload.enabled = false
+	}
+	
+	func disableUIForDownloading () {
 		
 		yearSeletor.enabled = false
 		
@@ -198,14 +260,11 @@ class ViewController: NSViewController, NSURLSessionDelegate, NSURLSessionDataDe
 		allCodeCheckbox.enabled = false
 	}
 	
-	func enableUI() {
+	func reEnableUIWhenStoppedDownloading() {
 		
 		yearSeletor.enabled = true
 		
-		allPDFCheckBox.enabled = true
-		allSDCheckBox.enabled = true
-		allHDCheckBox.enabled = true
-		allCodeCheckbox.enabled = true
+		coordinateAllCheckBoxUI()
 	}
 	
 	func updateTotalProgress() {
@@ -218,11 +277,11 @@ class ViewController: NSViewController, NSURLSessionDelegate, NSURLSessionDataDe
 			}
 		}
 		
-		currentlabel.stringValue = NSByteCountFormatter().stringFromByteCount(currentDownloadBytes)
+		currentlabel.stringValue = byteFormatter.stringFromByteCount(currentDownloadBytes)
 		
-		let progress = Double(currentDownloadBytes)/Double(totalBytesToDownload)
+		let progress = Float(currentDownloadBytes)/Float(totalBytesToDownload)
 		
-		downloadProgressView.doubleValue = progress
+		downloadProgressView.doubleValue = Double(progress)
 	}
 	
 	func updateTotalFileSize() {
@@ -231,32 +290,29 @@ class ViewController: NSViewController, NSURLSessionDelegate, NSURLSessionDataDe
 		
 		for wwdcSession in self.allWWDCSessionsArray {
 			
-			if let file = wwdcSession.sdFile where (wwdcSession.sdFile?.shouldDownloadFile == true && wwdcSession.sdFile?.fileSize > 0) {
+			if let file = wwdcSession.pdfFile  where (wwdcSession.pdfFile?.shouldDownloadFile == true && wwdcSession.pdfFile?.fileSize > 0 && wwdcSession.pdfFile?.isFileAlreadyDownloaded == false) {
 				if let fileSize = file.fileSize {
 					totalBytesToDownload += Int64(fileSize)
 				}
 			}
-			if let file = wwdcSession.hdFile  where (wwdcSession.hdFile?.shouldDownloadFile == true && wwdcSession.hdFile?.fileSize > 0) {
+			if let file = wwdcSession.sdFile where (wwdcSession.sdFile?.shouldDownloadFile == true && wwdcSession.sdFile?.fileSize > 0 && wwdcSession.sdFile?.isFileAlreadyDownloaded == false) {
 				if let fileSize = file.fileSize {
 					totalBytesToDownload += Int64(fileSize)
 				}
 			}
-			if let file = wwdcSession.pdfFile  where (wwdcSession.pdfFile?.shouldDownloadFile == true && wwdcSession.pdfFile?.fileSize > 0) {
+			if let file = wwdcSession.hdFile  where (wwdcSession.hdFile?.shouldDownloadFile == true && wwdcSession.hdFile?.fileSize > 0 && wwdcSession.hdFile?.isFileAlreadyDownloaded == false) {
 				if let fileSize = file.fileSize {
 					totalBytesToDownload += Int64(fileSize)
 				}
 			}
-			
-			for sample in wwdcSession.sampleCodeArray {
+			for sample in wwdcSession.sampleCodeArray where (sample.shouldDownloadFile == true && sample.fileSize > 0 && sample.isFileAlreadyDownloaded == false) {
 				if let fileSize = sample.fileSize {
-					if sample.shouldDownloadFile == true && fileSize > 0 {
-						totalBytesToDownload += Int64(fileSize)
-					}
+					totalBytesToDownload += Int64(fileSize)
 				}
 			}
 		}
 		
-		totallabel.stringValue = NSByteCountFormatter().stringFromByteCount(totalBytesToDownload)
+		totallabel.stringValue = byteFormatter.stringFromByteCount(totalBytesToDownload)
 	}
 
 
@@ -264,37 +320,41 @@ class ViewController: NSViewController, NSURLSessionDelegate, NSURLSessionDataDe
 	// MARK: Fetch Year Info
 	func fetchSessionInfoForYear(year : WWDCYear) {
 		
-		isSessionInfoFetchComplete = false
+		resetUIForYearFetch()
+		
+		yearSeletor.enabled = false
+		
+		isYearInfoFetchComplete = false
 		allWWDCSessionsArray.removeAll()
 		myTableView.reloadData()
 		
 		yearFetchIndicator.startAnimation(nil)
 		
-		disableUI()
-		
 		downloadSessionInfo = DownloadSessionInfo(year: year, parsingCompleteHandler: { [unowned self] (sessions) -> Void in
 			
 				self.allWWDCSessionsArray = sessions
 			
-				dispatch_async(dispatch_get_main_queue()) {
+				dispatch_async(dispatch_get_main_queue()) { [unowned self] in
 					self.myTableView.reloadData()
 				}
 			},
 			individualSessionUpdateHandler: { [unowned self] (session) -> Void in
 				
 				if let index = self.allWWDCSessionsArray.indexOf(session) {
-					dispatch_async(dispatch_get_main_queue()) {
-							self.myTableView.reloadDataForRowIndexes(NSIndexSet(index: index), columnIndexes:NSIndexSet(indexesInRange: NSMakeRange(0,self.myTableView.numberOfColumns)))
+					dispatch_async(dispatch_get_main_queue()) { [unowned self] in
+						self.myTableView.reloadDataForRowIndexes(NSIndexSet(index: index), columnIndexes:NSIndexSet(indexesInRange: NSMakeRange(0,self.myTableView.numberOfColumns)))
 					}
 				}
 			},
-			completionHandler: {
+			completionHandler: { [unowned self] in
 				
 				print("ALL \(year) INFO DOWNLOADED")
 				
-				dispatch_async(dispatch_get_main_queue()) {
+				dispatch_async(dispatch_get_main_queue()) { [unowned self] in
 
-					self.isSessionInfoFetchComplete = true
+					self.yearSeletor.enabled = true
+
+					self.isYearInfoFetchComplete = true
 
 					self.yearFetchIndicator.stopAnimation(nil)
 
@@ -302,7 +362,9 @@ class ViewController: NSViewController, NSURLSessionDelegate, NSURLSessionDataDe
 
 					self.myTableView.reloadData()
 					
-					self.enableUI()
+					self.reEnableCheckboxes()
+					
+					self.coordinateAllCheckBoxUI()
 				}
 			})
 	}
@@ -345,14 +407,16 @@ class ViewController: NSViewController, NSURLSessionDelegate, NSURLSessionDataDe
 
 			if let file = wwdcSession.pdfFile {
 				cell.fileArray = [file]
-				cell.updateCell(isSessionInfoFetchComplete)
+				cell.updateCell(isYearInfoFetchComplete, isDownloadSessionActive: isDownloading)
 			}
 			
 			if wwdcSession.isInfoFetchComplete {
 				cell.loadingProgressView.stopAnimation(nil)
+				cell.loadingProgressView.hidden = true
 			}
 			else {
 				cell.loadingProgressView.startAnimation(nil)
+				cell.loadingProgressView.hidden = false
 			}
 			
 			return cell
@@ -367,14 +431,16 @@ class ViewController: NSViewController, NSURLSessionDelegate, NSURLSessionDataDe
 
 			if let file = wwdcSession.sdFile {
 				cell.fileArray = [file]
-				cell.updateCell(isSessionInfoFetchComplete)
+				cell.updateCell(isYearInfoFetchComplete, isDownloadSessionActive: isDownloading)
 			}
 			
 			if wwdcSession.isInfoFetchComplete {
 				cell.loadingProgressView.stopAnimation(nil)
+				cell.loadingProgressView.hidden = true
 			}
 			else {
 				cell.loadingProgressView.startAnimation(nil)
+				cell.loadingProgressView.hidden = false
 			}
 			
 			return cell
@@ -389,14 +455,16 @@ class ViewController: NSViewController, NSURLSessionDelegate, NSURLSessionDataDe
 
 			if let file = wwdcSession.hdFile {
 				cell.fileArray = [file]
-				cell.updateCell(isSessionInfoFetchComplete)
+				cell.updateCell(isYearInfoFetchComplete, isDownloadSessionActive: isDownloading)
 			}
 			
 			if wwdcSession.isInfoFetchComplete {
 				cell.loadingProgressView.stopAnimation(nil)
+				cell.loadingProgressView.hidden = true
 			}
 			else {
 				cell.loadingProgressView.startAnimation(nil)
+				cell.loadingProgressView.hidden = false
 			}
 			
 			return cell
@@ -411,14 +479,16 @@ class ViewController: NSViewController, NSURLSessionDelegate, NSURLSessionDataDe
 
 			if wwdcSession.sampleCodeArray.count > 0 {
 				cell.fileArray = wwdcSession.sampleCodeArray
-				cell.updateCell(isSessionInfoFetchComplete)
+				cell.updateCell(isYearInfoFetchComplete, isDownloadSessionActive: isDownloading)
 			}
 			
 			if wwdcSession.isInfoFetchComplete {
 				cell.loadingProgressView.stopAnimation(nil)
+				cell.loadingProgressView.hidden = true
 			}
 			else {
 				cell.loadingProgressView.startAnimation(nil)
+				cell.loadingProgressView.hidden = false
 			}
 			
 			return cell
@@ -430,7 +500,7 @@ class ViewController: NSViewController, NSURLSessionDelegate, NSURLSessionDataDe
 	}
 	
 	
-	// MARK: - Download Convenience
+	// MARK: - Download
 	func  downloadFiles(files : [FileInfo] ) {
 		
 		print("Total Files to download - \(files.count)")
@@ -442,10 +512,9 @@ class ViewController: NSViewController, NSURLSessionDelegate, NSURLSessionDataDe
 			dispatch_group_enter(downloadGroup);
 			
 			let progressWrapper = ProgressWrapper(handler: { [unowned self] (progress) -> Void in
-				//print("\(file.displayName!) - \(progress)")
 				
-				dispatch_async(dispatch_get_main_queue()) {
-					if let index = self.allWWDCSessionsArray.indexOf(file.session) {
+				if let index = self.allWWDCSessionsArray.indexOf(file.session) {
+					dispatch_async(dispatch_get_main_queue()) { [unowned self] in
 						switch file.fileType {
 						case .PDF:
 							self.myTableView.reloadDataForRowIndexes(NSIndexSet(index: index), columnIndexes:NSIndexSet(indexesInRange: NSMakeRange(2,1)))
@@ -456,14 +525,14 @@ class ViewController: NSViewController, NSURLSessionDelegate, NSURLSessionDataDe
 						case .SampleCode:
 							self.myTableView.reloadDataForRowIndexes(NSIndexSet(index: index), columnIndexes:NSIndexSet(indexesInRange: NSMakeRange(5,1)))
 						}
+						
+						self.updateTotalProgress()
 					}
-                    
-                    self.updateTotalProgress()
 				}
 
 			})
 			
-			let completionWrapper = SimpleCompletionWrapper(handler: { (success) -> Void in
+			let completionWrapper = SimpleCompletionWrapper(handler: { [unowned self] (success) -> Void in
 				
 				if success {
 					
@@ -475,14 +544,13 @@ class ViewController: NSViewController, NSURLSessionDelegate, NSURLSessionDataDe
 					print("Download Fail - \(file.displayName!)")
 				}
 				
-				dispatch_async(dispatch_get_main_queue()) {
-					if let index = self.allWWDCSessionsArray.indexOf(file.session) {
+				if let index = self.allWWDCSessionsArray.indexOf(file.session) {
+					dispatch_async(dispatch_get_main_queue()) { [unowned self] in
 						self.myTableView.reloadDataForRowIndexes(NSIndexSet(index: index), columnIndexes:NSIndexSet(indexesInRange: NSMakeRange(0,self.myTableView.numberOfColumns)))
+						self.updateTotalProgress()
 					}
-                    
-                    self.updateTotalProgress()
 				}
-				
+
 				dispatch_group_leave(downloadGroup)
 			})
 			
@@ -490,29 +558,92 @@ class ViewController: NSViewController, NSURLSessionDelegate, NSURLSessionDataDe
 		}
 		
 		dispatch_group_notify(downloadGroup,dispatch_get_main_queue(),{ [unowned self] in
-			
-			self.yearFetchIndicator.stopAnimation(nil)
-            
-            self.startDownload.title = "Start Downloading"
-            
-            self.isDownloading = false
-            
             self.stopDownloading()
-            
-            self.enableUI()
-            
-            self.filesToDownload.removeAll()
-			
-			print("Finished All File Downloads")
 		})
+	}
+	
+	func startDownloading () {
+		
+		isDownloading = true
+
+		startDownload.title = "Stop Downloading"
+		
+		disableUIForDownloading()
+		
+		yearFetchIndicator.startAnimation(nil)
+		
+		filesToDownload.removeAll()
+		
+		for wwdcSession in self.allWWDCSessionsArray {
+			
+			if let file = wwdcSession.pdfFile  where (wwdcSession.pdfFile?.shouldDownloadFile == true && wwdcSession.pdfFile?.fileSize > 0  && wwdcSession.pdfFile?.isFileAlreadyDownloaded == false) {
+				filesToDownload.append(file)
+			}
+			if let file = wwdcSession.sdFile where (wwdcSession.sdFile?.shouldDownloadFile == true && wwdcSession.sdFile?.fileSize > 0  && wwdcSession.sdFile?.isFileAlreadyDownloaded == false) {
+				filesToDownload.append(file)
+			}
+			if let file = wwdcSession.hdFile  where (wwdcSession.hdFile?.shouldDownloadFile == true && wwdcSession.hdFile?.fileSize > 0  && wwdcSession.hdFile?.isFileAlreadyDownloaded == false) {
+				filesToDownload.append(file)
+			}
+			for file in wwdcSession.sampleCodeArray where (file.shouldDownloadFile == true && file.fileSize > 0  && file.isFileAlreadyDownloaded == false)  {
+				filesToDownload.append(file)
+			}
+		}
+		
+		updateTotalProgress()
+		oflabel.hidden = false
+		updateTotalFileSize()
+		
+		myTableView.reloadData()
+		
+		downloadFiles(filesToDownload)
 	}
 	
 	func stopDownloading () {
 		
-		DownloadFileManager.sharedManager.stopDownloads()
+		isDownloading = false
+
+		startDownload.title = "Start Downloading"
+
+		reEnableUIWhenStoppedDownloading()
+		
+		yearFetchIndicator.stopAnimation(nil)
+		
+		filesToDownload.removeAll()
+		
+		myTableView.reloadData()
+		
+		print("Completed File Downloads")
 	}
-    
 	
+	func resetDownloadUI() {
+		
+		currentlabel.stringValue = ""
+		oflabel.hidden = true
+		totallabel.stringValue = byteFormatter.stringFromByteCount(0)
+		downloadProgressView.doubleValue = 0
+	}
+	
+	func resetAllCheckboxesAndDisable() {
+		
+		allPDFCheckBox.state = 1
+		allSDCheckBox.state = 1
+		allHDCheckBox.state = 1
+		allCodeCheckbox.state = 1
+		
+		allPDFCheckBox.enabled = false
+		allSDCheckBox.enabled = false
+		allHDCheckBox.enabled = false
+		allCodeCheckbox.enabled = false
+	}
+	
+	func reEnableCheckboxes () {
+		
+		allPDFCheckBox.enabled = true
+		allSDCheckBox.enabled = true
+		allHDCheckBox.enabled = true
+		allCodeCheckbox.enabled = true
+	}
 	
 	
     override var representedObject: AnyObject? {

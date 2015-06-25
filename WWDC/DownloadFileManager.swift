@@ -74,7 +74,7 @@ typealias HeaderCompletionHandler = ((fileSize:Int?, errorCode:Int?) -> Void)
             callbackWrapper.addCompletionWrapper(completionWrapper)
             backgroundHandlersForFiles[file] = callbackWrapper
             
-            startDownload(file, callbacks: callbackWrapper)
+            startDownload(file)
         }
     }
 	
@@ -108,7 +108,7 @@ typealias HeaderCompletionHandler = ((fileSize:Int?, errorCode:Int?) -> Void)
 
 	
 	// MARK: -
-    private func startDownload(file: FileInfo, callbacks:CallbackWrapper?) {
+    private func startDownload(file: FileInfo) {
         
         if logFileManager { print("Queue Download of \(file.displayName!)") }
         

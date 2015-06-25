@@ -50,8 +50,8 @@ class DownloadSessionInfo: NSObject {
         
         if let videoURLString = videoURLString {
 
-            let task = NSURLSession.sharedSession().dataTaskWithURL(videoURLString) { [unowned self]  (url, response, error) in
-                self.downloadMainPageFinished(url, response: response as? NSHTTPURLResponse, error: error)
+            let task = NSURLSession.sharedSession().dataTaskWithURL(videoURLString) { [unowned self]  (data, response, error) in
+                self.downloadMainPageFinished(data, response: response as? NSHTTPURLResponse, error: error)
             }
             
             if let task = task {
@@ -76,7 +76,6 @@ class DownloadSessionInfo: NSObject {
                 case .WWDC2013:
                     parse2014Doc(doc)
             }
-            
         }
         else if let error = error {
             print("Main Page Error - \(error)")

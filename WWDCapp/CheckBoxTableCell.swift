@@ -11,8 +11,6 @@ import Cocoa
 
 class CheckBoxTableViewCell : NSTableCellView {
 	
-	weak var file : FileInfo?
-	
 	var fileArray : [FileInfo]?
 	
 	@IBOutlet weak var checkBox: NSButton!
@@ -20,12 +18,6 @@ class CheckBoxTableViewCell : NSTableCellView {
 	@IBOutlet weak var loadingProgressView: NSProgressIndicator!
 	@IBOutlet weak var downloadProgressView: NSProgressIndicator!
 	@IBOutlet weak var downloadCompleteImage: NSButton!
-	
-	@IBAction func checked(sender: NSButton) {
-		if let file = file {
-			file.shouldDownloadFile = Bool(sender.state)
-		}
-	}
 	
 	func resetCell() {
 		
@@ -35,19 +27,52 @@ class CheckBoxTableViewCell : NSTableCellView {
 		self.downloadCompleteImage.hidden = true
 	}
 	
-	func updateCell(isSessionInfoFetchComplete:Bool) {
+	func updateCell(isYearInfoFetchComplete:Bool, isDownloadSessionActive:Bool) {
 		
-		var isAllFilesSizeFetchComplete = false
-		var isAllFilesAlreadyDownloaded = false
+		var isAllFilesSizeFetchComplete = true
+		var isAllFilesAlreadyDownloaded = true
 		var isAllFilesDownloading = false
-		var isAllFilesShouldDownload = false
-		var fileDownloadProgress : Float = 0
-		var totalDownloadSize : Int64 = 0
+		var isAllFilesShouldDownload = true
+		var currentDownloadBytes : Int64 = 0
+		var totalDownloadSizeBytes : Int64 = 0
 		
 		if let fileArray = fileArray {
 			for file in fileArray {
 				
+				if let fileSize = file.fileSize {
+					
+					currentDownloadBytes += Int64(Double(file.downloadProgress)*Double(fileSize))
+					totalDownloadSizeBytes += Int64(fileSize)
+					
+					// Progress
+					if file.isFileAlreadyDownloaded == false {
+	
+						if isAllFilesAlreadyDownloaded == true {
+							isAllFilesAlreadyDownloaded = false
+						}
+						
+						if file.downloadProgress > 0 {
+							if isAllFilesDownloading == false {
+								isAllFilesDownloading = true
+							}
+						}
+					}
+					else {
+						if isAllFilesDownloading == true {
+							isAllFilesDownloading = false
+						}
+					}
+				}
+				else {
+					
+					if isAllFilesSizeFetchComplete == true {
+						isAllFilesSizeFetchComplete = false
+					}
+				}
 				
+				if file.shouldDownloadFile == false {
+					isAllFilesShouldDownload = false
+				}
 			}
 		}
 		
@@ -66,12 +91,13 @@ class CheckBoxTableViewCell : NSTableCellView {
 			else {
 				if isAllFilesDownloading {
 					self.downloadProgressView.hidden = false
-					self.downloadProgressView.doubleValue = Double(fileDownloadProgress)
-					self.label.stringValue = NSByteCountFormatter().stringFromByteCount(Int64(fileDownloadProgress*Float(totalDownloadSize)))
+					let progress = Double(Float(currentDownloadBytes)/Float(totalDownloadSizeBytes))
+					self.downloadProgressView.doubleValue = progress
+					self.label.stringValue = NSByteCountFormatter().stringFromByteCount(Int64(progress*Double(totalDownloadSizeBytes)))
 				}
 				else {
 					self.downloadProgressView.hidden = true
-					self.label.stringValue = NSByteCountFormatter().stringFromByteCount(Int64(totalDownloadSize))
+					self.label.stringValue = NSByteCountFormatter().stringFromByteCount(totalDownloadSizeBytes)
 				}
 			}
 			
@@ -82,16 +108,22 @@ class CheckBoxTableViewCell : NSTableCellView {
 			self.downloadProgressView.hidden = true
 		}
 		
-		// enabled
-		if (isSessionInfoFetchComplete) {
+		if (isYearInfoFetchComplete) {
 			
-			self.checkBox.enabled = true
 			
 			if isAllFilesShouldDownload == true {
 				self.checkBox.state = 1
 			}
 			else {
 				self.checkBox.state = 0
+			}
+			
+			if (isDownloadSessionActive) {
+				self.checkBox.enabled = false
+
+			}
+			else {
+				self.checkBox.enabled = true
 			}
 		}
 		else {

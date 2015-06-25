@@ -741,7 +741,7 @@
                             <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="2Uk-zV-FYf">
                                 <rect key="frame" x="766" y="18" width="160" height="25"/>
                                 <animations/>
-                                <buttonCell key="cell" type="roundTextured" title="Start Download" bezelStyle="texturedRounded" alignment="center" enabled="NO" state="on" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="pOo-Tq-sg7">
+                                <buttonCell key="cell" type="roundTextured" title="Start Download" bezelStyle="texturedRounded" alignment="center" state="on" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="pOo-Tq-sg7">
                                     <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                                     <font key="font" metaFont="system"/>
                                 </buttonCell>
@@ -856,7 +856,7 @@
                                                                         <font key="font" metaFont="system"/>
                                                                     </buttonCell>
                                                                     <connections>
-                                                                        <action selector="checked:" target="XN5-Bl-Ag6" id="aUO-qm-cbj"/>
+                                                                        <action selector="singleChecked:" target="XfG-lQ-9wD" id="bVK-oa-aVI"/>
                                                                     </connections>
                                                                 </button>
                                                                 <progressIndicator wantsLayer="YES" fixedFrame="YES" maxValue="1" style="bar" translatesAutoresizingMaskIntoConstraints="NO" id="lZ2-UJ-cEH">
@@ -892,7 +892,6 @@
                                                                 <outlet property="downloadProgressView" destination="lZ2-UJ-cEH" id="yv0-WK-JFF"/>
                                                                 <outlet property="label" destination="djj-Az-BU3" id="NFc-31-qba"/>
                                                                 <outlet property="loadingProgressView" destination="rlj-5i-n0V" id="ZG6-Kf-vAI"/>
-                                                                <outlet property="progressView" destination="lZ2-UJ-cEH" id="LVh-hH-wgc"/>
                                                             </connections>
                                                         </tableCellView>
                                                     </prototypeCellViews>
@@ -922,7 +921,7 @@
                                                                         <font key="font" metaFont="system"/>
                                                                     </buttonCell>
                                                                     <connections>
-                                                                        <action selector="checked:" target="lke-Gm-rNp" id="kMU-DS-9gC"/>
+                                                                        <action selector="singleChecked:" target="XfG-lQ-9wD" id="Yrp-le-7vq"/>
                                                                     </connections>
                                                                 </button>
                                                                 <progressIndicator wantsLayer="YES" fixedFrame="YES" maxValue="1" style="bar" translatesAutoresizingMaskIntoConstraints="NO" id="iuT-PE-Bxv">
@@ -958,7 +957,6 @@
                                                                 <outlet property="downloadProgressView" destination="iuT-PE-Bxv" id="tYd-Gl-eIi"/>
                                                                 <outlet property="label" destination="uwa-vg-dVW" id="Hoh-yp-T3X"/>
                                                                 <outlet property="loadingProgressView" destination="o9h-TZ-POI" id="Xal-cy-sTA"/>
-                                                                <outlet property="progressView" destination="iuT-PE-Bxv" id="Zby-w9-eQX"/>
                                                             </connections>
                                                         </tableCellView>
                                                     </prototypeCellViews>
@@ -988,7 +986,7 @@
                                                                         <font key="font" metaFont="system"/>
                                                                     </buttonCell>
                                                                     <connections>
-                                                                        <action selector="checked:" target="BRJ-vK-4k4" id="M2q-hN-r3M"/>
+                                                                        <action selector="singleChecked:" target="XfG-lQ-9wD" id="A8E-c5-lFx"/>
                                                                     </connections>
                                                                 </button>
                                                                 <progressIndicator wantsLayer="YES" fixedFrame="YES" maxValue="1" style="bar" translatesAutoresizingMaskIntoConstraints="NO" id="YQ9-Gz-LAK">
@@ -1024,7 +1022,6 @@
                                                                 <outlet property="downloadProgressView" destination="YQ9-Gz-LAK" id="Mym-hI-rUS"/>
                                                                 <outlet property="label" destination="RTl-b9-Pcu" id="yY2-C0-HeT"/>
                                                                 <outlet property="loadingProgressView" destination="Xaz-o6-8u8" id="y0o-8W-VWK"/>
-                                                                <outlet property="progressView" destination="YQ9-Gz-LAK" id="WCJ-mv-C4b"/>
                                                             </connections>
                                                         </tableCellView>
                                                     </prototypeCellViews>
@@ -1054,7 +1051,7 @@
                                                                         <font key="font" metaFont="system"/>
                                                                     </buttonCell>
                                                                     <connections>
-                                                                        <action selector="checked:" target="fVV-S8-xk2" id="Zbh-n0-4we"/>
+                                                                        <action selector="singleChecked:" target="XfG-lQ-9wD" id="HF0-IY-xuW"/>
                                                                     </connections>
                                                                 </button>
                                                                 <progressIndicator wantsLayer="YES" fixedFrame="YES" maxValue="1" style="bar" translatesAutoresizingMaskIntoConstraints="NO" id="nee-rf-5ea">
@@ -1090,12 +1087,15 @@
                                                                 <outlet property="downloadProgressView" destination="nee-rf-5ea" id="yhM-qT-sHG"/>
                                                                 <outlet property="label" destination="dS8-HG-4eW" id="2ab-RY-w6D"/>
                                                                 <outlet property="loadingProgressView" destination="9s2-9m-UxR" id="U8u-LB-pem"/>
-                                                                <outlet property="progressView" destination="nee-rf-5ea" id="DaN-cS-yWL"/>
                                                             </connections>
                                                         </tableCellView>
                                                     </prototypeCellViews>
                                                 </tableColumn>
                                             </tableColumns>
+                                            <connections>
+                                                <outlet property="dataSource" destination="XfG-lQ-9wD" id="LrG-ZG-wLT"/>
+                                                <outlet property="delegate" destination="XfG-lQ-9wD" id="Mhc-oJ-Q50"/>
+                                            </connections>
                                         </tableView>
                                     </subviews>
                                     <animations/>
@@ -1141,9 +1141,9 @@
                                 </textFieldCell>
                             </textField>
                             <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="ang-ho-9A3">
-                                <rect key="frame" x="594" y="27" width="72" height="17"/>
+                                <rect key="frame" x="623" y="27" width="57" height="17"/>
                                 <animations/>
-                                <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" alignment="right" id="zJ5-L6-AYd">
+                                <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" alignment="left" id="zJ5-L6-AYd">
                                     <font key="font" metaFont="smallSystem"/>
                                     <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
                                     <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
