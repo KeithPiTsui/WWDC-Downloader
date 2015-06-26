@@ -306,6 +306,12 @@ class ViewController: NSViewController, NSURLSessionDelegate, NSURLSessionDataDe
 	
 	func resetUIForYearFetch () {
 		
+		isFiltered = false
+		
+		searchField.stringValue = ""
+		
+		visibleWWDCSessionsArray.removeAll()
+		
 		searchField.enabled = false
 		
 		resetAllCheckboxesAndDisable()
