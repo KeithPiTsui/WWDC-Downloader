@@ -45,7 +45,7 @@
 		44776DA81B399950004B9178 /* FileInfo.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = FileInfo.swift; path = Common/FileInfo.swift; sourceTree = "<group>"; };
 		4479EA751B3C114600D5558D /* CheckBoxTableCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CheckBoxTableCell.swift; sourceTree = "<group>"; };
 		44DBD9EB1B3AC4C60097E20C /* .gitignore */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = .gitignore; sourceTree = "<group>"; };
-		A90284041B2FBDEA00755CA1 /* DownloadSessionInfo.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = DownloadSessionInfo.swift; path = WWDC/DownloadSessionInfo.swift; sourceTree = "<group>"; };
+		A90284041B2FBDEA00755CA1 /* DownloadSessionInfo.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = DownloadSessionInfo.swift; path = Common/DownloadSessionInfo.swift; sourceTree = "<group>"; };
 		A9528F241B34C40D002290D3 /* WWDCapp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = WWDCapp.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		A9528F261B34C40E002290D3 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		A9528F281B34C40E002290D3 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
@@ -54,15 +54,15 @@
 		A9528F2F1B34C40E002290D3 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		A9528F3E1B34C5D4002290D3 /* WWDCapp-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "WWDCapp-Bridging-Header.h"; sourceTree = "<group>"; };
 		A96E4D611B2D44910030F908 /* libxml2.2.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libxml2.2.dylib; path = /usr/lib/libxml2.2.dylib; sourceTree = "<absolute>"; };
-		A96E4D631B2EB2770030F908 /* WWDCSession.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = WWDCSession.swift; path = WWDC/WWDCSession.swift; sourceTree = "<group>"; };
-		A96E4D651B2F62340030F908 /* StringExtras.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = StringExtras.swift; path = WWDC/StringExtras.swift; sourceTree = "<group>"; };
+		A96E4D631B2EB2770030F908 /* WWDCSession.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = WWDCSession.swift; path = Common/WWDCSession.swift; sourceTree = "<group>"; };
+		A96E4D651B2F62340030F908 /* StringExtras.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = StringExtras.swift; path = Common/StringExtras.swift; sourceTree = "<group>"; };
 		A983F8501B2D15A600ED681E /* WWDC-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "WWDC-Bridging-Header.h"; sourceTree = "<group>"; };
-		A983F8511B2D15A700ED681E /* TFHpple.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TFHpple.h; sourceTree = "<group>"; };
-		A983F8521B2D15A700ED681E /* TFHpple.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TFHpple.m; sourceTree = "<group>"; };
-		A983F8531B2D15A700ED681E /* TFHppleElement.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TFHppleElement.h; sourceTree = "<group>"; };
-		A983F8541B2D15A700ED681E /* TFHppleElement.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TFHppleElement.m; sourceTree = "<group>"; };
-		A983F8551B2D15A700ED681E /* XPathQuery.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = XPathQuery.h; sourceTree = "<group>"; };
-		A983F8561B2D15A700ED681E /* XPathQuery.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = XPathQuery.m; sourceTree = "<group>"; };
+		A983F8511B2D15A700ED681E /* TFHpple.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = TFHpple.h; path = ../Common/TFHpple.h; sourceTree = "<group>"; };
+		A983F8521B2D15A700ED681E /* TFHpple.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = TFHpple.m; path = ../Common/TFHpple.m; sourceTree = "<group>"; };
+		A983F8531B2D15A700ED681E /* TFHppleElement.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = TFHppleElement.h; path = ../Common/TFHppleElement.h; sourceTree = "<group>"; };
+		A983F8541B2D15A700ED681E /* TFHppleElement.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = TFHppleElement.m; path = ../Common/TFHppleElement.m; sourceTree = "<group>"; };
+		A983F8551B2D15A700ED681E /* XPathQuery.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = XPathQuery.h; path = ../Common/XPathQuery.h; sourceTree = "<group>"; };
+		A983F8561B2D15A700ED681E /* XPathQuery.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = XPathQuery.m; path = ../Common/XPathQuery.m; sourceTree = "<group>"; };
 		A99B1FE81B2CC5DD0019067A /* WWDC.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = WWDC.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		A99B1FEB1B2CC5DD0019067A /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		A99B1FED1B2CC5DD0019067A /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
@@ -70,8 +70,8 @@
 		A99B1FF21B2CC5DD0019067A /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		A99B1FF51B2CC5DD0019067A /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		A99B1FF71B2CC5DD0019067A /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		A9F9BADA1B34689300BEA874 /* BlockWrappers.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = BlockWrappers.swift; path = WWDC/BlockWrappers.swift; sourceTree = "<group>"; };
-		A9F9BADB1B34689300BEA874 /* DownloadFileManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = DownloadFileManager.swift; path = WWDC/DownloadFileManager.swift; sourceTree = "<group>"; };
+		A9F9BADA1B34689300BEA874 /* BlockWrappers.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = BlockWrappers.swift; path = Common/BlockWrappers.swift; sourceTree = "<group>"; };
+		A9F9BADB1B34689300BEA874 /* DownloadFileManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = DownloadFileManager.swift; path = Common/DownloadFileManager.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
