@@ -19,7 +19,7 @@ enum FileType {
 @objc class FileInfo : NSObject {
 	
 	let fileType : FileType
-	let session : WWDCSession
+	weak var session : WWDCSession?
 	
 	var remoteFileURL : NSURL?
 	var fileSize : Int?
@@ -28,22 +28,39 @@ enum FileType {
 	
 	var downloadProgress : Float = 0
 	
+	var attemptsToDownloadFile = 0
+	var fileErrorCode : NSError?
 	
 	var sessionID : String {
 		get {
-			return session.sessionID
+			if let session = session {
+				return session.sessionID
+			}
+			else {
+				return ""
+			}
 		}
 	}
 	
 	var title : String {
 		get {
-			return session.title
+			if let session = session {
+				return session.title
+			}
+			else {
+				return ""
+			}
 		}
 	}
 	
 	var year : WWDCYear {
 		get {
-			return session.sessionYear
+			if let session = session {
+				return session.sessionYear
+			}
+			else {
+				return .WWDC2015 // should never happen but needed to satisfy weak optional to break ref cycle
+			}
 		}
 	}
 

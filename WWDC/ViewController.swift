@@ -13,6 +13,9 @@ class ViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view, typically from a nib.
+        @IBOutlet weak var searchField: NSSearchField!
+		@IBOutlet weak var searchFiels: NSSearchField!
+		@IBOutlet weak var searchField: NSSearchField!
         
 		
 	}

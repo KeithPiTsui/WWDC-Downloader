@@ -12,6 +12,7 @@ class ViewController: NSViewController, NSURLSessionDelegate, NSURLSessionDataDe
 
 	@IBOutlet weak var yearSeletor: NSPopUpButton!
 	@IBOutlet weak var yearFetchIndicator: NSProgressIndicator!
+	@IBOutlet weak var searchField: NSSearchField!
 
 	@IBOutlet weak var allCodeCheckbox: NSButton!
 	@IBOutlet weak var allSDCheckBox: NSButton!
@@ -30,6 +31,7 @@ class ViewController: NSViewController, NSURLSessionDelegate, NSURLSessionDataDe
 
 	
 	var allWWDCSessionsArray : [WWDCSession] = []
+	var visibleWWDCSessionsArray : [WWDCSession] = []
 
 	private var downloadSessionInfo : DownloadSessionInfo?
 	
@@ -40,6 +42,8 @@ class ViewController: NSViewController, NSURLSessionDelegate, NSURLSessionDataDe
     private var totalBytesToDownload : Int64 = 0
 	
 	private let byteFormatter : NSByteCountFormatter
+	
+	private var isFiltered  = false
 	
 	// MARK: - Init
 	required init?(coder: NSCoder) {
@@ -67,8 +71,36 @@ class ViewController: NSViewController, NSURLSessionDelegate, NSURLSessionDataDe
         }
 	}
 	
+	@IBAction func searchEntered(sender: NSSearchField) {
+	
+		if sender.stringValue.isEmpty {
+			isFiltered = false
+		}
+		else {
+			isFiltered = true
+			
+			var newArray = [WWDCSession]()
+			
+			for wwdcSession in allWWDCSessionsArray {
+				if wwdcSession.title.localizedStandardContainsString(sender.stringValue.stringByTrimmingCharactersInSet(NSCharacterSet.whitespaceCharacterSet())) {
+					newArray.append(wwdcSession)
+				}
+			}
+
+			visibleWWDCSessionsArray = newArray
+		}
+		
+		dispatch_async(dispatch_get_main_queue()) { [unowned self] in
+			self.myTableView.reloadData()
+		}
+		
+	}
+	
+
 	@IBAction func allPDFChecked(sender: NSButton) {
 		
+		resetDownloadUI()
+
 		for wwdcSession in allWWDCSessionsArray {
 			wwdcSession.pdfFile?.shouldDownloadFile = Bool(sender.state)
 		}
@@ -80,6 +112,8 @@ class ViewController: NSViewController, NSURLSessionDelegate, NSURLSessionDataDe
 	
 	@IBAction func allSDChecked(sender: NSButton) {
 		
+		resetDownloadUI()
+
 		for wwdcSession in allWWDCSessionsArray {
 			wwdcSession.sdFile?.shouldDownloadFile = Bool(sender.state)
 		}
@@ -91,6 +125,8 @@ class ViewController: NSViewController, NSURLSessionDelegate, NSURLSessionDataDe
 	
 	@IBAction func allHDChecked(sender: NSButton) {
 		
+		resetDownloadUI()
+
 		for wwdcSession in allWWDCSessionsArray {
 			wwdcSession.hdFile?.shouldDownloadFile = Bool(sender.state)
 		}
@@ -98,10 +134,13 @@ class ViewController: NSViewController, NSURLSessionDelegate, NSURLSessionDataDe
 		myTableView.reloadDataForRowIndexes(NSIndexSet(indexesInRange: NSMakeRange(0,allWWDCSessionsArray.count)) , columnIndexes:NSIndexSet(index: 4))
 		
         updateTotalFileSize()
+		
 	}
 	
 	@IBAction func allCodeChecked(sender: NSButton) {
 		
+		resetDownloadUI()
+
 		for wwdcSession in allWWDCSessionsArray {
 			for code in wwdcSession.sampleCodeArray {
 				code.shouldDownloadFile = Bool(sender.state)
@@ -116,6 +155,8 @@ class ViewController: NSViewController, NSURLSessionDelegate, NSURLSessionDataDe
 	
 	@IBAction func singleChecked(sender: NSButton) {
 		
+		resetDownloadUI()
+
 		let cell = sender.superview as! CheckBoxTableViewCell
 		
 		if let fileArray = cell.fileArray {
@@ -133,6 +174,30 @@ class ViewController: NSViewController, NSURLSessionDelegate, NSURLSessionDataDe
 		updateTotalFileSize()
 		
 		coordinateAllCheckBoxUI()
+		
+	}
+	
+	@IBAction func fileClicked(sender: NSButton) {
+		
+		let cell = sender.superview as! CheckBoxTableViewCell
+		
+		if let fileArray = cell.fileArray {
+			if let fileInfo = fileArray.first {
+				
+				guard let localFileURL = fileInfo.localFileURL else { return }
+				
+				switch fileInfo.fileType {
+				case .PDF:
+					NSWorkspace.sharedWorkspace().openURL(localFileURL)
+				case .SD:
+					NSWorkspace.sharedWorkspace().openURL(localFileURL)
+				case .HD:
+					NSWorkspace.sharedWorkspace().openURL(localFileURL)
+				case .SampleCode:
+					NSWorkspace.sharedWorkspace().selectFile(localFileURL.filePathURL?.path, inFileViewerRootedAtPath: localFileURL.filePathURL?.absoluteString.stringByDeletingLastPathComponent)
+				}
+			}
+		}
 	}
 	
 	private func coordinateAllCheckBoxUI() {
@@ -175,7 +240,7 @@ class ViewController: NSViewController, NSURLSessionDelegate, NSURLSessionDataDe
 			}
 		}
 
-		print("PDFs-\(countPDF), SD-\(countSD), HD-\(countHD), Code-\(countCode)")
+		// print("PDFs-\(countPDF), SD-\(countSD), HD-\(countHD), Code-\(countCode)")
 		
 		if countPDF > 0 {
 			allPDFCheckBox.state = Int(shouldCheckAllPDF)
@@ -241,6 +306,8 @@ class ViewController: NSViewController, NSURLSessionDelegate, NSURLSessionDataDe
 	
 	func resetUIForYearFetch () {
 		
+		searchField.enabled = false
+		
 		resetAllCheckboxesAndDisable()
 		
 		updateTotalFileSize()
@@ -269,19 +336,25 @@ class ViewController: NSViewController, NSURLSessionDelegate, NSURLSessionDataDe
 	
 	func updateTotalProgress() {
 		
-		var currentDownloadBytes : Int64 = 0
-		
-		for file in filesToDownload {
-			if let fileSize = file.fileSize {
-				currentDownloadBytes += Int64(file.downloadProgress*Float(fileSize))
+		dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), { [unowned self] in
+			
+			var currentDownloadBytes : Int64 = 0
+			
+			for file in self.filesToDownload {
+				if let fileSize = file.fileSize {
+					currentDownloadBytes += Int64(file.downloadProgress*Float(fileSize))
+				}
 			}
-		}
-		
-		currentlabel.stringValue = byteFormatter.stringFromByteCount(currentDownloadBytes)
-		
-		let progress = Float(currentDownloadBytes)/Float(totalBytesToDownload)
-		
-		downloadProgressView.doubleValue = Double(progress)
+			
+			dispatch_async(dispatch_get_main_queue(), { [unowned self] in
+				
+				self.currentlabel.stringValue = self.byteFormatter.stringFromByteCount(currentDownloadBytes)
+				
+				let progress = Float(currentDownloadBytes)/Float(self.totalBytesToDownload)
+				
+				self.downloadProgressView.doubleValue = Double(progress)
+			})
+		})
 	}
 	
 	func updateTotalFileSize() {
@@ -352,6 +425,8 @@ class ViewController: NSViewController, NSURLSessionDelegate, NSURLSessionDataDe
 				
 				dispatch_async(dispatch_get_main_queue()) { [unowned self] in
 
+					self.searchField.enabled = true
+					
 					self.yearSeletor.enabled = true
 
 					self.isYearInfoFetchComplete = true
@@ -359,8 +434,10 @@ class ViewController: NSViewController, NSURLSessionDelegate, NSURLSessionDataDe
 					self.yearFetchIndicator.stopAnimation(nil)
 
 					self.startDownload.enabled = true
-
-					self.myTableView.reloadData()
+					
+					let sessionIDSortDescriptor = NSSortDescriptor(key: "sessionID", ascending: true, selector: "localizedStandardCompare:")
+					
+					self.myTableView.sortDescriptors = [sessionIDSortDescriptor]  // This fires reload of table
 					
 					self.reEnableCheckboxes()
 					
@@ -372,7 +449,13 @@ class ViewController: NSViewController, NSURLSessionDelegate, NSURLSessionDataDe
 	
 	// MARK: - TableView
 	func numberOfRowsInTableView(tableView: NSTableView) -> Int {
-		return self.allWWDCSessionsArray.count
+		
+		if !isFiltered {
+			return self.allWWDCSessionsArray.count
+		}
+		else {
+			return self.visibleWWDCSessionsArray.count
+		}
 	}
 	
 	func selectionShouldChangeInTableView(tableView: NSTableView) -> Bool {
@@ -381,11 +464,20 @@ class ViewController: NSViewController, NSURLSessionDelegate, NSURLSessionDataDe
 	
 	func tableView(tableView: NSTableView, viewForTableColumn tableColumn: NSTableColumn?, row: Int) -> NSView? {
 		
+		let wwdcSession : WWDCSession
+		
+		if !isFiltered {
+			wwdcSession =  allWWDCSessionsArray[row]
+		}
+		else {
+			wwdcSession = visibleWWDCSessionsArray[row]
+		}
+		
 		if tableColumn?.identifier == "sessionID" {
 
 			let cell = (tableView.makeViewWithIdentifier("sessionID", owner: self) as? NSTableCellView)!
 			
-			cell.textField?.stringValue = allWWDCSessionsArray[row].sessionID
+			cell.textField?.stringValue = wwdcSession.sessionID
 			
 			return cell
 		}
@@ -393,7 +485,7 @@ class ViewController: NSViewController, NSURLSessionDelegate, NSURLSessionDataDe
 			
 			let cell = (tableView.makeViewWithIdentifier("sessionName", owner: self) as? NSTableCellView)!
 			
-			cell.textField?.stringValue = allWWDCSessionsArray[row].title
+			cell.textField?.stringValue = wwdcSession.title
 			
 			return cell
 		}
@@ -401,8 +493,6 @@ class ViewController: NSViewController, NSURLSessionDelegate, NSURLSessionDataDe
 			
 			let cell = (tableView.makeViewWithIdentifier("PDF", owner: self) as? CheckBoxTableViewCell)!
 			
-			let wwdcSession = allWWDCSessionsArray[row]
-		
 			cell.resetCell()
 
 			if let file = wwdcSession.pdfFile {
@@ -424,8 +514,6 @@ class ViewController: NSViewController, NSURLSessionDelegate, NSURLSessionDataDe
 		else if tableColumn?.identifier == "SD" {
 			
 			let cell = (tableView.makeViewWithIdentifier("SD", owner: self) as? CheckBoxTableViewCell)!
-			
-			let wwdcSession = allWWDCSessionsArray[row]
 			
 			cell.resetCell()
 
@@ -449,8 +537,6 @@ class ViewController: NSViewController, NSURLSessionDelegate, NSURLSessionDataDe
 			
 			let cell = (tableView.makeViewWithIdentifier("HD", owner: self) as? CheckBoxTableViewCell)!
 			
-			let wwdcSession = allWWDCSessionsArray[row]
-			
 			cell.resetCell()
 
 			if let file = wwdcSession.hdFile {
@@ -472,8 +558,6 @@ class ViewController: NSViewController, NSURLSessionDelegate, NSURLSessionDataDe
 		else if tableColumn?.identifier == "Code" {
 			
 			let cell = (tableView.makeViewWithIdentifier("Code", owner: self) as? CheckBoxTableViewCell)!
-			
-			let wwdcSession = allWWDCSessionsArray[row]
 			
 			cell.resetCell()
 
@@ -500,6 +584,32 @@ class ViewController: NSViewController, NSURLSessionDelegate, NSURLSessionDataDe
 	}
 	
 	
+	func tableView(tableView: NSTableView, sortDescriptorsDidChange oldDescriptors: [NSSortDescriptor]) {
+
+		if !isFiltered {
+			let sortedBy = (allWWDCSessionsArray as NSArray).sortedArrayUsingDescriptors(tableView.sortDescriptors)
+			
+			allWWDCSessionsArray = sortedBy as! [WWDCSession]
+		}
+		else {
+			let sortedBy = (visibleWWDCSessionsArray as NSArray).sortedArrayUsingDescriptors(tableView.sortDescriptors)
+			
+			visibleWWDCSessionsArray = sortedBy as! [WWDCSession]
+		}
+		
+		tableView.reloadData()
+	}
+	
+	
+	// MARK: SearchFieldDelegates
+	func searchFieldDidStartSearching(sender: NSSearchField) {
+		
+	}
+	
+	func searchFieldDidEndSearching(sender: NSSearchField) {
+		
+	}
+	
 	// MARK: - Download
 	func  downloadFiles(files : [FileInfo] ) {
 		
@@ -513,7 +623,22 @@ class ViewController: NSViewController, NSURLSessionDelegate, NSURLSessionDataDe
 			
 			let progressWrapper = ProgressWrapper(handler: { [unowned self] (progress) -> Void in
 				
-				if let index = self.allWWDCSessionsArray.indexOf(file.session) {
+				guard let session = file.session else { return }
+				
+				var actualIndex : Int?
+				
+				if self.isFiltered {
+					if let index = self.visibleWWDCSessionsArray.indexOf(session) {
+						actualIndex = index
+					}
+				}
+				else {
+					if let index = self.allWWDCSessionsArray.indexOf(session) {
+						actualIndex = index
+					}
+				}
+
+				if let index = actualIndex {
 					dispatch_async(dispatch_get_main_queue()) { [unowned self] in
 						switch file.fileType {
 						case .PDF:
@@ -540,14 +665,23 @@ class ViewController: NSViewController, NSURLSessionDelegate, NSURLSessionDataDe
 					
 					print("Download SUCCESS - \(file.displayName!)")
 				}
-				else {
-					print("Download Fail - \(file.displayName!)")
-				}
 				
-				if let index = self.allWWDCSessionsArray.indexOf(file.session) {
-					dispatch_async(dispatch_get_main_queue()) { [unowned self] in
-						self.myTableView.reloadDataForRowIndexes(NSIndexSet(index: index), columnIndexes:NSIndexSet(indexesInRange: NSMakeRange(0,self.myTableView.numberOfColumns)))
-						self.updateTotalProgress()
+				guard let session = file.session else { return }
+
+				if self.isFiltered {
+					if let index = self.visibleWWDCSessionsArray.indexOf(session) {
+						dispatch_async(dispatch_get_main_queue()) { [unowned self] in
+							self.myTableView.reloadDataForRowIndexes(NSIndexSet(index: index), columnIndexes:NSIndexSet(indexesInRange: NSMakeRange(0,self.myTableView.numberOfColumns)))
+							self.updateTotalProgress()
+						}
+					}
+				}
+				else {
+					if let index = self.allWWDCSessionsArray.indexOf(session) {
+						dispatch_async(dispatch_get_main_queue()) { [unowned self] in
+							self.myTableView.reloadDataForRowIndexes(NSIndexSet(index: index), columnIndexes:NSIndexSet(indexesInRange: NSMakeRange(0,self.myTableView.numberOfColumns)))
+							self.updateTotalProgress()
+						}
 					}
 				}
 
@@ -567,6 +701,8 @@ class ViewController: NSViewController, NSURLSessionDelegate, NSURLSessionDataDe
 		isDownloading = true
 
 		startDownload.title = "Stop Downloading"
+		
+		searchField.enabled = false;
 		
 		disableUIForDownloading()
 		
@@ -604,6 +740,8 @@ class ViewController: NSViewController, NSURLSessionDelegate, NSURLSessionDataDe
 		isDownloading = false
 
 		startDownload.title = "Start Downloading"
+		
+		searchField.enabled = true
 
 		reEnableUIWhenStoppedDownloading()
 		

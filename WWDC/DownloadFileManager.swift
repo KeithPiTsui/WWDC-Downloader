@@ -44,7 +44,8 @@ typealias HeaderCompletionHandler = ((fileSize:Int?, errorCode:Int?) -> Void)
         super.init()
         
         let config = NSURLSessionConfiguration.defaultSessionConfiguration()
-        config.HTTPMaximumConnectionsPerHost = 3
+        config.HTTPMaximumConnectionsPerHost = 1
+		config.timeoutIntervalForResource = NSTimeInterval(600)
         sessionManager = NSURLSession(configuration: config, delegate: self, delegateQueue: nil)
 		
 		let headerconfig = NSURLSessionConfiguration.defaultSessionConfiguration()
@@ -77,6 +78,7 @@ typealias HeaderCompletionHandler = ((fileSize:Int?, errorCode:Int?) -> Void)
             startDownload(file)
         }
     }
+	
 	
 	func stopDownloads() {
 		
@@ -194,14 +196,25 @@ typealias HeaderCompletionHandler = ((fileSize:Int?, errorCode:Int?) -> Void)
 					if let callback = backgroundHandlersForFiles[fileInfo] {
 						
 						if let error = error {
-							callback.notifyCompletion(false, error: error)
+							
+							switch error.code {
+								case NSURLErrorTimedOut:
+									print("Retrying - \(fileInfo.displayName!)")
+									fileInfo.attemptsToDownloadFile++
+									startDownload(fileInfo)
+								default:
+									print("Download Fail Code-\(error.code) - \(fileInfo.displayName!)")
+									fileInfo.fileErrorCode = error
+									callback.notifyCompletion(false)
+									self.backgroundHandlersForFiles[fileInfo] = nil
+									self.backgroundRequestsForFiles[downloadTask.taskIdentifier] = nil
+							}
 						}
 						else {
-							callback.notifyCompletion(true, error: nil)
+							callback.notifyCompletion(true)
+							self.backgroundHandlersForFiles[fileInfo] = nil
+							self.backgroundRequestsForFiles[downloadTask.taskIdentifier] = nil
 						}
-						
-						self.backgroundHandlersForFiles[fileInfo] = nil
-						self.backgroundRequestsForFiles[downloadTask.taskIdentifier] = nil
 					}
 				}
 			}
@@ -251,7 +264,7 @@ typealias HeaderCompletionHandler = ((fileSize:Int?, errorCode:Int?) -> Void)
 			}
 		}
 		
-        func notifyCompletion(success: Bool, error: NSError?) {
+        func notifyCompletion(success: Bool) {
 			
 			var wrappersToRemove: [SimpleCompletionWrapper] = []
 			for wrapper in completionWrappers {
