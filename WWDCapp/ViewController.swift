@@ -100,10 +100,10 @@ class ViewController: NSViewController, NSURLSessionDelegate, NSURLSessionDataDe
 	@IBAction func allPDFChecked(sender: NSButton) {
 		
 		resetDownloadUI()
-
-		for wwdcSession in allWWDCSessionsArray {
-			wwdcSession.pdfFile?.shouldDownloadFile = Bool(sender.state)
-		}
+        
+        allWWDCSessionsArray.map { wwdcSession in
+            wwdcSession.pdfFile?.shouldDownloadFile = Bool(sender.state)
+        }
 		
 		myTableView.reloadDataForRowIndexes(NSIndexSet(indexesInRange: NSMakeRange(0,allWWDCSessionsArray.count)) , columnIndexes:NSIndexSet(index: 2))
 		
@@ -114,9 +114,10 @@ class ViewController: NSViewController, NSURLSessionDelegate, NSURLSessionDataDe
 		
 		resetDownloadUI()
 
-		for wwdcSession in allWWDCSessionsArray {
-			wwdcSession.sdFile?.shouldDownloadFile = Bool(sender.state)
-		}
+        allWWDCSessionsArray.map { wwdcSession in
+            wwdcSession.sdFile?.shouldDownloadFile = Bool(sender.state)
+        }
+
 		
 		myTableView.reloadDataForRowIndexes(NSIndexSet(indexesInRange: NSMakeRange(0,allWWDCSessionsArray.count)) , columnIndexes:NSIndexSet(index: 3))
 		
@@ -127,9 +128,10 @@ class ViewController: NSViewController, NSURLSessionDelegate, NSURLSessionDataDe
 		
 		resetDownloadUI()
 
-		for wwdcSession in allWWDCSessionsArray {
-			wwdcSession.hdFile?.shouldDownloadFile = Bool(sender.state)
-		}
+        allWWDCSessionsArray.map { wwdcSession in
+            wwdcSession.hdFile?.shouldDownloadFile = Bool(sender.state)
+        }
+
 		
 		myTableView.reloadDataForRowIndexes(NSIndexSet(indexesInRange: NSMakeRange(0,allWWDCSessionsArray.count)) , columnIndexes:NSIndexSet(index: 4))
 		
@@ -140,7 +142,7 @@ class ViewController: NSViewController, NSURLSessionDelegate, NSURLSessionDataDe
 	@IBAction func allCodeChecked(sender: NSButton) {
 		
 		resetDownloadUI()
-
+        
 		for wwdcSession in allWWDCSessionsArray {
 			for code in wwdcSession.sampleCodeArray {
 				code.shouldDownloadFile = Bool(sender.state)
