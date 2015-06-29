@@ -23,14 +23,13 @@ enum FileType {
 	
 	var remoteFileURL : NSURL?
 	var fileSize : Int?
-	
 	var shouldDownloadFile : Bool = true
-	
 	var downloadProgress : Float = 0
-	
 	var attemptsToDownloadFile = 0
 	var fileErrorCode : NSError?
+    var resumeData : NSData?
 	
+    // MARK: Convenience
 	var sessionID : String {
 		get {
 			if let session = session {
@@ -69,11 +68,11 @@ enum FileType {
 			
 			switch (fileType) {
 			case .PDF:
-				return self.sanitizeFileNameString(sessionID+"-"+title)+".pdf"
+				return (sessionID+"-"+title).sanitizeFileNameString()+".pdf"
 			case .SD:
-				return self.sanitizeFileNameString(sessionID+"-"+title)+"-SD.mp4"
+				return (sessionID+"-"+title).sanitizeFileNameString()+"-SD.mp4"
 			case .HD:
-				return self.sanitizeFileNameString(sessionID+"-"+title)+"-HD.mp4"
+				return (sessionID+"-"+title).sanitizeFileNameString()+"-HD.mp4"
 			case .SampleCode:
 				guard let fileName = remoteFileURL?.lastPathComponent else { return nil }
 				return fileName
@@ -87,16 +86,16 @@ enum FileType {
 			switch (fileType) {
 			case .PDF:
 				guard let directory = self.pdfDirectory(), let filename = self.fileName  else { return nil }
-				return NSURL(fileURLWithPath: directory.stringByAppendingPathComponent(self.sanitizeFileNameString( filename)))
+				return NSURL(fileURLWithPath: directory.stringByAppendingPathComponent(filename.sanitizeFileNameString()))
 			case .SD:
 				guard let directory = self.videoDirectory(), let filename = self.fileName  else { return nil }
-				return NSURL(fileURLWithPath: directory.stringByAppendingPathComponent(self.sanitizeFileNameString( filename)))
+				return NSURL(fileURLWithPath: directory.stringByAppendingPathComponent(filename.sanitizeFileNameString()))
 			case .HD:
 				guard let directory = self.videoDirectory(), let filename = self.fileName  else { return nil }
-				return NSURL(fileURLWithPath: directory.stringByAppendingPathComponent(self.sanitizeFileNameString( filename)))
+				return NSURL(fileURLWithPath: directory.stringByAppendingPathComponent(filename.sanitizeFileNameString()))
 			case .SampleCode:
 				guard let directory = self.codeDirectory(), let filename = self.fileName  else { return nil }
-				return NSURL(fileURLWithPath: directory.stringByAppendingPathComponent(self.sanitizeFileNameString( filename)))
+				return NSURL(fileURLWithPath: directory.stringByAppendingPathComponent(filename.sanitizeFileNameString()))
 			}
 		}
 	}
@@ -188,7 +187,7 @@ enum FileType {
 	// MARK: - Directory Helpers
 	func wwdcDirectory () -> String? {
 		
-		let paths = NSSearchPathForDirectoriesInDomains(.DocumentDirectory, .UserDomainMask, true)
+		let paths = NSSearchPathForDirectoriesInDomains(.DownloadsDirectory, .UserDomainMask, true)
 		
 		guard let documentsDirectory = paths.first else { return nil }
 		
@@ -248,13 +247,6 @@ enum FileType {
 	
 	// MARK: Helpers
 
-	private func sanitizeFileNameString(filename : String) -> String {
-		let characters = NSCharacterSet(charactersInString: "/\\?%*|\"<>:")
-		let components = filename.componentsSeparatedByCharactersInSet(characters) as NSArray
-		return components.componentsJoinedByString("")
-		
-	}
-	
 	private func createDirectoryIfNeeded(directory : String, inDirectory: String) -> String? {
 		
 		let path = inDirectory.stringByAppendingPathComponent(directory)

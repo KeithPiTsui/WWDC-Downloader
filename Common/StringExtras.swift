@@ -28,4 +28,12 @@ extension String {
             return nil
         }
     }
+    
+    func sanitizeFileNameString() -> String {
+        let characters = NSCharacterSet(charactersInString: "/\\?%*|\"<>:")
+        let components = self.componentsSeparatedByCharactersInSet(characters) as NSArray
+        return components.componentsJoinedByString("")
+        
+    }
+    
 }

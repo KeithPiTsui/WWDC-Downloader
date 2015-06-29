@@ -282,7 +282,7 @@ class ViewController: NSViewController, NSURLSessionDelegate, NSURLSessionDataDe
 	@IBAction func startDownloadButton(sender: NSButton) {
 		
 		if isDownloading {
-			DownloadFileManager.sharedManager.stopDownloads()   // Causes dispatch_group_notify to fire in downloadFiles eventually when tasks finished/cancelled
+			DownloadFileManager.sharedManager.stopFileDownloads()   // Causes dispatch_group_notify to fire in downloadFiles eventually when tasks finished/cancelled
 		}
 		else {
 			startDownloading()
@@ -359,6 +359,9 @@ class ViewController: NSViewController, NSURLSessionDelegate, NSURLSessionDataDe
 				let progress = Float(currentDownloadBytes)/Float(self.totalBytesToDownload)
 				
 				self.downloadProgressView.doubleValue = Double(progress)
+                
+//                let appDelegate = NSApplication.sharedApplication().delegate as! AppDelegate
+//                appDelegate.updateDockProgress(Double(progress))
 			})
 		})
 	}

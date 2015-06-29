@@ -101,6 +101,33 @@
 			name = Frameworks;
 			sourceTree = "<group>";
 		};
+		A90D14E71B3EDB4600A30590 /* Downloading */ = {
+			isa = PBXGroup;
+			children = (
+				A90284041B2FBDEA00755CA1 /* DownloadSessionInfo.swift */,
+				A9F9BADB1B34689300BEA874 /* DownloadFileManager.swift */,
+				A9F9BADA1B34689300BEA874 /* BlockWrappers.swift */,
+			);
+			name = Downloading;
+			sourceTree = "<group>";
+		};
+		A90D14E81B3EDB4F00A30590 /* Modal */ = {
+			isa = PBXGroup;
+			children = (
+				A96E4D631B2EB2770030F908 /* WWDCSession.swift */,
+				44776DA81B399950004B9178 /* FileInfo.swift */,
+			);
+			name = Modal;
+			sourceTree = "<group>";
+		};
+		A90D14E91B3EDB7200A30590 /* Extensions */ = {
+			isa = PBXGroup;
+			children = (
+				A96E4D651B2F62340030F908 /* StringExtras.swift */,
+			);
+			name = Extensions;
+			sourceTree = "<group>";
+		};
 		A9528F251B34C40E002290D3 /* WWDCapp */ = {
 			isa = PBXGroup;
 			children = (
@@ -118,12 +145,9 @@
 		A9528F391B34C42E002290D3 /* Common */ = {
 			isa = PBXGroup;
 			children = (
-				A90284041B2FBDEA00755CA1 /* DownloadSessionInfo.swift */,
-				A96E4D631B2EB2770030F908 /* WWDCSession.swift */,
-				A9F9BADB1B34689300BEA874 /* DownloadFileManager.swift */,
-				44776DA81B399950004B9178 /* FileInfo.swift */,
-				A9F9BADA1B34689300BEA874 /* BlockWrappers.swift */,
-				A96E4D651B2F62340030F908 /* StringExtras.swift */,
+				A90D14E81B3EDB4F00A30590 /* Modal */,
+				A90D14E71B3EDB4600A30590 /* Downloading */,
+				A90D14E91B3EDB7200A30590 /* Extensions */,
 				A96E4D611B2D44910030F908 /* libxml2.2.dylib */,
 				A983F85A1B2D165A00ED681E /* Hpple */,
 			);

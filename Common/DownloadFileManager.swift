@@ -44,9 +44,9 @@ typealias HeaderCompletionHandler = ((fileSize:Int?, errorCode:Int?) -> Void)
         super.init()
         
         let config = NSURLSessionConfiguration.defaultSessionConfiguration()
-        config.HTTPMaximumConnectionsPerHost = 1
-		config.timeoutIntervalForResource = NSTimeInterval(600)
-        sessionManager = NSURLSession(configuration: config, delegate: self, delegateQueue: nil)
+        config.HTTPMaximumConnectionsPerHost = 2
+		config.timeoutIntervalForResource = NSTimeInterval(300)
+        sessionManager = NSURLSession(configuration: config, delegate: self, delegateQueue: NSOperationQueue.mainQueue())
 		
 		let headerconfig = NSURLSessionConfiguration.defaultSessionConfiguration()
 		headerconfig.HTTPMaximumConnectionsPerHost = 3
@@ -80,7 +80,7 @@ typealias HeaderCompletionHandler = ((fileSize:Int?, errorCode:Int?) -> Void)
     }
 	
 	
-	func stopDownloads() {
+	func stopFileDownloads() {
 		
 		if let sessionManager = sessionManager {
 			
@@ -223,19 +223,13 @@ typealias HeaderCompletionHandler = ((fileSize:Int?, errorCode:Int?) -> Void)
 
 
 	// MARK: - CallbackWrapper
-	private class CallbackWrapper {
+    private class CallbackWrapper : NSObject {
 		
 		// MARK: Instance Variables
 		var progressWrappers: [ProgressWrapper] = []
 		var completionWrappers: [SimpleCompletionWrapper] = []
 		
-		// MARK: - Object Lifecycle Methods
-		init() {
-			
-		}
-		
 		// MARK: - Helper Methods
-		
 		func addProgressWrapper(wrapper: ProgressWrapper?) {
 			if let wrapper = wrapper {
 				progressWrappers.append(wrapper)
