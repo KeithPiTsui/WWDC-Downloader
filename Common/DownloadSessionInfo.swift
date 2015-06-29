@@ -345,60 +345,71 @@ class DownloadSessionInfo: NSObject {
 		
 		let fileSizeSessionGroup = dispatch_group_create();
 		
-		if let hdURL = wwdcSession.hdFile?.remoteFileURL {
+		if let file = wwdcSession.hdFile {
 			dispatch_group_enter(fileSizeSessionGroup);
 			
-			fetchFileSize(hdURL, completion: { (result, code) -> Void in
-				
-					if let filesize = result {
-						wwdcSession.hdFile?.fileSize = filesize
-					}
-					dispatch_group_leave(fileSizeSessionGroup)
-				})
+            FetchFileSizeManager.sharedManager.fetchFileSize(file, completion: { (success, errorCode) -> Void in
+                
+                if (success) {
+                    
+                }
+                else {
+                    print("\(file.displayName!) - File Size - NO RESULT #######")
+                }
+                
+                dispatch_group_leave(fileSizeSessionGroup)
+            })
+        }
+		
+		if let file = wwdcSession.sdFile {
+			dispatch_group_enter(fileSizeSessionGroup);
+			
+            FetchFileSizeManager.sharedManager.fetchFileSize(file, completion: { (success, errorCode) -> Void in
+                
+                if (success) {
+                    
+                }
+                else {
+                    print("\(file.displayName!) - File Size - NO RESULT #######")
+                }
+                
+                dispatch_group_leave(fileSizeSessionGroup)
+            })
+
 		}
 		
-		if let sdURL = wwdcSession.sdFile?.remoteFileURL {
+		if let file = wwdcSession.pdfFile {
 			dispatch_group_enter(fileSizeSessionGroup);
 			
-			fetchFileSize(sdURL, completion: { (result, code) -> Void in
-				
-					if let filesize = result {
-						wwdcSession.sdFile?.fileSize = filesize
-					}
-					dispatch_group_leave(fileSizeSessionGroup)
-				})
-		}
-		
-		if let pdfURL = wwdcSession.pdfFile?.remoteFileURL {
-			dispatch_group_enter(fileSizeSessionGroup);
-			
-			fetchFileSize(pdfURL, completion: { (result, code) -> Void in
-				
-					if let filesize = result {
-						wwdcSession.pdfFile?.fileSize = filesize
-					}
-					dispatch_group_leave(fileSizeSessionGroup)
-				})
+            FetchFileSizeManager.sharedManager.fetchFileSize(file, completion: { (success, errorCode) -> Void in
+                
+                if (success) {
+                    
+                }
+                else {
+                    print("\(file.displayName!) - File Size - NO RESULT #######")
+                }
+                
+                dispatch_group_leave(fileSizeSessionGroup)
+            })
+
 		}
 		
 		if wwdcSession.sampleCodeArray.count > 0 {
 			for sample in wwdcSession.sampleCodeArray {
-				if let fileURL = sample.remoteFileURL {
 					
-					dispatch_group_enter(fileSizeSessionGroup);
-					
-					fetchFileSize(fileURL, completion: { (result, code) -> Void in
-						
-						if let filesize = result {
-							sample.fileSize = filesize
-							//print("Sample Code FileSize - \(filesize)")
-						}
-						else {
-							print("File Size - NO RESULT")
-						}
-						dispatch_group_leave(fileSizeSessionGroup);
-					})
-				}
+                dispatch_group_enter(fileSizeSessionGroup);
+                    
+                FetchFileSizeManager.sharedManager.fetchFileSize(sample, completion: { (success, errorCode) -> Void in
+                    
+                    if (success) {
+                        
+                    }
+                    else {
+                        print("\(sample.displayName!) - File Size - NO RESULT #######")
+                    }
+                    dispatch_group_leave(fileSizeSessionGroup)
+                })
 			}
 		}
 		
@@ -411,36 +422,4 @@ class DownloadSessionInfo: NSObject {
 			})
 	}
 	
-	private func fetchFileSize(url : NSURL, completion: (result: Int?, errorCode:Int?) -> Void) {
-		
-		let request = NSMutableURLRequest(URL: url)
-		request.HTTPMethod = "HEAD"
-		
-		let fileSizeTask = NSURLSession.sharedSession().dataTaskWithRequest(request) { (data, response, error) -> Void in
-			if let hresponse = response as? NSHTTPURLResponse {
-				if let dictionary = hresponse.allHeaderFields as? Dictionary<String,String> {
-					if hresponse.statusCode == 200 {
-						if let size = dictionary["Content-Length"] {
-							completion(result: Int(size), errorCode:nil)
-							return
-						}
-					}
-					else {
-						DownloadFileManager.sharedManager.fetchHeader(url, completionHandler: { (fileSize, code) -> Void in
-							if let fileSize = fileSize {
-								completion(result: Int(fileSize), errorCode:nil)
-							}
-							else if let code = code {
-								completion(result: nil, errorCode:code)
-							}
-							else {
-								completion(result: nil, errorCode:nil)
-							}
-						})
-					}
-				}
-			}
-		}
-		fileSizeTask?.resume()
-	}
 }

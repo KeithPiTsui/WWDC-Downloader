@@ -13,8 +13,6 @@ let logFileManager = false
 typealias ProgressHandler = ((progress: Float) -> Void)
 typealias SimpleCompletionHandler = ((success: Bool) -> Void)
 
-typealias HeaderCompletionHandler = ((fileSize:Int?, errorCode:Int?) -> Void)
-
 @objc class DownloadFileManager : NSObject, NSURLSessionDownloadDelegate {
 	
 	// MARK: - Instance Variables
@@ -23,11 +21,6 @@ typealias HeaderCompletionHandler = ((fileSize:Int?, errorCode:Int?) -> Void)
 	private var sessionManager : NSURLSession?
 	private var backgroundHandlersForFiles: [FileInfo : CallbackWrapper] = [:]
 	private var backgroundRequestsForFiles: [Int : FileInfo] = [:]				// Int is taskIdentifier of NSURLSessionTask
-	
-	// Header Fetch
-	private var headerSessionManager : NSURLSession?
-	private var headerRequests: [Int : HeaderCompletionHandler] = [:]			// Int is taskIdentifier of NSURLSessionTask
-	
 	
   	// MARK: - Singleton Status
 	class var sharedManager: DownloadFileManager {
@@ -47,10 +40,6 @@ typealias HeaderCompletionHandler = ((fileSize:Int?, errorCode:Int?) -> Void)
         config.HTTPMaximumConnectionsPerHost = 2
 		config.timeoutIntervalForResource = NSTimeInterval(300)
         sessionManager = NSURLSession(configuration: config, delegate: self, delegateQueue: NSOperationQueue.mainQueue())
-		
-		let headerconfig = NSURLSessionConfiguration.defaultSessionConfiguration()
-		headerconfig.HTTPMaximumConnectionsPerHost = 3
-		headerSessionManager = NSURLSession(configuration: headerconfig, delegate: self, delegateQueue: nil)
 	}
 	
     // MARK: - Download File Transfer
@@ -97,15 +86,6 @@ typealias HeaderCompletionHandler = ((fileSize:Int?, errorCode:Int?) -> Void)
         }
     }
 	
-	func fetchHeader(url : NSURL, completionHandler:HeaderCompletionHandler) {
-				
-		if let task = headerSessionManager?.downloadTaskWithRequest(NSURLRequest(URL: url)) {
-			headerRequests[task.taskIdentifier] = completionHandler
-			task.resume()
-		}
-	}
-
-	
 	// MARK: -
     private func startDownload(file: FileInfo) {
         
@@ -144,42 +124,7 @@ typealias HeaderCompletionHandler = ((fileSize:Int?, errorCode:Int?) -> Void)
 				}
 			}
 		}
-		if session == headerSessionManager {
-			
-			if let completionHandler = headerRequests[downloadTask.taskIdentifier] {
-				
-				headerRequests[downloadTask.taskIdentifier] = nil
-				
-				if let response = downloadTask.response {
-					
-					downloadTask.cancel()
-
-					if let hresponse = response as? NSHTTPURLResponse {
-						if let dictionary = hresponse.allHeaderFields as? Dictionary<String,String> {
-							if hresponse.statusCode == 200 {
-								if let size = dictionary["Content-Length"] {
-									completionHandler(fileSize: Int(size), errorCode:nil)
-									return
-								}
-							}
-							else {
-								print("Code - \(hresponse.statusCode) - Bad Header Response - \(dictionary)")
-								completionHandler(fileSize: nil, errorCode:Int(hresponse.statusCode))
-							}
-						}
-					}
-				}
-			}
-		}
     }
-	
-	func URLSession(session: NSURLSession, task: NSURLSessionTask, willPerformHTTPRedirection response: NSHTTPURLResponse, newRequest request: NSURLRequest, completionHandler: (NSURLRequest?) -> Void) {
-		
-		if session == headerSessionManager {
-            if logFileManager { print("Redirected to \(request)") }
-		}
-		
-	}
 	
 	
     func URLSession(session: NSURLSession, downloadTask: NSURLSessionDownloadTask, didFinishDownloadingToURL location: NSURL) {

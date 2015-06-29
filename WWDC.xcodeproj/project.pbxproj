@@ -10,6 +10,7 @@
 		442D010B1B399A9D0081C56C /* FileInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 44776DA81B399950004B9178 /* FileInfo.swift */; };
 		4479EA761B3C114600D5558D /* CheckBoxTableCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4479EA751B3C114600D5558D /* CheckBoxTableCell.swift */; };
 		44DBD9ED1B3AC4C60097E20C /* .gitignore in Resources */ = {isa = PBXBuildFile; fileRef = 44DBD9EB1B3AC4C60097E20C /* .gitignore */; };
+		A90D14EB1B41A8CF00A30590 /* FetchFileSizeManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = A90D14EA1B41A8CF00A30590 /* FetchFileSizeManager.swift */; };
 		A9528F271B34C40E002290D3 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9528F261B34C40E002290D3 /* AppDelegate.swift */; };
 		A9528F291B34C40E002290D3 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9528F281B34C40E002290D3 /* ViewController.swift */; };
 		A9528F2B1B34C40E002290D3 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = A9528F2A1B34C40E002290D3 /* Assets.xcassets */; };
@@ -30,6 +31,7 @@
 		4479EA751B3C114600D5558D /* CheckBoxTableCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CheckBoxTableCell.swift; sourceTree = "<group>"; };
 		44DBD9EB1B3AC4C60097E20C /* .gitignore */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = .gitignore; sourceTree = "<group>"; };
 		A90284041B2FBDEA00755CA1 /* DownloadSessionInfo.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = DownloadSessionInfo.swift; path = Common/DownloadSessionInfo.swift; sourceTree = "<group>"; };
+		A90D14EA1B41A8CF00A30590 /* FetchFileSizeManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = FetchFileSizeManager.swift; path = Common/FetchFileSizeManager.swift; sourceTree = "<group>"; };
 		A9528F241B34C40D002290D3 /* WWDCapp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = WWDCapp.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		A9528F261B34C40E002290D3 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		A9528F281B34C40E002290D3 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
@@ -74,6 +76,7 @@
 			children = (
 				A90284041B2FBDEA00755CA1 /* DownloadSessionInfo.swift */,
 				A9F9BADB1B34689300BEA874 /* DownloadFileManager.swift */,
+				A90D14EA1B41A8CF00A30590 /* FetchFileSizeManager.swift */,
 				A9F9BADA1B34689300BEA874 /* BlockWrappers.swift */,
 			);
 			name = Downloading;
@@ -235,6 +238,7 @@
 				A9528F3C1B34C45D002290D3 /* TFHppleElement.m in Sources */,
 				A9528F3B1B34C45D002290D3 /* TFHpple.m in Sources */,
 				A9528F351B34C427002290D3 /* WWDCSession.swift in Sources */,
+				A90D14EB1B41A8CF00A30590 /* FetchFileSizeManager.swift in Sources */,
 				A9528F361B34C427002290D3 /* BlockWrappers.swift in Sources */,
 				A9528F341B34C427002290D3 /* DownloadSessionInfo.swift in Sources */,
 				A9528F271B34C40E002290D3 /* AppDelegate.swift in Sources */,
