@@ -90,10 +90,19 @@ class CheckBoxTableViewCell : NSTableCellView {
 			}
 			else {
 				if isAllFilesDownloading {
-					self.downloadProgressView.hidden = false
-					let progress = Double(Float(currentDownloadBytes)/Float(totalDownloadSizeBytes))
-					self.downloadProgressView.doubleValue = progress
-					self.label.stringValue = NSByteCountFormatter().stringFromByteCount(Int64(progress*Double(totalDownloadSizeBytes)))
+                    if isDownloadSessionActive {
+                        self.downloadProgressView.hidden = false
+                        let progress = Double(Float(currentDownloadBytes)/Float(totalDownloadSizeBytes))
+                        self.downloadProgressView.doubleValue = progress
+                        self.label.stringValue = NSByteCountFormatter().stringFromByteCount(Int64(progress*Double(totalDownloadSizeBytes)))
+
+                    }
+                    else {
+                        self.downloadProgressView.hidden = false
+                        let progress = Double(Float(currentDownloadBytes)/Float(totalDownloadSizeBytes))
+                        self.downloadProgressView.doubleValue = progress
+                        self.label.stringValue = NSByteCountFormatter().stringFromByteCount(totalDownloadSizeBytes)
+                    }
 				}
 				else {
 					self.downloadProgressView.hidden = true

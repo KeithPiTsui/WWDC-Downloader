@@ -53,10 +53,7 @@ class DownloadSessionInfo: NSObject {
             let task = NSURLSession.sharedSession().dataTaskWithURL(videoURLString) { [unowned self]  (data, response, error) in
                 self.downloadMainPageFinished(data, response: response as? NSHTTPURLResponse, error: error)
             }
-            
-            if let task = task {
-                task.resume()
-            }
+            task?.resume()
         }
     }
     

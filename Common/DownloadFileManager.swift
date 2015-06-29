@@ -81,28 +81,30 @@ typealias HeaderCompletionHandler = ((fileSize:Int?, errorCode:Int?) -> Void)
 	
 	
 	func stopFileDownloads() {
-		
-		if let sessionManager = sessionManager {
-			
-			sessionManager.getAllTasksWithCompletionHandler({ [unowned self] (tasks) -> Void in
-			
-				for task in tasks {
 					
-					if let file = self.backgroundRequestsForFiles[task.taskIdentifier] {
-						
-						task.cancel()
-						file.downloadProgress = 0
-					}
-				}
-			})
-		}
-	}
+        sessionManager?.getTasksWithCompletionHandler{ [unowned self] (dataTasks, uploadTasks, downloadTasks) -> Void in
+            
+            for task in downloadTasks {
+                if let file = self.backgroundRequestsForFiles[task.taskIdentifier] {
+
+                    task.cancelByProducingResumeData({ (data) -> Void in
+                        
+                        if let data = data{
+                            file.resumeData = data
+                        }
+                        else {
+                            file.resumeData = nil
+                            file.downloadProgress = 0
+                        }
+                    })
+                }
+            }
+        }
+    }
 	
 	func fetchHeader(url : NSURL, completionHandler:HeaderCompletionHandler) {
-		
-		let downloadTask = headerSessionManager?.downloadTaskWithRequest(NSURLRequest(URL: url))
-		
-		if let task = downloadTask {
+				
+		if let task = headerSessionManager?.downloadTaskWithRequest(NSURLRequest(URL: url)) {
 			headerRequests[task.taskIdentifier] = completionHandler
 			task.resume()
 		}
@@ -115,11 +117,17 @@ typealias HeaderCompletionHandler = ((fileSize:Int?, errorCode:Int?) -> Void)
         if logFileManager { print("Queue Download of \(file.displayName!)") }
         
         if let url = file.remoteFileURL {
-            let downloadTask = sessionManager?.downloadTaskWithRequest(NSURLRequest(URL: url))
-            
-            if let task = downloadTask {
-                backgroundRequestsForFiles[task.taskIdentifier] = file
-                task.resume()
+            if let resumeData = file.resumeData {
+                if let task = sessionManager?.downloadTaskWithResumeData(resumeData) {
+                    backgroundRequestsForFiles[task.taskIdentifier] = file
+                    task.resume()
+                }
+            }
+            else {
+                if let task = sessionManager?.downloadTaskWithRequest(NSURLRequest(URL: url)) {
+                    backgroundRequestsForFiles[task.taskIdentifier] = file
+                    task.resume()
+                }
             }
         }
     }
@@ -173,7 +181,7 @@ typealias HeaderCompletionHandler = ((fileSize:Int?, errorCode:Int?) -> Void)
 	func URLSession(session: NSURLSession, task: NSURLSessionTask, willPerformHTTPRedirection response: NSHTTPURLResponse, newRequest request: NSURLRequest, completionHandler: (NSURLRequest?) -> Void) {
 		
 		if session == headerSessionManager {
-			print("Redirected to \(request)")
+            if logFileManager { print("Redirected to \(request)") }
 		}
 		
 	}

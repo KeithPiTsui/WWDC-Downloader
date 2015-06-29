@@ -107,8 +107,15 @@ class ViewController: NSViewController, NSURLSessionDelegate, NSURLSessionDataDe
 		
 		myTableView.reloadDataForRowIndexes(NSIndexSet(indexesInRange: NSMakeRange(0,allWWDCSessionsArray.count)) , columnIndexes:NSIndexSet(index: 2))
 		
-		updateTotalFileSize()
-	}
+        let totalToFetch = updateTotalFileSize()
+        
+        if totalToFetch == 0 {
+            startDownload.enabled = false
+        }
+        else {
+            startDownload.enabled = true
+        }
+    }
 	
 	@IBAction func allSDChecked(sender: NSButton) {
 		
@@ -121,8 +128,15 @@ class ViewController: NSViewController, NSURLSessionDelegate, NSURLSessionDataDe
 		
 		myTableView.reloadDataForRowIndexes(NSIndexSet(indexesInRange: NSMakeRange(0,allWWDCSessionsArray.count)) , columnIndexes:NSIndexSet(index: 3))
 		
-        updateTotalFileSize()
-	}
+        let totalToFetch = updateTotalFileSize()
+        
+        if totalToFetch == 0 {
+            startDownload.enabled = false
+        }
+        else {
+            startDownload.enabled = true
+        }
+    }
 	
 	@IBAction func allHDChecked(sender: NSButton) {
 		
@@ -135,8 +149,14 @@ class ViewController: NSViewController, NSURLSessionDelegate, NSURLSessionDataDe
 		
 		myTableView.reloadDataForRowIndexes(NSIndexSet(indexesInRange: NSMakeRange(0,allWWDCSessionsArray.count)) , columnIndexes:NSIndexSet(index: 4))
 		
-        updateTotalFileSize()
-		
+        let totalToFetch = updateTotalFileSize()
+        
+        if totalToFetch == 0 {
+            startDownload.enabled = false
+        }
+        else {
+            startDownload.enabled = true
+        }
 	}
 	
 	@IBAction func allCodeChecked(sender: NSButton) {
@@ -151,8 +171,15 @@ class ViewController: NSViewController, NSURLSessionDelegate, NSURLSessionDataDe
 		
 		myTableView.reloadDataForRowIndexes(NSIndexSet(indexesInRange: NSMakeRange(0,allWWDCSessionsArray.count)) , columnIndexes:NSIndexSet(index: 5))
 		
-		updateTotalFileSize()
-	}
+        let totalToFetch = updateTotalFileSize()
+        
+        if totalToFetch == 0 {
+            startDownload.enabled = false
+        }
+        else {
+            startDownload.enabled = true
+        }
+    }
 	
 	
 	@IBAction func singleChecked(sender: NSButton) {
@@ -173,10 +200,16 @@ class ViewController: NSViewController, NSURLSessionDelegate, NSURLSessionDataDe
 			myTableView.reloadDataForRowIndexes(NSIndexSet(indexesInRange: NSMakeRange(0,allWWDCSessionsArray.count)) , columnIndexes:NSIndexSet(index: index))
 		}
 		
-		updateTotalFileSize()
-		
+        let totalToFetch = updateTotalFileSize()
+        
+        if totalToFetch == 0 {
+            startDownload.enabled = false
+        }
+        else {
+            startDownload.enabled = true
+        }
+        
 		coordinateAllCheckBoxUI()
-		
 	}
 	
 	@IBAction func fileClicked(sender: NSButton) {
@@ -368,7 +401,7 @@ class ViewController: NSViewController, NSURLSessionDelegate, NSURLSessionDataDe
 		})
 	}
 	
-	func updateTotalFileSize() {
+	func updateTotalFileSize() -> Int64 {
 		
 		totalBytesToDownload = 0
 		
@@ -397,6 +430,8 @@ class ViewController: NSViewController, NSURLSessionDelegate, NSURLSessionDataDe
 		}
 		
 		totallabel.stringValue = byteFormatter.stringFromByteCount(totalBytesToDownload)
+        
+        return totalBytesToDownload
 	}
 
 
@@ -764,8 +799,8 @@ class ViewController: NSViewController, NSURLSessionDelegate, NSURLSessionDataDe
 		
 		print("Completed File Downloads")
 	}
-	
-	func resetDownloadUI() {
+    
+   	func resetDownloadUI() {
 		
 		currentlabel.stringValue = ""
 		oflabel.hidden = true

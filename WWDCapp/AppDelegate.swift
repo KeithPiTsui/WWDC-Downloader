@@ -44,7 +44,6 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         
         if let dockProgress = dockProgress, let dockTile = dockTile {
             dockProgress.doubleValue = progress
-            //dockProgress.display()
             dockTile.display()
         }
     }
