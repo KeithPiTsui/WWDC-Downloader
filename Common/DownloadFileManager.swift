@@ -86,13 +86,8 @@ typealias HeaderCompletionHandler = ((fileSize:Int?, errorCode:Int?) -> Void)
             
             for task in downloadTasks {
                 if let file = self.backgroundRequestsForFiles[task.taskIdentifier] {
-
                     task.cancelByProducingResumeData({ (data) -> Void in
-                        
-                        if let data = data{
-                            file.resumeData = data
-                        }
-                        else {
+                        if  data == nil{
                             file.resumeData = nil
                             file.downloadProgress = 0
                         }
@@ -205,18 +200,29 @@ typealias HeaderCompletionHandler = ((fileSize:Int?, errorCode:Int?) -> Void)
 						
 						if let error = error {
 							
+                            if let resumeData = error.userInfo["NSURLSessionDownloadTaskResumeData"] as? NSData {
+                                fileInfo.resumeData = resumeData
+                            }
+                            
 							switch error.code {
 								case NSURLErrorTimedOut:
 									print("Retrying - \(fileInfo.displayName!)")
+                                    fileInfo.fileErrorCode = nil
 									fileInfo.attemptsToDownloadFile++
-									startDownload(fileInfo)
+                                    startDownload(fileInfo)
+                                case NSURLErrorCancelled:
+                                    print("User Cancelled - \(fileInfo.displayName!)")
+                                    fileInfo.fileErrorCode = nil
+                                    callback.notifyCompletion(false)
+                                    self.backgroundHandlersForFiles[fileInfo] = nil
+                                    self.backgroundRequestsForFiles[downloadTask.taskIdentifier] = nil
 								default:
 									print("Download Fail Code-\(error.code) - \(fileInfo.displayName!)")
 									fileInfo.fileErrorCode = error
 									callback.notifyCompletion(false)
 									self.backgroundHandlersForFiles[fileInfo] = nil
 									self.backgroundRequestsForFiles[downloadTask.taskIdentifier] = nil
-							}
+                            }
 						}
 						else {
 							callback.notifyCompletion(true)

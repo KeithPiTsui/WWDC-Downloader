@@ -663,6 +663,8 @@ class ViewController: NSViewController, NSURLSessionDelegate, NSURLSessionDataDe
 		
 		let downloadGroup = dispatch_group_create();
 		
+        var failError : NSError?
+        
 		for file in files {
 			
 			dispatch_group_enter(downloadGroup);
@@ -711,6 +713,11 @@ class ViewController: NSViewController, NSURLSessionDelegate, NSURLSessionDataDe
 					
 					print("Download SUCCESS - \(file.displayName!)")
 				}
+                else {
+                    if let error = file.fileErrorCode {
+                        failError = error
+                    }
+                }
 				
 				guard let session = file.session else { return }
 
@@ -738,6 +745,12 @@ class ViewController: NSViewController, NSURLSessionDelegate, NSURLSessionDataDe
 		}
 		
 		dispatch_group_notify(downloadGroup,dispatch_get_main_queue(),{ [unowned self] in
+            
+            if let error = failError {
+                let alert = NSAlert(error: error)
+                alert.runModal()
+            }
+            
             self.stopDownloading()
 		})
 	}
