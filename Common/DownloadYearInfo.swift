@@ -393,13 +393,9 @@ class DownloadYearInfo: NSObject {
 			
             FetchFileSizeManager.sharedManager.fetchFileSize(file, completion: { (success, errorCode) -> Void in
                 
-                if (success) {
-                    
-                }
-                else {
+                if (!success) {
                     print("\(file.displayName!) - File Size - NO RESULT #######")
                 }
-                
                 dispatch_group_leave(fileSizeSessionGroup)
             })
         }
@@ -409,13 +405,9 @@ class DownloadYearInfo: NSObject {
 			
             FetchFileSizeManager.sharedManager.fetchFileSize(file, completion: { (success, errorCode) -> Void in
                 
-                if (success) {
-                    
-                }
-                else {
-                    print("\(file.displayName!) - File Size - NO RESULT #######")
-                }
-                
+				if (!success) {
+					print("\(file.displayName!) - File Size - NO RESULT #######")
+				}
                 dispatch_group_leave(fileSizeSessionGroup)
             })
 
@@ -426,13 +418,9 @@ class DownloadYearInfo: NSObject {
 			
             FetchFileSizeManager.sharedManager.fetchFileSize(file, completion: { (success, errorCode) -> Void in
                 
-                if (success) {
-                    
-                }
-                else {
-                    print("\(file.displayName!) - File Size - NO RESULT #######")
-                }
-                
+				if (!success) {
+					print("\(file.displayName!) - File Size - NO RESULT #######")
+				}
                 dispatch_group_leave(fileSizeSessionGroup)
             })
 
@@ -445,12 +433,9 @@ class DownloadYearInfo: NSObject {
                     
                 FetchFileSizeManager.sharedManager.fetchFileSize(sample, completion: { (success, errorCode) -> Void in
                     
-                    if (success) {
-                        
-                    }
-                    else {
-                        print("\(sample.displayName!) - File Size - NO RESULT #######")
-                    }
+					if (!success) {
+						print("\(sample.displayName!) - File Size - NO RESULT #######")
+					}
                     dispatch_group_leave(fileSizeSessionGroup)
                 })
 			}
