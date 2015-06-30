@@ -25,8 +25,33 @@ class WWDCSession : NSObject {
     var pdfFile : FileInfo?
 
     var sampleCodeArray : [FileInfo]
-    
-    var transcript : String?
+	
+	// ASCIIwwdc fetchedInfo
+	var sesssionDescription : String?
+	var fullTranscriptPrettyPrint : String? {	// Full Print Out
+		get {
+			if let transcript = self.transcript {
+				
+				var fullTranscript : String = ""
+				
+				for (_, textToDisplay) in transcript {
+					fullTranscript = fullTranscript+(textToDisplay+"\n\n")
+				}
+				
+				if fullTranscript.isEmpty {
+					return nil
+				}
+				else {
+					return fullTranscript
+				}
+			}
+			else {
+				return nil
+			}
+		}
+	}
+	
+	var transcript : [(Double , String)]?	// (TimeStamp, Annotation)
     
     init(sessionID: String, title: String, year: WWDCYear) {
         

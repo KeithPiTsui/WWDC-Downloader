@@ -131,25 +131,27 @@ class DownloadYearInfo: NSObject {
         
 		dispatch_group_notify(sessionGroup,dispatch_get_main_queue(),{ [unowned self] in
 			
-            let transriptGroup = dispatch_group_create();
+			print("Fetching ASCIIwwdc Extra Info...")
+
+            let transcriptGroup = dispatch_group_create();
 
             for wwdcSession in self.wwdcSessions {
                 
-                dispatch_group_enter(transriptGroup);
+                dispatch_group_enter(transcriptGroup);
                 
                 DownloadTranscriptManager.sharedManager.fetchTranscript(wwdcSession, completion: {  (success, errorCode) -> Void in
-                        
+					
+					wwdcSession.isInfoFetchComplete = true
+
                     self.individualCompletionHandler(session: wwdcSession)
 
                     print("Completed fetch of Session Info -   \(wwdcSession.sessionID) - \(wwdcSession.title)")
-                    
-                    wwdcSession.isInfoFetchComplete = true
 
-                    dispatch_group_leave(transriptGroup)
+                    dispatch_group_leave(transcriptGroup)
                 })
             }
             
-            dispatch_group_notify(transriptGroup,dispatch_get_main_queue(),{ [unowned self] in
+            dispatch_group_notify(transcriptGroup,dispatch_get_main_queue(),{ [unowned self] in
 
 				print("Finished All Session Info in \(self.year)")
 				self.sessionInfoCompletionHandler()
@@ -346,16 +348,37 @@ class DownloadYearInfo: NSObject {
 
 			self.fetchFileSizes(wwdcSession) { (success) -> Void in
 				
-				self.individualCompletionHandler(session: wwdcSession)
-
 				dispatch_group_leave(fileSizeGroup)
 			}
 		}
 
 		dispatch_group_notify(fileSizeGroup,dispatch_get_main_queue(),{ [unowned self] in
 			
-			print("Finished File Sizes in \(self.year)")
-			self.sessionInfoCompletionHandler()
+			print("Fetching ASCIIwwdc Extra Info...")
+			
+			let transcriptGroup = dispatch_group_create();
+			
+			for wwdcSession in self.wwdcSessions {
+				
+				dispatch_group_enter(transcriptGroup);
+				
+				DownloadTranscriptManager.sharedManager.fetchTranscript(wwdcSession, completion: {  (success, errorCode) -> Void in
+					
+					wwdcSession.isInfoFetchComplete = true
+
+					self.individualCompletionHandler(session: wwdcSession)
+					
+					print("Completed fetch of Session Info -   \(wwdcSession.sessionID) - \(wwdcSession.title)")
+					
+					dispatch_group_leave(transcriptGroup)
+				})
+			}
+			
+			dispatch_group_notify(transcriptGroup,dispatch_get_main_queue(),{ [unowned self] in
+				
+					print("Finished All Session Info in \(self.year)")
+					self.sessionInfoCompletionHandler()
+				})
 		})
     }
 	

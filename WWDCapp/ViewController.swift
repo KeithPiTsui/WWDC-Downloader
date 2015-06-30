@@ -33,7 +33,7 @@ class ViewController: NSViewController, NSURLSessionDelegate, NSURLSessionDataDe
 	var allWWDCSessionsArray : [WWDCSession] = []
 	var visibleWWDCSessionsArray : [WWDCSession] = []
 
-	private var DownloadYearInfo : DownloadYearInfo?
+	private var downloadYearInfo : DownloadYearInfo?
 	
 	private var isYearInfoFetchComplete = false
 	
@@ -90,10 +90,7 @@ class ViewController: NSViewController, NSURLSessionDelegate, NSURLSessionDataDe
 			visibleWWDCSessionsArray = newArray
 		}
 		
-		dispatch_async(dispatch_get_main_queue()) { [unowned self] in
-			self.myTableView.reloadData()
-		}
-		
+		myTableView.reloadData()
 	}
 	
 
@@ -107,14 +104,7 @@ class ViewController: NSViewController, NSURLSessionDelegate, NSURLSessionDataDe
 		
 		myTableView.reloadDataForRowIndexes(NSIndexSet(indexesInRange: NSMakeRange(0,allWWDCSessionsArray.count)) , columnIndexes:NSIndexSet(index: 2))
 		
-        let totalToFetch = updateTotalFileSize()
-        
-        if totalToFetch == 0 {
-            startDownload.enabled = false
-        }
-        else {
-            startDownload.enabled = true
-        }
+		checkDownloadButtonState()
     }
 	
 	@IBAction func allSDChecked(sender: NSButton) {
@@ -128,14 +118,7 @@ class ViewController: NSViewController, NSURLSessionDelegate, NSURLSessionDataDe
 		
 		myTableView.reloadDataForRowIndexes(NSIndexSet(indexesInRange: NSMakeRange(0,allWWDCSessionsArray.count)) , columnIndexes:NSIndexSet(index: 3))
 		
-        let totalToFetch = updateTotalFileSize()
-        
-        if totalToFetch == 0 {
-            startDownload.enabled = false
-        }
-        else {
-            startDownload.enabled = true
-        }
+		checkDownloadButtonState()
     }
 	
 	@IBAction func allHDChecked(sender: NSButton) {
@@ -149,14 +132,7 @@ class ViewController: NSViewController, NSURLSessionDelegate, NSURLSessionDataDe
 		
 		myTableView.reloadDataForRowIndexes(NSIndexSet(indexesInRange: NSMakeRange(0,allWWDCSessionsArray.count)) , columnIndexes:NSIndexSet(index: 4))
 		
-        let totalToFetch = updateTotalFileSize()
-        
-        if totalToFetch == 0 {
-            startDownload.enabled = false
-        }
-        else {
-            startDownload.enabled = true
-        }
+		checkDownloadButtonState()
 	}
 	
 	@IBAction func allCodeChecked(sender: NSButton) {
@@ -171,14 +147,7 @@ class ViewController: NSViewController, NSURLSessionDelegate, NSURLSessionDataDe
 		
 		myTableView.reloadDataForRowIndexes(NSIndexSet(indexesInRange: NSMakeRange(0,allWWDCSessionsArray.count)) , columnIndexes:NSIndexSet(index: 5))
 		
-        let totalToFetch = updateTotalFileSize()
-        
-        if totalToFetch == 0 {
-            startDownload.enabled = false
-        }
-        else {
-            startDownload.enabled = true
-        }
+		checkDownloadButtonState()
     }
 	
 	
@@ -200,15 +169,8 @@ class ViewController: NSViewController, NSURLSessionDelegate, NSURLSessionDataDe
 			myTableView.reloadDataForRowIndexes(NSIndexSet(indexesInRange: NSMakeRange(0,allWWDCSessionsArray.count)) , columnIndexes:NSIndexSet(index: index))
 		}
 		
-        let totalToFetch = updateTotalFileSize()
-        
-        if totalToFetch == 0 {
-            startDownload.enabled = false
-        }
-        else {
-            startDownload.enabled = true
-        }
-        
+		checkDownloadButtonState()
+		
 		coordinateAllCheckBoxUI()
 	}
 	
@@ -449,7 +411,7 @@ class ViewController: NSViewController, NSURLSessionDelegate, NSURLSessionDataDe
 		
 		yearFetchIndicator.startAnimation(nil)
 		
-		DownloadYearInfo = DownloadYearInfo(year: year, parsingCompleteHandler: { [unowned self] (sessions) -> Void in
+		downloadYearInfo = DownloadYearInfo(year: year, parsingCompleteHandler: { [unowned self] (sessions) -> Void in
 			
 				self.allWWDCSessionsArray = sessions
 			
@@ -466,9 +428,7 @@ class ViewController: NSViewController, NSURLSessionDelegate, NSURLSessionDataDe
 				}
 			},
 			completionHandler: { [unowned self] in
-				
-				print("ALL \(year) INFO DOWNLOADED")
-				
+								
 				dispatch_async(dispatch_get_main_queue()) { [unowned self] in
 
 					self.searchField.enabled = true
@@ -647,15 +607,6 @@ class ViewController: NSViewController, NSURLSessionDelegate, NSURLSessionDataDe
 	}
 	
 	
-	// MARK: SearchFieldDelegates
-	func searchFieldDidStartSearching(sender: NSSearchField) {
-		
-	}
-	
-	func searchFieldDidEndSearching(sender: NSSearchField) {
-		
-	}
-	
 	// MARK: - Download
 	func  downloadFiles(files : [FileInfo] ) {
 		
@@ -759,9 +710,13 @@ class ViewController: NSViewController, NSURLSessionDelegate, NSURLSessionDataDe
 		
 		isDownloading = true
 
-		startDownload.title = "Stop Downloading"
-		
 		searchField.enabled = false;
+		searchField.stringValue = ""
+		isFiltered = false
+		visibleWWDCSessionsArray.removeAll()
+		myTableView.reloadData()
+
+		startDownload.title = "Stop Downloading"
 		
 		disableUIForDownloading()
 		
@@ -789,8 +744,6 @@ class ViewController: NSViewController, NSURLSessionDelegate, NSURLSessionDataDe
 		oflabel.hidden = false
 		updateTotalFileSize()
 		
-		myTableView.reloadData()
-		
 		downloadFiles(filesToDownload)
 	}
 	
@@ -810,9 +763,23 @@ class ViewController: NSViewController, NSURLSessionDelegate, NSURLSessionDataDe
 		
 		myTableView.reloadData()
 		
+		checkDownloadButtonState()
+		
 		print("Completed File Downloads")
 	}
-    
+	
+	func checkDownloadButtonState () {
+		
+		let totalToFetch = updateTotalFileSize()
+		
+		if totalToFetch == 0 {
+			startDownload.enabled = false
+		}
+		else {
+			startDownload.enabled = true
+		}
+	}
+	
    	func resetDownloadUI() {
 		
 		currentlabel.stringValue = ""

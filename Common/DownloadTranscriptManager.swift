@@ -36,15 +36,41 @@ class DownloadTranscriptManager : NSObject, NSURLSessionDataDelegate {
         if let url = NSURL(string: remoteFileURLString) {
             
             let request = NSMutableURLRequest(URL: url)
-			request.setValue("application/json", forHTTPHeaderField: "Content-Type")
+			request.HTTPMethod = "GET"
+			request.setValue("application/json", forHTTPHeaderField: "Accept")
+
 			
-            let task = NSURLSession.sharedSession().dataTaskWithRequest(request) { [unowned self] (data, response, error) -> Void in
+            let task = NSURLSession.sharedSession().dataTaskWithRequest(request) { (data, response, error) -> Void in
                 if let hresponse = response as? NSHTTPURLResponse {
                     if hresponse.statusCode == 200 {
                         if let data = data {
                             do {
-                                let jsonObject = try NSJSONSerialization.JSONObjectWithData(data, options:NSJSONReadingOptions.AllowFragments)
-                                print(jsonObject)
+								if let jsonObject : NSDictionary = try NSJSONSerialization.JSONObjectWithData(data, options:NSJSONReadingOptions.AllowFragments) as? NSDictionary {
+									
+									if let sessionDescription = jsonObject["description"] as? String {
+										session.sesssionDescription = sessionDescription
+									}
+									
+									if let timeCodes = jsonObject["timecodes"] as? NSArray, let annotations = jsonObject["annotations"] as? NSArray {
+										
+										if timeCodes.count == annotations.count {
+											var transcript : [(Double, String)] = []
+											
+											for var i = 0;  i < timeCodes.count; ++i {
+												let timeCode = timeCodes[i] as? NSNumber
+												let annotation = annotations[i] as? NSString
+												
+												if let timeCode = timeCode, let annotation = annotation {
+													transcript.append(Double(timeCode), annotation as String)
+												}
+											}
+											
+											session.transcript = transcript
+										}
+									}
+									
+									completion(success: true, errorCode: nil)
+								}
                             }
                             catch {
                                print("JSON Error - \(error)")
