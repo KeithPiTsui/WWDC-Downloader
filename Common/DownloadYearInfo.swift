@@ -1,5 +1,5 @@
 //
-//  DownloadSessionInfo.swift
+//  DownloadYearInfo.swift
 //  WWDC
 //
 //  Created by David Roberts on 15/06/2015.
@@ -14,7 +14,7 @@ let videos2013baseURL = "/videos/wwdc/2013/"
 
 import Foundation
 
-class DownloadSessionInfo: NSObject {
+class DownloadYearInfo: NSObject {
     
 	var wwdcSessions : [WWDCSession] = []
 	
@@ -137,7 +137,7 @@ class DownloadSessionInfo: NSObject {
                 
                 dispatch_group_enter(transriptGroup);
                 
-                TranscriptDownloadManager.sharedManager.fetchTranscript(wwdcSession, completion: {  (success, errorCode) -> Void in
+                DownloadTranscriptManager.sharedManager.fetchTranscript(wwdcSession, completion: {  (success, errorCode) -> Void in
                         
                     self.individualCompletionHandler(session: wwdcSession)
 

@@ -1,5 +1,5 @@
 //
-//  TranscriptDownloadManager.swift
+//  DownloadTranscriptManager.swift
 //  WWDC
 //
 //  Created by David Roberts on 29/06/2015.
@@ -8,14 +8,14 @@
 
 import Foundation
 
-class TranscriptDownloadManager : NSObject, NSURLSessionDataDelegate {
+class DownloadTranscriptManager : NSObject, NSURLSessionDataDelegate {
     
     private var sessionManager : NSURLSession?
     private var downloadHandlers: [Int : (WWDCSession, SimpleCompletionHandler)] = [:]			// Int is taskIdentifier of NSURLSessionTask
     
-    class var sharedManager: TranscriptDownloadManager {
+    class var sharedManager: DownloadTranscriptManager {
         struct Singleton {
-            static let instance = TranscriptDownloadManager()
+            static let instance = DownloadTranscriptManager()
         }
         return Singleton.instance
     }
@@ -36,7 +36,8 @@ class TranscriptDownloadManager : NSObject, NSURLSessionDataDelegate {
         if let url = NSURL(string: remoteFileURLString) {
             
             let request = NSMutableURLRequest(URL: url)
-            
+			request.setValue("application/json", forHTTPHeaderField: "Content-Type")
+			
             let task = NSURLSession.sharedSession().dataTaskWithRequest(request) { [unowned self] (data, response, error) -> Void in
                 if let hresponse = response as? NSHTTPURLResponse {
                     if hresponse.statusCode == 200 {

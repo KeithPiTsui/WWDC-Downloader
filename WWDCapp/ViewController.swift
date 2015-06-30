@@ -33,7 +33,7 @@ class ViewController: NSViewController, NSURLSessionDelegate, NSURLSessionDataDe
 	var allWWDCSessionsArray : [WWDCSession] = []
 	var visibleWWDCSessionsArray : [WWDCSession] = []
 
-	private var downloadSessionInfo : DownloadSessionInfo?
+	private var DownloadYearInfo : DownloadYearInfo?
 	
 	private var isYearInfoFetchComplete = false
 	
@@ -449,7 +449,7 @@ class ViewController: NSViewController, NSURLSessionDelegate, NSURLSessionDataDe
 		
 		yearFetchIndicator.startAnimation(nil)
 		
-		downloadSessionInfo = DownloadSessionInfo(year: year, parsingCompleteHandler: { [unowned self] (sessions) -> Void in
+		DownloadYearInfo = DownloadYearInfo(year: year, parsingCompleteHandler: { [unowned self] (sessions) -> Void in
 			
 				self.allWWDCSessionsArray = sessions
 			
