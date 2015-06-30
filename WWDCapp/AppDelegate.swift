@@ -20,24 +20,32 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         dockTile = NSApplication.sharedApplication().dockTile
 
         if let dockTile = dockTile {
-            dockProgress = NSProgressIndicator(frame: NSRect(x: 0, y: 0, width: dockTile.size.width, height: 50))
+            dockProgress = NSProgressIndicator(frame: NSRect(x: 0, y: 0, width: dockTile.size.width, height: 20))
             if let dockProgress = dockProgress {
                 let imageView = NSImageView()
                 imageView.image = NSApplication.sharedApplication().applicationIconImage
                 dockTile.contentView = imageView
-                
-                dockProgress.style = NSProgressIndicatorStyle.BarStyle
-                //dockProgress.usesThreadedAnimation = true
+
+				dockProgress.style = NSProgressIndicatorStyle.BarStyle
                 dockProgress.startAnimation(self)
                 dockProgress.indeterminate = false
                 dockProgress.minValue = 0
                 dockProgress.maxValue = 1
-                dockProgress.needsDisplay = true
                 dockProgress.hidden = false
+				dockProgress.needsDisplay = true
+
+				// Not working to color progress indicator
+//				if let filter = CIFilter(name: "CIHueAdjust") {
+//					filter.setDefaults()
+//					filter.setValue(0.8, forKey: "inputAngle")
+//					dockProgress.backgroundFilters = [filter]
+//				}
+				
                 imageView.addSubview(dockProgress)
+				
+				dockTile.display()
             }
         }
-       
     }
     
     func updateDockProgress(progress: Double) {

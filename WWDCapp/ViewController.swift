@@ -45,6 +45,8 @@ class ViewController: NSViewController, NSURLSessionDelegate, NSURLSessionDataDe
 	
 	private var isFiltered  = false
 	
+	private var dockIconUpdateTimer : NSTimer?
+	
 	// MARK: - Init
 	required init?(coder: NSCoder) {
 	
@@ -356,9 +358,6 @@ class ViewController: NSViewController, NSURLSessionDelegate, NSURLSessionDataDe
 				let progress = Float(currentDownloadBytes)/Float(self.totalBytesToDownload)
 				
 				self.downloadProgressView.doubleValue = Double(progress)
-                
-//                let appDelegate = NSApplication.sharedApplication().delegate as! AppDelegate
-//                appDelegate.updateDockProgress(Double(progress))
 			})
 		})
 	}
@@ -744,6 +743,8 @@ class ViewController: NSViewController, NSURLSessionDelegate, NSURLSessionDataDe
 		oflabel.hidden = false
 		updateTotalFileSize()
 		
+		startUpdatingDockIcon()
+		
 		downloadFiles(filesToDownload)
 	}
 	
@@ -764,6 +765,8 @@ class ViewController: NSViewController, NSURLSessionDelegate, NSURLSessionDataDe
 		myTableView.reloadData()
 		
 		checkDownloadButtonState()
+		
+		stopUpdatingDockIcon()
 		
 		print("Completed File Downloads")
 	}
@@ -807,6 +810,27 @@ class ViewController: NSViewController, NSURLSessionDelegate, NSURLSessionDataDe
 		allSDCheckBox.enabled = true
 		allHDCheckBox.enabled = true
 		allCodeCheckbox.enabled = true
+	}
+	
+	func startUpdatingDockIcon () {
+		dockIconUpdateTimer = NSTimer.scheduledTimerWithTimeInterval(0.5, target: self, selector: "updateDockIcon", userInfo: nil, repeats: true)
+	}
+	
+	func updateDockIcon () {
+		
+		dispatch_async(dispatch_get_main_queue()) { [unowned self] in
+			let appDelegate = NSApplication.sharedApplication().delegate as! AppDelegate
+			appDelegate.updateDockProgress(self.downloadProgressView.doubleValue)
+		}
+	}
+	
+	func stopUpdatingDockIcon () {
+		if let timer = dockIconUpdateTimer {
+			if timer.valid {
+				timer.invalidate()
+			}
+		}
+		dockIconUpdateTimer = nil
 	}
 	
 	
