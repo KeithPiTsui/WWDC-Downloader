@@ -31,7 +31,7 @@ class TranscriptDownloadManager : NSObject, NSURLSessionDataDelegate {
     
     func fetchTranscript(session : WWDCSession, completion: (success: Bool, errorCode:Int?) -> Void) {
         
-        let remoteFileURLString = "http://asciiwwdc.com/"+String(session.sessionYear)+"/sessions/"+session.sessionID
+        let remoteFileURLString = "http://asciiwwdc.com/"+String(session.sessionYear.description)+"/sessions/"+session.sessionID
         
         if let url = NSURL(string: remoteFileURLString) {
             

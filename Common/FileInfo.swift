@@ -8,12 +8,41 @@
 
 import Foundation
 
-enum WWDCYear {
-	case WWDC2015, WWDC2014, WWDC2013
+enum WWDCYear: CustomStringConvertible {
+	case WWDC2015
+    case WWDC2014
+    case WWDC2013
+    
+    var description : String {
+        switch self {
+        case .WWDC2015:
+            return "2015"
+        case .WWDC2014:
+            return "2014"
+        case .WWDC2013:
+            return "2013"
+        }
+    }
 }
 
-enum FileType {
-	case PDF, SD, HD, SampleCode
+enum FileType: CustomStringConvertible {
+	case PDF
+    case SD
+    case HD
+    case SampleCode
+    
+    var description : String {
+        switch self {
+        case .PDF:
+            return "PDF"
+        case .SD:
+            return "SD"
+        case .HD:
+            return "HD"
+        case .SampleCode:
+            return "Sample Code"
+        }
+    }
 }
 
 @objc class FileInfo : NSObject {
@@ -200,20 +229,9 @@ enum FileType {
 		
 		guard let wwdcDirectory = wwdcDirectory()  else { return nil }
 		
-		var yearpath : String?
+		let yearpath = "/\(year.description)"
 		
-		switch year {
-		case .WWDC2015:
-			yearpath = "/2015"
-		case .WWDC2014:
-			yearpath = "/2014"
-		case .WWDC2013:
-			yearpath = "/2013"
-		}
-		
-		guard let path = yearpath else { return nil }
-		
-		return createDirectoryIfNeeded(path, inDirectory: wwdcDirectory)
+		return createDirectoryIfNeeded(yearpath, inDirectory: wwdcDirectory)
 	}
 	
 	

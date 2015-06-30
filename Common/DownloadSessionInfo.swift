@@ -141,6 +141,10 @@ class DownloadSessionInfo: NSObject {
                         
                     self.individualCompletionHandler(session: wwdcSession)
 
+                    print("Completed fetch of Session Info -   \(wwdcSession.sessionID) - \(wwdcSession.title)")
+                    
+                    wwdcSession.isInfoFetchComplete = true
+
                     dispatch_group_leave(transriptGroup)
                 })
             }
@@ -430,11 +434,7 @@ class DownloadSessionInfo: NSObject {
 		}
 		
 		dispatch_group_notify(fileSizeSessionGroup,dispatch_get_main_queue(),{
-			
-				print("Completed fetch of Session Info -   \(wwdcSession.sessionID) - \(wwdcSession.title)")
-
-				wwdcSession.isInfoFetchComplete = true
-				completion(success: true)
+                completion(success: true)
 			})
 	}
 	
