@@ -28,7 +28,6 @@ enum FileType {
 	var attemptsToDownloadFile = 0
 	var fileErrorCode : NSError?
     var resumeData : NSData?
-    var transcript : String?
 	
     // MARK: Convenience
 	var sessionID : String {

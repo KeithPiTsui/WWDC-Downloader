@@ -123,19 +123,35 @@ class DownloadSessionInfo: NSObject {
 			
 			dispatch_group_enter(sessionGroup);
 			
-			parseAndFetchSession2015(wwdcSession) { [unowned self] (success) -> Void in
-				
-				self.individualCompletionHandler(session: wwdcSession)
+			parseAndFetchSession2015(wwdcSession) { (success) -> Void in
 				
 				dispatch_group_leave(sessionGroup)
 			}
 		}
-		
+        
 		dispatch_group_notify(sessionGroup,dispatch_get_main_queue(),{ [unowned self] in
 			
+            let transriptGroup = dispatch_group_create();
+
+            for wwdcSession in self.wwdcSessions {
+                
+                dispatch_group_enter(transriptGroup);
+                
+                TranscriptDownloadManager.sharedManager.fetchTranscript(wwdcSession, completion: {  (success, errorCode) -> Void in
+                        
+                    self.individualCompletionHandler(session: wwdcSession)
+
+                    dispatch_group_leave(transriptGroup)
+                })
+            }
+            
+            dispatch_group_notify(transriptGroup,dispatch_get_main_queue(),{ [unowned self] in
+
 				print("Finished All Session Info in \(self.year)")
 				self.sessionInfoCompletionHandler()
 			})
+            
+        })
 	}
 	
 	private func parseAndFetchSession2015 (wwdcSession : WWDCSession, completion: (success: Bool) -> Void) {

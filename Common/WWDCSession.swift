@@ -26,6 +26,8 @@ class WWDCSession : NSObject {
 
     var sampleCodeArray : [FileInfo]
     
+    var transcript : String?
+    
     init(sessionID: String, title: String, year: WWDCYear) {
         
         self.title = title
