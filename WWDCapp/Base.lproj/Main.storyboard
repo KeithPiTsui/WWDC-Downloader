@@ -194,7 +194,7 @@
                                     <rect key="frame" x="1" y="1" width="888" height="478"/>
                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                     <subviews>
-                                        <tableView verticalHuggingPriority="750" allowsExpansionToolTips="YES" columnAutoresizingStyle="none" alternatingRowBackgroundColors="YES" columnReordering="NO" columnResizing="NO" multipleSelection="NO" emptySelection="NO" autosaveColumns="NO" typeSelect="NO" rowHeight="50" headerView="GLv-Gv-fqk" viewBased="YES" id="SSh-0R-MKF">
+                                        <tableView verticalHuggingPriority="750" allowsExpansionToolTips="YES" columnAutoresizingStyle="none" alternatingRowBackgroundColors="YES" columnReordering="NO" columnResizing="NO" multipleSelection="NO" emptySelection="NO" autosaveColumns="NO" typeSelect="NO" rowHeight="50" rowSizeStyle="automatic" headerView="GLv-Gv-fqk" viewBased="YES" id="SSh-0R-MKF">
                                             <rect key="frame" x="0.0" y="0.0" width="888" height="455"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <animations/>
@@ -220,8 +220,11 @@
                                                             <rect key="frame" x="1" y="1" width="70" height="50"/>
                                                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                             <subviews>
-                                                                <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="y3w-TZ-YZi">
+                                                                <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" translatesAutoresizingMaskIntoConstraints="NO" id="y3w-TZ-YZi" userLabel="Session ID Field">
                                                                     <rect key="frame" x="0.0" y="13" width="70" height="24"/>
+                                                                    <constraints>
+                                                                        <constraint firstAttribute="height" constant="24" id="xjk-Hc-OFP"/>
+                                                                    </constraints>
                                                                     <animations/>
                                                                     <textFieldCell key="cell" lineBreakMode="truncatingTail" sendsActionOnEndEditing="YES" alignment="center" title="Table View Cell" id="erZ-ME-7Gm">
                                                                         <font key="font" metaFont="system"/>
@@ -230,6 +233,11 @@
                                                                     </textFieldCell>
                                                                 </textField>
                                                             </subviews>
+                                                            <constraints>
+                                                                <constraint firstItem="y3w-TZ-YZi" firstAttribute="centerX" secondItem="I6T-jp-6sv" secondAttribute="centerX" id="Y0s-Fg-0mS"/>
+                                                                <constraint firstItem="y3w-TZ-YZi" firstAttribute="centerY" secondItem="I6T-jp-6sv" secondAttribute="centerY" id="km2-Pg-W1N"/>
+                                                                <constraint firstItem="y3w-TZ-YZi" firstAttribute="leading" secondItem="I6T-jp-6sv" secondAttribute="leading" constant="2" id="pwz-wm-BKm"/>
+                                                            </constraints>
                                                             <animations/>
                                                             <connections>
                                                                 <outlet property="textField" destination="y3w-TZ-YZi" id="uNZ-ZM-GAg"/>
@@ -251,23 +259,45 @@
                                                     <sortDescriptor key="sortDescriptorPrototype" selector="localizedStandardCompare:" sortKey="title"/>
                                                     <tableColumnResizingMask key="resizingMask" resizeWithTable="YES" userResizable="YES"/>
                                                     <prototypeCellViews>
-                                                        <tableCellView identifier="sessionName" id="AR7-Tv-V89">
-                                                            <rect key="frame" x="74" y="1" width="400" height="50"/>
+                                                        <tableCellView id="RoC-Vv-kEq" customClass="SessionNameDescriptionCell" customModule="WWDCapp" customModuleProvider="target">
+                                                            <rect key="frame" x="74" y="1" width="400" height="49"/>
                                                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                             <subviews>
-                                                                <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Vfc-ab-Dsz">
-                                                                    <rect key="frame" x="0.0" y="13" width="400" height="24"/>
+                                                                <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" translatesAutoresizingMaskIntoConstraints="NO" id="ygr-QC-bnS" userLabel="Name Field">
+                                                                    <rect key="frame" x="0.0" y="19" width="400" height="20"/>
+                                                                    <constraints>
+                                                                        <constraint firstAttribute="height" constant="20" id="maE-tc-3te"/>
+                                                                    </constraints>
                                                                     <animations/>
-                                                                    <textFieldCell key="cell" lineBreakMode="truncatingTail" sendsActionOnEndEditing="YES" title="Table View Cell" id="8aE-sP-WBQ">
-                                                                        <font key="font" metaFont="system"/>
+                                                                    <textFieldCell key="cell" lineBreakMode="truncatingTail" sendsActionOnEndEditing="YES" title="Table View Cell" id="ZXt-bm-zgP">
+                                                                        <font key="font" metaFont="systemBold"/>
                                                                         <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
                                                                         <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                                                                     </textFieldCell>
                                                                 </textField>
+                                                                <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" setsMaxLayoutWidthAtFirstLayout="YES" translatesAutoresizingMaskIntoConstraints="NO" id="nZf-66-To1">
+                                                                    <rect key="frame" x="0.0" y="4" width="400" height="17"/>
+                                                                    <animations/>
+                                                                    <textFieldCell key="cell" truncatesLastVisibleLine="YES" selectable="YES" refusesFirstResponder="YES" allowsUndo="NO" sendsActionOnEndEditing="YES" state="on" alignment="left" id="gFm-Tg-WgZ">
+                                                                        <font key="font" metaFont="system"/>
+                                                                        <color key="textColor" name="textColor" catalog="System" colorSpace="catalog"/>
+                                                                        <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                                                    </textFieldCell>
+                                                                </textField>
                                                             </subviews>
+                                                            <constraints>
+                                                                <constraint firstAttribute="bottom" secondItem="nZf-66-To1" secondAttribute="bottom" constant="4" id="7rV-Aj-CZ6"/>
+                                                                <constraint firstItem="ygr-QC-bnS" firstAttribute="top" secondItem="RoC-Vv-kEq" secondAttribute="top" constant="10" id="FKZ-cK-zbi"/>
+                                                                <constraint firstItem="ygr-QC-bnS" firstAttribute="leading" secondItem="RoC-Vv-kEq" secondAttribute="leading" constant="2" id="eiD-Er-CNy"/>
+                                                                <constraint firstItem="ygr-QC-bnS" firstAttribute="bottom" secondItem="nZf-66-To1" secondAttribute="top" constant="2" id="oof-QK-79E"/>
+                                                                <constraint firstItem="nZf-66-To1" firstAttribute="leading" secondItem="RoC-Vv-kEq" secondAttribute="leading" constant="2" id="rSj-cl-EYQ"/>
+                                                                <constraint firstAttribute="trailing" secondItem="ygr-QC-bnS" secondAttribute="trailing" constant="2" id="zOD-22-AXh"/>
+                                                                <constraint firstAttribute="trailing" secondItem="nZf-66-To1" secondAttribute="trailing" constant="2" id="zYC-eA-yK6"/>
+                                                            </constraints>
                                                             <animations/>
                                                             <connections>
-                                                                <outlet property="textField" destination="Vfc-ab-Dsz" id="IyL-Iv-lMN"/>
+                                                                <outlet property="descriptionField" destination="nZf-66-To1" id="ZAB-tJ-yna"/>
+                                                                <outlet property="textField" destination="ygr-QC-bnS" id="2zC-Ak-lPF"/>
                                                             </connections>
                                                         </tableCellView>
                                                     </prototypeCellViews>
@@ -630,6 +660,17 @@
                                     <action selector="startDownloadButton:" target="XfG-lQ-9wD" id="q7T-gH-FQB"/>
                                 </connections>
                             </button>
+                            <button fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="o2q-VB-fLx">
+                                <rect key="frame" x="18" y="40" width="181" height="18"/>
+                                <animations/>
+                                <buttonCell key="cell" type="check" title="Hide Session Descriptions" bezelStyle="regularSquare" imagePosition="left" alignment="left" state="on" inset="2" id="2BT-Kz-3ep">
+                                    <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
+                                    <font key="font" metaFont="system"/>
+                                </buttonCell>
+                                <connections>
+                                    <action selector="hideSessionsChecked:" target="XfG-lQ-9wD" id="aP2-5d-q8y"/>
+                                </connections>
+                            </button>
                         </subviews>
                         <animations/>
                     </view>
@@ -640,6 +681,7 @@
                         <outlet property="allSDCheckBox" destination="hdC-U3-wYR" id="Y83-Xh-DMa"/>
                         <outlet property="currentlabel" destination="ang-ho-9A3" id="6te-I5-TEb"/>
                         <outlet property="downloadProgressView" destination="eQd-ix-KJW" id="PoK-x9-or9"/>
+                        <outlet property="hideDescriptionsCheckBox" destination="o2q-VB-fLx" id="aPI-Hb-O9Z"/>
                         <outlet property="myTableView" destination="SSh-0R-MKF" id="liZ-v1-msq"/>
                         <outlet property="oflabel" destination="C8t-xS-mu2" id="IvW-Va-OWf"/>
                         <outlet property="searchField" destination="rOw-UC-Hwr" id="ahm-px-cEF"/>

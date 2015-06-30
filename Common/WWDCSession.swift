@@ -27,7 +27,7 @@ class WWDCSession : NSObject {
     var sampleCodeArray : [FileInfo]
 	
 	// ASCIIwwdc fetchedInfo
-	var sesssionDescription : String?
+	var sessionDescription : String?
 	var fullTranscriptPrettyPrint : String? {	// Full Print Out
 		get {
 			if let transcript = self.transcript {

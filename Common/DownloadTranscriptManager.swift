@@ -11,8 +11,7 @@ import Foundation
 class DownloadTranscriptManager : NSObject, NSURLSessionDataDelegate {
     
     private var sessionManager : NSURLSession?
-    private var downloadHandlers: [Int : (WWDCSession, SimpleCompletionHandler)] = [:]			// Int is taskIdentifier of NSURLSessionTask
-    
+	
     class var sharedManager: DownloadTranscriptManager {
         struct Singleton {
             static let instance = DownloadTranscriptManager()
@@ -48,24 +47,27 @@ class DownloadTranscriptManager : NSObject, NSURLSessionDataDelegate {
 								if let jsonObject : NSDictionary = try NSJSONSerialization.JSONObjectWithData(data, options:NSJSONReadingOptions.AllowFragments) as? NSDictionary {
 									
 									if let sessionDescription = jsonObject["description"] as? String {
-										session.sesssionDescription = sessionDescription
+										session.sessionDescription = sessionDescription
 									}
 									
 									if let timeCodes = jsonObject["timecodes"] as? NSArray, let annotations = jsonObject["annotations"] as? NSArray {
 										
 										if timeCodes.count == annotations.count {
-											var transcript : [(Double, String)] = []
 											
-											for var i = 0;  i < timeCodes.count; ++i {
-												let timeCode = timeCodes[i] as? NSNumber
-												let annotation = annotations[i] as? NSString
+											autoreleasepool {
+												var transcript : [(Double, String)] = []
 												
-												if let timeCode = timeCode, let annotation = annotation {
-													transcript.append(Double(timeCode), annotation as String)
+												for var i = 0;  i < timeCodes.count; ++i {
+													let timeCode = timeCodes[i] as? NSNumber
+													let annotation = annotations[i] as? NSString
+													
+													if let timeCode = timeCode, let annotation = annotation {
+														transcript.append(Double(timeCode), annotation as String)
+													}
 												}
+												
+												session.transcript = transcript
 											}
-											
-											session.transcript = transcript
 										}
 									}
 									

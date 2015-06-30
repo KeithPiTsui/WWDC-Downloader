@@ -23,6 +23,8 @@ class ViewController: NSViewController, NSURLSessionDelegate, NSURLSessionDataDe
 	
 	@IBOutlet weak var myTableView: NSTableView!
 	
+	@IBOutlet weak var hideDescriptionsCheckBox: NSButton!
+	
     @IBOutlet weak var currentlabel: NSTextField!
     @IBOutlet weak var oflabel: NSTextField!
     @IBOutlet weak var totallabel: NSTextField!
@@ -84,8 +86,16 @@ class ViewController: NSViewController, NSURLSessionDelegate, NSURLSessionDataDe
 			var newArray = [WWDCSession]()
 			
 			for wwdcSession in allWWDCSessionsArray {
-				if wwdcSession.title.localizedStandardContainsString(sender.stringValue.stringByTrimmingCharactersInSet(NSCharacterSet.whitespaceCharacterSet())) {
-					newArray.append(wwdcSession)
+				
+				if let description = wwdcSession.sessionDescription {
+					if wwdcSession.title.localizedStandardContainsString(sender.stringValue.stringByTrimmingCharactersInSet(NSCharacterSet.whitespaceCharacterSet())) || description.localizedStandardContainsString(sender.stringValue.stringByTrimmingCharactersInSet(NSCharacterSet.whitespaceCharacterSet())) {
+						newArray.append(wwdcSession)
+					}
+				}
+				else {
+					if wwdcSession.title.localizedStandardContainsString(sender.stringValue.stringByTrimmingCharactersInSet(NSCharacterSet.whitespaceCharacterSet())) {
+						newArray.append(wwdcSession)
+					}
 				}
 			}
 
@@ -107,6 +117,10 @@ class ViewController: NSViewController, NSURLSessionDelegate, NSURLSessionDataDe
 		myTableView.reloadDataForRowIndexes(NSIndexSet(indexesInRange: NSMakeRange(0,allWWDCSessionsArray.count)) , columnIndexes:NSIndexSet(index: 2))
 		
 		checkDownloadButtonState()
+		
+		let totalSize = totalFileSizeToDownload()
+		
+		totallabel.stringValue = byteFormatter.stringFromByteCount(totalSize)
     }
 	
 	@IBAction func allSDChecked(sender: NSButton) {
@@ -121,6 +135,10 @@ class ViewController: NSViewController, NSURLSessionDelegate, NSURLSessionDataDe
 		myTableView.reloadDataForRowIndexes(NSIndexSet(indexesInRange: NSMakeRange(0,allWWDCSessionsArray.count)) , columnIndexes:NSIndexSet(index: 3))
 		
 		checkDownloadButtonState()
+		
+		let totalSize = totalFileSizeToDownload()
+		
+		totallabel.stringValue = byteFormatter.stringFromByteCount(totalSize)
     }
 	
 	@IBAction func allHDChecked(sender: NSButton) {
@@ -135,6 +153,10 @@ class ViewController: NSViewController, NSURLSessionDelegate, NSURLSessionDataDe
 		myTableView.reloadDataForRowIndexes(NSIndexSet(indexesInRange: NSMakeRange(0,allWWDCSessionsArray.count)) , columnIndexes:NSIndexSet(index: 4))
 		
 		checkDownloadButtonState()
+		
+		let totalSize = totalFileSizeToDownload()
+		
+		totallabel.stringValue = byteFormatter.stringFromByteCount(totalSize)
 	}
 	
 	@IBAction func allCodeChecked(sender: NSButton) {
@@ -150,6 +172,10 @@ class ViewController: NSViewController, NSURLSessionDelegate, NSURLSessionDataDe
 		myTableView.reloadDataForRowIndexes(NSIndexSet(indexesInRange: NSMakeRange(0,allWWDCSessionsArray.count)) , columnIndexes:NSIndexSet(index: 5))
 		
 		checkDownloadButtonState()
+		
+		let totalSize = totalFileSizeToDownload()
+		
+		totallabel.stringValue = byteFormatter.stringFromByteCount(totalSize)
     }
 	
 	
@@ -172,6 +198,10 @@ class ViewController: NSViewController, NSURLSessionDelegate, NSURLSessionDataDe
 		}
 		
 		checkDownloadButtonState()
+		
+		let totalSize = totalFileSizeToDownload()
+		
+		totallabel.stringValue = byteFormatter.stringFromByteCount(totalSize)
 		
 		coordinateAllCheckBoxUI()
 	}
@@ -278,6 +308,20 @@ class ViewController: NSViewController, NSURLSessionDelegate, NSURLSessionDataDe
 		}
 	}
 	
+	@IBAction func hideSessionsChecked(sender: NSButton) {
+		
+		myTableView.beginUpdates()
+		
+		if !isFiltered {
+			myTableView.noteHeightOfRowsWithIndexesChanged(NSIndexSet(indexesInRange: NSMakeRange(0,allWWDCSessionsArray.count)))
+		}
+		else {
+			myTableView.noteHeightOfRowsWithIndexesChanged(NSIndexSet(indexesInRange: NSMakeRange(0,visibleWWDCSessionsArray.count)))
+		}
+		
+		myTableView.endUpdates()
+	}
+	
 	@IBAction func startDownloadButton(sender: NSButton) {
 		
 		if isDownloading {
@@ -298,6 +342,8 @@ class ViewController: NSViewController, NSURLSessionDelegate, NSURLSessionDataDe
 		myTableView.allowsMultipleSelection = false
 		myTableView.allowsEmptySelection = false
 		
+		myTableView.rowSizeStyle = NSTableViewRowSizeStyle.Custom
+		
 		myTableView.reloadData()
 		
 		resetUIForYearFetch()
@@ -315,11 +361,17 @@ class ViewController: NSViewController, NSURLSessionDelegate, NSURLSessionDataDe
 		
 		resetAllCheckboxesAndDisable()
 		
-		updateTotalFileSize()
+		let totalSize = totalFileSizeToDownload()
 		
+		totallabel.stringValue = byteFormatter.stringFromByteCount(totalSize)
+
 		resetDownloadUI()
 		
 		startDownload.enabled = false
+		
+		hideDescriptionsCheckBox.enabled = false
+		
+		hideDescriptionsCheckBox.state = 0
 	}
 	
 	func disableUIForDownloading () {
@@ -330,13 +382,6 @@ class ViewController: NSViewController, NSURLSessionDelegate, NSURLSessionDataDe
 		allSDCheckBox.enabled = false
 		allHDCheckBox.enabled = false
 		allCodeCheckbox.enabled = false
-	}
-	
-	func reEnableUIWhenStoppedDownloading() {
-		
-		yearSeletor.enabled = true
-		
-		coordinateAllCheckBoxUI()
 	}
 	
 	func updateTotalProgress() {
@@ -362,7 +407,7 @@ class ViewController: NSViewController, NSURLSessionDelegate, NSURLSessionDataDe
 		})
 	}
 	
-	func updateTotalFileSize() -> Int64 {
+	func totalFileSizeToDownload() -> Int64 {
 		
 		totalBytesToDownload = 0
 		
@@ -390,8 +435,6 @@ class ViewController: NSViewController, NSURLSessionDelegate, NSURLSessionDataDe
 			}
 		}
 		
-		totallabel.stringValue = byteFormatter.stringFromByteCount(totalBytesToDownload)
-        
         return totalBytesToDownload
 	}
 
@@ -422,7 +465,10 @@ class ViewController: NSViewController, NSURLSessionDelegate, NSURLSessionDataDe
 				
 				if let index = self.allWWDCSessionsArray.indexOf(session) {
 					dispatch_async(dispatch_get_main_queue()) { [unowned self] in
+						self.myTableView.beginUpdates()
 						self.myTableView.reloadDataForRowIndexes(NSIndexSet(index: index), columnIndexes:NSIndexSet(indexesInRange: NSMakeRange(0,self.myTableView.numberOfColumns)))
+						self.myTableView.noteHeightOfRowsWithIndexesChanged(NSIndexSet(index: index))
+						self.myTableView.endUpdates()
 					}
 				}
 			},
@@ -430,11 +476,11 @@ class ViewController: NSViewController, NSURLSessionDelegate, NSURLSessionDataDe
 								
 				dispatch_async(dispatch_get_main_queue()) { [unowned self] in
 
+					self.isYearInfoFetchComplete = true
+
 					self.searchField.enabled = true
 					
 					self.yearSeletor.enabled = true
-
-					self.isYearInfoFetchComplete = true
 
 					self.yearFetchIndicator.stopAnimation(nil)
 
@@ -442,11 +488,16 @@ class ViewController: NSViewController, NSURLSessionDelegate, NSURLSessionDataDe
 					
 					let sessionIDSortDescriptor = NSSortDescriptor(key: "sessionID", ascending: true, selector: "localizedStandardCompare:")
 					
-					self.myTableView.sortDescriptors = [sessionIDSortDescriptor]  // This fires reload of table
+					self.myTableView.sortDescriptors = [sessionIDSortDescriptor]
 					
 					self.reEnableCheckboxes()
 					
 					self.coordinateAllCheckBoxUI()
+					
+					self.hideDescriptionsCheckBox.enabled = true
+					self.hideDescriptionsCheckBox.state = 0
+					
+					self.myTableView.reloadData()
 				}
 			})
 	}
@@ -461,6 +512,48 @@ class ViewController: NSViewController, NSURLSessionDelegate, NSURLSessionDataDe
 		else {
 			return self.visibleWWDCSessionsArray.count
 		}
+	}
+	
+	func tableView(tableView: NSTableView, heightOfRow row: Int) -> CGFloat {
+	
+		if hideDescriptionsCheckBox.state == 1 {
+			return 50
+		}
+		else {
+			var text : String?
+			
+			if !isFiltered {
+				text = allWWDCSessionsArray[row].sessionDescription
+			}
+			else {
+				text = visibleWWDCSessionsArray[row].sessionDescription
+			}
+			
+			if let text = text {
+				return 42 + heightForStringDrawing(text, font: NSFont.systemFontOfSize(NSFont.systemFontSizeForControlSize(NSControlSize.RegularControlSize)), width: 380)
+			}
+			else {
+				return 50
+			}
+		}
+	}
+	
+	func heightForStringDrawing(text: String, font: NSFont, width: Double) -> CGFloat {
+		
+		let textStorage = NSTextStorage(string: text)
+		let textContainer = NSTextContainer(containerSize: NSSize(width: width, height: DBL_MAX))
+		let layoutManager = NSLayoutManager()
+		
+		layoutManager.addTextContainer(textContainer)
+		textStorage.addLayoutManager(layoutManager)
+		textStorage.addAttribute(NSFontAttributeName, value: font, range: NSRange(location: 0,length: textStorage.length))
+		textContainer.lineFragmentPadding = 0.0
+		
+		layoutManager.glyphRangeForTextContainer(textContainer)
+		
+		let rect = layoutManager.usedRectForTextContainer(textContainer)
+		
+		return rect.size.height
 	}
 	
 	func selectionShouldChangeInTableView(tableView: NSTableView) -> Bool {
@@ -488,9 +581,11 @@ class ViewController: NSViewController, NSURLSessionDelegate, NSURLSessionDataDe
 		}
 		else if tableColumn?.identifier == "sessionName" {
 			
-			let cell = (tableView.makeViewWithIdentifier("sessionName", owner: self) as? NSTableCellView)!
+			let cell = (tableView.makeViewWithIdentifier("sessionName", owner: self) as? SessionNameDescriptionCell)!
 			
-			cell.textField?.stringValue = wwdcSession.title
+			cell.resetCell()
+			
+			cell.updateCell(wwdcSession.title, description: wwdcSession.sessionDescription, descriptionVisible: false)
 			
 			return cell
 		}
@@ -741,7 +836,8 @@ class ViewController: NSViewController, NSURLSessionDelegate, NSURLSessionDataDe
 		
 		updateTotalProgress()
 		oflabel.hidden = false
-		updateTotalFileSize()
+		let totalSize = totalFileSizeToDownload()
+		totallabel.stringValue = byteFormatter.stringFromByteCount(totalSize)
 		
 		startUpdatingDockIcon()
 		
@@ -756,7 +852,9 @@ class ViewController: NSViewController, NSURLSessionDelegate, NSURLSessionDataDe
 		
 		searchField.enabled = true
 
-		reEnableUIWhenStoppedDownloading()
+		yearSeletor.enabled = true
+		
+		coordinateAllCheckBoxUI()
 		
 		yearFetchIndicator.stopAnimation(nil)
 		
@@ -773,7 +871,7 @@ class ViewController: NSViewController, NSURLSessionDelegate, NSURLSessionDataDe
 	
 	func checkDownloadButtonState () {
 		
-		let totalToFetch = updateTotalFileSize()
+		let totalToFetch = totalFileSizeToDownload()
 		
 		if totalToFetch == 0 {
 			startDownload.enabled = false

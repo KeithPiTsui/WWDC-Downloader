@@ -25,6 +25,8 @@ class CheckBoxTableViewCell : NSTableCellView {
 		self.label.hidden = true
 		self.downloadProgressView.hidden = true
 		self.downloadCompleteImage.hidden = true
+		self.checkBox.enabled = false
+		self.checkBox.state = 1
 	}
 	
 	func updateCell(isYearInfoFetchComplete:Bool, isDownloadSessionActive:Bool) {
@@ -90,16 +92,14 @@ class CheckBoxTableViewCell : NSTableCellView {
 			}
 			else {
 				if isAllFilesDownloading {
-                    if isDownloadSessionActive {
-                        self.downloadProgressView.hidden = false
-                        let progress = Double(Float(currentDownloadBytes)/Float(totalDownloadSizeBytes))
-                        self.downloadProgressView.doubleValue = progress
+					self.downloadProgressView.hidden = false
+					let progress = Double(Float(currentDownloadBytes)/Float(totalDownloadSizeBytes))
+					self.downloadProgressView.doubleValue = progress
+					
+					if isDownloadSessionActive {
                         self.label.stringValue = NSByteCountFormatter().stringFromByteCount(Int64(progress*Double(totalDownloadSizeBytes)))
                     }
                     else {
-                        self.downloadProgressView.hidden = false
-                        let progress = Double(Float(currentDownloadBytes)/Float(totalDownloadSizeBytes))
-                        self.downloadProgressView.doubleValue = progress
                         self.label.stringValue = NSByteCountFormatter().stringFromByteCount(totalDownloadSizeBytes)
                     }
 				}
@@ -124,7 +124,7 @@ class CheckBoxTableViewCell : NSTableCellView {
 				self.checkBox.state = 0
 			}
 			
-			if (isDownloadSessionActive) {
+			if isDownloadSessionActive {
 				self.checkBox.enabled = false
 			}
 			else {

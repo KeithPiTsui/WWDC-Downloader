@@ -97,15 +97,17 @@ class DownloadYearInfo: NSObject {
         for section in sections {
             
             let sectionItems = section.searchWithXPathQuery("//a") as! [TFHppleElement]
-            
+			
             for link in sectionItems {
-                
-                if let sessionIDLink = link.attributes["href"] as? String, let sessionTitle = link.content {
-                    
-                    let sessionID = sessionIDLink.stringByReplacingOccurrencesOfString("?id=", withString: "")
-                    
-                    wwdcSessions.append(WWDCSession(sessionID: sessionID, title: sessionTitle, year: .WWDC2015))
-                }
+				
+				autoreleasepool {
+					if let sessionIDLink = link.attributes["href"] as? String, let sessionTitle = link.content {
+						
+						let sessionID = sessionIDLink.stringByReplacingOccurrencesOfString("?id=", withString: "")
+						
+						wwdcSessions.append(WWDCSession(sessionID: sessionID, title: sessionTitle, year: .WWDC2015))
+					}
+				}
             }
         }
 		
@@ -285,52 +287,54 @@ class DownloadYearInfo: NSObject {
 		print("Started Parsing \(year)...")
 
         for section in sessionSections {
-            
-            if let sessionID = section.attributes["id"] as? String {
-
-				let cleanSessionID = sessionID.stringByReplacingOccurrencesOfString("-video", withString: "")
-				
-                let sectionItems = section.searchWithXPathQuery("//*[@class='title']") as! [TFHppleElement]
-                let title = sectionItems[0].content
-
-                let wwdcSession = WWDCSession(sessionID: cleanSessionID, title: title, year: year)
-            
-                let aItems = section.searchWithXPathQuery("//*[@class='description active']") as! [TFHppleElement]
-                
-                for anItem in aItems {
-                    
-                    let links = anItem.searchWithXPathQuery("//a") as! [TFHppleElement]
-                    
-                    for link in links {
-                        if link.content == "HD" {
-                            if let hdDownloadLink = link.attributes["href"] as? String {
-								let file = FileInfo(session: wwdcSession, fileType: .HD)
-                                file.remoteFileURL = NSURL(string: hdDownloadLink)
-                                wwdcSession.hdFile = file
-                            }
-                        }
-                        
-                        if link.content == "SD" {
-                            if let sdDownloadLink = link.attributes["href"] as? String {
-								let file = FileInfo(session: wwdcSession, fileType: .SD)
-                                file.remoteFileURL = NSURL(string: sdDownloadLink)
-								wwdcSession.sdFile = file
-                            }
-                        }
-                        
-                        if link.content == "PDF" {
-                            if let pdfDownloadLink = link.attributes["href"] as? String {
-								let file = FileInfo(session: wwdcSession, fileType: .PDF)
-                                file.remoteFileURL = NSURL(string: pdfDownloadLink)
-                                wwdcSession.pdfFile = file
-                            }
-                        }
-                    }
-                }
-                
-                wwdcSessions.append(wwdcSession)
-            }
-        }
+			
+			autoreleasepool {
+				if let sessionID = section.attributes["id"] as? String {
+					
+					let cleanSessionID = sessionID.stringByReplacingOccurrencesOfString("-video", withString: "")
+					
+					let sectionItems = section.searchWithXPathQuery("//*[@class='title']") as! [TFHppleElement]
+					let title = sectionItems[0].content
+					
+					let wwdcSession = WWDCSession(sessionID: cleanSessionID, title: title, year: year)
+					
+					let aItems = section.searchWithXPathQuery("//*[@class='description active']") as! [TFHppleElement]
+					
+					for anItem in aItems {
+						
+						let links = anItem.searchWithXPathQuery("//a") as! [TFHppleElement]
+						
+						for link in links {
+							if link.content == "HD" {
+								if let hdDownloadLink = link.attributes["href"] as? String {
+									let file = FileInfo(session: wwdcSession, fileType: .HD)
+									file.remoteFileURL = NSURL(string: hdDownloadLink)
+									wwdcSession.hdFile = file
+								}
+							}
+							
+							if link.content == "SD" {
+								if let sdDownloadLink = link.attributes["href"] as? String {
+									let file = FileInfo(session: wwdcSession, fileType: .SD)
+									file.remoteFileURL = NSURL(string: sdDownloadLink)
+									wwdcSession.sdFile = file
+								}
+							}
+							
+							if link.content == "PDF" {
+								if let pdfDownloadLink = link.attributes["href"] as? String {
+									let file = FileInfo(session: wwdcSession, fileType: .PDF)
+									file.remoteFileURL = NSURL(string: pdfDownloadLink)
+									wwdcSession.pdfFile = file
+								}
+							}
+						}
+					}
+					
+					wwdcSessions.append(wwdcSession)
+				}
+			}
+		}
 		
 		wwdcSessions.sortInPlace { ($1.sessionID > $0.sessionID) }
 
