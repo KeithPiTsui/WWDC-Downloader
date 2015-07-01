@@ -95,10 +95,27 @@ class DownloadTranscriptManager : NSObject, NSURLSessionDataDelegate {
     
     func stopAllTranscriptFetchs() {
         
-        sessionManager?.getAllTasksWithCompletionHandler{ (tasks) -> Void in
-            for task in tasks {
-                task.cancel()
+        if #available(OSX 10.11, *) {
+            sessionManager?.getAllTasksWithCompletionHandler{ (tasks) -> Void in
+                for task in tasks {
+                    task.cancel()
+                }
             }
+        }
+		else {
+            // Fallback on earlier versions
+			sessionManager?.getTasksWithCompletionHandler({ (data, upload, download) -> Void in
+				for task in data {
+					task.cancel()
+				}
+				for task in upload {
+					task.cancel()
+				}
+				for task in download {
+					task.cancel()
+				}
+
+			})
         }
     }
 

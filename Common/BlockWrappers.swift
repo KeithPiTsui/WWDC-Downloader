@@ -31,7 +31,7 @@ import Foundation
 	// MARK: - Helper Methods
 	
 	func invalidate() {
-		valid = false;
+		valid = false
 	}
 	
 	func execute(progress: Float) -> Bool {
@@ -60,7 +60,7 @@ import Foundation
 	
 	// MARK: - Helper Methods
 	func invalidate() {
-		valid = false;
+		valid = false
 	}
 	
 	func execute(success: Bool) -> Bool {

@@ -10,11 +10,49 @@ import Cocoa
 
 class ViewController: NSViewController, NSURLSessionDelegate, NSURLSessionDataDelegate, NSTableViewDataSource, NSTableViewDelegate {
 
-	@IBOutlet weak var yearSeletor: NSPopUpButton!
-	@IBOutlet weak var yearFetchIndicator: NSProgressIndicator!
-    @IBOutlet weak var stopFetchButton: NSButton!
-    
-	@IBOutlet weak var searchField: NSSearchField!
+	// MARK: Hooks to ToolbarItems in WindowControllerSubclass
+	var yearSeletor: NSPopUpButton! {
+		get {
+			if let windowController = NSApplication.sharedApplication().windows.first?.windowController  as? ToolbarHookableWindowSubclass {
+				return windowController.yearSeletor
+			}
+			assertionFailure("IBOutlet Fail!")
+			return NSPopUpButton()
+		}
+	}
+	
+	var yearFetchIndicator: NSProgressIndicator! {
+		get {
+			if let windowController = NSApplication.sharedApplication().windows.first?.windowController  as? ToolbarHookableWindowSubclass {
+				return windowController.yearFetchIndicator
+			}
+			assertionFailure("IBOutlet Fail!")
+			return NSProgressIndicator() //
+		}
+	}
+	
+	var stopFetchButton: NSButton! {
+		get {
+			if let windowController = NSApplication.sharedApplication().windows.first?.windowController  as? ToolbarHookableWindowSubclass {
+				return windowController.stopFetchButton
+			}
+			assertionFailure("IBOutlet Fail!")
+			return NSButton() //
+		}
+	}
+		
+	var searchField: NSSearchField! {
+		get {
+			if let windowController = NSApplication.sharedApplication().windows.first?.windowController  as? ToolbarHookableWindowSubclass {
+				return windowController.searchField
+			}
+			assertionFailure("IBOutlet Fail!")
+			return NSSearchField() //
+		}
+	}
+
+	// MARK: IBOutlets
+	@IBOutlet weak var visualEffectView: NSVisualEffectView!
 
 	@IBOutlet weak var allCodeCheckbox: NSButton!
 	@IBOutlet weak var allSDCheckBox: NSButton!
@@ -33,7 +71,7 @@ class ViewController: NSViewController, NSURLSessionDelegate, NSURLSessionDataDe
 
     @IBOutlet weak var downloadProgressView: NSProgressIndicator!
 
-	
+	// MARK: Variables
 	var allWWDCSessionsArray : [WWDCSession] = []
 	var visibleWWDCSessionsArray : [WWDCSession] = []
 
@@ -97,13 +135,33 @@ class ViewController: NSViewController, NSURLSessionDelegate, NSURLSessionDataDe
 			for wwdcSession in allWWDCSessionsArray {
 				
 				if let description = wwdcSession.sessionDescription {
-					if wwdcSession.title.localizedStandardContainsString(sender.stringValue.stringByTrimmingCharactersInSet(NSCharacterSet.whitespaceCharacterSet())) || description.localizedStandardContainsString(sender.stringValue.stringByTrimmingCharactersInSet(NSCharacterSet.whitespaceCharacterSet())) {
-						newArray.append(wwdcSession)
+					if #available(OSX 10.11, *) {
+					    if wwdcSession.title.localizedStandardContainsString(sender.stringValue.stringByTrimmingCharactersInSet(NSCharacterSet.whitespaceCharacterSet())) || description.localizedStandardContainsString(sender.stringValue.stringByTrimmingCharactersInSet(NSCharacterSet.whitespaceCharacterSet())) {
+    						newArray.append(wwdcSession)
+    					}
+					} else {
+					    // Fallback on earlier versions
+						let searchTerm = sender.stringValue.stringByTrimmingCharactersInSet(NSCharacterSet.whitespaceCharacterSet())
+						let rangeTitle = wwdcSession.title.rangeOfString(searchTerm, options: NSStringCompareOptions.CaseInsensitiveSearch, range: nil, locale: NSLocale.systemLocale())
+						let rangeDescription = description.rangeOfString(searchTerm, options: NSStringCompareOptions.CaseInsensitiveSearch, range: nil, locale: NSLocale.systemLocale())
+
+						if rangeTitle != nil || rangeDescription != nil {
+							newArray.append(wwdcSession)
+						}
 					}
 				}
 				else {
-					if wwdcSession.title.localizedStandardContainsString(sender.stringValue.stringByTrimmingCharactersInSet(NSCharacterSet.whitespaceCharacterSet())) {
-						newArray.append(wwdcSession)
+					if #available(OSX 10.11, *) {
+					    if wwdcSession.title.localizedStandardContainsString(sender.stringValue.stringByTrimmingCharactersInSet(NSCharacterSet.whitespaceCharacterSet())) {
+    						newArray.append(wwdcSession)
+    					}
+					} else {
+					    // Fallback on earlier versions
+						let searchTerm = sender.stringValue.stringByTrimmingCharactersInSet(NSCharacterSet.whitespaceCharacterSet())
+						let rangeTitle = wwdcSession.title.rangeOfString(searchTerm, options: NSStringCompareOptions.CaseInsensitiveSearch, range: nil, locale: NSLocale.systemLocale())
+						if rangeTitle != nil {
+							newArray.append(wwdcSession)
+						}
 					}
 				}
 			}
@@ -347,7 +405,24 @@ class ViewController: NSViewController, NSURLSessionDelegate, NSURLSessionDataDe
     override func viewDidLoad() {
         super.viewDidLoad()
 		
-		myTableView.allowsColumnSelection = false
+		visualEffectView.material = NSVisualEffectMaterial.AppearanceBased
+		visualEffectView.appearance = NSAppearance(named: NSAppearanceNameVibrantLight)
+		visualEffectView.blendingMode = NSVisualEffectBlendingMode.BehindWindow
+		visualEffectView.state = NSVisualEffectState.Active
+		
+		//hideDescriptionsCheckBox.se
+		let pstyle = NSMutableParagraphStyle()
+		pstyle.alignment = NSTextAlignment.Left
+		let attritbutes = [ NSForegroundColorAttributeName : NSColor.labelColor(), NSParagraphStyleAttributeName : pstyle ]
+		
+		hideDescriptionsCheckBox.attributedTitle = NSAttributedString(string: "Hide Session Descriptions", attributes: attritbutes)
+		allPDFCheckBox.attributedTitle = NSAttributedString(string: "All PDFs", attributes: attritbutes)
+		allHDCheckBox.attributedTitle = NSAttributedString(string: "All HD", attributes: attritbutes)
+		allSDCheckBox.attributedTitle = NSAttributedString(string: "All SD", attributes: attritbutes)
+		allCodeCheckbox.attributedTitle = NSAttributedString(string: "All Code", attributes: attritbutes)
+
+		
+		myTableView.allowsMultipleSelection = false
 		myTableView.allowsMultipleSelection = false
 		myTableView.allowsEmptySelection = false
         
@@ -727,13 +802,13 @@ class ViewController: NSViewController, NSURLSessionDelegate, NSURLSessionDataDe
 		
 		print("Total Files to download - \(files.count)")
 		
-		let downloadGroup = dispatch_group_create();
+		let downloadGroup = dispatch_group_create()
 		
         var failError : NSError?
         
 		for file in files {
 			
-			dispatch_group_enter(downloadGroup);
+			dispatch_group_enter(downloadGroup)
 			
 			let progressWrapper = ProgressWrapper(handler: { [unowned self] (progress) -> Void in
 				
@@ -823,8 +898,16 @@ class ViewController: NSViewController, NSURLSessionDelegate, NSURLSessionDataDe
             if let error = failError {
                 let alert = NSAlert(error: error)
                 alert.runModal()
+				NSSound(named: "Basso")?.play()
             }
-            
+			else {
+				if NSRunningApplication.currentApplication() != NSWorkspace.sharedWorkspace().frontmostApplication {
+					NSSound(named: "Glass")?.play()
+					NSApp.requestUserAttention(NSRequestUserAttentionType.CriticalRequest)
+				}
+
+			}
+			
             self.stopDownloading()
 		})
 	}
@@ -833,7 +916,7 @@ class ViewController: NSViewController, NSURLSessionDelegate, NSURLSessionDataDe
 		
 		isDownloading = true
 
-		searchField.enabled = false;
+		searchField.enabled = false
 		searchField.stringValue = ""
 		isFiltered = false
 		visibleWWDCSessionsArray.removeAll()
@@ -897,7 +980,7 @@ class ViewController: NSViewController, NSURLSessionDelegate, NSURLSessionDataDe
 		
 		print("Completed File Downloads")
 		
-		createPDF()
+		//createPDF()
 	}
 	
 	func createPDF () {
@@ -916,16 +999,20 @@ class ViewController: NSViewController, NSURLSessionDelegate, NSURLSessionDataDe
 		
 		guard let title = yearSeletor.selectedItem?.title else { return }
 		
+		var combinedPDFURL : NSURL?
+		
 		switch title {
 		case "2015":
-			PDFMerge.merge(pdfURLArray, year: .WWDC2015)
+			combinedPDFURL = PDFMerge.merge(pdfURLArray, year: .WWDC2015)
 		case "2014":
-			PDFMerge.merge(pdfURLArray, year: .WWDC2014)
+			combinedPDFURL = PDFMerge.merge(pdfURLArray, year: .WWDC2014)
 		case "2013":
-			PDFMerge.merge(pdfURLArray, year: .WWDC2013)
+			combinedPDFURL = PDFMerge.merge(pdfURLArray, year: .WWDC2013)
 		default:
 			break
 		}
+		
+		print(combinedPDFURL)
 		
 	}
 	

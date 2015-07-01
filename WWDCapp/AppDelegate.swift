@@ -13,9 +13,23 @@ class AppDelegate: NSObject, NSApplicationDelegate {
 
     var dockTile : NSDockTile?
     var dockProgress : NSProgressIndicator?
-    
+	
     func applicationDidFinishLaunching(aNotification: NSNotification) {
         // Insert code here to initialize your application
+		
+		if let window = NSApplication.sharedApplication().windows.first {
+			
+			let zoomButton = window.standardWindowButton(NSWindowButton.ZoomButton)
+
+			zoomButton?.enabled = false
+			zoomButton?.hidden = true
+			
+			window.styleMask |= NSFullSizeContentViewWindowMask
+			window.titlebarAppearsTransparent = false
+			window.appearance = NSAppearance(named: NSAppearanceNameVibrantLight)
+			
+			window.titleVisibility = NSWindowTitleVisibility.Hidden
+		}
         
         dockTile = NSApplication.sharedApplication().dockTile
 
@@ -59,11 +73,16 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     @IBAction func showPreferencesPanel(sender: NSMenuItem) {
         print("Show Preferences")
     }
-    
+	
+	
+	func applicationShouldTerminateAfterLastWindowClosed(sender: NSApplication) -> Bool {
+		return true
+	}
+	
+	
     func applicationWillTerminate(aNotification: NSNotification) {
-        // Insert code here to tear down your application
+        // Insert code here to tear zown your application
+		
     }
-
-
 }
 

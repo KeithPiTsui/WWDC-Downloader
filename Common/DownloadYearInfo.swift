@@ -154,11 +154,11 @@ class DownloadYearInfo: NSObject, NSURLSessionTaskDelegate {
 		
         state = .FetchingFileSizes
 
-		let sessionGroup = dispatch_group_create();
+		let sessionGroup = dispatch_group_create()
 		
 		for wwdcSession in wwdcSessions {
 			
-			dispatch_group_enter(sessionGroup);
+			dispatch_group_enter(sessionGroup)
 			
 			parseAndFetchSession2015(wwdcSession) { (success) -> Void in
 				
@@ -174,11 +174,11 @@ class DownloadYearInfo: NSObject, NSURLSessionTaskDelegate {
                 
                 self.state = .FetchingASCIIExtendedinfo
                 
-                let transcriptGroup = dispatch_group_create();
+                let transcriptGroup = dispatch_group_create()
                 
                 for wwdcSession in self.wwdcSessions {
                     
-                    dispatch_group_enter(transcriptGroup);
+                    dispatch_group_enter(transcriptGroup)
                     
                     DownloadTranscriptManager.sharedManager.fetchTranscript(wwdcSession, completion: {  (success, errorCode) -> Void in
                         
@@ -258,7 +258,7 @@ class DownloadYearInfo: NSObject, NSURLSessionTaskDelegate {
 				
 				if sampleCodes.count > 0 {
 					
-					let downloadGroup = dispatch_group_create();
+					let downloadGroup = dispatch_group_create()
 					
 					for sampleCode in sampleCodes {
 						
@@ -279,7 +279,7 @@ class DownloadYearInfo: NSObject, NSURLSessionTaskDelegate {
 							}
 							else {
 								
-								dispatch_group_enter(downloadGroup);
+								dispatch_group_enter(downloadGroup)
 								
 								let codeURLSession = self.sessionManager?.dataTaskWithURL(NSURL(string: developerBaseURL+link+"/book.json")!) { (jsonData, response, error) -> Void in
 									
@@ -297,7 +297,7 @@ class DownloadYearInfo: NSObject, NSURLSessionTaskDelegate {
 											wwdcSession.sampleCodeArray.append(file)
 										}
 									}
-									dispatch_group_leave(downloadGroup);
+									dispatch_group_leave(downloadGroup)
 								}
 								codeURLSession?.resume()
 							}
@@ -401,11 +401,11 @@ class DownloadYearInfo: NSObject, NSURLSessionTaskDelegate {
         
         state = .FetchingFileSizes
 		
-		let fileSizeGroup = dispatch_group_create();
+		let fileSizeGroup = dispatch_group_create()
 
 		for wwdcSession in wwdcSessions {
 			
-			dispatch_group_enter(fileSizeGroup);
+			dispatch_group_enter(fileSizeGroup)
 
 			self.fetchFileSizes(wwdcSession) { (success) -> Void in
 				
@@ -421,11 +421,11 @@ class DownloadYearInfo: NSObject, NSURLSessionTaskDelegate {
                 
                 self.state = .FetchingASCIIExtendedinfo
                 
-                let transcriptGroup = dispatch_group_create();
+                let transcriptGroup = dispatch_group_create()
                 
                 for wwdcSession in self.wwdcSessions {
                     
-                    dispatch_group_enter(transcriptGroup);
+                    dispatch_group_enter(transcriptGroup)
                     
                     DownloadTranscriptManager.sharedManager.fetchTranscript(wwdcSession, completion: {  (success, errorCode) -> Void in
                         
@@ -462,10 +462,10 @@ class DownloadYearInfo: NSObject, NSURLSessionTaskDelegate {
 	// MARK: - FileSize
 	private func fetchFileSizes (wwdcSession : WWDCSession, completion: (success: Bool) -> Void) {
 		
-		let fileSizeSessionGroup = dispatch_group_create();
+		let fileSizeSessionGroup = dispatch_group_create()
 		
 		if let file = wwdcSession.hdFile {
-			dispatch_group_enter(fileSizeSessionGroup);
+			dispatch_group_enter(fileSizeSessionGroup)
 			
             FetchFileSizeManager.sharedManager.fetchFileSize(file, completion: { (success, errorCode) -> Void in
                 
@@ -477,7 +477,7 @@ class DownloadYearInfo: NSObject, NSURLSessionTaskDelegate {
         }
 		
 		if let file = wwdcSession.sdFile {
-			dispatch_group_enter(fileSizeSessionGroup);
+			dispatch_group_enter(fileSizeSessionGroup)
 			
             FetchFileSizeManager.sharedManager.fetchFileSize(file, completion: { (success, errorCode) -> Void in
                 
@@ -490,7 +490,7 @@ class DownloadYearInfo: NSObject, NSURLSessionTaskDelegate {
 		}
 		
 		if let file = wwdcSession.pdfFile {
-			dispatch_group_enter(fileSizeSessionGroup);
+			dispatch_group_enter(fileSizeSessionGroup)
 			
             FetchFileSizeManager.sharedManager.fetchFileSize(file, completion: { (success, errorCode) -> Void in
                 
@@ -505,7 +505,7 @@ class DownloadYearInfo: NSObject, NSURLSessionTaskDelegate {
 		if wwdcSession.sampleCodeArray.count > 0 {
 			for sample in wwdcSession.sampleCodeArray {
 					
-                dispatch_group_enter(fileSizeSessionGroup);
+                dispatch_group_enter(fileSizeSessionGroup)
                     
                 FetchFileSizeManager.sharedManager.fetchFileSize(sample, completion: { (success, errorCode) -> Void in
                     
@@ -530,11 +530,26 @@ class DownloadYearInfo: NSObject, NSURLSessionTaskDelegate {
         case .Idle:
             break
         case .FetchingYear:
-            sessionManager?.getAllTasksWithCompletionHandler({ (tasks) -> Void in
-                for task in tasks {
-                    task.cancel()
-                }
-            })
+            if #available(OSX 10.11, *) {
+                sessionManager?.getAllTasksWithCompletionHandler({ (tasks) -> Void in
+                    for task in tasks {
+                        task.cancel()
+                    }
+                })
+            } else {
+                // Fallback on earlier versions
+				sessionManager?.getTasksWithCompletionHandler({ (data, upload, download) -> Void in
+					for task in data {
+						task.cancel()
+					}
+					for task in upload {
+						task.cancel()
+					}
+					for task in download {
+						task.cancel()
+					}
+				})
+            }
         case .FetchingFileSizes:
             FetchFileSizeManager.sharedManager.stopAllFileSizeFetchs()
         case .FetchingASCIIExtendedinfo:

@@ -112,11 +112,26 @@ class FetchFileSizeManager : NSObject, NSURLSessionDownloadDelegate {
     }
     
     func stopAllFileSizeFetchs() {
-        headerSessionManager?.getAllTasksWithCompletionHandler({ (tasks) -> Void in
-            for task in tasks {
-                task.cancel()
-            }
-        })
+        if #available(OSX 10.11, *) {
+            headerSessionManager?.getAllTasksWithCompletionHandler({ (tasks) -> Void in
+                for task in tasks {
+                    task.cancel()
+                }
+            })
+        } else {
+            // Fallback on earlier versions
+			headerSessionManager?.getTasksWithCompletionHandler({ (data, upload, download) -> Void in
+				for task in data {
+					task.cancel()
+				}
+				for task in upload {
+					task.cancel()
+				}
+				for task in download {
+					task.cancel()
+				}
+			})
+        }
     }
 
 }

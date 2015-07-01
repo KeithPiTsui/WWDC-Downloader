@@ -112,7 +112,7 @@ typealias SimpleCompletionHandler = ((success: Bool) -> Void)
 		if session == sessionManager {
 			var progress = Float(totalBytesWritten)/Float(totalBytesExpectedToWrite)
 			if progress > 1 {
-				progress = 1;
+				progress = 1
 			}
 			
 			if let fileInfo = backgroundRequestsForFiles[downloadTask.taskIdentifier] {

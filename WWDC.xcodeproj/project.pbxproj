@@ -11,6 +11,7 @@
 		442D010B1B399A9D0081C56C /* FileInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 44776DA81B399950004B9178 /* FileInfo.swift */; };
 		446C7A1D1B42D3C7007CA3C2 /* SessionNameDescriptionCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 446C7A1C1B42D3C7007CA3C2 /* SessionNameDescriptionCell.swift */; };
 		4479EA761B3C114600D5558D /* CheckBoxTableCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4479EA751B3C114600D5558D /* CheckBoxTableCell.swift */; };
+		44A647911B44634900157487 /* ToolbarHookableWindowSubclass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 44A647901B44634900157487 /* ToolbarHookableWindowSubclass.swift */; };
 		44D546221B4296FB00197B23 /* DownloadYearInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 44D546211B4296FB00197B23 /* DownloadYearInfo.swift */; };
 		A90D14EB1B41A8CF00A30590 /* FetchFileSizeManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = A90D14EA1B41A8CF00A30590 /* FetchFileSizeManager.swift */; };
 		A90D14ED1B41C5F000A30590 /* DownloadTranscriptManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = A90D14EC1B41C5F000A30590 /* DownloadTranscriptManager.swift */; };
@@ -33,6 +34,7 @@
 		446C7A1C1B42D3C7007CA3C2 /* SessionNameDescriptionCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SessionNameDescriptionCell.swift; sourceTree = "<group>"; };
 		44776DA81B399950004B9178 /* FileInfo.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = FileInfo.swift; path = Common/FileInfo.swift; sourceTree = "<group>"; };
 		4479EA751B3C114600D5558D /* CheckBoxTableCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CheckBoxTableCell.swift; sourceTree = "<group>"; };
+		44A647901B44634900157487 /* ToolbarHookableWindowSubclass.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ToolbarHookableWindowSubclass.swift; sourceTree = "<group>"; };
 		44D546211B4296FB00197B23 /* DownloadYearInfo.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = DownloadYearInfo.swift; path = Common/DownloadYearInfo.swift; sourceTree = "<group>"; };
 		44DBD9EB1B3AC4C60097E20C /* .gitignore */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = .gitignore; sourceTree = "<group>"; };
 		A90D14EA1B41A8CF00A30590 /* FetchFileSizeManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = FetchFileSizeManager.swift; path = Common/FetchFileSizeManager.swift; sourceTree = "<group>"; };
@@ -111,6 +113,7 @@
 				A9528F3E1B34C5D4002290D3 /* WWDCapp-Bridging-Header.h */,
 				A9528F261B34C40E002290D3 /* AppDelegate.swift */,
 				A9528F281B34C40E002290D3 /* ViewController.swift */,
+				44A647901B44634900157487 /* ToolbarHookableWindowSubclass.swift */,
 				4479EA751B3C114600D5558D /* CheckBoxTableCell.swift */,
 				446C7A1C1B42D3C7007CA3C2 /* SessionNameDescriptionCell.swift */,
 				A9528F2C1B34C40E002290D3 /* Main.storyboard */,
@@ -123,12 +126,12 @@
 		A9528F391B34C42E002290D3 /* Common */ = {
 			isa = PBXGroup;
 			children = (
+				4408A7F81B43F20A00AB4A10 /* PDFMerge.swift */,
 				A90D14E81B3EDB4F00A30590 /* Modal */,
 				A90D14E71B3EDB4600A30590 /* Downloading */,
 				A90D14E91B3EDB7200A30590 /* Extensions */,
 				A96E4D611B2D44910030F908 /* libxml2.2.dylib */,
 				A983F85A1B2D165A00ED681E /* Hpple */,
-				4408A7F81B43F20A00AB4A10 /* PDFMerge.swift */,
 			);
 			name = Common;
 			sourceTree = "<group>";
@@ -198,6 +201,7 @@
 				TargetAttributes = {
 					A9528F231B34C40D002290D3 = {
 						CreatedOnToolsVersion = 7.0;
+						DevelopmentTeam = R66Y5DJ7P8;
 					};
 				};
 			};
@@ -239,6 +243,7 @@
 				446C7A1D1B42D3C7007CA3C2 /* SessionNameDescriptionCell.swift in Sources */,
 				44D546221B4296FB00197B23 /* DownloadYearInfo.swift in Sources */,
 				A9528F291B34C40E002290D3 /* ViewController.swift in Sources */,
+				44A647911B44634900157487 /* ToolbarHookableWindowSubclass.swift in Sources */,
 				A90D14ED1B41C5F000A30590 /* DownloadTranscriptManager.swift in Sources */,
 				A9528F371B34C427002290D3 /* DownloadFileManager.swift in Sources */,
 				4408A7F91B43F20A00AB4A10 /* PDFMerge.swift in Sources */,
@@ -273,12 +278,12 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				CODE_SIGN_IDENTITY = "-";
+				CODE_SIGN_IDENTITY = "Developer ID Application";
 				COMBINE_HIDPI_IMAGES = YES;
 				INFOPLIST_FILE = WWDCapp/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks";
-				MACOSX_DEPLOYMENT_TARGET = 10.11;
-				PRODUCT_BUNDLE_IDENTIFIER = com.daveroberts.WWDCapp;
+				MACOSX_DEPLOYMENT_TARGET = 10.10;
+				PRODUCT_BUNDLE_IDENTIFIER = com.serendipityappcompany.wwdcdownloader;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = macosx;
 				SWIFT_OBJC_BRIDGING_HEADER = "WWDCapp/WWDCapp-Bridging-Header.h";
@@ -289,12 +294,12 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				CODE_SIGN_IDENTITY = "-";
+				CODE_SIGN_IDENTITY = "Developer ID Application";
 				COMBINE_HIDPI_IMAGES = YES;
 				INFOPLIST_FILE = WWDCapp/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks";
-				MACOSX_DEPLOYMENT_TARGET = 10.11;
-				PRODUCT_BUNDLE_IDENTIFIER = com.daveroberts.WWDCapp;
+				MACOSX_DEPLOYMENT_TARGET = 10.10;
+				PRODUCT_BUNDLE_IDENTIFIER = com.serendipityappcompany.wwdcdownloader;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = macosx;
 				SWIFT_OBJC_BRIDGING_HEADER = "WWDCapp/WWDCapp-Bridging-Header.h";
@@ -341,6 +346,7 @@
 					"$SDKROOT/usr/include/libxml2\n$SDKROOT/usr/include/libxml2\n$SDKROOT/usr/include/libxml2\n",
 				);
 				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
+				MACOSX_DEPLOYMENT_TARGET = 10.10;
 				MTL_ENABLE_DEBUG_INFO = YES;
 				ONLY_ACTIVE_ARCH = YES;
 				OTHER_LDFLAGS = "$(inherited)";
@@ -383,6 +389,7 @@
 					"$SDKROOT/usr/include/libxml2\n$SDKROOT/usr/include/libxml2\n$SDKROOT/usr/include/libxml2\n",
 				);
 				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
+				MACOSX_DEPLOYMENT_TARGET = 10.10;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				OTHER_LDFLAGS = "$(inherited)";
 				SDKROOT = iphoneos;

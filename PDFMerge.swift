@@ -17,12 +17,14 @@ class PDFMerge : NSObject {
 	
 		guard let directory = FileInfo.pdfDirectory(year) else { return nil }
 		
-		let outputPath = directory.stringByAppendingPathComponent("/combined.pdf")
+		let outputPath = directory.stringByAppendingPathComponent("/\(year.description)-Combined-PDF.pdf")
 		
 		let outputURL = NSURL.fileURLWithPath(outputPath)
 		
 		guard let writeContext = CGPDFContextCreateWithURL(outputURL, nil, nil) else { return nil }
 
+		print("Creating Enormous Combined PDF document...")
+		
 		for url in pdfs {
 			
 			autoreleasepool {
@@ -45,6 +47,8 @@ class PDFMerge : NSObject {
 		
 		CGPDFContextClose(writeContext)
 		
+		print("Finishing \(year.description) Combined PDF Document")
+
 		return outputURL
 	}
 	
