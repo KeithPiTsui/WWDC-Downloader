@@ -12,6 +12,8 @@ class ViewController: NSViewController, NSURLSessionDelegate, NSURLSessionDataDe
 
 	@IBOutlet weak var yearSeletor: NSPopUpButton!
 	@IBOutlet weak var yearFetchIndicator: NSProgressIndicator!
+    @IBOutlet weak var stopFetchButton: NSButton!
+    
 	@IBOutlet weak var searchField: NSSearchField!
 
 	@IBOutlet weak var allCodeCheckbox: NSButton!
@@ -75,6 +77,13 @@ class ViewController: NSViewController, NSURLSessionDelegate, NSURLSessionDataDe
         }
 	}
 	
+    @IBAction func stopFetchingYearInfo(sender: NSButton) {
+        
+        if let downloadYearInfo = downloadYearInfo {
+            downloadYearInfo.stopDownloading()
+        }
+    }
+    
 	@IBAction func searchEntered(sender: NSSearchField) {
 	
 		if sender.stringValue.isEmpty {
@@ -183,7 +192,7 @@ class ViewController: NSViewController, NSURLSessionDelegate, NSURLSessionDataDe
 		
 		resetDownloadUI()
 
-		let cell = sender.superview as! CheckBoxTableViewCell
+		let cell = sender.superview?.superview as! CheckBoxTableViewCell
 		
 		if let fileArray = cell.fileArray {
 			for file in fileArray {
@@ -208,7 +217,7 @@ class ViewController: NSViewController, NSURLSessionDelegate, NSURLSessionDataDe
 	
 	@IBAction func fileClicked(sender: NSButton) {
 		
-		let cell = sender.superview as! CheckBoxTableViewCell
+		let cell = sender.superview?.superview as! CheckBoxTableViewCell
 		
 		if let fileArray = cell.fileArray {
 			if let fileInfo = fileArray.first {
@@ -341,20 +350,22 @@ class ViewController: NSViewController, NSURLSessionDelegate, NSURLSessionDataDe
 		myTableView.allowsColumnSelection = false
 		myTableView.allowsMultipleSelection = false
 		myTableView.allowsEmptySelection = false
-		
-		myTableView.rowSizeStyle = NSTableViewRowSizeStyle.Custom
-		
-		myTableView.reloadData()
-		
+        
 		resetUIForYearFetch()
 	}
 	
 	func resetUIForYearFetch () {
+        
+        stopFetchButton.hidden = true
 		
+        isYearInfoFetchComplete = false
+        
 		isFiltered = false
 		
 		searchField.stringValue = ""
 		
+        allWWDCSessionsArray.removeAll()
+        
 		visibleWWDCSessionsArray.removeAll()
 		
 		searchField.enabled = false
@@ -372,6 +383,8 @@ class ViewController: NSViewController, NSURLSessionDelegate, NSURLSessionDataDe
 		hideDescriptionsCheckBox.enabled = false
 		
 		hideDescriptionsCheckBox.state = 0
+        
+        myTableView.reloadData()
 	}
 	
 	func disableUIForDownloading () {
@@ -447,10 +460,8 @@ class ViewController: NSViewController, NSURLSessionDelegate, NSURLSessionDataDe
 		
 		yearSeletor.enabled = false
 		
-		isYearInfoFetchComplete = false
-		allWWDCSessionsArray.removeAll()
-		myTableView.reloadData()
-		
+        stopFetchButton.hidden = false
+        
 		yearFetchIndicator.startAnimation(nil)
 		
 		downloadYearInfo = DownloadYearInfo(year: year, parsingCompleteHandler: { [unowned self] (sessions) -> Void in
@@ -466,38 +477,48 @@ class ViewController: NSViewController, NSURLSessionDelegate, NSURLSessionDataDe
 				if let index = self.allWWDCSessionsArray.indexOf(session) {
 					dispatch_async(dispatch_get_main_queue()) { [unowned self] in
 						self.myTableView.beginUpdates()
+                        self.myTableView.noteHeightOfRowsWithIndexesChanged(NSIndexSet(index: index))
 						self.myTableView.reloadDataForRowIndexes(NSIndexSet(index: index), columnIndexes:NSIndexSet(indexesInRange: NSMakeRange(0,self.myTableView.numberOfColumns)))
-						self.myTableView.noteHeightOfRowsWithIndexesChanged(NSIndexSet(index: index))
 						self.myTableView.endUpdates()
 					}
 				}
 			},
-			completionHandler: { [unowned self] in
+			completionHandler: { [unowned self] (success) in
 								
 				dispatch_async(dispatch_get_main_queue()) { [unowned self] in
 
-					self.isYearInfoFetchComplete = true
+                    if (success) {
+                        
+                        self.isYearInfoFetchComplete = true
+                        
+                        self.stopFetchButton.hidden = true
 
-					self.searchField.enabled = true
-					
-					self.yearSeletor.enabled = true
+                        self.searchField.enabled = true
+                        
+                        self.startDownload.enabled = true
+                        
+                        let sessionIDSortDescriptor = NSSortDescriptor(key: "sessionID", ascending: true, selector: "localizedStandardCompare:")
+                        
+                        self.myTableView.sortDescriptors = [sessionIDSortDescriptor]
+                        
+                        self.reEnableCheckboxes()
+                        
+                        self.coordinateAllCheckBoxUI()
+                        
+                        self.hideDescriptionsCheckBox.enabled = true
+                        self.hideDescriptionsCheckBox.state = 0
+                        
+                        self.myTableView.reloadData()
+                    }
+                    else {
+                        self.resetUIForYearFetch()
+                    }
+                    
+                    self.yearSeletor.enabled = true
 
-					self.yearFetchIndicator.stopAnimation(nil)
-
-					self.startDownload.enabled = true
-					
-					let sessionIDSortDescriptor = NSSortDescriptor(key: "sessionID", ascending: true, selector: "localizedStandardCompare:")
-					
-					self.myTableView.sortDescriptors = [sessionIDSortDescriptor]
-					
-					self.reEnableCheckboxes()
-					
-					self.coordinateAllCheckBoxUI()
-					
-					self.hideDescriptionsCheckBox.enabled = true
-					self.hideDescriptionsCheckBox.state = 0
-					
-					self.myTableView.reloadData()
+                    self.yearFetchIndicator.stopAnimation(nil)
+                    
+                    self.downloadYearInfo = nil
 				}
 			})
 	}
@@ -769,7 +790,11 @@ class ViewController: NSViewController, NSURLSessionDelegate, NSURLSessionDataDe
 				if self.isFiltered {
 					if let index = self.visibleWWDCSessionsArray.indexOf(session) {
 						dispatch_async(dispatch_get_main_queue()) { [unowned self] in
+                            self.myTableView.beginUpdates()
 							self.myTableView.reloadDataForRowIndexes(NSIndexSet(index: index), columnIndexes:NSIndexSet(indexesInRange: NSMakeRange(0,self.myTableView.numberOfColumns)))
+//                            self.myTableView.scrollRowToVisible(index)
+                            self.myTableView.endUpdates()
+
 							self.updateTotalProgress()
 						}
 					}
@@ -777,7 +802,11 @@ class ViewController: NSViewController, NSURLSessionDelegate, NSURLSessionDataDe
 				else {
 					if let index = self.allWWDCSessionsArray.indexOf(session) {
 						dispatch_async(dispatch_get_main_queue()) { [unowned self] in
+                            self.myTableView.beginUpdates()
 							self.myTableView.reloadDataForRowIndexes(NSIndexSet(index: index), columnIndexes:NSIndexSet(indexesInRange: NSMakeRange(0,self.myTableView.numberOfColumns)))
+//                            self.myTableView.scrollRowToVisible(index)
+                            self.myTableView.endUpdates()
+
 							self.updateTotalProgress()
 						}
 					}

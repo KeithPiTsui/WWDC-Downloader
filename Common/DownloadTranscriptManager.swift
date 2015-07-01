@@ -37,9 +37,8 @@ class DownloadTranscriptManager : NSObject, NSURLSessionDataDelegate {
             let request = NSMutableURLRequest(URL: url)
 			request.HTTPMethod = "GET"
 			request.setValue("application/json", forHTTPHeaderField: "Accept")
-
 			
-            let task = NSURLSession.sharedSession().dataTaskWithRequest(request) { (data, response, error) -> Void in
+            let task = sessionManager?.dataTaskWithRequest(request) { (data, response, error) -> Void in
                 if let hresponse = response as? NSHTTPURLResponse {
                     if hresponse.statusCode == 200 {
                         if let data = data {
@@ -86,9 +85,22 @@ class DownloadTranscriptManager : NSObject, NSURLSessionDataDelegate {
                         completion(success: false, errorCode: error?.code)
                     }
                 }
+                else if let error = error {
+                    completion(success: false, errorCode: error.code)
+                }
             }
             task?.resume()
         }
     }
+    
+    func stopAllTranscriptFetchs() {
+        
+        sessionManager?.getAllTasksWithCompletionHandler{ (tasks) -> Void in
+            for task in tasks {
+                task.cancel()
+            }
+        }
+    }
+
 
 }

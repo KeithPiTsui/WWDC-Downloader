@@ -38,7 +38,7 @@ class FetchFileSizeManager : NSObject, NSURLSessionDownloadDelegate {
         let request = NSMutableURLRequest(URL: remotefileURL)
         request.HTTPMethod = "HEAD"
         
-        let fileSizeTask = NSURLSession.sharedSession().dataTaskWithRequest(request) { [unowned self] (data, response, error) -> Void in
+        let fileSizeTask = headerSessionManager?.dataTaskWithRequest(request) { [unowned self] (data, response, error) -> Void in
             if let hresponse = response as? NSHTTPURLResponse {
                 if let dictionary = hresponse.allHeaderFields as? Dictionary<String,String> {
                     if hresponse.statusCode == 200 {
@@ -56,6 +56,9 @@ class FetchFileSizeManager : NSObject, NSURLSessionDownloadDelegate {
                     }
                 }
             }
+            else if let error = error {
+                completion(success: false, errorCode:error.code)
+            }
         }
         fileSizeTask?.resume()
     }
@@ -66,7 +69,7 @@ class FetchFileSizeManager : NSObject, NSURLSessionDownloadDelegate {
             
             if let (file,completionHandler) = downloadHandlers[downloadTask.taskIdentifier] {
                 
-                downloadHandlers[downloadTask.taskIdentifier] = nil
+                downloadHandlers[downloadTask.taskIdentifier] = nil // clear now so that delegate error is ignored by completion handler
                 
                 if let response = downloadTask.response {
                     
@@ -99,8 +102,21 @@ class FetchFileSizeManager : NSObject, NSURLSessionDownloadDelegate {
     func URLSession(session: NSURLSession, task: NSURLSessionTask, didCompleteWithError error: NSError?) {
         
         if session == headerSessionManager {
+            if let (_,completion) = downloadHandlers[task.taskIdentifier] {
+                if let error = error {
+                    completion(success: false, errorCode:error.code)
+                }
+            }
             downloadHandlers[task.taskIdentifier] = nil
         }
+    }
+    
+    func stopAllFileSizeFetchs() {
+        headerSessionManager?.getAllTasksWithCompletionHandler({ (tasks) -> Void in
+            for task in tasks {
+                task.cancel()
+            }
+        })
     }
 
 }

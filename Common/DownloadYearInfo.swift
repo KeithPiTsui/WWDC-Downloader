@@ -12,9 +12,16 @@ let videos2015baseURL = "/videos/wwdc/2015/"
 let videos2014baseURL = "/videos/wwdc/2014/"
 let videos2013baseURL = "/videos/wwdc/2013/"
 
+enum DownloadYearState {
+    case Idle
+    case FetchingYear
+    case FetchingFileSizes
+    case FetchingASCIIExtendedinfo
+}
+
 import Foundation
 
-class DownloadYearInfo: NSObject {
+class DownloadYearInfo: NSObject, NSURLSessionTaskDelegate {
     
 	var wwdcSessions : [WWDCSession] = []
 	
@@ -22,18 +29,29 @@ class DownloadYearInfo: NSObject {
 	
 	private var parsingCompletionHandler : (sessions: [WWDCSession]) -> Void
 	private var individualCompletionHandler : (session : WWDCSession) -> Void
-    private var sessionInfoCompletionHandler : () -> Void
+    private var sessionInfoCompletionHandler : (success : Bool) -> Void
 	
-	
+    private var sessionManager : NSURLSession?
+
+    private var state : DownloadYearState
+    
+    private var isCancelled = false
+    
 	// MARK: Initialization
-	init(year: WWDCYear, parsingCompleteHandler:((sessions: [WWDCSession]) -> Void), individualSessionUpdateHandler: ((session: WWDCSession) -> Void), completionHandler: () -> Void) {
+    init(year: WWDCYear, parsingCompleteHandler:((sessions: [WWDCSession]) -> Void), individualSessionUpdateHandler: ((session: WWDCSession) -> Void), completionHandler: (success : Bool) -> Void) {
         
         self.year = year
 		self.parsingCompletionHandler = parsingCompleteHandler
 		self.individualCompletionHandler = individualSessionUpdateHandler
         self.sessionInfoCompletionHandler = completionHandler
 	
+        self.state = .Idle
+        
         super.init()
+        
+        let config = NSURLSessionConfiguration.defaultSessionConfiguration()
+        config.HTTPMaximumConnectionsPerHost = 3
+        sessionManager = NSURLSession(configuration: config, delegate: self, delegateQueue: nil)
         
         print("Downloading Main Page for \(year)...")
         
@@ -50,7 +68,9 @@ class DownloadYearInfo: NSObject {
         
         if let videoURLString = videoURLString {
 
-            let task = NSURLSession.sharedSession().dataTaskWithURL(videoURLString) { [unowned self]  (data, response, error) in
+            state = .FetchingYear
+            
+            let task = sessionManager?.dataTaskWithURL(videoURLString) { [unowned self]  (data, response, error) in
                 self.downloadMainPageFinished(data, response: response as? NSHTTPURLResponse, error: error)
             }
             task?.resume()
@@ -59,27 +79,35 @@ class DownloadYearInfo: NSObject {
     
     private func downloadMainPageFinished(data: NSData?, response: NSHTTPURLResponse?, error: NSError?) {
         
-        if let wwdcMainHTMLdata = data  {
-			
-			print("Completed Downloading Main Page for \(year)")
-            // Convert Data to TFHpple Elements
-            let doc = TFHpple(HTMLData: wwdcMainHTMLdata)
+        if !isCancelled {
+            if let wwdcMainHTMLdata = data  {
             
-            switch year {
-                case .WWDC2015:
-                    parse2015Doc(doc)
-                case .WWDC2014:
-                    parse2014Doc(doc)
-                case .WWDC2013:
-                    parse2014Doc(doc)
+                print("Completed Downloading Main Page for \(year)")
+                // Convert Data to TFHpple Elements
+                let doc = TFHpple(HTMLData: wwdcMainHTMLdata)
+                
+                switch year {
+                    case .WWDC2015:
+                        parse2015Doc(doc)
+                    case .WWDC2014:
+                        parse2014Doc(doc)
+                    case .WWDC2013:
+                        parse2014Doc(doc)
+                }
+                return
+            }
+            else if let error = error {
+                print("Main Page Error - \(error)")
+            }
+            else {
+                // Do nothing, and the operation will automatically finish.
             }
         }
-        else if let error = error {
-            print("Main Page Error - \(error)")
-        }
         else {
-            // Do nothing, and the operation will automatically finish.
+            self.sessionInfoCompletionHandler(success: false)
         }
+        
+        self.state = .Idle
     }
 	
 	
@@ -115,10 +143,17 @@ class DownloadYearInfo: NSObject {
         
         print("Finished Parsing Main Page\(year)")
 		
+        if isCancelled {
+            sessionInfoCompletionHandler(success: false)
+            return
+        }
+        
 		parsingCompletionHandler(sessions: wwdcSessions)
 		
 		print("Fetching Session Info in \(year)...")
 		
+        state = .FetchingFileSizes
+
 		let sessionGroup = dispatch_group_create();
 		
 		for wwdcSession in wwdcSessions {
@@ -133,31 +168,46 @@ class DownloadYearInfo: NSObject {
         
 		dispatch_group_notify(sessionGroup,dispatch_get_main_queue(),{ [unowned self] in
 			
-			print("Fetching ASCIIwwdc Extra Info...")
-
-            let transcriptGroup = dispatch_group_create();
-
-            for wwdcSession in self.wwdcSessions {
+            if !self.isCancelled {
                 
-                dispatch_group_enter(transcriptGroup);
+                print("Fetching ASCIIwwdc Extra Info...")
                 
-                DownloadTranscriptManager.sharedManager.fetchTranscript(wwdcSession, completion: {  (success, errorCode) -> Void in
-					
-					wwdcSession.isInfoFetchComplete = true
-
-                    self.individualCompletionHandler(session: wwdcSession)
-
-                    print("Completed fetch of Session Info -   \(wwdcSession.sessionID) - \(wwdcSession.title)")
-
-                    dispatch_group_leave(transcriptGroup)
-                })
+                self.state = .FetchingASCIIExtendedinfo
+                
+                let transcriptGroup = dispatch_group_create();
+                
+                for wwdcSession in self.wwdcSessions {
+                    
+                    dispatch_group_enter(transcriptGroup);
+                    
+                    DownloadTranscriptManager.sharedManager.fetchTranscript(wwdcSession, completion: {  (success, errorCode) -> Void in
+                        
+                        wwdcSession.isInfoFetchComplete = true
+                        
+                        self.individualCompletionHandler(session: wwdcSession)
+                        
+                        if success {
+                            print("Completed fetch of Session Info -   \(wwdcSession.sessionID) - \(wwdcSession.title)")
+                        }
+                        else {
+                            print("Failed fetch of Extended Info - \(wwdcSession.sessionID) - \(wwdcSession.title)")
+                        }
+                        
+                        dispatch_group_leave(transcriptGroup)
+                    })
+                }
+                
+                dispatch_group_notify(transcriptGroup,dispatch_get_main_queue(),{ [unowned self] in
+                    
+                        self.state = .Idle
+                        
+                        print("Finished All Session Info in \(self.year)")
+                        self.sessionInfoCompletionHandler(success: true)
+                    })
             }
-            
-            dispatch_group_notify(transcriptGroup,dispatch_get_main_queue(),{ [unowned self] in
-
-				print("Finished All Session Info in \(self.year)")
-				self.sessionInfoCompletionHandler()
-			})
+            else {
+                self.sessionInfoCompletionHandler(success: false)
+            }
             
         })
 	}
@@ -168,7 +218,7 @@ class DownloadYearInfo: NSObject {
 		
 		guard let wwdcSessionPageURL = NSURL(string: wwdcSessionPage) else { return }
         
-        let urlSessionTask : NSURLSessionDataTask? = NSURLSession.sharedSession().dataTaskWithRequest(NSURLRequest(URL: wwdcSessionPageURL)) { [unowned self] (pageData, response, error) -> Void in
+        let urlSessionTask : NSURLSessionDataTask? = sessionManager?.dataTaskWithRequest(NSURLRequest(URL: wwdcSessionPageURL)) { [unowned self] (pageData, response, error) -> Void in
 			
 
 			if let pageData = pageData  {
@@ -231,7 +281,7 @@ class DownloadYearInfo: NSObject {
 								
 								dispatch_group_enter(downloadGroup);
 								
-								let codeURLSession = NSURLSession.sharedSession().dataTaskWithURL(NSURL(string: developerBaseURL+link+"/book.json")!) { (jsonData, response, error) -> Void in
+								let codeURLSession = self.sessionManager?.dataTaskWithURL(NSURL(string: developerBaseURL+link+"/book.json")!) { (jsonData, response, error) -> Void in
 									
 									if let jsonData = jsonData {
 										guard let json = NSString(data: jsonData, encoding: NSUTF8StringEncoding) as? String else { return }
@@ -340,9 +390,16 @@ class DownloadYearInfo: NSObject {
 
         print("Finished Parsing \(year)")
 		
+        if isCancelled {
+            self.sessionInfoCompletionHandler(success: false)
+            return
+        }
+        
 		self.parsingCompletionHandler(sessions: wwdcSessions)
 
 		print("Fetching File Sizes for Sessions in \(year)...")
+        
+        state = .FetchingFileSizes
 		
 		let fileSizeGroup = dispatch_group_create();
 
@@ -358,31 +415,46 @@ class DownloadYearInfo: NSObject {
 
 		dispatch_group_notify(fileSizeGroup,dispatch_get_main_queue(),{ [unowned self] in
 			
-			print("Fetching ASCIIwwdc Extra Info...")
-			
-			let transcriptGroup = dispatch_group_create();
-			
-			for wwdcSession in self.wwdcSessions {
-				
-				dispatch_group_enter(transcriptGroup);
-				
-				DownloadTranscriptManager.sharedManager.fetchTranscript(wwdcSession, completion: {  (success, errorCode) -> Void in
-					
-					wwdcSession.isInfoFetchComplete = true
+            if !self.isCancelled {
+                
+                print("Fetching ASCIIwwdc Extra Info...")
+                
+                self.state = .FetchingASCIIExtendedinfo
+                
+                let transcriptGroup = dispatch_group_create();
+                
+                for wwdcSession in self.wwdcSessions {
+                    
+                    dispatch_group_enter(transcriptGroup);
+                    
+                    DownloadTranscriptManager.sharedManager.fetchTranscript(wwdcSession, completion: {  (success, errorCode) -> Void in
+                        
+                        wwdcSession.isInfoFetchComplete = true
 
-					self.individualCompletionHandler(session: wwdcSession)
-					
-					print("Completed fetch of Session Info -   \(wwdcSession.sessionID) - \(wwdcSession.title)")
-					
-					dispatch_group_leave(transcriptGroup)
-				})
-			}
-			
-			dispatch_group_notify(transcriptGroup,dispatch_get_main_queue(),{ [unowned self] in
-				
-					print("Finished All Session Info in \(self.year)")
-					self.sessionInfoCompletionHandler()
-				})
+                        self.individualCompletionHandler(session: wwdcSession)
+                        
+                        if success {
+                            print("Completed fetch of Session Info -   \(wwdcSession.sessionID) - \(wwdcSession.title)")
+                        }
+                        else {
+                            print("Failed fetch of Extended Info - \(wwdcSession.sessionID) - \(wwdcSession.title)")
+                        }
+                        
+                        dispatch_group_leave(transcriptGroup)
+                    })
+                }
+                
+                dispatch_group_notify(transcriptGroup,dispatch_get_main_queue(),{ [unowned self] in
+                    
+                        self.state = .Idle
+
+                        print("Finished All Session Info in \(self.year)")
+                        self.sessionInfoCompletionHandler(success: true)
+                    })
+            }
+            else {
+                self.sessionInfoCompletionHandler(success: false)
+            }
 		})
     }
 	
@@ -449,5 +521,25 @@ class DownloadYearInfo: NSObject {
                 completion(success: true)
 			})
 	}
+    
+    func stopDownloading () {
+        
+        isCancelled = true
+        
+        switch state {
+        case .Idle:
+            break
+        case .FetchingYear:
+            sessionManager?.getAllTasksWithCompletionHandler({ (tasks) -> Void in
+                for task in tasks {
+                    task.cancel()
+                }
+            })
+        case .FetchingFileSizes:
+            FetchFileSizeManager.sharedManager.stopAllFileSizeFetchs()
+        case .FetchingASCIIExtendedinfo:
+            DownloadTranscriptManager.sharedManager.stopAllTranscriptFetchs()
+        }
+    }
 	
 }
