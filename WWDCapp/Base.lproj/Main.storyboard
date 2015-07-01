@@ -111,6 +111,23 @@
                             <allowedToolbarItems>
                                 <toolbarItem implicitItemIdentifier="NSToolbarSpaceItem" id="Fd4-Dr-wtO"/>
                                 <toolbarItem implicitItemIdentifier="NSToolbarFlexibleSpaceItem" id="4qA-86-6DG"/>
+                                <toolbarItem implicitItemIdentifier="4631C2EC-C1BA-4EBD-A717-A994A1BFE4A6" label="Custom View" paletteLabel="Custom View" id="ovu-se-0G5">
+                                    <nil key="toolTip"/>
+                                    <size key="minSize" width="127" height="25"/>
+                                    <size key="maxSize" width="127" height="28"/>
+                                    <button key="view" toolTip="This will combine the PDFs that are already downloaded into 1 PDF." verticalHuggingPriority="750" id="bDF-jX-IoP">
+                                        <rect key="frame" x="0.0" y="14" width="127" height="28"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                        <animations/>
+                                        <buttonCell key="cell" type="roundTextured" title="Combine PDFs" bezelStyle="texturedRounded" alignment="center" lineBreakMode="truncatingTail" state="on" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="SgP-hJ-gLL">
+                                            <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                                            <font key="font" metaFont="system"/>
+                                        </buttonCell>
+                                        <connections>
+                                            <action selector="combinePDF:" target="Oky-zY-oP4" id="9Qj-eS-XMm"/>
+                                        </connections>
+                                    </button>
+                                </toolbarItem>
                                 <toolbarItem implicitItemIdentifier="BEA6EF3D-2817-4EC9-8127-221507142717" label="Custom View" paletteLabel="Custom View" id="9je-fQ-YGH">
                                     <nil key="toolTip"/>
                                     <size key="minSize" width="300" height="22"/>
@@ -132,15 +149,15 @@
                                 </toolbarItem>
                                 <toolbarItem implicitItemIdentifier="4030D862-B2A3-4533-839A-3A190E3114AE" label="Custom View" paletteLabel="Custom View" id="ql1-TC-qy2">
                                     <nil key="toolTip"/>
-                                    <size key="minSize" width="81" height="32"/>
+                                    <size key="minSize" width="81" height="20"/>
                                     <size key="maxSize" width="81" height="32"/>
                                     <button key="view" verticalHuggingPriority="750" id="9wu-A9-w09">
-                                        <rect key="frame" x="0.0" y="14" width="81" height="32"/>
+                                        <rect key="frame" x="0.0" y="14" width="81" height="20"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                         <animations/>
-                                        <buttonCell key="cell" type="push" title="Stop" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="OZ4-C5-fzZ">
-                                            <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
-                                            <font key="font" metaFont="system"/>
+                                        <buttonCell key="cell" type="recessed" title="Cancel" bezelStyle="recessed" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="OZ4-C5-fzZ">
+                                            <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
+                                            <font key="font" metaFont="systemBold" size="12"/>
                                         </buttonCell>
                                         <connections>
                                             <action selector="stopFetchingYearInfo:" target="Oky-zY-oP4" id="GPM-wi-wf6"/>
@@ -182,16 +199,31 @@
                                         </connections>
                                     </popUpButton>
                                 </toolbarItem>
+                                <toolbarItem implicitItemIdentifier="6DE07D90-2DEA-48E8-B74D-8483C3A5B181" label="Custom View" paletteLabel="Custom View" tag="-1" id="k4i-b5-wK2">
+                                    <nil key="toolTip"/>
+                                    <size key="minSize" width="16" height="16"/>
+                                    <size key="maxSize" width="16" height="16"/>
+                                    <progressIndicator key="view" wantsLayer="YES" horizontalHuggingPriority="750" verticalHuggingPriority="750" maxValue="100" displayedWhenStopped="NO" bezeled="NO" indeterminate="YES" controlSize="small" style="spinning" id="qo1-AD-SfJ">
+                                        <rect key="frame" x="30" y="14" width="16" height="16"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                        <animations/>
+                                    </progressIndicator>
+                                </toolbarItem>
                             </allowedToolbarItems>
                             <defaultToolbarItems>
                                 <toolbarItem reference="T6z-hy-uca"/>
                                 <toolbarItem reference="8R4-TN-2Lh"/>
                                 <toolbarItem reference="ql1-TC-qy2"/>
                                 <toolbarItem reference="9je-fQ-YGH"/>
+                                <toolbarItem reference="4qA-86-6DG"/>
+                                <toolbarItem reference="k4i-b5-wK2"/>
+                                <toolbarItem reference="ovu-se-0G5"/>
                             </defaultToolbarItems>
                         </toolbar>
                     </window>
                     <connections>
+                        <outlet property="combinePDFButton" destination="bDF-jX-IoP" id="Haf-rq-kJ2"/>
+                        <outlet property="combinePDFIndicator" destination="qo1-AD-SfJ" id="w9U-Vv-Yj1"/>
                         <outlet property="searchField" destination="sJr-P1-XUA" id="MuO-Kc-4la"/>
                         <outlet property="stopFetchButton" destination="9wu-A9-w09" id="vYV-aZ-w4i"/>
                         <outlet property="yearFetchIndicator" destination="iez-ZM-vRx" id="6rS-E2-pWz"/>
@@ -844,14 +876,33 @@
                                             <action selector="hideSessionsChecked:" target="XfG-lQ-9wD" id="aP2-5d-q8y"/>
                                         </connections>
                                     </button>
+                                    <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="OeA-4Q-HGv">
+                                        <rect key="frame" x="685" y="46" width="60" height="11"/>
+                                        <animations/>
+                                        <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" alignment="right" title="total:" id="s1a-rk-dpV">
+                                            <font key="font" metaFont="miniSystem"/>
+                                            <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                                            <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
+                                        </textFieldCell>
+                                    </textField>
                                 </subviews>
                                 <animations/>
                             </customView>
+                            <visualEffectView appearanceType="vibrantLight" blendingMode="behindWindow" state="followsWindowActiveState" translatesAutoresizingMaskIntoConstraints="NO" id="BmC-e0-Fwn">
+                                <rect key="frame" x="0.0" y="583" width="930" height="37"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="37" id="oor-Yb-X6c"/>
+                                </constraints>
+                                <animations/>
+                            </visualEffectView>
                         </subviews>
                         <constraints>
                             <constraint firstItem="ZwT-7T-fue" firstAttribute="top" secondItem="m2S-Jp-Qdl" secondAttribute="top" id="AAs-Aa-JE8"/>
+                            <constraint firstItem="BmC-e0-Fwn" firstAttribute="width" secondItem="m2S-Jp-Qdl" secondAttribute="width" id="Czc-mb-ULp"/>
+                            <constraint firstItem="BmC-e0-Fwn" firstAttribute="leading" secondItem="m2S-Jp-Qdl" secondAttribute="leading" id="Gkd-pY-ED7"/>
                             <constraint firstItem="ZwT-7T-fue" firstAttribute="width" secondItem="m2S-Jp-Qdl" secondAttribute="width" id="Wdx-2q-bNE"/>
                             <constraint firstAttribute="trailing" secondItem="ZwT-7T-fue" secondAttribute="trailing" id="gYd-iF-J9n"/>
+                            <constraint firstItem="BmC-e0-Fwn" firstAttribute="top" secondItem="m2S-Jp-Qdl" secondAttribute="top" id="ked-qW-dFD"/>
                             <constraint firstItem="ZwT-7T-fue" firstAttribute="height" secondItem="m2S-Jp-Qdl" secondAttribute="height" id="oMu-tj-xAd"/>
                             <constraint firstItem="ZwT-7T-fue" firstAttribute="leading" secondItem="m2S-Jp-Qdl" secondAttribute="leading" id="r1r-6Z-881"/>
                         </constraints>
@@ -868,6 +919,7 @@
                         <outlet property="myTableView" destination="SSh-0R-MKF" id="liZ-v1-msq"/>
                         <outlet property="oflabel" destination="C8t-xS-mu2" id="IvW-Va-OWf"/>
                         <outlet property="startDownload" destination="2Uk-zV-FYf" id="wan-PT-H8F"/>
+                        <outlet property="toolbarVisualEffectView" destination="BmC-e0-Fwn" id="0lp-83-Tso"/>
                         <outlet property="totallabel" destination="LdI-VT-wO4" id="NHk-ad-W5R"/>
                         <outlet property="visualEffectView" destination="ZwT-7T-fue" id="GF7-Xc-3Qf"/>
                     </connections>

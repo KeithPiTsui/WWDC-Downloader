@@ -50,8 +50,29 @@ class ViewController: NSViewController, NSURLSessionDelegate, NSURLSessionDataDe
 			return NSSearchField() //
 		}
 	}
+    
+    var combinePDFIndicator: NSProgressIndicator! {
+        get {
+            if let windowController = NSApplication.sharedApplication().windows.first?.windowController  as? ToolbarHookableWindowSubclass {
+                return windowController.combinePDFIndicator
+            }
+            assertionFailure("IBOutlet Fail!")
+            return NSProgressIndicator() //
+        }
+    }
+    
+    var combinePDFButton: NSButton! {
+        get {
+            if let windowController = NSApplication.sharedApplication().windows.first?.windowController  as? ToolbarHookableWindowSubclass {
+                return windowController.combinePDFButton
+            }
+            assertionFailure("IBOutlet Fail!")
+            return NSButton() //
+        }
+    }
 
 	// MARK: IBOutlets
+    @IBOutlet weak var toolbarVisualEffectView: NSVisualEffectView!
 	@IBOutlet weak var visualEffectView: NSVisualEffectView!
 
 	@IBOutlet weak var allCodeCheckbox: NSButton!
@@ -88,7 +109,24 @@ class ViewController: NSViewController, NSURLSessionDelegate, NSURLSessionDataDe
 	private var isFiltered  = false
 	
 	private var dockIconUpdateTimer : NSTimer?
+    
+    private var attributesForTextLabelLeft : [String : NSObject] {
+        get {
+            let pstyle = NSMutableParagraphStyle()
+            pstyle.alignment = NSTextAlignment.Left
+            return [ NSForegroundColorAttributeName : NSColor.labelColor(), NSParagraphStyleAttributeName : pstyle ]
+        }
+    }
 	
+    private var attributesForTextLabelRight : [String : NSObject] {
+        get {
+            let pstyle = NSMutableParagraphStyle()
+            pstyle.alignment = NSTextAlignment.Right
+            return [ NSForegroundColorAttributeName : NSColor.labelColor(), NSParagraphStyleAttributeName : pstyle ]
+        }
+    }
+    
+    
 	// MARK: - Init
 	required init?(coder: NSCoder) {
 	
@@ -99,6 +137,7 @@ class ViewController: NSViewController, NSURLSessionDelegate, NSURLSessionDataDe
 	}
 	
 	// MARK: - ACTIONS
+    // MARK: TitleBar
 	@IBAction func yearSelected(sender: NSPopUpButton) {
 
         guard let title = sender.selectedItem?.title else { return }
@@ -171,8 +210,47 @@ class ViewController: NSViewController, NSURLSessionDelegate, NSURLSessionDataDe
 		
 		myTableView.reloadData()
 	}
-	
+    
+    @IBAction func combinePDF(sender: NSButton) {
 
+        combinePDFIndicator.startAnimation(nil)
+        combinePDFButton.enabled = false
+        disableUIForDownloading()
+        startDownload.enabled = false
+        
+        var pdfURLArray = [NSURL]()
+        
+        for wwdcSession in allWWDCSessionsArray {
+            if let pdf = wwdcSession.pdfFile {
+                if pdf.isFileAlreadyDownloaded {
+                    if let url = pdf.localFileURL {
+                        pdfURLArray.append(url)
+                    }
+                }
+            }
+        }
+        
+        guard let title = yearSeletor.selectedItem?.title else { return }
+        
+        switch title {
+        case "2015":
+            PDFMerge.merge(pdfURLArray, year: .WWDC2015, completionHandler: { [unowned self] (url) in
+                self.updateUIAfterCombiningPDFAndDisplay(url)
+            })
+        case "2014":
+            PDFMerge.merge(pdfURLArray, year: .WWDC2014, completionHandler: { [unowned self] (url) in
+                self.updateUIAfterCombiningPDFAndDisplay(url)
+            })
+        case "2013":
+            PDFMerge.merge(pdfURLArray, year: .WWDC2013, completionHandler: { [unowned self] (url) in
+                self.updateUIAfterCombiningPDFAndDisplay(url)
+            })
+        default:
+            break
+        }
+    }
+    
+    // MARK: Main View
 	@IBAction func allPDFChecked(sender: NSButton) {
 		
 		resetDownloadUI()
@@ -186,8 +264,8 @@ class ViewController: NSViewController, NSURLSessionDelegate, NSURLSessionDataDe
 		checkDownloadButtonState()
 		
 		let totalSize = totalFileSizeToDownload()
-		
-		totallabel.stringValue = byteFormatter.stringFromByteCount(totalSize)
+        
+        totallabel.attributedStringValue = NSAttributedString(string: byteFormatter.stringFromByteCount(totalSize), attributes: attributesForTextLabelRight)
     }
 	
 	@IBAction func allSDChecked(sender: NSButton) {
@@ -205,7 +283,7 @@ class ViewController: NSViewController, NSURLSessionDelegate, NSURLSessionDataDe
 		
 		let totalSize = totalFileSizeToDownload()
 		
-		totallabel.stringValue = byteFormatter.stringFromByteCount(totalSize)
+        totallabel.attributedStringValue = NSAttributedString(string: byteFormatter.stringFromByteCount(totalSize), attributes: attributesForTextLabelRight)
     }
 	
 	@IBAction func allHDChecked(sender: NSButton) {
@@ -223,8 +301,8 @@ class ViewController: NSViewController, NSURLSessionDelegate, NSURLSessionDataDe
 		
 		let totalSize = totalFileSizeToDownload()
 		
-		totallabel.stringValue = byteFormatter.stringFromByteCount(totalSize)
-	}
+        totallabel.attributedStringValue = NSAttributedString(string: byteFormatter.stringFromByteCount(totalSize), attributes: attributesForTextLabelRight)
+    }
 	
 	@IBAction func allCodeChecked(sender: NSButton) {
 		
@@ -242,7 +320,8 @@ class ViewController: NSViewController, NSURLSessionDelegate, NSURLSessionDataDe
 		
 		let totalSize = totalFileSizeToDownload()
 		
-		totallabel.stringValue = byteFormatter.stringFromByteCount(totalSize)
+        totallabel.attributedStringValue = NSAttributedString(string: byteFormatter.stringFromByteCount(totalSize), attributes: attributesForTextLabelRight)
+
     }
 	
 	
@@ -268,8 +347,8 @@ class ViewController: NSViewController, NSURLSessionDelegate, NSURLSessionDataDe
 		
 		let totalSize = totalFileSizeToDownload()
 		
-		totallabel.stringValue = byteFormatter.stringFromByteCount(totalSize)
-		
+        totallabel.attributedStringValue = NSAttributedString(string: byteFormatter.stringFromByteCount(totalSize), attributes: attributesForTextLabelRight)
+        
 		coordinateAllCheckBoxUI()
 	}
 	
@@ -295,86 +374,7 @@ class ViewController: NSViewController, NSURLSessionDelegate, NSURLSessionDataDe
 			}
 		}
 	}
-	
-	private func coordinateAllCheckBoxUI() {
-		
-		var shouldCheckAllPDF = true
-		var shouldCheckAllSD = true
-		var shouldCheckAllHD = true
-		var shouldCheckAllCode = true
-		
-		var countPDF = 0
-		var countSD = 0
-		var countHD = 0
-		var countCode = 0
-
-		for wwdcSession in self.allWWDCSessionsArray {
-			
-			if let file = wwdcSession.pdfFile  where (wwdcSession.pdfFile?.fileSize > 0 && wwdcSession.pdfFile?.isFileAlreadyDownloaded == false) {
-				if file.shouldDownloadFile == false {
-					shouldCheckAllPDF = false
-				}
-				countPDF++
-			}
-			if let file = wwdcSession.sdFile where (wwdcSession.sdFile?.fileSize > 0 && wwdcSession.sdFile?.isFileAlreadyDownloaded == false) {
-				if file.shouldDownloadFile == false {
-					shouldCheckAllSD = false
-				}
-				countSD++
-			}
-			if let file = wwdcSession.hdFile  where (wwdcSession.hdFile?.fileSize > 0 && wwdcSession.hdFile?.isFileAlreadyDownloaded == false) {
-				if file.shouldDownloadFile == false {
-					shouldCheckAllHD = false
-				}
-				countHD++
-			}
-			for sample in wwdcSession.sampleCodeArray where (sample.fileSize > 0 && sample.isFileAlreadyDownloaded == false)  {
-				if sample.shouldDownloadFile == false {
-					shouldCheckAllCode = false
-				}
-				countCode++
-			}
-		}
-
-		// print("PDFs-\(countPDF), SD-\(countSD), HD-\(countHD), Code-\(countCode)")
-		
-		if countPDF > 0 {
-			allPDFCheckBox.state = Int(shouldCheckAllPDF)
-			allPDFCheckBox.enabled = true
-		}
-		else {
-			allPDFCheckBox.state = 0
-			allPDFCheckBox.enabled = false
-		}
-		
-		if countSD > 0 {
-			allSDCheckBox.state = Int(shouldCheckAllSD)
-			allSDCheckBox.enabled = true
-		}
-		else {
-			allSDCheckBox.state = 0
-			allSDCheckBox.enabled = false
-		}
-		
-		if countHD > 0 {
-			allHDCheckBox.state = Int(shouldCheckAllHD)
-			allHDCheckBox.enabled = true
-		}
-		else {
-			allHDCheckBox.state = 0
-			allHDCheckBox.enabled = false
-		}
-		
-		if countCode > 0 {
-			allCodeCheckbox.state = Int(shouldCheckAllCode)
-			allCodeCheckbox.enabled = true
-		}
-		else {
-			allCodeCheckbox.state = 0
-			allCodeCheckbox.enabled = false
-		}
-	}
-	
+    
 	@IBAction func hideSessionsChecked(sender: NSButton) {
 		
 		myTableView.beginUpdates()
@@ -405,21 +405,21 @@ class ViewController: NSViewController, NSURLSessionDelegate, NSURLSessionDataDe
     override func viewDidLoad() {
         super.viewDidLoad()
 		
+        toolbarVisualEffectView.material = NSVisualEffectMaterial.Titlebar
+        toolbarVisualEffectView.appearance = NSAppearance(named: NSAppearanceNameVibrantLight)
+        toolbarVisualEffectView.state = NSVisualEffectState.FollowsWindowActiveState
+        toolbarVisualEffectView.blendingMode = NSVisualEffectBlendingMode.BehindWindow
+
 		visualEffectView.material = NSVisualEffectMaterial.AppearanceBased
 		visualEffectView.appearance = NSAppearance(named: NSAppearanceNameVibrantLight)
 		visualEffectView.blendingMode = NSVisualEffectBlendingMode.BehindWindow
-		visualEffectView.state = NSVisualEffectState.Active
+		visualEffectView.state = NSVisualEffectState.FollowsWindowActiveState
 		
-		//hideDescriptionsCheckBox.se
-		let pstyle = NSMutableParagraphStyle()
-		pstyle.alignment = NSTextAlignment.Left
-		let attritbutes = [ NSForegroundColorAttributeName : NSColor.labelColor(), NSParagraphStyleAttributeName : pstyle ]
-		
-		hideDescriptionsCheckBox.attributedTitle = NSAttributedString(string: "Hide Session Descriptions", attributes: attritbutes)
-		allPDFCheckBox.attributedTitle = NSAttributedString(string: "All PDFs", attributes: attritbutes)
-		allHDCheckBox.attributedTitle = NSAttributedString(string: "All HD", attributes: attritbutes)
-		allSDCheckBox.attributedTitle = NSAttributedString(string: "All SD", attributes: attritbutes)
-		allCodeCheckbox.attributedTitle = NSAttributedString(string: "All Code", attributes: attritbutes)
+		hideDescriptionsCheckBox.attributedTitle = NSAttributedString(string: "Hide Session Descriptions", attributes: attributesForTextLabelLeft)
+		allPDFCheckBox.attributedTitle = NSAttributedString(string: "All PDFs", attributes: attributesForTextLabelLeft)
+		allHDCheckBox.attributedTitle = NSAttributedString(string: "All HD", attributes: attributesForTextLabelLeft)
+		allSDCheckBox.attributedTitle = NSAttributedString(string: "All SD", attributes: attributesForTextLabelLeft)
+		allCodeCheckbox.attributedTitle = NSAttributedString(string: "All Code", attributes: attributesForTextLabelLeft)
 
 		
 		myTableView.allowsMultipleSelection = false
@@ -430,6 +430,8 @@ class ViewController: NSViewController, NSURLSessionDelegate, NSURLSessionDataDe
 	}
 	
 	func resetUIForYearFetch () {
+        
+        combinePDFButton.enabled = false
         
         stopFetchButton.hidden = true
 		
@@ -449,8 +451,8 @@ class ViewController: NSViewController, NSURLSessionDelegate, NSURLSessionDataDe
 		
 		let totalSize = totalFileSizeToDownload()
 		
-		totallabel.stringValue = byteFormatter.stringFromByteCount(totalSize)
-
+        totallabel.attributedStringValue = NSAttributedString(string: byteFormatter.stringFromByteCount(totalSize), attributes: attributesForTextLabelRight)
+        
 		resetDownloadUI()
 		
 		startDownload.enabled = false
@@ -460,72 +462,7 @@ class ViewController: NSViewController, NSURLSessionDelegate, NSURLSessionDataDe
 		hideDescriptionsCheckBox.state = 0
         
         myTableView.reloadData()
-	}
-	
-	func disableUIForDownloading () {
-		
-		yearSeletor.enabled = false
-		
-		allPDFCheckBox.enabled = false
-		allSDCheckBox.enabled = false
-		allHDCheckBox.enabled = false
-		allCodeCheckbox.enabled = false
-	}
-	
-	func updateTotalProgress() {
-		
-		dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), { [unowned self] in
-			
-			var currentDownloadBytes : Int64 = 0
-			
-			for file in self.filesToDownload {
-				if let fileSize = file.fileSize {
-					currentDownloadBytes += Int64(file.downloadProgress*Float(fileSize))
-				}
-			}
-			
-			dispatch_async(dispatch_get_main_queue(), { [unowned self] in
-				
-				self.currentlabel.stringValue = self.byteFormatter.stringFromByteCount(currentDownloadBytes)
-				
-				let progress = Float(currentDownloadBytes)/Float(self.totalBytesToDownload)
-				
-				self.downloadProgressView.doubleValue = Double(progress)
-			})
-		})
-	}
-	
-	func totalFileSizeToDownload() -> Int64 {
-		
-		totalBytesToDownload = 0
-		
-		for wwdcSession in self.allWWDCSessionsArray {
-			
-			if let file = wwdcSession.pdfFile  where (wwdcSession.pdfFile?.shouldDownloadFile == true && wwdcSession.pdfFile?.fileSize > 0 && wwdcSession.pdfFile?.isFileAlreadyDownloaded == false) {
-				if let fileSize = file.fileSize {
-					totalBytesToDownload += Int64(fileSize)
-				}
-			}
-			if let file = wwdcSession.sdFile where (wwdcSession.sdFile?.shouldDownloadFile == true && wwdcSession.sdFile?.fileSize > 0 && wwdcSession.sdFile?.isFileAlreadyDownloaded == false) {
-				if let fileSize = file.fileSize {
-					totalBytesToDownload += Int64(fileSize)
-				}
-			}
-			if let file = wwdcSession.hdFile  where (wwdcSession.hdFile?.shouldDownloadFile == true && wwdcSession.hdFile?.fileSize > 0 && wwdcSession.hdFile?.isFileAlreadyDownloaded == false) {
-				if let fileSize = file.fileSize {
-					totalBytesToDownload += Int64(fileSize)
-				}
-			}
-			for sample in wwdcSession.sampleCodeArray where (sample.shouldDownloadFile == true && sample.fileSize > 0 && sample.isFileAlreadyDownloaded == false) {
-				if let fileSize = sample.fileSize {
-					totalBytesToDownload += Int64(fileSize)
-				}
-			}
-		}
-		
-        return totalBytesToDownload
-	}
-
+    }
 
 	
 	// MARK: Fetch Year Info
@@ -584,6 +521,8 @@ class ViewController: NSViewController, NSURLSessionDelegate, NSURLSessionDataDe
                         self.hideDescriptionsCheckBox.state = 0
                         
                         self.myTableView.reloadData()
+                        
+                        self.updateCombinePDFButtonState()
                     }
                     else {
                         self.resetUIForYearFetch()
@@ -925,9 +864,7 @@ class ViewController: NSViewController, NSURLSessionDelegate, NSURLSessionDataDe
 		startDownload.title = "Stop Downloading"
 		
 		disableUIForDownloading()
-		
-		yearFetchIndicator.startAnimation(nil)
-		
+				
 		filesToDownload.removeAll()
 		
 		for wwdcSession in self.allWWDCSessionsArray {
@@ -949,8 +886,9 @@ class ViewController: NSViewController, NSURLSessionDelegate, NSURLSessionDataDe
 		updateTotalProgress()
 		oflabel.hidden = false
 		let totalSize = totalFileSizeToDownload()
-		totallabel.stringValue = byteFormatter.stringFromByteCount(totalSize)
-		
+
+        totallabel.attributedStringValue = NSAttributedString(string: byteFormatter.stringFromByteCount(totalSize), attributes: attributesForTextLabelRight)
+        
 		startUpdatingDockIcon()
 		
 		downloadFiles(filesToDownload)
@@ -967,9 +905,7 @@ class ViewController: NSViewController, NSURLSessionDelegate, NSURLSessionDataDe
 		yearSeletor.enabled = true
 		
 		coordinateAllCheckBoxUI()
-		
-		yearFetchIndicator.stopAnimation(nil)
-		
+				
 		filesToDownload.removeAll()
 		
 		myTableView.reloadData()
@@ -978,44 +914,66 @@ class ViewController: NSViewController, NSURLSessionDelegate, NSURLSessionDataDe
 		
 		stopUpdatingDockIcon()
 		
-		print("Completed File Downloads")
-		
-		//createPDF()
+        updateCombinePDFButtonState()
+        
+        print("Completed File Downloads")
 	}
 	
-	func createPDF () {
-		
-		var pdfURLArray = [NSURL]()
-		
-		for wwdcSession in allWWDCSessionsArray {
-			if let pdf = wwdcSession.pdfFile {
-				if pdf.isFileAlreadyDownloaded {
-					if let url = pdf.localFileURL {
-						pdfURLArray.append(url)
-					}
-				}
-			}
-		}
-		
-		guard let title = yearSeletor.selectedItem?.title else { return }
-		
-		var combinedPDFURL : NSURL?
-		
-		switch title {
-		case "2015":
-			combinedPDFURL = PDFMerge.merge(pdfURLArray, year: .WWDC2015)
-		case "2014":
-			combinedPDFURL = PDFMerge.merge(pdfURLArray, year: .WWDC2014)
-		case "2013":
-			combinedPDFURL = PDFMerge.merge(pdfURLArray, year: .WWDC2013)
-		default:
-			break
-		}
-		
-		print(combinedPDFURL)
-		
-	}
-	
+    // MARK: - UI State changes / checks
+    func updateTotalProgress() {
+        
+        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), { [unowned self] in
+            
+            var currentDownloadBytes : Int64 = 0
+            
+            for file in self.filesToDownload {
+                if let fileSize = file.fileSize {
+                    currentDownloadBytes += Int64(file.downloadProgress*Float(fileSize))
+                }
+            }
+            
+            dispatch_async(dispatch_get_main_queue(), { [unowned self] in
+                
+                self.currentlabel.attributedStringValue = NSAttributedString(string: self.byteFormatter.stringFromByteCount(currentDownloadBytes), attributes: self.attributesForTextLabelLeft)
+                
+                let progress = Float(currentDownloadBytes)/Float(self.totalBytesToDownload)
+                
+                self.downloadProgressView.doubleValue = Double(progress)
+                })
+            })
+    }
+    
+    func totalFileSizeToDownload() -> Int64 {
+        
+        totalBytesToDownload = 0
+        
+        for wwdcSession in self.allWWDCSessionsArray {
+            
+            if let file = wwdcSession.pdfFile  where (wwdcSession.pdfFile?.shouldDownloadFile == true && wwdcSession.pdfFile?.fileSize > 0 && wwdcSession.pdfFile?.isFileAlreadyDownloaded == false) {
+                if let fileSize = file.fileSize {
+                    totalBytesToDownload += Int64(fileSize)
+                }
+            }
+            if let file = wwdcSession.sdFile where (wwdcSession.sdFile?.shouldDownloadFile == true && wwdcSession.sdFile?.fileSize > 0 && wwdcSession.sdFile?.isFileAlreadyDownloaded == false) {
+                if let fileSize = file.fileSize {
+                    totalBytesToDownload += Int64(fileSize)
+                }
+            }
+            if let file = wwdcSession.hdFile  where (wwdcSession.hdFile?.shouldDownloadFile == true && wwdcSession.hdFile?.fileSize > 0 && wwdcSession.hdFile?.isFileAlreadyDownloaded == false) {
+                if let fileSize = file.fileSize {
+                    totalBytesToDownload += Int64(fileSize)
+                }
+            }
+            for sample in wwdcSession.sampleCodeArray where (sample.shouldDownloadFile == true && sample.fileSize > 0 && sample.isFileAlreadyDownloaded == false) {
+                if let fileSize = sample.fileSize {
+                    totalBytesToDownload += Int64(fileSize)
+                }
+            }
+        }
+        
+        return totalBytesToDownload
+    }
+    
 	func checkDownloadButtonState () {
 		
 		let totalToFetch = totalFileSizeToDownload()
@@ -1030,11 +988,24 @@ class ViewController: NSViewController, NSURLSessionDelegate, NSURLSessionDataDe
 	
    	func resetDownloadUI() {
 		
-		currentlabel.stringValue = ""
+		currentlabel.attributedStringValue = NSAttributedString()
 		oflabel.hidden = true
-		totallabel.stringValue = byteFormatter.stringFromByteCount(0)
+        
+        totallabel.attributedStringValue = NSAttributedString(string: byteFormatter.stringFromByteCount(0), attributes: attributesForTextLabelRight)
+
 		downloadProgressView.doubleValue = 0
 	}
+
+    // MARK: Checkboxes
+    func disableUIForDownloading () {
+        
+        yearSeletor.enabled = false
+        
+        allPDFCheckBox.enabled = false
+        allSDCheckBox.enabled = false
+        allHDCheckBox.enabled = false
+        allCodeCheckbox.enabled = false
+    }
 	
 	func resetAllCheckboxesAndDisable() {
 		
@@ -1056,8 +1027,127 @@ class ViewController: NSViewController, NSURLSessionDelegate, NSURLSessionDataDe
 		allHDCheckBox.enabled = true
 		allCodeCheckbox.enabled = true
 	}
+    
+    private func coordinateAllCheckBoxUI() {
+        
+        var shouldCheckAllPDF = true
+        var shouldCheckAllSD = true
+        var shouldCheckAllHD = true
+        var shouldCheckAllCode = true
+        
+        var countPDF = 0
+        var countSD = 0
+        var countHD = 0
+        var countCode = 0
+        
+        for wwdcSession in self.allWWDCSessionsArray {
+            
+            if let file = wwdcSession.pdfFile  where (wwdcSession.pdfFile?.fileSize > 0 && wwdcSession.pdfFile?.isFileAlreadyDownloaded == false) {
+                if file.shouldDownloadFile == false {
+                    shouldCheckAllPDF = false
+                }
+                countPDF++
+            }
+            if let file = wwdcSession.sdFile where (wwdcSession.sdFile?.fileSize > 0 && wwdcSession.sdFile?.isFileAlreadyDownloaded == false) {
+                if file.shouldDownloadFile == false {
+                    shouldCheckAllSD = false
+                }
+                countSD++
+            }
+            if let file = wwdcSession.hdFile  where (wwdcSession.hdFile?.fileSize > 0 && wwdcSession.hdFile?.isFileAlreadyDownloaded == false) {
+                if file.shouldDownloadFile == false {
+                    shouldCheckAllHD = false
+                }
+                countHD++
+            }
+            for sample in wwdcSession.sampleCodeArray where (sample.fileSize > 0 && sample.isFileAlreadyDownloaded == false)  {
+                if sample.shouldDownloadFile == false {
+                    shouldCheckAllCode = false
+                }
+                countCode++
+            }
+        }
+        
+        if countPDF > 0 {
+            allPDFCheckBox.state = Int(shouldCheckAllPDF)
+            allPDFCheckBox.enabled = true
+        }
+        else {
+            allPDFCheckBox.state = 0
+            allPDFCheckBox.enabled = false
+        }
+        
+        if countSD > 0 {
+            allSDCheckBox.state = Int(shouldCheckAllSD)
+            allSDCheckBox.enabled = true
+        }
+        else {
+            allSDCheckBox.state = 0
+            allSDCheckBox.enabled = false
+        }
+        
+        if countHD > 0 {
+            allHDCheckBox.state = Int(shouldCheckAllHD)
+            allHDCheckBox.enabled = true
+        }
+        else {
+            allHDCheckBox.state = 0
+            allHDCheckBox.enabled = false
+        }
+        
+        if countCode > 0 {
+            allCodeCheckbox.state = Int(shouldCheckAllCode)
+            allCodeCheckbox.enabled = true
+        }
+        else {
+            allCodeCheckbox.state = 0
+            allCodeCheckbox.enabled = false
+        }
+    }
+
+    // MARK: CombineButton
+    func updateCombinePDFButtonState() {
+        
+        if isDownloading {
+            combinePDFButton.enabled = false
+        }
+        else {
+            
+            var numberOfPDFsPresent = 0
+            
+            for wwdcSession in allWWDCSessionsArray {
+                if let pdfFile = wwdcSession.pdfFile {
+                    if pdfFile.isFileAlreadyDownloaded {
+                        numberOfPDFsPresent++
+                    }
+                }
+            }
+            
+            if numberOfPDFsPresent > 1 {
+                combinePDFButton.enabled = true
+            }
+            else{
+                combinePDFButton.enabled = false
+            }
+        }
+    }
+    
+    func updateUIAfterCombiningPDFAndDisplay(url:NSURL?) {
+        
+        if let url = url {
+            NSWorkspace.sharedWorkspace().selectFile(url.path, inFileViewerRootedAtPath: url.absoluteString.stringByDeletingLastPathComponent)
+        }
+        
+        combinePDFIndicator.stopAnimation(nil)
+        combinePDFButton.enabled = true
+        startDownload.enabled = true
+        yearSeletor.enabled = true
+        reEnableCheckboxes()
+    }
+
 	
-	func startUpdatingDockIcon () {
+    // MARK: Dock Icon
+    func startUpdatingDockIcon () {
 		dockIconUpdateTimer = NSTimer.scheduledTimerWithTimeInterval(0.5, target: self, selector: "updateDockIcon", userInfo: nil, repeats: true)
 	}
 	

@@ -11,45 +11,50 @@ import CoreGraphics
 
 class PDFMerge : NSObject {
 	
-	class func merge(pdfs : [NSURL], year : WWDCYear) -> NSURL? {
+    class func merge(pdfs : [NSURL], year : WWDCYear, completionHandler :(url: NSURL?) -> ()) {
 		
-		if pdfs.count == 0 { return nil }
+        if pdfs.count == 0 { completionHandler(url: nil); return}
 	
-		guard let directory = FileInfo.pdfDirectory(year) else { return nil }
+        guard let directory = FileInfo.yearDirectory(year) else { completionHandler(url: nil); return }
 		
 		let outputPath = directory.stringByAppendingPathComponent("/\(year.description)-Combined-PDF.pdf")
 		
 		let outputURL = NSURL.fileURLWithPath(outputPath)
 		
-		guard let writeContext = CGPDFContextCreateWithURL(outputURL, nil, nil) else { return nil }
+        guard let writeContext = CGPDFContextCreateWithURL(outputURL, nil, nil) else { completionHandler(url: nil); return }
 
 		print("Creating Enormous Combined PDF document...")
 		
-		for url in pdfs {
-			
-			autoreleasepool {
-				if let doc = CGPDFDocumentCreateWithURL(url as CFURL) {
+        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), {
 
-					let numberOfPages = CGPDFDocumentGetNumberOfPages(doc)
-					
-					for var index = 0; index < numberOfPages; ++index {
-						
-						if let page = CGPDFDocumentGetPage(doc, index) {
-							var rect = CGPDFPageGetBoxRect(page, CGPDFBox.CropBox)
-							CGContextBeginPage(writeContext, &rect)
-							CGContextDrawPDFPage(writeContext, page)
-							CGContextEndPage(writeContext)
-						}
-					}
-				}
-			}
-		}
-		
-		CGPDFContextClose(writeContext)
-		
-		print("Finishing \(year.description) Combined PDF Document")
-
-		return outputURL
+                for url in pdfs {
+                    
+                    autoreleasepool {
+                        if let doc = CGPDFDocumentCreateWithURL(url as CFURL) {
+                            
+                            let numberOfPages = CGPDFDocumentGetNumberOfPages(doc)
+                            
+                            for var index = 0; index < numberOfPages; ++index {
+                                
+                                if let page = CGPDFDocumentGetPage(doc, index) {
+                                    var rect = CGPDFPageGetBoxRect(page, CGPDFBox.CropBox)
+                                    CGContextBeginPage(writeContext, &rect)
+                                    CGContextDrawPDFPage(writeContext, page)
+                                    CGContextEndPage(writeContext)
+                                }
+                            }
+                        }
+                    }
+                }
+            
+                CGPDFContextClose(writeContext)
+                
+                print("Finishing \(year.description) Combined PDF Document")
+            
+                dispatch_async(dispatch_get_main_queue()) {
+                    completionHandler(url: outputURL)
+                }
+            })
 	}
 	
 }

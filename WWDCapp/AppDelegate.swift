@@ -25,7 +25,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
 			zoomButton?.hidden = true
 			
 			window.styleMask |= NSFullSizeContentViewWindowMask
-			window.titlebarAppearsTransparent = false
+			window.titlebarAppearsTransparent = true
 			window.appearance = NSAppearance(named: NSAppearanceNameVibrantLight)
 			
 			window.titleVisibility = NSWindowTitleVisibility.Hidden
