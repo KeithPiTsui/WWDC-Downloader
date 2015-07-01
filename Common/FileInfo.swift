@@ -114,16 +114,16 @@ enum FileType: CustomStringConvertible {
 		get {
 			switch (fileType) {
 			case .PDF:
-				guard let directory = self.pdfDirectory(), let filename = self.fileName  else { return nil }
+				guard let directory = FileInfo.pdfDirectory(year), let filename = self.fileName  else { return nil }
 				return NSURL(fileURLWithPath: directory.stringByAppendingPathComponent(filename.sanitizeFileNameString()))
 			case .SD:
-				guard let directory = self.videoDirectory(), let filename = self.fileName  else { return nil }
+				guard let directory = FileInfo.videoDirectory(year), let filename = self.fileName  else { return nil }
 				return NSURL(fileURLWithPath: directory.stringByAppendingPathComponent(filename.sanitizeFileNameString()))
 			case .HD:
-				guard let directory = self.videoDirectory(), let filename = self.fileName  else { return nil }
+				guard let directory = FileInfo.videoDirectory(year), let filename = self.fileName  else { return nil }
 				return NSURL(fileURLWithPath: directory.stringByAppendingPathComponent(filename.sanitizeFileNameString()))
 			case .SampleCode:
-				guard let directory = self.codeDirectory(), let filename = self.fileName  else { return nil }
+				guard let directory = FileInfo.codeDirectory(year), let filename = self.fileName  else { return nil }
 				return NSURL(fileURLWithPath: directory.stringByAppendingPathComponent(filename.sanitizeFileNameString()))
 			}
 		}
@@ -214,7 +214,7 @@ enum FileType: CustomStringConvertible {
 
 	
 	// MARK: - Directory Helpers
-	func wwdcDirectory () -> String? {
+	class func wwdcDirectory () -> String? {
 		
 		let paths = NSSearchPathForDirectoriesInDomains(.DownloadsDirectory, .UserDomainMask, true)
 		
@@ -225,7 +225,7 @@ enum FileType: CustomStringConvertible {
 		return createDirectoryIfNeeded(path, inDirectory: documentsDirectory)
 	}
 	
-	func yearDirectory(year : WWDCYear) -> String? {
+	class func yearDirectory(year : WWDCYear) -> String? {
 		
 		guard let wwdcDirectory = wwdcDirectory()  else { return nil }
 		
@@ -235,7 +235,7 @@ enum FileType: CustomStringConvertible {
 	}
 	
 	
-	func videoDirectory () -> String? {
+	class func videoDirectory (year : WWDCYear) -> String? {
 		
 		guard let wwdcDirectory = yearDirectory(year)  else { return nil }
 		
@@ -244,7 +244,7 @@ enum FileType: CustomStringConvertible {
 		return createDirectoryIfNeeded(path, inDirectory: wwdcDirectory)
 	}
 	
-	func codeDirectory () -> String? {
+	class func codeDirectory (year : WWDCYear) -> String? {
 		
 		guard let wwdcDirectory = yearDirectory(year)  else { return nil }
 		
@@ -253,7 +253,7 @@ enum FileType: CustomStringConvertible {
 		return createDirectoryIfNeeded(path, inDirectory: wwdcDirectory)
 	}
 	
-	func pdfDirectory () -> String? {
+	class func pdfDirectory (year : WWDCYear) -> String? {
 		
 		guard let wwdcDirectory = yearDirectory(year)  else { return nil }
 		
@@ -265,7 +265,7 @@ enum FileType: CustomStringConvertible {
 	
 	// MARK: Helpers
 
-	private func createDirectoryIfNeeded(directory : String, inDirectory: String) -> String? {
+	private class func createDirectoryIfNeeded(directory : String, inDirectory: String) -> String? {
 		
 		let path = inDirectory.stringByAppendingPathComponent(directory)
 				

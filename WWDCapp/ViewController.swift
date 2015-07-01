@@ -896,6 +896,37 @@ class ViewController: NSViewController, NSURLSessionDelegate, NSURLSessionDataDe
 		stopUpdatingDockIcon()
 		
 		print("Completed File Downloads")
+		
+		createPDF()
+	}
+	
+	func createPDF () {
+		
+		var pdfURLArray = [NSURL]()
+		
+		for wwdcSession in allWWDCSessionsArray {
+			if let pdf = wwdcSession.pdfFile {
+				if pdf.isFileAlreadyDownloaded {
+					if let url = pdf.localFileURL {
+						pdfURLArray.append(url)
+					}
+				}
+			}
+		}
+		
+		guard let title = yearSeletor.selectedItem?.title else { return }
+		
+		switch title {
+		case "2015":
+			PDFMerge.merge(pdfURLArray, year: .WWDC2015)
+		case "2014":
+			PDFMerge.merge(pdfURLArray, year: .WWDC2014)
+		case "2013":
+			PDFMerge.merge(pdfURLArray, year: .WWDC2013)
+		default:
+			break
+		}
+		
 	}
 	
 	func checkDownloadButtonState () {

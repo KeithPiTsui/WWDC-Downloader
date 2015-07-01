@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		4408A7F91B43F20A00AB4A10 /* PDFMerge.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4408A7F81B43F20A00AB4A10 /* PDFMerge.swift */; };
 		442D010B1B399A9D0081C56C /* FileInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 44776DA81B399950004B9178 /* FileInfo.swift */; };
 		446C7A1D1B42D3C7007CA3C2 /* SessionNameDescriptionCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 446C7A1C1B42D3C7007CA3C2 /* SessionNameDescriptionCell.swift */; };
 		4479EA761B3C114600D5558D /* CheckBoxTableCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4479EA751B3C114600D5558D /* CheckBoxTableCell.swift */; };
@@ -28,6 +29,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		4408A7F81B43F20A00AB4A10 /* PDFMerge.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PDFMerge.swift; sourceTree = "<group>"; };
 		446C7A1C1B42D3C7007CA3C2 /* SessionNameDescriptionCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SessionNameDescriptionCell.swift; sourceTree = "<group>"; };
 		44776DA81B399950004B9178 /* FileInfo.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = FileInfo.swift; path = Common/FileInfo.swift; sourceTree = "<group>"; };
 		4479EA751B3C114600D5558D /* CheckBoxTableCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CheckBoxTableCell.swift; sourceTree = "<group>"; };
@@ -126,6 +128,7 @@
 				A90D14E91B3EDB7200A30590 /* Extensions */,
 				A96E4D611B2D44910030F908 /* libxml2.2.dylib */,
 				A983F85A1B2D165A00ED681E /* Hpple */,
+				4408A7F81B43F20A00AB4A10 /* PDFMerge.swift */,
 			);
 			name = Common;
 			sourceTree = "<group>";
@@ -238,6 +241,7 @@
 				A9528F291B34C40E002290D3 /* ViewController.swift in Sources */,
 				A90D14ED1B41C5F000A30590 /* DownloadTranscriptManager.swift in Sources */,
 				A9528F371B34C427002290D3 /* DownloadFileManager.swift in Sources */,
+				4408A7F91B43F20A00AB4A10 /* PDFMerge.swift in Sources */,
 				A9528F381B34C427002290D3 /* StringExtras.swift in Sources */,
 				4479EA761B3C114600D5558D /* CheckBoxTableCell.swift in Sources */,
 				442D010B1B399A9D0081C56C /* FileInfo.swift in Sources */,
