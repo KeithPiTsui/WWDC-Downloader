@@ -18,15 +18,25 @@ class CheckBoxTableViewCell : NSTableCellView {
 	@IBOutlet weak var loadingProgressView: NSProgressIndicator!
 	@IBOutlet weak var downloadProgressView: NSProgressIndicator!
 	@IBOutlet weak var downloadCompleteImage: NSButton!
+
+	static let byteFormatter : NSByteCountFormatter = {
+		let aFormatter = NSByteCountFormatter()
+		aFormatter.zeroPadsFractionDigits = true
+		return aFormatter
+	}()
 	
 	func resetCell() {
 		
-		self.checkBox.hidden = true
-		self.label.hidden = true
-		self.downloadProgressView.hidden = true
-		self.downloadCompleteImage.hidden = true
-		self.checkBox.enabled = false
-		self.checkBox.state = 1
+		if #available(OSX 10.11, *) {
+		    label.font = NSFont.monospacedDigitSystemFontOfSize(NSFont.systemFontSizeForControlSize(NSControlSize.SmallControlSize), weight: NSFontWeightRegular)
+		}
+		
+		checkBox.hidden = true
+		label.hidden = true
+		downloadProgressView.hidden = true
+		downloadCompleteImage.hidden = true
+		checkBox.enabled = false
+		checkBox.state = 1
 	}
 	
 	func updateCell(isYearInfoFetchComplete:Bool, isDownloadSessionActive:Bool) {
@@ -80,59 +90,59 @@ class CheckBoxTableViewCell : NSTableCellView {
 		
 			// visible
 		if isAllFilesSizeFetchComplete {
-			self.checkBox.hidden = false
-			self.label.hidden = false
+			checkBox.hidden = false
+			label.hidden = false
 
 			// Progress
 			if isAllFilesAlreadyDownloaded {
-				self.downloadProgressView.hidden = true
-				self.label.hidden = true
-				self.checkBox.hidden = true
-				self.downloadCompleteImage.hidden = false
+				downloadProgressView.hidden = true
+				label.hidden = true
+				checkBox.hidden = true
+				downloadCompleteImage.hidden = false
 			}
 			else {
 				if isAllFilesDownloading {
-					self.downloadProgressView.hidden = false
+					downloadProgressView.hidden = false
 					let progress = Double(Float(currentDownloadBytes)/Float(totalDownloadSizeBytes))
-					self.downloadProgressView.doubleValue = progress
+					downloadProgressView.doubleValue = progress
 					
 					if isDownloadSessionActive {
-                        self.label.stringValue = NSByteCountFormatter().stringFromByteCount(Int64(progress*Double(totalDownloadSizeBytes)))
+						label.stringValue = CheckBoxTableViewCell.byteFormatter.stringFromByteCount(Int64(progress*Double(totalDownloadSizeBytes)))
                     }
                     else {
-                        self.label.stringValue = NSByteCountFormatter().stringFromByteCount(totalDownloadSizeBytes)
+						label.stringValue = CheckBoxTableViewCell.byteFormatter.stringFromByteCount(totalDownloadSizeBytes)
                     }
 				}
 				else {
-					self.downloadProgressView.hidden = true
-					self.label.stringValue = NSByteCountFormatter().stringFromByteCount(totalDownloadSizeBytes)
+					downloadProgressView.hidden = true
+					label.stringValue = CheckBoxTableViewCell.byteFormatter.stringFromByteCount(totalDownloadSizeBytes)
 				}
 			}
 		}
 		else {
-			self.checkBox.hidden = true
-			self.label.hidden = true
-			self.downloadProgressView.hidden = true
+			checkBox.hidden = true
+			label.hidden = true
+			downloadProgressView.hidden = true
 		}
 		
 		if (isYearInfoFetchComplete) {
 			
 			if isAllFilesShouldDownload == true {
-				self.checkBox.state = 1
+				checkBox.state = 1
 			}
 			else {
-				self.checkBox.state = 0
+				checkBox.state = 0
 			}
 			
 			if isDownloadSessionActive {
-				self.checkBox.enabled = false
+				checkBox.enabled = false
 			}
 			else {
-				self.checkBox.enabled = true
+				checkBox.enabled = true
 			}
 		}
 		else {
-			self.checkBox.enabled = false
+			checkBox.enabled = false
 		}
 	}
 }

@@ -124,28 +124,17 @@ class ViewController: NSViewController, NSURLSessionDelegate, NSURLSessionDataDe
 	
 	private var dockIconUpdateTimer : NSTimer?
     
-    private var attributesForTextLabelLeft : [String : NSObject] {
-        get {
-            let pstyle = NSMutableParagraphStyle()
-            pstyle.alignment = NSTextAlignment.Left
-            return [ NSForegroundColorAttributeName : NSColor.labelColor(), NSParagraphStyleAttributeName : pstyle ]
-        }
-    }
+    private let attributesForCheckboxLabelLeft : [String : NSObject]
 	
-    private var attributesForTextLabelRight : [String : NSObject] {
-        get {
-            let pstyle = NSMutableParagraphStyle()
-            pstyle.alignment = NSTextAlignment.Right
-            return [ NSForegroundColorAttributeName : NSColor.labelColor(), NSParagraphStyleAttributeName : pstyle ]
-        }
-    }
-    
-    
 	// MARK: - Init
 	required init?(coder: NSCoder) {
 	
 		byteFormatter = NSByteCountFormatter()
 		byteFormatter.zeroPadsFractionDigits = true
+		
+		let pstyle = NSMutableParagraphStyle()
+		pstyle.alignment = NSTextAlignment.Left
+		attributesForCheckboxLabelLeft = [ NSForegroundColorAttributeName : NSColor.labelColor(), NSParagraphStyleAttributeName : pstyle ]
 		
 		super.init(coder: coder)
 	}
@@ -459,17 +448,23 @@ class ViewController: NSViewController, NSURLSessionDelegate, NSURLSessionDataDe
 		visualEffectView.blendingMode = NSVisualEffectBlendingMode.BehindWindow
 		visualEffectView.state = NSVisualEffectState.FollowsWindowActiveState
 		
-		hideDescriptionsCheckBox.attributedTitle = NSAttributedString(string: "Hide Session Descriptions", attributes: attributesForTextLabelLeft)
-		allPDFCheckBox.attributedTitle = NSAttributedString(string: "All PDFs", attributes: attributesForTextLabelLeft)
-		allHDCheckBox.attributedTitle = NSAttributedString(string: "All HD", attributes: attributesForTextLabelLeft)
-		allSDCheckBox.attributedTitle = NSAttributedString(string: "All SD", attributes: attributesForTextLabelLeft)
-		allCodeCheckbox.attributedTitle = NSAttributedString(string: "All Code", attributes: attributesForTextLabelLeft)
+		hideDescriptionsCheckBox.attributedTitle = NSAttributedString(string: "Hide Session Descriptions", attributes: attributesForCheckboxLabelLeft)
+		allPDFCheckBox.attributedTitle = NSAttributedString(string: "All PDFs", attributes: attributesForCheckboxLabelLeft)
+		allHDCheckBox.attributedTitle = NSAttributedString(string: "All HD", attributes: attributesForCheckboxLabelLeft)
+		allSDCheckBox.attributedTitle = NSAttributedString(string: "All SD", attributes: attributesForCheckboxLabelLeft)
+		allCodeCheckbox.attributedTitle = NSAttributedString(string: "All Code", attributes: attributesForCheckboxLabelLeft)
 
 		
 		myTableView.allowsMultipleSelection = false
 		myTableView.allowsMultipleSelection = false
 		myTableView.allowsEmptySelection = false
-        
+		
+		if #available(OSX 10.11, *) {
+		    totallabel.font = NSFont.monospacedDigitSystemFontOfSize(NSFont.systemFontSizeForControlSize(NSControlSize.SmallControlSize), weight: NSFontWeightRegular)
+			oflabel.font = NSFont.monospacedDigitSystemFontOfSize(NSFont.systemFontSizeForControlSize(NSControlSize.SmallControlSize), weight: NSFontWeightRegular)
+			currentlabel.font = NSFont.monospacedDigitSystemFontOfSize(NSFont.systemFontSizeForControlSize(NSControlSize.SmallControlSize), weight: NSFontWeightRegular)
+		}
+		
 		resetUIForYearFetch()
 	}
 	
