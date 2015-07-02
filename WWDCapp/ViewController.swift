@@ -10,7 +10,7 @@ import Cocoa
 
 class ViewController: NSViewController, NSURLSessionDelegate, NSURLSessionDataDelegate, NSTableViewDataSource, NSTableViewDelegate {
 
-	// MARK: Hooks to ToolbarItems in WindowControllerSubclass
+	// MARK: Hooks for Proxying to ToolbarItems in WindowControllerSubclass
 	var yearSeletor: NSPopUpButton! {
 		get {
 			if let windowController = NSApplication.sharedApplication().windows.first?.windowController  as? ToolbarHookableWindowSubclass {
@@ -263,9 +263,7 @@ class ViewController: NSViewController, NSURLSessionDelegate, NSURLSessionDataDe
 		
 		checkDownloadButtonState()
 		
-		let totalSize = totalFileSizeToDownload()
-        
-        totallabel.attributedStringValue = NSAttributedString(string: byteFormatter.stringFromByteCount(totalSize), attributes: attributesForTextLabelRight)
+		updateTotalToDownloadLabel()
     }
 	
 	@IBAction func allSDChecked(sender: NSButton) {
@@ -281,9 +279,7 @@ class ViewController: NSViewController, NSURLSessionDelegate, NSURLSessionDataDe
 		
 		checkDownloadButtonState()
 		
-		let totalSize = totalFileSizeToDownload()
-		
-        totallabel.attributedStringValue = NSAttributedString(string: byteFormatter.stringFromByteCount(totalSize), attributes: attributesForTextLabelRight)
+		updateTotalToDownloadLabel()
     }
 	
 	@IBAction func allHDChecked(sender: NSButton) {
@@ -299,9 +295,7 @@ class ViewController: NSViewController, NSURLSessionDelegate, NSURLSessionDataDe
 		
 		checkDownloadButtonState()
 		
-		let totalSize = totalFileSizeToDownload()
-		
-        totallabel.attributedStringValue = NSAttributedString(string: byteFormatter.stringFromByteCount(totalSize), attributes: attributesForTextLabelRight)
+		updateTotalToDownloadLabel()
     }
 	
 	@IBAction func allCodeChecked(sender: NSButton) {
@@ -318,10 +312,7 @@ class ViewController: NSViewController, NSURLSessionDelegate, NSURLSessionDataDe
 		
 		checkDownloadButtonState()
 		
-		let totalSize = totalFileSizeToDownload()
-		
-        totallabel.attributedStringValue = NSAttributedString(string: byteFormatter.stringFromByteCount(totalSize), attributes: attributesForTextLabelRight)
-
+		updateTotalToDownloadLabel()
     }
 	
 	
@@ -345,10 +336,8 @@ class ViewController: NSViewController, NSURLSessionDelegate, NSURLSessionDataDe
 		
 		checkDownloadButtonState()
 		
-		let totalSize = totalFileSizeToDownload()
+		updateTotalToDownloadLabel()
 		
-        totallabel.attributedStringValue = NSAttributedString(string: byteFormatter.stringFromByteCount(totalSize), attributes: attributesForTextLabelRight)
-        
 		coordinateAllCheckBoxUI()
 	}
 	
@@ -395,7 +384,38 @@ class ViewController: NSViewController, NSURLSessionDelegate, NSURLSessionDataDe
 			DownloadFileManager.sharedManager.stopFileDownloads()   // Causes dispatch_group_notify to fire in downloadFiles eventually when tasks finished/cancelled
 		}
 		else {
-			startDownloading()
+			let totalSize = totalFileSizeToDownload()
+			
+			let (hasSpace, freeSpace) = hasReasonableFreeDiskSpace(totalSize)
+			
+			if hasSpace {
+				startDownloading()
+			}
+			else {
+				
+				let neededSpace = totalSize - freeSpace
+				
+				let readableFreeSpace = byteFormatter.stringFromByteCount(freeSpace)
+				let readableNeededSpace = byteFormatter.stringFromByteCount(neededSpace)
+				
+				let alert = NSAlert()
+				alert.messageText = "Friendly Warning"
+				alert.informativeText = "It looks like you don't have enough free disk space for the selected downloads, you currently have \(readableFreeSpace) available, so would need to free up at least \(readableNeededSpace)."
+				alert.addButtonWithTitle("I understand, GO!")
+				alert.addButtonWithTitle("Let me think about it")
+
+				if let window = NSApplication.sharedApplication().windows.first {
+
+					alert.beginSheetModalForWindow(window, completionHandler: { [unowned self] (returnCode) -> Void in
+							if returnCode == NSAlertFirstButtonReturn {
+								self.startDownloading()
+							}
+							if returnCode == NSAlertSecondButtonReturn {
+								
+							}
+						})
+				}
+			}
 		}
 	}
 	
@@ -449,10 +469,8 @@ class ViewController: NSViewController, NSURLSessionDelegate, NSURLSessionDataDe
 		
 		resetAllCheckboxesAndDisable()
 		
-		let totalSize = totalFileSizeToDownload()
+		updateTotalToDownloadLabel()
 		
-        totallabel.attributedStringValue = NSAttributedString(string: byteFormatter.stringFromByteCount(totalSize), attributes: attributesForTextLabelRight)
-        
 		resetDownloadUI()
 		
 		startDownload.enabled = false
@@ -523,6 +541,8 @@ class ViewController: NSViewController, NSURLSessionDelegate, NSURLSessionDataDe
                         self.myTableView.reloadData()
                         
                         self.updateCombinePDFButtonState()
+						
+						self.updateTotalToDownloadLabel()
                     }
                     else {
                         self.resetUIForYearFetch()
@@ -885,10 +905,8 @@ class ViewController: NSViewController, NSURLSessionDelegate, NSURLSessionDataDe
 		
 		updateTotalProgress()
 		oflabel.hidden = false
-		let totalSize = totalFileSizeToDownload()
-
-        totallabel.attributedStringValue = NSAttributedString(string: byteFormatter.stringFromByteCount(totalSize), attributes: attributesForTextLabelRight)
-        
+		updateTotalToDownloadLabel()
+		
 		startUpdatingDockIcon()
 		
 		downloadFiles(filesToDownload)
@@ -917,6 +935,33 @@ class ViewController: NSViewController, NSURLSessionDelegate, NSURLSessionDataDe
         updateCombinePDFButtonState()
         
         print("Completed File Downloads")
+	}
+	
+	func hasReasonableFreeDiskSpace(projectedSpaceNeeded : Int64) -> (Bool, Int64) {
+		
+		let fileManager = NSFileManager.defaultManager()
+		
+		do {
+			let attributes = try fileManager.attributesOfFileSystemForPath("/")
+			let freeSpace = Int64((attributes[NSFileSystemFreeSize] as! NSNumber) as Double)
+			
+			let readableNeeded = byteFormatter.stringFromByteCount(projectedSpaceNeeded)
+			let readableFreeSpace = byteFormatter.stringFromByteCount(freeSpace)
+
+			print("Needed Space - \(readableNeeded)")
+			print("Free Space - \(readableFreeSpace)")
+			
+			if freeSpace > projectedSpaceNeeded {
+				return (true, freeSpace)
+			}
+			else {
+				return (false, freeSpace)
+			}
+		}
+		catch {
+			print(error)
+			return (false, 0)
+		}
 	}
 	
     // MARK: - UI State changes / checks
@@ -973,7 +1018,28 @@ class ViewController: NSViewController, NSURLSessionDelegate, NSURLSessionDataDe
         
         return totalBytesToDownload
     }
-    
+	
+	func updateTotalToDownloadLabel() {
+		
+		let totalSize = totalFileSizeToDownload()
+		
+		let attrib : [String : NSObject]
+		
+		let (hasSpace, _) = hasReasonableFreeDiskSpace(totalSize)
+
+		if hasSpace {
+			attrib = attributesForTextLabelRight
+		}
+		else {
+			
+			var newAttrib = attributesForTextLabelRight
+			newAttrib[NSForegroundColorAttributeName] = NSColor.redColor()
+			attrib = newAttrib
+		}
+		
+		totallabel.attributedStringValue = NSAttributedString(string: byteFormatter.stringFromByteCount(totalSize), attributes: attrib)
+	}
+	
 	func checkDownloadButtonState () {
 		
 		let totalToFetch = totalFileSizeToDownload()
@@ -1122,7 +1188,7 @@ class ViewController: NSViewController, NSURLSessionDelegate, NSURLSessionDataDe
                     }
                 }
             }
-            
+			            
             if numberOfPDFsPresent > 1 {
                 combinePDFButton.enabled = true
             }
