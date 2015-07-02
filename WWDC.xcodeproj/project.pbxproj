@@ -49,12 +49,12 @@
 		A96E4D611B2D44910030F908 /* libxml2.2.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libxml2.2.dylib; path = /usr/lib/libxml2.2.dylib; sourceTree = "<absolute>"; };
 		A96E4D631B2EB2770030F908 /* WWDCSession.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = WWDCSession.swift; path = Common/WWDCSession.swift; sourceTree = "<group>"; };
 		A96E4D651B2F62340030F908 /* StringExtras.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = StringExtras.swift; path = Common/StringExtras.swift; sourceTree = "<group>"; };
-		A983F8511B2D15A700ED681E /* TFHpple.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = TFHpple.h; path = ../Common/TFHpple.h; sourceTree = "<group>"; };
-		A983F8521B2D15A700ED681E /* TFHpple.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = TFHpple.m; path = ../Common/TFHpple.m; sourceTree = "<group>"; };
-		A983F8531B2D15A700ED681E /* TFHppleElement.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = TFHppleElement.h; path = ../Common/TFHppleElement.h; sourceTree = "<group>"; };
-		A983F8541B2D15A700ED681E /* TFHppleElement.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = TFHppleElement.m; path = ../Common/TFHppleElement.m; sourceTree = "<group>"; };
-		A983F8551B2D15A700ED681E /* XPathQuery.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = XPathQuery.h; path = ../Common/XPathQuery.h; sourceTree = "<group>"; };
-		A983F8561B2D15A700ED681E /* XPathQuery.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = XPathQuery.m; path = ../Common/XPathQuery.m; sourceTree = "<group>"; };
+		A983F8511B2D15A700ED681E /* TFHpple.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = TFHpple.h; path = Common/TFHpple.h; sourceTree = "<group>"; };
+		A983F8521B2D15A700ED681E /* TFHpple.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = TFHpple.m; path = Common/TFHpple.m; sourceTree = "<group>"; };
+		A983F8531B2D15A700ED681E /* TFHppleElement.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = TFHppleElement.h; path = Common/TFHppleElement.h; sourceTree = "<group>"; };
+		A983F8541B2D15A700ED681E /* TFHppleElement.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = TFHppleElement.m; path = Common/TFHppleElement.m; sourceTree = "<group>"; };
+		A983F8551B2D15A700ED681E /* XPathQuery.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = XPathQuery.h; path = Common/XPathQuery.h; sourceTree = "<group>"; };
+		A983F8561B2D15A700ED681E /* XPathQuery.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = XPathQuery.m; path = Common/XPathQuery.m; sourceTree = "<group>"; };
 		A9F9BADA1B34689300BEA874 /* BlockWrappers.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = BlockWrappers.swift; path = Common/BlockWrappers.swift; sourceTree = "<group>"; };
 		A9F9BADB1B34689300BEA874 /* DownloadFileManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = DownloadFileManager.swift; path = Common/DownloadFileManager.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
