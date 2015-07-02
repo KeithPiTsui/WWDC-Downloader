@@ -13,6 +13,9 @@
 		4479EA761B3C114600D5558D /* CheckBoxTableCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4479EA751B3C114600D5558D /* CheckBoxTableCell.swift */; };
 		44A647911B44634900157487 /* ToolbarHookableWindowSubclass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 44A647901B44634900157487 /* ToolbarHookableWindowSubclass.swift */; };
 		44D546221B4296FB00197B23 /* DownloadYearInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 44D546211B4296FB00197B23 /* DownloadYearInfo.swift */; };
+		44F5EE8E1B457B9800CE683D /* TFHpple.m in Sources */ = {isa = PBXBuildFile; fileRef = 44F5EE891B457B9800CE683D /* TFHpple.m */; };
+		44F5EE8F1B457B9800CE683D /* TFHppleElement.m in Sources */ = {isa = PBXBuildFile; fileRef = 44F5EE8B1B457B9800CE683D /* TFHppleElement.m */; };
+		44F5EE901B457B9800CE683D /* XPathQuery.m in Sources */ = {isa = PBXBuildFile; fileRef = 44F5EE8D1B457B9800CE683D /* XPathQuery.m */; };
 		A90D14EB1B41A8CF00A30590 /* FetchFileSizeManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = A90D14EA1B41A8CF00A30590 /* FetchFileSizeManager.swift */; };
 		A90D14ED1B41C5F000A30590 /* DownloadTranscriptManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = A90D14EC1B41C5F000A30590 /* DownloadTranscriptManager.swift */; };
 		A9528F271B34C40E002290D3 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9528F261B34C40E002290D3 /* AppDelegate.swift */; };
@@ -23,9 +26,6 @@
 		A9528F361B34C427002290D3 /* BlockWrappers.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9F9BADA1B34689300BEA874 /* BlockWrappers.swift */; };
 		A9528F371B34C427002290D3 /* DownloadFileManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9F9BADB1B34689300BEA874 /* DownloadFileManager.swift */; };
 		A9528F381B34C427002290D3 /* StringExtras.swift in Sources */ = {isa = PBXBuildFile; fileRef = A96E4D651B2F62340030F908 /* StringExtras.swift */; };
-		A9528F3B1B34C45D002290D3 /* TFHpple.m in Sources */ = {isa = PBXBuildFile; fileRef = A983F8521B2D15A700ED681E /* TFHpple.m */; };
-		A9528F3C1B34C45D002290D3 /* TFHppleElement.m in Sources */ = {isa = PBXBuildFile; fileRef = A983F8541B2D15A700ED681E /* TFHppleElement.m */; };
-		A9528F3D1B34C45D002290D3 /* XPathQuery.m in Sources */ = {isa = PBXBuildFile; fileRef = A983F8561B2D15A700ED681E /* XPathQuery.m */; };
 		A97D90A11B34CDF70008CED5 /* libxml2.2.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = A96E4D611B2D44910030F908 /* libxml2.2.dylib */; };
 /* End PBXBuildFile section */
 
@@ -37,6 +37,12 @@
 		44A647901B44634900157487 /* ToolbarHookableWindowSubclass.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ToolbarHookableWindowSubclass.swift; sourceTree = "<group>"; };
 		44D546211B4296FB00197B23 /* DownloadYearInfo.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = DownloadYearInfo.swift; path = Common/DownloadYearInfo.swift; sourceTree = "<group>"; };
 		44DBD9EB1B3AC4C60097E20C /* .gitignore */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = .gitignore; sourceTree = "<group>"; };
+		44F5EE881B457B9800CE683D /* TFHpple.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = TFHpple.h; path = Common/TFHpple.h; sourceTree = SOURCE_ROOT; };
+		44F5EE891B457B9800CE683D /* TFHpple.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = TFHpple.m; path = Common/TFHpple.m; sourceTree = SOURCE_ROOT; };
+		44F5EE8A1B457B9800CE683D /* TFHppleElement.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = TFHppleElement.h; path = Common/TFHppleElement.h; sourceTree = SOURCE_ROOT; };
+		44F5EE8B1B457B9800CE683D /* TFHppleElement.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = TFHppleElement.m; path = Common/TFHppleElement.m; sourceTree = SOURCE_ROOT; };
+		44F5EE8C1B457B9800CE683D /* XPathQuery.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = XPathQuery.h; path = Common/XPathQuery.h; sourceTree = SOURCE_ROOT; };
+		44F5EE8D1B457B9800CE683D /* XPathQuery.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = XPathQuery.m; path = Common/XPathQuery.m; sourceTree = SOURCE_ROOT; };
 		A90D14EA1B41A8CF00A30590 /* FetchFileSizeManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = FetchFileSizeManager.swift; path = Common/FetchFileSizeManager.swift; sourceTree = "<group>"; };
 		A90D14EC1B41C5F000A30590 /* DownloadTranscriptManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = DownloadTranscriptManager.swift; path = Common/DownloadTranscriptManager.swift; sourceTree = "<group>"; };
 		A9528F241B34C40D002290D3 /* WWDCapp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = WWDCapp.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -49,12 +55,6 @@
 		A96E4D611B2D44910030F908 /* libxml2.2.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libxml2.2.dylib; path = /usr/lib/libxml2.2.dylib; sourceTree = "<absolute>"; };
 		A96E4D631B2EB2770030F908 /* WWDCSession.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = WWDCSession.swift; path = Common/WWDCSession.swift; sourceTree = "<group>"; };
 		A96E4D651B2F62340030F908 /* StringExtras.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = StringExtras.swift; path = Common/StringExtras.swift; sourceTree = "<group>"; };
-		A983F8511B2D15A700ED681E /* TFHpple.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = TFHpple.h; path = Common/TFHpple.h; sourceTree = "<group>"; };
-		A983F8521B2D15A700ED681E /* TFHpple.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = TFHpple.m; path = Common/TFHpple.m; sourceTree = "<group>"; };
-		A983F8531B2D15A700ED681E /* TFHppleElement.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = TFHppleElement.h; path = Common/TFHppleElement.h; sourceTree = "<group>"; };
-		A983F8541B2D15A700ED681E /* TFHppleElement.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = TFHppleElement.m; path = Common/TFHppleElement.m; sourceTree = "<group>"; };
-		A983F8551B2D15A700ED681E /* XPathQuery.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = XPathQuery.h; path = Common/XPathQuery.h; sourceTree = "<group>"; };
-		A983F8561B2D15A700ED681E /* XPathQuery.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = XPathQuery.m; path = Common/XPathQuery.m; sourceTree = "<group>"; };
 		A9F9BADA1B34689300BEA874 /* BlockWrappers.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = BlockWrappers.swift; path = Common/BlockWrappers.swift; sourceTree = "<group>"; };
 		A9F9BADB1B34689300BEA874 /* DownloadFileManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = DownloadFileManager.swift; path = Common/DownloadFileManager.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -155,12 +155,12 @@
 		A983F85A1B2D165A00ED681E /* Hpple */ = {
 			isa = PBXGroup;
 			children = (
-				A983F8511B2D15A700ED681E /* TFHpple.h */,
-				A983F8521B2D15A700ED681E /* TFHpple.m */,
-				A983F8531B2D15A700ED681E /* TFHppleElement.h */,
-				A983F8541B2D15A700ED681E /* TFHppleElement.m */,
-				A983F8551B2D15A700ED681E /* XPathQuery.h */,
-				A983F8561B2D15A700ED681E /* XPathQuery.m */,
+				44F5EE881B457B9800CE683D /* TFHpple.h */,
+				44F5EE891B457B9800CE683D /* TFHpple.m */,
+				44F5EE8A1B457B9800CE683D /* TFHppleElement.h */,
+				44F5EE8B1B457B9800CE683D /* TFHppleElement.m */,
+				44F5EE8C1B457B9800CE683D /* XPathQuery.h */,
+				44F5EE8D1B457B9800CE683D /* XPathQuery.m */,
 			);
 			name = Hpple;
 			path = WWDC;
@@ -264,15 +264,15 @@
 				A9528F371B34C427002290D3 /* DownloadFileManager.swift in Sources */,
 				4408A7F91B43F20A00AB4A10 /* PDFMerge.swift in Sources */,
 				A9528F381B34C427002290D3 /* StringExtras.swift in Sources */,
+				44F5EE8F1B457B9800CE683D /* TFHppleElement.m in Sources */,
 				4479EA761B3C114600D5558D /* CheckBoxTableCell.swift in Sources */,
 				442D010B1B399A9D0081C56C /* FileInfo.swift in Sources */,
-				A9528F3D1B34C45D002290D3 /* XPathQuery.m in Sources */,
-				A9528F3C1B34C45D002290D3 /* TFHppleElement.m in Sources */,
-				A9528F3B1B34C45D002290D3 /* TFHpple.m in Sources */,
+				44F5EE8E1B457B9800CE683D /* TFHpple.m in Sources */,
 				A9528F351B34C427002290D3 /* WWDCSession.swift in Sources */,
 				A90D14EB1B41A8CF00A30590 /* FetchFileSizeManager.swift in Sources */,
 				A9528F361B34C427002290D3 /* BlockWrappers.swift in Sources */,
 				A9528F271B34C40E002290D3 /* AppDelegate.swift in Sources */,
+				44F5EE901B457B9800CE683D /* XPathQuery.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -344,6 +344,7 @@
 				DEBUG_INFORMATION_FORMAT = dwarf;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				ENABLE_TESTABILITY = YES;
+				FRAMEWORK_SEARCH_PATHS = "";
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_NO_COMMON_BLOCKS = YES;
@@ -358,9 +359,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				HEADER_SEARCH_PATHS = (
-					"$SDKROOT/usr/include/libxml2\n$SDKROOT/usr/include/libxml2\n$SDKROOT/usr/include/libxml2\n",
-				);
+				HEADER_SEARCH_PATHS = $SDKROOT/usr/include/libxml2;
 				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				MACOSX_DEPLOYMENT_TARGET = 10.10;
 				MTL_ENABLE_DEBUG_INFO = YES;
@@ -368,6 +367,7 @@
 				OTHER_LDFLAGS = "$(inherited)";
 				SDKROOT = iphoneos;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				USER_HEADER_SEARCH_PATHS = "";
 			};
 			name = Debug;
 		};
@@ -393,6 +393,7 @@
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				ENABLE_NS_ASSERTIONS = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				FRAMEWORK_SEARCH_PATHS = "";
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_NO_COMMON_BLOCKS = YES;
 				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
@@ -401,14 +402,13 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				HEADER_SEARCH_PATHS = (
-					"$SDKROOT/usr/include/libxml2\n$SDKROOT/usr/include/libxml2\n$SDKROOT/usr/include/libxml2\n",
-				);
+				HEADER_SEARCH_PATHS = $SDKROOT/usr/include/libxml2;
 				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				MACOSX_DEPLOYMENT_TARGET = 10.10;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				OTHER_LDFLAGS = "$(inherited)";
 				SDKROOT = iphoneos;
+				USER_HEADER_SEARCH_PATHS = "";
 				VALIDATE_PRODUCT = YES;
 			};
 			name = Release;
