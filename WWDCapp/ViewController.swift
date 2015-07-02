@@ -50,7 +50,17 @@ class ViewController: NSViewController, NSURLSessionDelegate, NSURLSessionDataDe
 			return NSSearchField()
 		}
 	}
-    
+	
+	var combineProgressLabel: NSTextField! {
+		get {
+			if let windowController = NSApplication.sharedApplication().windows.first?.windowController  as? ToolbarHookableWindowSubclass {
+				return windowController.combineProgressLabel
+			}
+			assertionFailure("IBOutlet Fail!")
+			return NSTextField()
+		}
+	}
+	
     var combinePDFIndicator: NSProgressIndicator! {
         get {
             if let windowController = NSApplication.sharedApplication().windows.first?.windowController  as? ToolbarHookableWindowSubclass {
@@ -236,17 +246,26 @@ class ViewController: NSViewController, NSURLSessionDelegate, NSURLSessionDataDe
         
         switch title {
         case "2015":
-            PDFMerge.merge(pdfURLArray, year: .WWDC2015, completionHandler: { [unowned self] (url) in
-                self.updateUIAfterCombiningPDFAndDisplay(url)
-            })
+			PDFMerge.merge(pdfURLArray, year: .WWDC2015, progressHandler: { (numberProcessed) in
+					self.updateUIAfterEachPDFProcessed(numberProcessed)
+				},
+				completionHandler: { [unowned self] (url) in
+					self.updateUIAfterCombiningPDFAndDisplay(url)
+				})
         case "2014":
-            PDFMerge.merge(pdfURLArray, year: .WWDC2014, completionHandler: { [unowned self] (url) in
-                self.updateUIAfterCombiningPDFAndDisplay(url)
-            })
+			PDFMerge.merge(pdfURLArray, year: .WWDC2014, progressHandler: { (numberProcessed) in
+					self.updateUIAfterEachPDFProcessed(numberProcessed)
+				},
+				completionHandler: { [unowned self] (url) in
+					self.updateUIAfterCombiningPDFAndDisplay(url)
+				})
         case "2013":
-            PDFMerge.merge(pdfURLArray, year: .WWDC2013, completionHandler: { [unowned self] (url) in
-                self.updateUIAfterCombiningPDFAndDisplay(url)
-            })
+			PDFMerge.merge(pdfURLArray, year: .WWDC2013, progressHandler: { (numberProcessed) in
+					self.updateUIAfterEachPDFProcessed(numberProcessed)
+				},
+				completionHandler: { [unowned self] (url) in
+					self.updateUIAfterCombiningPDFAndDisplay(url)
+				})
         default:
             break
         }
@@ -461,6 +480,8 @@ class ViewController: NSViewController, NSURLSessionDelegate, NSURLSessionDataDe
         isYearInfoFetchComplete = false
         
 		isFiltered = false
+		
+		combineProgressLabel.stringValue = ""
 		
 		searchField.stringValue = ""
 		
@@ -983,7 +1004,7 @@ class ViewController: NSViewController, NSURLSessionDelegate, NSURLSessionDataDe
             
             dispatch_async(dispatch_get_main_queue(), { [unowned self] in
                 
-                self.currentlabel.attributedStringValue = NSAttributedString(string: self.byteFormatter.stringFromByteCount(currentDownloadBytes), attributes: self.attributesForTextLabelLeft)
+                self.currentlabel.stringValue = self.byteFormatter.stringFromByteCount(currentDownloadBytes)
                 
                 let progress = Float(currentDownloadBytes)/Float(self.totalBytesToDownload)
                 
@@ -1036,47 +1057,38 @@ class ViewController: NSViewController, NSURLSessionDelegate, NSURLSessionDataDe
 		
 		let (totalSize, _) = selectedDownloadInformation()
 		
-		let attrib : [String : NSObject]
-		
 		let (hasSpace, _) = hasReasonableFreeDiskSpace(totalSize)
 
 		if hasSpace {
-			attrib = attributesForTextLabelRight
+			totallabel.textColor = NSColor.labelColor()
 		}
 		else {
-			
-			var newAttrib = attributesForTextLabelRight
-			newAttrib[NSForegroundColorAttributeName] = NSColor.redColor()
-			attrib = newAttrib
+			totallabel.textColor = NSColor.redColor()
 		}
 		
-		totallabel.attributedStringValue = NSAttributedString(string: byteFormatter.stringFromByteCount(totalSize), attributes: attrib)
+		totallabel.stringValue = byteFormatter.stringFromByteCount(totalSize)
 	}
 	
 	func checkDownloadButtonState () {
 		
 		let (_, totalToFetch) = selectedDownloadInformation()
 		
-		let pstyle = NSMutableParagraphStyle()
-		pstyle.alignment = NSTextAlignment.Right
-		let attributes = [ NSForegroundColorAttributeName : NSColor.labelColor(), NSParagraphStyleAttributeName : pstyle, NSFontAttributeName : NSFont.systemFontOfSize(NSFont.systemFontSizeForControlSize(NSControlSize.MiniControlSize))]
-		
 		if totalToFetch == 0 {
 			startDownload.enabled = false
-			totalDescriptionlabel.attributedStringValue = NSAttributedString(string: "total:", attributes: attributes)
+			totalDescriptionlabel.stringValue = "total:"
 		}
 		else {
 			startDownload.enabled = true
-			totalDescriptionlabel.attributedStringValue = NSAttributedString(string: "\(totalToFetch) files, total:", attributes: attributes)
+			totalDescriptionlabel.stringValue = "\(totalToFetch) files, total:"
 		}
 	}
 	
    	func resetDownloadUI() {
 		
-		currentlabel.attributedStringValue = NSAttributedString()
+		currentlabel.stringValue = ""
 		oflabel.hidden = true
         
-        totallabel.attributedStringValue = NSAttributedString(string: byteFormatter.stringFromByteCount(0), attributes: attributesForTextLabelRight)
+        totallabel.stringValue = byteFormatter.stringFromByteCount(0)
 
 		downloadProgressView.doubleValue = 0
 	}
@@ -1218,13 +1230,19 @@ class ViewController: NSViewController, NSURLSessionDelegate, NSURLSessionDataDe
             }
         }
     }
+	
+	func updateUIAfterEachPDFProcessed(numberProcessed:Int) {
+		
+		combineProgressLabel.stringValue = "Progress: \(numberProcessed)"
+	}
     
     func updateUIAfterCombiningPDFAndDisplay(url:NSURL?) {
         
         if let url = url {
             NSWorkspace.sharedWorkspace().selectFile(url.path, inFileViewerRootedAtPath: url.absoluteString.stringByDeletingLastPathComponent)
         }
-        
+		
+		combineProgressLabel.stringValue = ""
         combinePDFIndicator.stopAnimation(nil)
         combinePDFButton.enabled = true
         startDownload.enabled = true
@@ -1254,14 +1272,6 @@ class ViewController: NSViewController, NSURLSessionDelegate, NSURLSessionDataDe
 		}
 		dockIconUpdateTimer = nil
 	}
-	
-	
-    override var representedObject: AnyObject? {
-        didSet {
-        // Update the view, if already loaded.
-        }
-    }
-
 
 }
 

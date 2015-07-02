@@ -146,8 +146,8 @@
 				A90D14E81B3EDB4F00A30590 /* Modal */,
 				A90D14E71B3EDB4600A30590 /* Downloading */,
 				A90D14E91B3EDB7200A30590 /* Extensions */,
-				A96E4D611B2D44910030F908 /* libxml2.2.dylib */,
 				A983F85A1B2D165A00ED681E /* Hpple */,
+				A96E4D611B2D44910030F908 /* libxml2.2.dylib */,
 			);
 			name = Common;
 			sourceTree = "<group>";

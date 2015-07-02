@@ -15,6 +15,7 @@ class ToolbarHookableWindowSubclass : NSWindowController {
 	@IBOutlet weak var yearFetchIndicator: NSProgressIndicator!
 	@IBOutlet weak var stopFetchButton: NSButton!
 	@IBOutlet weak var searchField: NSSearchField!
+	@IBOutlet weak var combineProgressLabel: NSTextField!
     @IBOutlet weak var combinePDFIndicator: NSProgressIndicator!
     @IBOutlet weak var combinePDFButton: NSButton!
 

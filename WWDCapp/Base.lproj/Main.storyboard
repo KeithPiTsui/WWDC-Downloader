@@ -209,6 +209,21 @@
                                         <animations/>
                                     </progressIndicator>
                                 </toolbarItem>
+                                <toolbarItem implicitItemIdentifier="3211183B-A912-4F3F-AC57-EDE5C1CD161A" label="Custom View" paletteLabel="Custom View" id="BEh-Vj-KiM">
+                                    <nil key="toolTip"/>
+                                    <size key="minSize" width="38" height="15"/>
+                                    <size key="maxSize" width="76" height="15"/>
+                                    <textField key="view" horizontalHuggingPriority="251" verticalHuggingPriority="750" id="Gqc-gf-6kf" userLabel="combine progress">
+                                        <rect key="frame" x="19" y="14" width="38" height="15"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                        <animations/>
+                                        <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" alignment="left" title="Progress: 105" usesSingleLineMode="YES" id="er3-pw-Qxh">
+                                            <font key="font" metaFont="smallSystem"/>
+                                            <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                                            <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
+                                        </textFieldCell>
+                                    </textField>
+                                </toolbarItem>
                             </allowedToolbarItems>
                             <defaultToolbarItems>
                                 <toolbarItem reference="T6z-hy-uca"/>
@@ -216,6 +231,7 @@
                                 <toolbarItem reference="ql1-TC-qy2"/>
                                 <toolbarItem reference="9je-fQ-YGH"/>
                                 <toolbarItem reference="4qA-86-6DG"/>
+                                <toolbarItem reference="BEh-Vj-KiM"/>
                                 <toolbarItem reference="k4i-b5-wK2"/>
                                 <toolbarItem reference="ovu-se-0G5"/>
                             </defaultToolbarItems>
@@ -224,6 +240,7 @@
                     <connections>
                         <outlet property="combinePDFButton" destination="bDF-jX-IoP" id="Haf-rq-kJ2"/>
                         <outlet property="combinePDFIndicator" destination="qo1-AD-SfJ" id="w9U-Vv-Yj1"/>
+                        <outlet property="combineProgressLabel" destination="Gqc-gf-6kf" id="6DL-F2-Xwt"/>
                         <outlet property="searchField" destination="sJr-P1-XUA" id="MuO-Kc-4la"/>
                         <outlet property="stopFetchButton" destination="9wu-A9-w09" id="vYV-aZ-w4i"/>
                         <outlet property="yearFetchIndicator" destination="iez-ZM-vRx" id="6rS-E2-pWz"/>

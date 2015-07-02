@@ -11,7 +11,7 @@ import CoreGraphics
 
 class PDFMerge : NSObject {
 	
-    class func merge(pdfs : [NSURL], year : WWDCYear, completionHandler :(url: NSURL?) -> ()) {
+    class func merge(pdfs : [NSURL], year : WWDCYear, progressHandler:((numberProcessed: Int) -> Void), completionHandler :(url: NSURL?) -> ()) {
 		
         if pdfs.count == 0 { completionHandler(url: nil); return}
 	
@@ -24,6 +24,8 @@ class PDFMerge : NSObject {
         guard let writeContext = CGPDFContextCreateWithURL(outputURL, nil, nil) else { completionHandler(url: nil); return }
 
 		print("Creating Enormous Combined PDF document...")
+		
+		var numberOfPDFsProcessed = 0
 		
         dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), {
 
@@ -43,6 +45,12 @@ class PDFMerge : NSObject {
                                     CGContextEndPage(writeContext)
                                 }
                             }
+							
+							numberOfPDFsProcessed++
+							
+							dispatch_async(dispatch_get_main_queue()) {
+								progressHandler(numberProcessed: numberOfPDFsProcessed)
+							}
                         }
                     }
                 }
