@@ -27,7 +27,7 @@ class ViewController: NSViewController, NSURLSessionDelegate, NSURLSessionDataDe
 				return windowController.yearFetchIndicator
 			}
 			assertionFailure("IBOutlet Fail!")
-			return NSProgressIndicator() //
+			return NSProgressIndicator()
 		}
 	}
 	
@@ -37,7 +37,7 @@ class ViewController: NSViewController, NSURLSessionDelegate, NSURLSessionDataDe
 				return windowController.stopFetchButton
 			}
 			assertionFailure("IBOutlet Fail!")
-			return NSButton() //
+			return NSButton()
 		}
 	}
 		
@@ -47,7 +47,7 @@ class ViewController: NSViewController, NSURLSessionDelegate, NSURLSessionDataDe
 				return windowController.searchField
 			}
 			assertionFailure("IBOutlet Fail!")
-			return NSSearchField() //
+			return NSSearchField()
 		}
 	}
     
@@ -57,7 +57,7 @@ class ViewController: NSViewController, NSURLSessionDelegate, NSURLSessionDataDe
                 return windowController.combinePDFIndicator
             }
             assertionFailure("IBOutlet Fail!")
-            return NSProgressIndicator() //
+            return NSProgressIndicator()
         }
     }
     
@@ -67,10 +67,11 @@ class ViewController: NSViewController, NSURLSessionDelegate, NSURLSessionDataDe
                 return windowController.combinePDFButton
             }
             assertionFailure("IBOutlet Fail!")
-            return NSButton() //
+            return NSButton()
         }
     }
 
+	
 	// MARK: IBOutlets
     @IBOutlet weak var toolbarVisualEffectView: NSVisualEffectView!
 	@IBOutlet weak var visualEffectView: NSVisualEffectView!
@@ -80,17 +81,18 @@ class ViewController: NSViewController, NSURLSessionDelegate, NSURLSessionDataDe
 	@IBOutlet weak var allHDCheckBox: NSButton!
 	@IBOutlet weak var allPDFCheckBox: NSButton!
 	
-	@IBOutlet weak var startDownload: NSButton!
-	
 	@IBOutlet weak var myTableView: NSTableView!
-	
 	@IBOutlet weak var hideDescriptionsCheckBox: NSButton!
 	
+	@IBOutlet weak var totalDescriptionlabel: NSTextField!
     @IBOutlet weak var currentlabel: NSTextField!
     @IBOutlet weak var oflabel: NSTextField!
     @IBOutlet weak var totallabel: NSTextField!
 
     @IBOutlet weak var downloadProgressView: NSProgressIndicator!
+
+	@IBOutlet weak var startDownload: NSButton!
+	
 
 	// MARK: Variables
 	var allWWDCSessionsArray : [WWDCSession] = []
@@ -384,7 +386,8 @@ class ViewController: NSViewController, NSURLSessionDelegate, NSURLSessionDataDe
 			DownloadFileManager.sharedManager.stopFileDownloads()   // Causes dispatch_group_notify to fire in downloadFiles eventually when tasks finished/cancelled
 		}
 		else {
-			let totalSize = totalFileSizeToDownload()
+			
+			let (totalSize, _) = selectedDownloadInformation()
 			
 			let (hasSpace, freeSpace) = hasReasonableFreeDiskSpace(totalSize)
 			
@@ -543,6 +546,8 @@ class ViewController: NSViewController, NSURLSessionDelegate, NSURLSessionDataDe
                         self.updateCombinePDFButtonState()
 						
 						self.updateTotalToDownloadLabel()
+						
+						self.checkDownloadButtonState()
                     }
                     else {
                         self.resetUIForYearFetch()
@@ -945,11 +950,10 @@ class ViewController: NSViewController, NSURLSessionDelegate, NSURLSessionDataDe
 			let attributes = try fileManager.attributesOfFileSystemForPath("/")
 			let freeSpace = Int64((attributes[NSFileSystemFreeSize] as! NSNumber) as Double)
 			
-			let readableNeeded = byteFormatter.stringFromByteCount(projectedSpaceNeeded)
-			let readableFreeSpace = byteFormatter.stringFromByteCount(freeSpace)
-
-			print("Needed Space - \(readableNeeded)")
-			print("Free Space - \(readableFreeSpace)")
+//			let readableNeeded = byteFormatter.stringFromByteCount(projectedSpaceNeeded)
+//			let readableFreeSpace = byteFormatter.stringFromByteCount(freeSpace)
+//			print("Needed Space - \(readableNeeded)")
+//			print("Free Space - \(readableFreeSpace)")
 			
 			if freeSpace > projectedSpaceNeeded {
 				return (true, freeSpace)
@@ -988,40 +992,49 @@ class ViewController: NSViewController, NSURLSessionDelegate, NSURLSessionDataDe
             })
     }
     
-    func totalFileSizeToDownload() -> Int64 {
+	func selectedDownloadInformation() -> (totalSize: Int64, numberOfFiles: Int) {
         
         totalBytesToDownload = 0
-        
+		
+		var totalBytes : Int64 = 0
+		var numberOfFiles = 0
+
         for wwdcSession in self.allWWDCSessionsArray {
             
             if let file = wwdcSession.pdfFile  where (wwdcSession.pdfFile?.shouldDownloadFile == true && wwdcSession.pdfFile?.fileSize > 0 && wwdcSession.pdfFile?.isFileAlreadyDownloaded == false) {
                 if let fileSize = file.fileSize {
-                    totalBytesToDownload += Int64(fileSize)
+                    totalBytes += Int64(fileSize)
+					numberOfFiles++
                 }
             }
             if let file = wwdcSession.sdFile where (wwdcSession.sdFile?.shouldDownloadFile == true && wwdcSession.sdFile?.fileSize > 0 && wwdcSession.sdFile?.isFileAlreadyDownloaded == false) {
                 if let fileSize = file.fileSize {
-                    totalBytesToDownload += Int64(fileSize)
+                    totalBytes += Int64(fileSize)
+					numberOfFiles++
                 }
             }
             if let file = wwdcSession.hdFile  where (wwdcSession.hdFile?.shouldDownloadFile == true && wwdcSession.hdFile?.fileSize > 0 && wwdcSession.hdFile?.isFileAlreadyDownloaded == false) {
                 if let fileSize = file.fileSize {
-                    totalBytesToDownload += Int64(fileSize)
+                    totalBytes += Int64(fileSize)
+					numberOfFiles++
                 }
             }
             for sample in wwdcSession.sampleCodeArray where (sample.shouldDownloadFile == true && sample.fileSize > 0 && sample.isFileAlreadyDownloaded == false) {
                 if let fileSize = sample.fileSize {
-                    totalBytesToDownload += Int64(fileSize)
+                    totalBytes += Int64(fileSize)
+					numberOfFiles++
                 }
             }
         }
-        
-        return totalBytesToDownload
+		
+		totalBytesToDownload = totalBytes
+		
+        return (totalBytes, numberOfFiles)
     }
 	
 	func updateTotalToDownloadLabel() {
 		
-		let totalSize = totalFileSizeToDownload()
+		let (totalSize, _) = selectedDownloadInformation()
 		
 		let attrib : [String : NSObject]
 		
@@ -1042,13 +1055,19 @@ class ViewController: NSViewController, NSURLSessionDelegate, NSURLSessionDataDe
 	
 	func checkDownloadButtonState () {
 		
-		let totalToFetch = totalFileSizeToDownload()
+		let (_, totalToFetch) = selectedDownloadInformation()
+		
+		let pstyle = NSMutableParagraphStyle()
+		pstyle.alignment = NSTextAlignment.Right
+		let attributes = [ NSForegroundColorAttributeName : NSColor.labelColor(), NSParagraphStyleAttributeName : pstyle, NSFontAttributeName : NSFont.systemFontOfSize(NSFont.systemFontSizeForControlSize(NSControlSize.MiniControlSize))]
 		
 		if totalToFetch == 0 {
 			startDownload.enabled = false
+			totalDescriptionlabel.attributedStringValue = NSAttributedString(string: "total:", attributes: attributes)
 		}
 		else {
 			startDownload.enabled = true
+			totalDescriptionlabel.attributedStringValue = NSAttributedString(string: "\(totalToFetch) files, total:", attributes: attributes)
 		}
 	}
 	

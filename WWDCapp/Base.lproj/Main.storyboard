@@ -877,7 +877,7 @@
                                         </connections>
                                     </button>
                                     <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="OeA-4Q-HGv">
-                                        <rect key="frame" x="685" y="46" width="60" height="11"/>
+                                        <rect key="frame" x="622" y="46" width="123" height="11"/>
                                         <animations/>
                                         <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" alignment="right" title="total:" id="s1a-rk-dpV">
                                             <font key="font" metaFont="miniSystem"/>
@@ -920,6 +920,7 @@
                         <outlet property="oflabel" destination="C8t-xS-mu2" id="IvW-Va-OWf"/>
                         <outlet property="startDownload" destination="2Uk-zV-FYf" id="wan-PT-H8F"/>
                         <outlet property="toolbarVisualEffectView" destination="BmC-e0-Fwn" id="0lp-83-Tso"/>
+                        <outlet property="totalDescriptionlabel" destination="OeA-4Q-HGv" id="15I-ga-6Yu"/>
                         <outlet property="totallabel" destination="LdI-VT-wO4" id="NHk-ad-W5R"/>
                         <outlet property="visualEffectView" destination="ZwT-7T-fue" id="GF7-Xc-3Qf"/>
                     </connections>

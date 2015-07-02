@@ -71,6 +71,23 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		444D79881B456B5100F552C4 /* Cells */ = {
+			isa = PBXGroup;
+			children = (
+				446C7A1C1B42D3C7007CA3C2 /* SessionNameDescriptionCell.swift */,
+				4479EA751B3C114600D5558D /* CheckBoxTableCell.swift */,
+			);
+			name = Cells;
+			sourceTree = "<group>";
+		};
+		444D79891B456B6600F552C4 /* Subclasses */ = {
+			isa = PBXGroup;
+			children = (
+				44A647901B44634900157487 /* ToolbarHookableWindowSubclass.swift */,
+			);
+			name = Subclasses;
+			sourceTree = "<group>";
+		};
 		4FCD057A3AFE451CCAACFA6D /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
@@ -110,14 +127,13 @@
 		A9528F251B34C40E002290D3 /* WWDCapp */ = {
 			isa = PBXGroup;
 			children = (
-				A9528F3E1B34C5D4002290D3 /* WWDCapp-Bridging-Header.h */,
-				A9528F261B34C40E002290D3 /* AppDelegate.swift */,
+				444D79891B456B6600F552C4 /* Subclasses */,
+				444D79881B456B5100F552C4 /* Cells */,
 				A9528F281B34C40E002290D3 /* ViewController.swift */,
-				44A647901B44634900157487 /* ToolbarHookableWindowSubclass.swift */,
-				4479EA751B3C114600D5558D /* CheckBoxTableCell.swift */,
-				446C7A1C1B42D3C7007CA3C2 /* SessionNameDescriptionCell.swift */,
+				A9528F261B34C40E002290D3 /* AppDelegate.swift */,
 				A9528F2C1B34C40E002290D3 /* Main.storyboard */,
 				A9528F2A1B34C40E002290D3 /* Assets.xcassets */,
+				A9528F3E1B34C5D4002290D3 /* WWDCapp-Bridging-Header.h */,
 				A9528F2F1B34C40E002290D3 /* Info.plist */,
 			);
 			path = WWDCapp;
