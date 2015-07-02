@@ -86,6 +86,8 @@ class ViewController: NSViewController, NSURLSessionDelegate, NSURLSessionDataDe
     @IBOutlet weak var toolbarVisualEffectView: NSVisualEffectView!
 	@IBOutlet weak var visualEffectView: NSVisualEffectView!
 
+	@IBOutlet weak var loggingLabel: NSTextField!
+	
 	@IBOutlet weak var allCodeCheckbox: NSButton!
 	@IBOutlet weak var allSDCheckBox: NSButton!
 	@IBOutlet weak var allHDCheckBox: NSButton!
@@ -472,6 +474,8 @@ class ViewController: NSViewController, NSURLSessionDelegate, NSURLSessionDataDe
 	}
 	
 	func resetUIForYearFetch () {
+		
+		loggingLabel.stringValue = ""
         
         combinePDFButton.enabled = false
         
@@ -526,6 +530,12 @@ class ViewController: NSViewController, NSURLSessionDelegate, NSURLSessionDataDe
 					self.myTableView.reloadData()
 				}
 			},
+			messageForUIupdateHandler: { [unowned self] (updateMessage) -> Void in
+				
+				dispatch_async(dispatch_get_main_queue()) { [unowned self] in
+					self.loggingLabel.stringValue = updateMessage
+				}
+			},
 			individualSessionUpdateHandler: { [unowned self] (session) -> Void in
 				
 				if let index = self.allWWDCSessionsArray.indexOf(session) {
@@ -569,6 +579,12 @@ class ViewController: NSViewController, NSURLSessionDelegate, NSURLSessionDataDe
 						self.updateTotalToDownloadLabel()
 						
 						self.checkDownloadButtonState()
+						
+						let delayTime = dispatch_time(DISPATCH_TIME_NOW, Int64(3 * Double(NSEC_PER_SEC)))
+						dispatch_after(delayTime, dispatch_get_main_queue()) {
+							self.loggingLabel.stringValue = ""
+						}
+						
                     }
                     else {
                         self.resetUIForYearFetch()
