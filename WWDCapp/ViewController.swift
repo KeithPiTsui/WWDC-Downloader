@@ -197,6 +197,7 @@ class ViewController: NSViewController, NSURLSessionDelegate, NSURLSessionDataDe
 					    if wwdcSession.title.localizedStandardContainsString(sender.stringValue.stringByTrimmingCharactersInSet(NSCharacterSet.whitespaceCharacterSet())) {
     						newArray.append(wwdcSession)
     					}
+					
 					} else {
 					    // Fallback on earlier versions
 						let searchTerm = sender.stringValue.stringByTrimmingCharactersInSet(NSCharacterSet.whitespaceCharacterSet())
@@ -501,7 +502,9 @@ class ViewController: NSViewController, NSURLSessionDelegate, NSURLSessionDataDe
 		hideDescriptionsCheckBox.enabled = false
 		
 		hideDescriptionsCheckBox.state = 0
-        
+		
+		updateCombinePDFButtonState()
+
         myTableView.reloadData()
     }
 
@@ -678,6 +681,8 @@ class ViewController: NSViewController, NSURLSessionDelegate, NSURLSessionDataDe
 			cell.resetCell()
 			
 			cell.updateCell(wwdcSession.title, description: wwdcSession.sessionDescription, descriptionVisible: false)
+			
+			cell.textField?.attributedStringValue
 			
 			return cell
 		}

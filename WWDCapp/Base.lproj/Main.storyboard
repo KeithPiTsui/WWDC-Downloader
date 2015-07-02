@@ -403,10 +403,50 @@
                                                                                 <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                                                             </textFieldCell>
                                                                         </textField>
+                                                                        <scrollView borderType="none" horizontalLineScroll="10" horizontalPageScroll="10" verticalLineScroll="10" verticalPageScroll="10" hasHorizontalScroller="NO" hasVerticalScroller="NO" usesPredominantAxisScrolling="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Ax9-07-ryC" customClass="DisabledScrollingScrollView" customModule="WWDCapp" customModuleProvider="target">
+                                                                            <rect key="frame" x="2" y="19" width="396" height="20"/>
+                                                                            <clipView key="contentView" id="6Br-BP-Tno">
+                                                                                <rect key="frame" x="0.0" y="0.0" width="396" height="20"/>
+                                                                                <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                                                                                <subviews>
+                                                                                    <textView editable="NO" drawsBackground="NO" importsGraphics="NO" verticallyResizable="YES" allowsNonContiguousLayout="YES" id="SY7-hN-yFX">
+                                                                                        <rect key="frame" x="0.0" y="0.0" width="396" height="20"/>
+                                                                                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                                                                                        <animations/>
+                                                                                        <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
+                                                                                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                                                                        <size key="minSize" width="396" height="20"/>
+                                                                                        <size key="maxSize" width="463" height="10000000"/>
+                                                                                        <color key="insertionPointColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
+                                                                                        <size key="minSize" width="396" height="20"/>
+                                                                                        <size key="maxSize" width="463" height="10000000"/>
+                                                                                    </textView>
+                                                                                </subviews>
+                                                                                <animations/>
+                                                                                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                                                            </clipView>
+                                                                            <constraints>
+                                                                                <constraint firstAttribute="height" constant="20" id="DNp-iK-cft"/>
+                                                                            </constraints>
+                                                                            <animations/>
+                                                                            <scroller key="horizontalScroller" hidden="YES" wantsLayer="YES" verticalHuggingPriority="750" doubleValue="1" horizontal="YES" id="mhi-I4-Qaz">
+                                                                                <rect key="frame" x="-100" y="-100" width="87" height="18"/>
+                                                                                <autoresizingMask key="autoresizingMask"/>
+                                                                                <animations/>
+                                                                            </scroller>
+                                                                            <scroller key="verticalScroller" hidden="YES" wantsLayer="YES" verticalHuggingPriority="750" horizontal="NO" id="9bK-NM-vjs">
+                                                                                <rect key="frame" x="-100" y="-100" width="16" height="20"/>
+                                                                                <autoresizingMask key="autoresizingMask"/>
+                                                                                <animations/>
+                                                                            </scroller>
+                                                                        </scrollView>
                                                                     </subviews>
                                                                     <constraints>
+                                                                        <constraint firstAttribute="trailing" secondItem="Ax9-07-ryC" secondAttribute="trailing" constant="2" id="2Qx-y3-hwQ"/>
+                                                                        <constraint firstItem="Ax9-07-ryC" firstAttribute="top" secondItem="RoC-Vv-kEq" secondAttribute="top" constant="10" id="3kF-eo-dSD"/>
                                                                         <constraint firstAttribute="bottom" secondItem="nZf-66-To1" secondAttribute="bottom" constant="4" id="7rV-Aj-CZ6"/>
                                                                         <constraint firstItem="ygr-QC-bnS" firstAttribute="top" secondItem="RoC-Vv-kEq" secondAttribute="top" constant="10" id="FKZ-cK-zbi"/>
+                                                                        <constraint firstItem="Ax9-07-ryC" firstAttribute="leading" secondItem="RoC-Vv-kEq" secondAttribute="leading" constant="2" id="FjV-xT-sfM"/>
                                                                         <constraint firstItem="ygr-QC-bnS" firstAttribute="leading" secondItem="RoC-Vv-kEq" secondAttribute="leading" constant="2" id="eiD-Er-CNy"/>
                                                                         <constraint firstItem="ygr-QC-bnS" firstAttribute="bottom" secondItem="nZf-66-To1" secondAttribute="top" constant="2" id="oof-QK-79E"/>
                                                                         <constraint firstItem="nZf-66-To1" firstAttribute="leading" secondItem="RoC-Vv-kEq" secondAttribute="leading" constant="2" id="rSj-cl-EYQ"/>
@@ -416,6 +456,8 @@
                                                                     <animations/>
                                                                     <connections>
                                                                         <outlet property="descriptionField" destination="nZf-66-To1" id="ZAB-tJ-yna"/>
+                                                                        <outlet property="nameScrollView" destination="Ax9-07-ryC" id="Dxm-gr-bGB"/>
+                                                                        <outlet property="sessionName" destination="SY7-hN-yFX" id="BSB-71-Kgm"/>
                                                                         <outlet property="textField" destination="ygr-QC-bnS" id="2zC-Ak-lPF"/>
                                                                     </connections>
                                                                 </tableCellView>
