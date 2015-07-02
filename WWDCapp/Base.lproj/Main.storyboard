@@ -404,21 +404,21 @@
                                                                             </textFieldCell>
                                                                         </textField>
                                                                         <scrollView borderType="none" horizontalLineScroll="10" horizontalPageScroll="10" verticalLineScroll="10" verticalPageScroll="10" hasHorizontalScroller="NO" hasVerticalScroller="NO" usesPredominantAxisScrolling="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Ax9-07-ryC" customClass="DisabledScrollingScrollView" customModule="WWDCapp" customModuleProvider="target">
-                                                                            <rect key="frame" x="2" y="19" width="396" height="20"/>
-                                                                            <clipView key="contentView" id="6Br-BP-Tno">
-                                                                                <rect key="frame" x="0.0" y="0.0" width="396" height="20"/>
+                                                                            <rect key="frame" x="0.0" y="19" width="400" height="20"/>
+                                                                            <clipView key="contentView" drawsBackground="NO" copiesOnScroll="NO" id="6Br-BP-Tno">
+                                                                                <rect key="frame" x="0.0" y="0.0" width="400" height="20"/>
                                                                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                                                 <subviews>
                                                                                     <textView editable="NO" drawsBackground="NO" importsGraphics="NO" verticallyResizable="YES" allowsNonContiguousLayout="YES" id="SY7-hN-yFX">
-                                                                                        <rect key="frame" x="0.0" y="0.0" width="396" height="20"/>
+                                                                                        <rect key="frame" x="0.0" y="0.0" width="400" height="20"/>
                                                                                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                                                         <animations/>
                                                                                         <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
                                                                                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                                                                                        <size key="minSize" width="396" height="20"/>
+                                                                                        <size key="minSize" width="400" height="20"/>
                                                                                         <size key="maxSize" width="463" height="10000000"/>
                                                                                         <color key="insertionPointColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
-                                                                                        <size key="minSize" width="396" height="20"/>
+                                                                                        <size key="minSize" width="400" height="20"/>
                                                                                         <size key="maxSize" width="463" height="10000000"/>
                                                                                     </textView>
                                                                                 </subviews>
@@ -440,13 +440,50 @@
                                                                                 <animations/>
                                                                             </scroller>
                                                                         </scrollView>
+                                                                        <scrollView borderType="none" horizontalLineScroll="10" horizontalPageScroll="10" verticalLineScroll="10" verticalPageScroll="10" hasHorizontalScroller="NO" usesPredominantAxisScrolling="NO" translatesAutoresizingMaskIntoConstraints="NO" id="K7q-GE-dhi" customClass="DisabledScrollingScrollView" customModule="WWDCapp" customModuleProvider="target">
+                                                                            <rect key="frame" x="0.0" y="4" width="400" height="13"/>
+                                                                            <clipView key="contentView" drawsBackground="NO" copiesOnScroll="NO" id="qu8-f7-ivC">
+                                                                                <rect key="frame" x="0.0" y="0.0" width="400" height="13"/>
+                                                                                <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                                                                                <subviews>
+                                                                                    <textView editable="NO" drawsBackground="NO" importsGraphics="NO" verticallyResizable="YES" allowsNonContiguousLayout="YES" id="4AP-Fn-m4a">
+                                                                                        <rect key="frame" x="0.0" y="0.0" width="400" height="14"/>
+                                                                                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                                                                                        <animations/>
+                                                                                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                                                                        <size key="minSize" width="400" height="13"/>
+                                                                                        <size key="maxSize" width="463" height="10000000"/>
+                                                                                        <color key="insertionPointColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
+                                                                                        <size key="minSize" width="400" height="13"/>
+                                                                                        <size key="maxSize" width="463" height="10000000"/>
+                                                                                    </textView>
+                                                                                </subviews>
+                                                                                <animations/>
+                                                                                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                                                            </clipView>
+                                                                            <animations/>
+                                                                            <scroller key="horizontalScroller" hidden="YES" wantsLayer="YES" verticalHuggingPriority="750" doubleValue="1" horizontal="YES" id="BSA-pi-1DR">
+                                                                                <rect key="frame" x="-100" y="-100" width="87" height="18"/>
+                                                                                <autoresizingMask key="autoresizingMask"/>
+                                                                                <animations/>
+                                                                            </scroller>
+                                                                            <scroller key="verticalScroller" wantsLayer="YES" verticalHuggingPriority="750" horizontal="NO" id="aC2-k3-Mvy">
+                                                                                <rect key="frame" x="384" y="0.0" width="16" height="13"/>
+                                                                                <autoresizingMask key="autoresizingMask"/>
+                                                                                <animations/>
+                                                                            </scroller>
+                                                                        </scrollView>
                                                                     </subviews>
                                                                     <constraints>
-                                                                        <constraint firstAttribute="trailing" secondItem="Ax9-07-ryC" secondAttribute="trailing" constant="2" id="2Qx-y3-hwQ"/>
+                                                                        <constraint firstAttribute="trailing" secondItem="Ax9-07-ryC" secondAttribute="trailing" id="2Qx-y3-hwQ"/>
                                                                         <constraint firstItem="Ax9-07-ryC" firstAttribute="top" secondItem="RoC-Vv-kEq" secondAttribute="top" constant="10" id="3kF-eo-dSD"/>
+                                                                        <constraint firstAttribute="trailing" secondItem="K7q-GE-dhi" secondAttribute="trailing" id="64E-dc-fo2"/>
                                                                         <constraint firstAttribute="bottom" secondItem="nZf-66-To1" secondAttribute="bottom" constant="4" id="7rV-Aj-CZ6"/>
+                                                                        <constraint firstItem="K7q-GE-dhi" firstAttribute="leading" secondItem="RoC-Vv-kEq" secondAttribute="leading" id="Eyr-di-TWI"/>
                                                                         <constraint firstItem="ygr-QC-bnS" firstAttribute="top" secondItem="RoC-Vv-kEq" secondAttribute="top" constant="10" id="FKZ-cK-zbi"/>
-                                                                        <constraint firstItem="Ax9-07-ryC" firstAttribute="leading" secondItem="RoC-Vv-kEq" secondAttribute="leading" constant="2" id="FjV-xT-sfM"/>
+                                                                        <constraint firstItem="Ax9-07-ryC" firstAttribute="leading" secondItem="RoC-Vv-kEq" secondAttribute="leading" id="FjV-xT-sfM"/>
+                                                                        <constraint firstItem="K7q-GE-dhi" firstAttribute="top" secondItem="Ax9-07-ryC" secondAttribute="bottom" constant="2" id="Olc-5i-b96"/>
+                                                                        <constraint firstAttribute="bottom" secondItem="K7q-GE-dhi" secondAttribute="bottom" constant="4" id="dZE-nZ-Buo"/>
                                                                         <constraint firstItem="ygr-QC-bnS" firstAttribute="leading" secondItem="RoC-Vv-kEq" secondAttribute="leading" constant="2" id="eiD-Er-CNy"/>
                                                                         <constraint firstItem="ygr-QC-bnS" firstAttribute="bottom" secondItem="nZf-66-To1" secondAttribute="top" constant="2" id="oof-QK-79E"/>
                                                                         <constraint firstItem="nZf-66-To1" firstAttribute="leading" secondItem="RoC-Vv-kEq" secondAttribute="leading" constant="2" id="rSj-cl-EYQ"/>
@@ -456,7 +493,7 @@
                                                                     <animations/>
                                                                     <connections>
                                                                         <outlet property="descriptionField" destination="nZf-66-To1" id="ZAB-tJ-yna"/>
-                                                                        <outlet property="nameScrollView" destination="Ax9-07-ryC" id="Dxm-gr-bGB"/>
+                                                                        <outlet property="sessionDescriptionTextView" destination="4AP-Fn-m4a" id="uxX-vr-Yf7"/>
                                                                         <outlet property="sessionName" destination="SY7-hN-yFX" id="BSB-71-Kgm"/>
                                                                         <outlet property="textField" destination="ygr-QC-bnS" id="2zC-Ak-lPF"/>
                                                                     </connections>

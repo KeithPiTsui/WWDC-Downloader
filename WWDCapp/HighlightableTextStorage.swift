@@ -12,9 +12,9 @@ import Cocoa
 @available(OSX 10.11, *)
 class HighlightableTextStorage : NSTextStorage {
 	
-	var textToHighlight : String = "keynote"
+	var textToHighlight : String = ""
 	
-	private var tmpString = NSMutableAttributedString()
+    private var tmpString = NSMutableAttributedString()
 	
 	override var string : String {
 		get {
@@ -30,11 +30,8 @@ class HighlightableTextStorage : NSTextStorage {
 	override init() {
 		
 		super.init()
-	}
-	
-	override init(string str: String, attributes attrs: [String : AnyObject]?) {
-		
-		super.init(string: str, attributes: attrs)
+        
+        tmpString = NSMutableAttributedString()
 	}
 	
 	override func replaceCharactersInRange(range: NSRange, withString str: String) {

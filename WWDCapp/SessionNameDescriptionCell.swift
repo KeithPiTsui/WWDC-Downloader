@@ -11,59 +11,80 @@ import Cocoa
 
 class SessionNameDescriptionCell : NSTableCellView {
 
-	@IBOutlet var nameScrollView : NSScrollView!
 	@IBOutlet var sessionName: NSTextView!
+    @IBOutlet var sessionDescriptionTextView: NSTextView!
 
-	@IBOutlet var descriptionField: NSTextField!
-	
-	var textStorage : AnyObject?
+    var nameTextStorage : AnyObject!
+    var descriptionTextStorage : AnyObject!
+
+	@IBOutlet var descriptionField: NSTextField! // pre 10.11
 	
 	override func awakeFromNib() {
 
-		if #available(OSX 10.11, *) {
-						
-		    textStorage = HighlightableTextStorage()
-			
+        if #available(OSX 10.11, *) {
+				
+            textField!.stringValue = ""
+
+            let pstyle = NSMutableParagraphStyle()
+            pstyle.alignment = NSTextAlignment.Left
+            let attributes = [ NSForegroundColorAttributeName : NSColor.labelColor(), NSParagraphStyleAttributeName : pstyle , NSFontAttributeName : NSFont.boldSystemFontOfSize(12.0)]
+            
+            sessionName.string = ""
+            sessionName.typingAttributes = attributes
+            
+            
+            let descriptionAttributes = [ NSForegroundColorAttributeName : NSColor.labelColor(), NSParagraphStyleAttributeName : pstyle , NSFontAttributeName : NSFont.systemFontOfSize(12.0)]
+            
+            sessionDescriptionTextView.string = ""
+            sessionDescriptionTextView.typingAttributes = descriptionAttributes
+            
+
+		    nameTextStorage = HighlightableTextStorage()
+            descriptionTextStorage = HighlightableTextStorage()
+
 			if let layoutManager = sessionName.layoutManager {
-				(textStorage as! HighlightableTextStorage).addLayoutManager(layoutManager)
+				(nameTextStorage as! HighlightableTextStorage).addLayoutManager(layoutManager)
 			}
+            if let layoutManager = sessionDescriptionTextView.layoutManager {
+                (descriptionTextStorage as! HighlightableTextStorage).addLayoutManager(layoutManager)
+            }
 		}
 	}
 
 	func resetCell() {
 		
-		
 		if #available(OSX 10.11, *) {
-			if let textStorage = textStorage as? HighlightableTextStorage {
-				textStorage.replaceCharactersInRange(NSMakeRange(0, (sessionName.string?.characters.count)!), withString:"")
-			}
-		}
-		else {
+            sessionName.string = ""
+            sessionDescriptionTextView.string = ""
+        }
+        else {
 			textField!.stringValue = ""
+            descriptionField.stringValue = ""
 		}
-		
-		descriptionField.stringValue = ""
-		
 	}
 	
 	func updateCell(name:String, description:String?, descriptionVisible:Bool) {
 		
 		if #available(OSX 10.11, *) {
-			if let textStorage = textStorage as? HighlightableTextStorage {
-				textStorage.replaceCharactersInRange(NSMakeRange(0, 0), withString:name)
-			}
+            sessionName.string = name
+            if let description = description {
+                sessionDescriptionTextView.string = description
+            }
+            else {
+                sessionDescriptionTextView.string = ""
+            }
 		}
 		else {
 			textField!.stringValue = name
+            
+            if let description = description {
+                descriptionField.stringValue = description
+            }
+            else {
+                descriptionField.stringValue = ""
+            }
 		}
-		
-		if let description = description {
-			descriptionField.stringValue = description
-		}
-		else {
-			descriptionField.stringValue = ""
-		}
-		
+				
 		if descriptionVisible {
 			
 		}

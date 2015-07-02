@@ -625,7 +625,7 @@ class ViewController: NSViewController, NSURLSessionDelegate, NSURLSessionDataDe
 			}
 			
 			if let text = text {
-				return 42 + heightForStringDrawing(text, font: NSFont.systemFontOfSize(NSFont.systemFontSizeForControlSize(NSControlSize.RegularControlSize)), width: 380)
+				return 42 + heightForStringDrawing(text, font: NSFont.systemFontOfSize(12), width: 380)
 			}
 			else {
 				return 50
@@ -680,10 +680,16 @@ class ViewController: NSViewController, NSURLSessionDelegate, NSURLSessionDataDe
 			
 			cell.resetCell()
 			
+            if #available(OSX 10.11, *) {
+                let nameTextStorage = cell.nameTextStorage as! HighlightableTextStorage
+                let descriptionTextStorage = cell.descriptionTextStorage as! HighlightableTextStorage
+                nameTextStorage.textToHighlight = searchField.stringValue.stringByTrimmingCharactersInSet(NSCharacterSet.whitespaceCharacterSet())
+                descriptionTextStorage.textToHighlight = searchField.stringValue.stringByTrimmingCharactersInSet(NSCharacterSet.whitespaceCharacterSet())
+
+            }
+            
 			cell.updateCell(wwdcSession.title, description: wwdcSession.sessionDescription, descriptionVisible: false)
-			
-			cell.textField?.attributedStringValue
-			
+						
 			return cell
 		}
 		else if tableColumn?.identifier == "PDF" {
