@@ -1188,12 +1188,14 @@ class ViewController: NSViewController, NSURLSessionDelegate, NSURLSessionDataDe
                     }
                 }
             }
-			            
+			
             if numberOfPDFsPresent > 1 {
                 combinePDFButton.enabled = true
+				combinePDFButton.title = "Combine \(numberOfPDFsPresent) PDFs"
             }
             else{
                 combinePDFButton.enabled = false
+				combinePDFButton.title = "Combine PDFs"
             }
         }
     }
