@@ -677,9 +677,7 @@ class ViewController: NSViewController, NSURLSessionDelegate, NSURLSessionDataDe
 		else if tableColumn?.identifier == "sessionName" {
 			
 			let cell = (tableView.makeViewWithIdentifier("sessionName", owner: self) as? SessionNameDescriptionCell)!
-			
-			cell.resetCell()
-			
+						
             if #available(OSX 10.11, *) {
                 let nameTextStorage = cell.nameTextStorage as! HighlightableTextStorage
                 let descriptionTextStorage = cell.descriptionTextStorage as! HighlightableTextStorage

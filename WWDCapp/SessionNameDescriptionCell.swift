@@ -11,9 +11,11 @@ import Cocoa
 
 class SessionNameDescriptionCell : NSTableCellView {
 
-	@IBOutlet var sessionName: NSTextView!
-    @IBOutlet var sessionDescriptionTextView: NSTextView!
-
+    @IBOutlet var sessionName: IntrinsicContentNSTextView!
+    @IBOutlet var sessionNameScrollView: NSScrollView!
+    
+    @IBOutlet var sessionDescriptionTextView: IntrinsicContentNSTextView!
+    @IBOutlet var sessionDescriptionTextViewScrollView: NSScrollView!
     var nameTextStorage : AnyObject!
     var descriptionTextStorage : AnyObject!
 
@@ -38,6 +40,9 @@ class SessionNameDescriptionCell : NSTableCellView {
             sessionDescriptionTextView.string = ""
             sessionDescriptionTextView.typingAttributes = descriptionAttributes
             
+            sessionName.didChangeText()
+            sessionDescriptionTextView.didChangeText()
+
 
 		    nameTextStorage = HighlightableTextStorage()
             descriptionTextStorage = HighlightableTextStorage()
@@ -50,30 +55,28 @@ class SessionNameDescriptionCell : NSTableCellView {
             }
 		}
 	}
-
-	func resetCell() {
-		
-		if #available(OSX 10.11, *) {
-            sessionName.string = ""
-            sessionDescriptionTextView.string = ""
-        }
-        else {
-			textField!.stringValue = ""
-            descriptionField.stringValue = ""
-		}
-	}
 	
 	func updateCell(name:String, description:String?, descriptionVisible:Bool) {
 		
-		if #available(OSX 10.11, *) {
+        if #available(OSX 10.11, *) {
             sessionName.string = name
+            sessionName.didChangeText()
+            
             if let description = description {
+                sessionDescriptionTextView.hidden = false
                 sessionDescriptionTextView.string = description
             }
             else {
+                sessionDescriptionTextView.hidden = true
                 sessionDescriptionTextView.string = ""
             }
-		}
+            
+            sessionDescriptionTextView.didChangeText()
+            
+            var frame = sessionDescriptionTextViewScrollView.frame
+            frame.size.height = sessionDescriptionTextViewScrollView.intrinsicContentSize.height
+            sessionDescriptionTextViewScrollView.frame = frame
+        }
 		else {
 			textField!.stringValue = name
             
