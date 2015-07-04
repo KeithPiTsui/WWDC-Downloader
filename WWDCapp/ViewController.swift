@@ -125,6 +125,8 @@ class ViewController: NSViewController, NSURLSessionDelegate, NSURLSessionDataDe
 	private var dockIconUpdateTimer : NSTimer?
     
     private let attributesForCheckboxLabelLeft : [String : NSObject]
+    
+    private var referenceCell : SessionNameDescriptionCell?
 	
 	// MARK: - Init
 	required init?(coder: NSCoder) {
@@ -439,6 +441,8 @@ class ViewController: NSViewController, NSURLSessionDelegate, NSURLSessionDataDe
     override func viewDidLoad() {
         super.viewDidLoad()
 		
+        referenceCell = (myTableView.makeViewWithIdentifier("sessionName", owner: self) as? SessionNameDescriptionCell)!
+
         toolbarVisualEffectView.material = NSVisualEffectMaterial.Titlebar
         toolbarVisualEffectView.appearance = NSAppearance(named: NSAppearanceNameVibrantLight)
         toolbarVisualEffectView.state = NSVisualEffectState.FollowsWindowActiveState
@@ -609,29 +613,34 @@ class ViewController: NSViewController, NSURLSessionDelegate, NSURLSessionDataDe
 		}
 	}
 	
-	func tableView(tableView: NSTableView, heightOfRow row: Int) -> CGFloat {
-	
-		if hideDescriptionsCheckBox.state == 1 {
-			return 50
-		}
-		else {
-			var text : String?
-			
-			if !isFiltered {
-				text = allWWDCSessionsArray[row].sessionDescription
-			}
-			else {
-				text = visibleWWDCSessionsArray[row].sessionDescription
-			}
-			
-			if let text = text {
-				return 42 + heightForStringDrawing(text, font: NSFont.systemFontOfSize(12), width: 380)
-			}
-			else {
-				return 50
-			}
-		}
-	}
+    func tableView(tableView: NSTableView, heightOfRow row: Int) -> CGFloat {
+        
+        if hideDescriptionsCheckBox.state == 1 {
+            return 50
+        }
+        else {
+            
+            let wwdcSession = (!isFiltered ? allWWDCSessionsArray[row] : visibleWWDCSessionsArray[row])
+            
+            if let referenceCell = referenceCell {
+                
+                referenceCell.updateCell(wwdcSession.title, description: wwdcSession.sessionDescription, descriptionVisible: true)
+                
+                let rowHeight = 10 + referenceCell.sessionName.intrinsicContentSize.height + referenceCell.sessionDescriptionTextView.intrinsicContentSize.height + 10
+                
+                if rowHeight < 50 {
+                    return 50
+                }
+                else {
+                    return rowHeight
+                }
+            }
+            else {
+                return 50
+            }
+        }
+    }
+
 	
 	func heightForStringDrawing(text: String, font: NSFont, width: Double) -> CGFloat {
 		
@@ -678,17 +687,13 @@ class ViewController: NSViewController, NSURLSessionDelegate, NSURLSessionDataDe
 			
 			let cell = (tableView.makeViewWithIdentifier("sessionName", owner: self) as? SessionNameDescriptionCell)!
 						
+            cell.updateCell(wwdcSession.title, description: wwdcSession.sessionDescription, descriptionVisible: false)
+            
             if #available(OSX 10.11, *) {
-                let nameTextStorage = cell.nameTextStorage as! HighlightableTextStorage
-                let descriptionTextStorage = cell.descriptionTextStorage as! HighlightableTextStorage
-                nameTextStorage.textToHighlight = searchField.stringValue.stringByTrimmingCharactersInSet(NSCharacterSet.whitespaceCharacterSet())
-                descriptionTextStorage.textToHighlight = searchField.stringValue.stringByTrimmingCharactersInSet(NSCharacterSet.whitespaceCharacterSet())
-
+                cell.highlightText(searchField.stringValue)
             }
             
-			cell.updateCell(wwdcSession.title, description: wwdcSession.sessionDescription, descriptionVisible: false)
-						
-			return cell
+            return cell
 		}
 		else if tableColumn?.identifier == "PDF" {
 			
