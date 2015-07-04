@@ -11,6 +11,8 @@ import Cocoa
 
 class DisabledScrollingScrollView : NSScrollView {
 
+    @IBOutlet var textView: IntrinsicContentNSTextView!
+
 	required init?(coder: NSCoder) {
 	    super.init(coder: coder)
 		self.hideScrollers()
@@ -35,4 +37,10 @@ class DisabledScrollingScrollView : NSScrollView {
 		
 		self.nextResponder?.swipeWithEvent(event)
 	}
+    
+    override var intrinsicContentSize : CGSize {
+        get {
+            return textView.intrinsicContentSize
+        }
+    }
 }
