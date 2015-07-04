@@ -640,25 +640,6 @@ class ViewController: NSViewController, NSURLSessionDelegate, NSURLSessionDataDe
             }
         }
     }
-
-	
-	func heightForStringDrawing(text: String, font: NSFont, width: Double) -> CGFloat {
-		
-		let textStorage = NSTextStorage(string: text)
-		let textContainer = NSTextContainer(containerSize: NSSize(width: width, height: DBL_MAX))
-		let layoutManager = NSLayoutManager()
-		
-		layoutManager.addTextContainer(textContainer)
-		textStorage.addLayoutManager(layoutManager)
-		textStorage.addAttribute(NSFontAttributeName, value: font, range: NSRange(location: 0,length: textStorage.length))
-		textContainer.lineFragmentPadding = 0.0
-		
-		layoutManager.glyphRangeForTextContainer(textContainer)
-		
-		let rect = layoutManager.usedRectForTextContainer(textContainer)
-		
-		return rect.size.height
-	}
 	
 	func selectionShouldChangeInTableView(tableView: NSTableView) -> Bool {
 		return false
@@ -666,14 +647,7 @@ class ViewController: NSViewController, NSURLSessionDelegate, NSURLSessionDataDe
 	
 	func tableView(tableView: NSTableView, viewForTableColumn tableColumn: NSTableColumn?, row: Int) -> NSView? {
 		
-		let wwdcSession : WWDCSession
-		
-		if !isFiltered {
-			wwdcSession =  allWWDCSessionsArray[row]
-		}
-		else {
-			wwdcSession = visibleWWDCSessionsArray[row]
-		}
+        let wwdcSession = (!isFiltered ? allWWDCSessionsArray[row] : visibleWWDCSessionsArray[row])
 		
 		if tableColumn?.identifier == "sessionID" {
 
@@ -686,12 +660,12 @@ class ViewController: NSViewController, NSURLSessionDelegate, NSURLSessionDataDe
 		else if tableColumn?.identifier == "sessionName" {
 			
 			let cell = (tableView.makeViewWithIdentifier("sessionName", owner: self) as? SessionNameDescriptionCell)!
-						
-            cell.updateCell(wwdcSession.title, description: wwdcSession.sessionDescription, descriptionVisible: false)
-            
+				
             if #available(OSX 10.11, *) {
                 cell.highlightText(searchField.stringValue)
             }
+            
+            cell.updateCell(wwdcSession.title, description: wwdcSession.sessionDescription, descriptionVisible: false)
             
             return cell
 		}

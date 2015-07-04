@@ -379,11 +379,11 @@
                                                             <tableColumnResizingMask key="resizingMask" resizeWithTable="YES" userResizable="YES"/>
                                                             <prototypeCellViews>
                                                                 <tableCellView id="RoC-Vv-kEq" customClass="SessionNameDescriptionCell" customModule="WWDCapp" customModuleProvider="target">
-                                                                    <rect key="frame" x="74" y="1" width="400" height="49"/>
+                                                                    <rect key="frame" x="74" y="1" width="400" height="50"/>
                                                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                                     <subviews>
-                                                                        <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" translatesAutoresizingMaskIntoConstraints="NO" id="ygr-QC-bnS" userLabel="Name Field">
-                                                                            <rect key="frame" x="0.0" y="19" width="400" height="20"/>
+                                                                        <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" ambiguous="YES" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="ygr-QC-bnS" userLabel="Name Field">
+                                                                            <rect key="frame" x="0.0" y="20" width="400" height="20"/>
                                                                             <constraints>
                                                                                 <constraint firstAttribute="height" constant="20" id="maE-tc-3te"/>
                                                                             </constraints>
@@ -394,8 +394,8 @@
                                                                                 <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                                                                             </textFieldCell>
                                                                         </textField>
-                                                                        <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" setsMaxLayoutWidthAtFirstLayout="YES" translatesAutoresizingMaskIntoConstraints="NO" id="nZf-66-To1">
-                                                                            <rect key="frame" x="0.0" y="4" width="400" height="17"/>
+                                                                        <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" fixedFrame="YES" setsMaxLayoutWidthAtFirstLayout="YES" translatesAutoresizingMaskIntoConstraints="NO" id="nZf-66-To1">
+                                                                            <rect key="frame" x="0.0" y="5" width="400" height="17"/>
                                                                             <animations/>
                                                                             <textFieldCell key="cell" truncatesLastVisibleLine="YES" selectable="YES" refusesFirstResponder="YES" allowsUndo="NO" sendsActionOnEndEditing="YES" state="on" alignment="left" id="gFm-Tg-WgZ">
                                                                                 <font key="font" metaFont="system"/>
@@ -403,31 +403,28 @@
                                                                                 <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                                                             </textFieldCell>
                                                                         </textField>
-                                                                        <scrollView borderType="none" horizontalLineScroll="10" horizontalPageScroll="10" verticalLineScroll="10" verticalPageScroll="10" hasHorizontalScroller="NO" hasVerticalScroller="NO" usesPredominantAxisScrolling="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Ax9-07-ryC" customClass="DisabledScrollingScrollView" customModule="WWDCapp" customModuleProvider="target">
-                                                                            <rect key="frame" x="0.0" y="19" width="400" height="20"/>
+                                                                        <scrollView verticalHuggingPriority="260" verticalCompressionResistancePriority="760" placeholderIntrinsicWidth="400" placeholderIntrinsicHeight="15" borderType="none" horizontalLineScroll="10" horizontalPageScroll="10" verticalLineScroll="10" verticalPageScroll="10" hasHorizontalScroller="NO" hasVerticalScroller="NO" usesPredominantAxisScrolling="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Ax9-07-ryC" customClass="DisabledScrollingScrollView" customModule="WWDCapp" customModuleProvider="target">
+                                                                            <rect key="frame" x="0.0" y="25" width="400" height="15"/>
                                                                             <clipView key="contentView" drawsBackground="NO" copiesOnScroll="NO" id="6Br-BP-Tno">
-                                                                                <rect key="frame" x="0.0" y="0.0" width="400" height="20"/>
+                                                                                <rect key="frame" x="0.0" y="0.0" width="400" height="15"/>
                                                                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                                                 <subviews>
-                                                                                    <textView editable="NO" drawsBackground="NO" importsGraphics="NO" verticallyResizable="YES" allowsNonContiguousLayout="YES" id="SY7-hN-yFX">
-                                                                                        <rect key="frame" x="0.0" y="0.0" width="400" height="20"/>
+                                                                                    <textView editable="NO" drawsBackground="NO" importsGraphics="NO" verticallyResizable="YES" allowsNonContiguousLayout="YES" id="SY7-hN-yFX" customClass="IntrinsicContentNSTextView" customModule="WWDCapp" customModuleProvider="target">
+                                                                                        <rect key="frame" x="0.0" y="0.0" width="400" height="15"/>
                                                                                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                                                         <animations/>
                                                                                         <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
                                                                                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                                                                                        <size key="minSize" width="400" height="20"/>
+                                                                                        <size key="minSize" width="400" height="15"/>
                                                                                         <size key="maxSize" width="463" height="10000000"/>
                                                                                         <color key="insertionPointColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
-                                                                                        <size key="minSize" width="400" height="20"/>
+                                                                                        <size key="minSize" width="400" height="15"/>
                                                                                         <size key="maxSize" width="463" height="10000000"/>
                                                                                     </textView>
                                                                                 </subviews>
                                                                                 <animations/>
                                                                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                                                             </clipView>
-                                                                            <constraints>
-                                                                                <constraint firstAttribute="height" constant="20" id="DNp-iK-cft"/>
-                                                                            </constraints>
                                                                             <animations/>
                                                                             <scroller key="horizontalScroller" hidden="YES" wantsLayer="YES" verticalHuggingPriority="750" doubleValue="1" horizontal="YES" id="mhi-I4-Qaz">
                                                                                 <rect key="frame" x="-100" y="-100" width="87" height="18"/>
@@ -439,22 +436,25 @@
                                                                                 <autoresizingMask key="autoresizingMask"/>
                                                                                 <animations/>
                                                                             </scroller>
+                                                                            <connections>
+                                                                                <outlet property="textView" destination="SY7-hN-yFX" id="NcA-Qa-ULC"/>
+                                                                            </connections>
                                                                         </scrollView>
-                                                                        <scrollView borderType="none" horizontalLineScroll="10" horizontalPageScroll="10" verticalLineScroll="10" verticalPageScroll="10" hasHorizontalScroller="NO" usesPredominantAxisScrolling="NO" translatesAutoresizingMaskIntoConstraints="NO" id="K7q-GE-dhi" customClass="DisabledScrollingScrollView" customModule="WWDCapp" customModuleProvider="target">
-                                                                            <rect key="frame" x="0.0" y="4" width="400" height="13"/>
+                                                                        <scrollView placeholderIntrinsicWidth="400" placeholderIntrinsicHeight="15" borderType="none" horizontalLineScroll="10" horizontalPageScroll="10" verticalLineScroll="10" verticalPageScroll="10" hasHorizontalScroller="NO" usesPredominantAxisScrolling="NO" translatesAutoresizingMaskIntoConstraints="NO" id="K7q-GE-dhi" customClass="DisabledScrollingScrollView" customModule="WWDCapp" customModuleProvider="target">
+                                                                            <rect key="frame" x="0.0" y="10" width="400" height="15"/>
                                                                             <clipView key="contentView" drawsBackground="NO" copiesOnScroll="NO" id="qu8-f7-ivC">
-                                                                                <rect key="frame" x="0.0" y="0.0" width="400" height="13"/>
+                                                                                <rect key="frame" x="0.0" y="0.0" width="400" height="15"/>
                                                                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                                                 <subviews>
-                                                                                    <textView editable="NO" drawsBackground="NO" importsGraphics="NO" verticallyResizable="YES" allowsNonContiguousLayout="YES" id="4AP-Fn-m4a">
-                                                                                        <rect key="frame" x="0.0" y="0.0" width="400" height="14"/>
+                                                                                    <textView editable="NO" drawsBackground="NO" importsGraphics="NO" verticallyResizable="YES" allowsNonContiguousLayout="YES" id="4AP-Fn-m4a" customClass="IntrinsicContentNSTextView" customModule="WWDCapp" customModuleProvider="target">
+                                                                                        <rect key="frame" x="0.0" y="0.0" width="400" height="15"/>
                                                                                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                                                         <animations/>
                                                                                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                                                                                        <size key="minSize" width="400" height="13"/>
+                                                                                        <size key="minSize" width="400" height="15"/>
                                                                                         <size key="maxSize" width="463" height="10000000"/>
                                                                                         <color key="insertionPointColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
-                                                                                        <size key="minSize" width="400" height="13"/>
+                                                                                        <size key="minSize" width="400" height="15"/>
                                                                                         <size key="maxSize" width="463" height="10000000"/>
                                                                                     </textView>
                                                                                 </subviews>
@@ -468,33 +468,31 @@
                                                                                 <animations/>
                                                                             </scroller>
                                                                             <scroller key="verticalScroller" wantsLayer="YES" verticalHuggingPriority="750" horizontal="NO" id="aC2-k3-Mvy">
-                                                                                <rect key="frame" x="384" y="0.0" width="16" height="13"/>
+                                                                                <rect key="frame" x="384" y="0.0" width="16" height="15"/>
                                                                                 <autoresizingMask key="autoresizingMask"/>
                                                                                 <animations/>
                                                                             </scroller>
+                                                                            <connections>
+                                                                                <outlet property="textView" destination="4AP-Fn-m4a" id="zCO-Of-7bj"/>
+                                                                            </connections>
                                                                         </scrollView>
                                                                     </subviews>
                                                                     <constraints>
-                                                                        <constraint firstAttribute="trailing" secondItem="Ax9-07-ryC" secondAttribute="trailing" id="2Qx-y3-hwQ"/>
-                                                                        <constraint firstItem="Ax9-07-ryC" firstAttribute="top" secondItem="RoC-Vv-kEq" secondAttribute="top" constant="10" id="3kF-eo-dSD"/>
-                                                                        <constraint firstAttribute="trailing" secondItem="K7q-GE-dhi" secondAttribute="trailing" id="64E-dc-fo2"/>
-                                                                        <constraint firstAttribute="bottom" secondItem="nZf-66-To1" secondAttribute="bottom" constant="4" id="7rV-Aj-CZ6"/>
-                                                                        <constraint firstItem="K7q-GE-dhi" firstAttribute="leading" secondItem="RoC-Vv-kEq" secondAttribute="leading" id="Eyr-di-TWI"/>
-                                                                        <constraint firstItem="ygr-QC-bnS" firstAttribute="top" secondItem="RoC-Vv-kEq" secondAttribute="top" constant="10" id="FKZ-cK-zbi"/>
-                                                                        <constraint firstItem="Ax9-07-ryC" firstAttribute="leading" secondItem="RoC-Vv-kEq" secondAttribute="leading" id="FjV-xT-sfM"/>
-                                                                        <constraint firstItem="K7q-GE-dhi" firstAttribute="top" secondItem="Ax9-07-ryC" secondAttribute="bottom" constant="2" id="Olc-5i-b96"/>
-                                                                        <constraint firstAttribute="bottom" secondItem="K7q-GE-dhi" secondAttribute="bottom" constant="4" id="dZE-nZ-Buo"/>
-                                                                        <constraint firstItem="ygr-QC-bnS" firstAttribute="leading" secondItem="RoC-Vv-kEq" secondAttribute="leading" constant="2" id="eiD-Er-CNy"/>
-                                                                        <constraint firstItem="ygr-QC-bnS" firstAttribute="bottom" secondItem="nZf-66-To1" secondAttribute="top" constant="2" id="oof-QK-79E"/>
-                                                                        <constraint firstItem="nZf-66-To1" firstAttribute="leading" secondItem="RoC-Vv-kEq" secondAttribute="leading" constant="2" id="rSj-cl-EYQ"/>
-                                                                        <constraint firstAttribute="trailing" secondItem="ygr-QC-bnS" secondAttribute="trailing" constant="2" id="zOD-22-AXh"/>
-                                                                        <constraint firstAttribute="trailing" secondItem="nZf-66-To1" secondAttribute="trailing" constant="2" id="zYC-eA-yK6"/>
+                                                                        <constraint firstItem="K7q-GE-dhi" firstAttribute="trailing" secondItem="Ax9-07-ryC" secondAttribute="trailing" id="E5l-Tg-ptg"/>
+                                                                        <constraint firstItem="Ax9-07-ryC" firstAttribute="top" secondItem="RoC-Vv-kEq" secondAttribute="top" constant="10" id="cBA-Gs-exp"/>
+                                                                        <constraint firstItem="Ax9-07-ryC" firstAttribute="leading" secondItem="RoC-Vv-kEq" secondAttribute="leading" id="dJI-uM-jBl"/>
+                                                                        <constraint firstItem="K7q-GE-dhi" firstAttribute="leading" secondItem="Ax9-07-ryC" secondAttribute="leading" id="mey-Il-NjS"/>
+                                                                        <constraint firstAttribute="trailing" secondItem="Ax9-07-ryC" secondAttribute="trailing" id="pRW-da-Iq0"/>
+                                                                        <constraint firstItem="K7q-GE-dhi" firstAttribute="top" secondItem="Ax9-07-ryC" secondAttribute="bottom" id="s4o-m9-UEy"/>
+                                                                        <constraint firstAttribute="bottom" secondItem="K7q-GE-dhi" secondAttribute="bottom" constant="10" id="ueO-TX-aTy"/>
                                                                     </constraints>
                                                                     <animations/>
                                                                     <connections>
                                                                         <outlet property="descriptionField" destination="nZf-66-To1" id="ZAB-tJ-yna"/>
                                                                         <outlet property="sessionDescriptionTextView" destination="4AP-Fn-m4a" id="uxX-vr-Yf7"/>
+                                                                        <outlet property="sessionDescriptionTextViewScrollView" destination="K7q-GE-dhi" id="uCc-pB-rIZ"/>
                                                                         <outlet property="sessionName" destination="SY7-hN-yFX" id="BSB-71-Kgm"/>
+                                                                        <outlet property="sessionNameScrollView" destination="Ax9-07-ryC" id="zc7-3z-SaR"/>
                                                                         <outlet property="textField" destination="ygr-QC-bnS" id="2zC-Ak-lPF"/>
                                                                     </connections>
                                                                 </tableCellView>
