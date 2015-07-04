@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import Cocoa
 
 extension String {
     
@@ -36,4 +37,23 @@ extension String {
         
     }
     
+    // NOT USED But may be better than using temp Cell??
+    func heightForStringDrawing(font: NSFont, width: Double) -> CGFloat {
+        
+        let textStorage = NSTextStorage(string: self)
+        let textContainer = NSTextContainer(containerSize: NSSize(width: width, height: DBL_MAX))
+        let layoutManager = NSLayoutManager()
+        
+        layoutManager.addTextContainer(textContainer)
+        textStorage.addLayoutManager(layoutManager)
+        textStorage.addAttribute(NSFontAttributeName, value: font, range: NSRange(location: 0,length: textStorage.length))
+        textContainer.lineFragmentPadding = 0.0
+        
+        layoutManager.glyphRangeForTextContainer(textContainer)
+        
+        let rect = layoutManager.usedRectForTextContainer(textContainer)
+        
+        return rect.size.height
+    }
+
 }
