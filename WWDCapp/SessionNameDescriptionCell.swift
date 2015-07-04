@@ -96,5 +96,15 @@ class SessionNameDescriptionCell : NSTableCellView {
 			
 		}
 	}
+    
+    @available(OSX 10.11, *)
+    func highlightText (searchString: String) {
+        
+        let nameTextStorage = self.nameTextStorage as! HighlightableTextStorage
+        let descriptionTextStorage = self.descriptionTextStorage as! HighlightableTextStorage
+        nameTextStorage.textToHighlight = searchString.stringByTrimmingCharactersInSet(NSCharacterSet.whitespaceCharacterSet())
+        descriptionTextStorage.textToHighlight = searchString.stringByTrimmingCharactersInSet(NSCharacterSet.whitespaceCharacterSet())
+    }
+
 	
 }
