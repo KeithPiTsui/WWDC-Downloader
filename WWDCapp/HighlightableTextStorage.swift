@@ -52,7 +52,7 @@ class HighlightableTextStorage : NSTextStorage {
 	override func processEditing() {
 			
 		let paragraphRange = (self.string as NSString).paragraphRangeForRange(self.editedRange)
-		self.removeAttribute(NSForegroundColorAttributeName, range: paragraphRange)		
+		self.removeAttribute(NSBackgroundColorAttributeName, range: paragraphRange)		
 		
 		do {
 			let expression =  try NSRegularExpression(pattern: textToHighlight, options: NSRegularExpressionOptions.CaseInsensitive)
