@@ -60,7 +60,7 @@ class HighlightableTextStorage : NSTextStorage {
 			expression.enumerateMatchesInString(self.string, options: NSMatchingOptions.ReportProgress, range: paragraphRange, usingBlock: { (result, _, _) -> Void in
 				
 				if let result = result {
-					self.addAttribute(NSForegroundColorAttributeName, value: NSColor.redColor(), range: result.range)
+					self.addAttribute(NSBackgroundColorAttributeName, value: NSColor.yellowColor(), range: result.range)
 				}
 			})
 			
