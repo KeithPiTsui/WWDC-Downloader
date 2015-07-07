@@ -34,8 +34,9 @@ class IntrinsicContentNSTextView : NSTextView {
         }
     }
     
-    override func didChangeText() {
-        super.didChangeText()
-        self.invalidateIntrinsicContentSize()
-    }
+//    override func didChangeText() {
+//        super.didChangeText()
+//
+//        self.invalidateIntrinsicContentSize()
+//    }
 }

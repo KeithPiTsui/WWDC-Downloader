@@ -9,7 +9,7 @@
 import Foundation
 import Cocoa
 
-class SessionNameDescriptionCell : NSTableCellView {
+class SessionNameDescriptionCell : NSTableCellView, NSTextViewDelegate {
 
     @IBOutlet var sessionName: IntrinsicContentNSTextView!
     @IBOutlet var sessionNameScrollView: NSScrollView!
@@ -20,30 +20,42 @@ class SessionNameDescriptionCell : NSTableCellView {
     var descriptionTextStorage : AnyObject!
 
 	@IBOutlet var descriptionField: NSTextField! // pre 10.11
+    
+    var nameAttributes : [String : NSObject] {
+        get {
+            let pstyle = NSMutableParagraphStyle()
+            pstyle.alignment = NSTextAlignment.Left
+            pstyle.lineBreakMode = NSLineBreakMode.ByWordWrapping
+            let attributes = [ NSForegroundColorAttributeName : NSColor.labelColor(), NSParagraphStyleAttributeName : pstyle , NSFontAttributeName : NSFont.boldSystemFontOfSize(12.0)]
+            return attributes
+        }
+    }
+    
+    var descriptionAttributesFull : [String : NSObject] {
+        get {
+            let pstyle = NSMutableParagraphStyle()
+            pstyle.alignment = NSTextAlignment.Left
+            pstyle.lineBreakMode = NSLineBreakMode.ByTruncatingTail
+            let attributes = [ NSForegroundColorAttributeName : NSColor.labelColor(), NSParagraphStyleAttributeName : pstyle , NSFontAttributeName : NSFont.systemFontOfSize(12.0)]
+            return attributes
+        }
+    }
 	
 	override func awakeFromNib() {
 
         if #available(OSX 10.11, *) {
 				
             textField!.stringValue = ""
-
-            let pstyle = NSMutableParagraphStyle()
-            pstyle.alignment = NSTextAlignment.Left
-            let attributes = [ NSForegroundColorAttributeName : NSColor.labelColor(), NSParagraphStyleAttributeName : pstyle , NSFontAttributeName : NSFont.boldSystemFontOfSize(12.0)]
+            
+            sessionName.verticallyResizable = false
+            sessionDescriptionTextView.verticallyResizable = false
             
             sessionName.string = ""
-            sessionName.typingAttributes = attributes
-            
-            
-            let descriptionAttributes = [ NSForegroundColorAttributeName : NSColor.labelColor(), NSParagraphStyleAttributeName : pstyle , NSFontAttributeName : NSFont.systemFontOfSize(12.0)]
+            sessionName.typingAttributes = nameAttributes
             
             sessionDescriptionTextView.string = ""
-            sessionDescriptionTextView.typingAttributes = descriptionAttributes
+            sessionDescriptionTextView.typingAttributes = descriptionAttributesFull
             
-            sessionName.didChangeText()
-            sessionDescriptionTextView.didChangeText()
-
-
 		    nameTextStorage = HighlightableTextStorage()
             descriptionTextStorage = HighlightableTextStorage()
 
@@ -60,22 +72,53 @@ class SessionNameDescriptionCell : NSTableCellView {
 		
         if #available(OSX 10.11, *) {
             sessionName.string = name
-            sessionName.didChangeText()
+            
+            if descriptionVisible {
+                var attributes = sessionDescriptionTextView.typingAttributes
+                if let pstyle = attributes[NSParagraphStyleAttributeName] as? NSMutableParagraphStyle {
+                    pstyle.lineBreakMode = NSLineBreakMode.ByWordWrapping
+                    attributes[NSParagraphStyleAttributeName] = pstyle
+                    sessionDescriptionTextView.typingAttributes = attributes
+                }
+            }
+            else {
+                var attributes = sessionDescriptionTextView.typingAttributes
+                if let pstyle = attributes[NSParagraphStyleAttributeName] as? NSMutableParagraphStyle {
+                    pstyle.lineBreakMode = NSLineBreakMode.ByTruncatingTail
+                    attributes[NSParagraphStyleAttributeName] = pstyle
+                    sessionDescriptionTextView.typingAttributes = attributes
+                }
+            }
             
             if let description = description {
                 sessionDescriptionTextView.hidden = false
                 sessionDescriptionTextView.string = description
+              //  sessionDescriptionTextView.didChangeText()
             }
             else {
                 sessionDescriptionTextView.hidden = true
                 sessionDescriptionTextView.string = ""
+              //  sessionDescriptionTextView.didChangeText()
             }
             
-            sessionDescriptionTextView.didChangeText()
-            
-            var frame = sessionDescriptionTextViewScrollView.frame
-            frame.size.height = sessionDescriptionTextViewScrollView.intrinsicContentSize.height
-            sessionDescriptionTextViewScrollView.frame = frame
+            if descriptionVisible {
+                
+                var scrollFrame = sessionDescriptionTextViewScrollView.frame
+                var textviewFrame = sessionDescriptionTextView.frame
+                scrollFrame.size.height = sessionDescriptionTextView.intrinsicContentSize.height
+                textviewFrame.size.height = sessionDescriptionTextView.intrinsicContentSize.height
+                sessionDescriptionTextViewScrollView.frame = scrollFrame
+                sessionDescriptionTextView.frame = textviewFrame
+            }
+            else {
+                
+                var scrollFrame = sessionDescriptionTextViewScrollView.frame
+                var textviewFrame = sessionDescriptionTextView.frame
+                scrollFrame.size.height = 15
+                textviewFrame.size.height = 15
+                sessionDescriptionTextViewScrollView.frame = scrollFrame
+                sessionDescriptionTextView.frame = textviewFrame
+            }
         }
 		else {
 			textField!.stringValue = name
@@ -86,14 +129,6 @@ class SessionNameDescriptionCell : NSTableCellView {
             else {
                 descriptionField.stringValue = ""
             }
-		}
-				
-		if descriptionVisible {
-			
-		}
-		else {
-			
-			
 		}
 	}
     

@@ -98,6 +98,7 @@ class DownloadYearInfo: NSObject, NSURLSessionTaskDelegate {
             }
             else if let error = error {
 				updateUIHandler(update: "Main Page Error - \(error)")
+                self.sessionInfoCompletionHandler(success: false)
             }
             else {
                 // Do nothing, and the operation will automatically finish.
@@ -161,6 +162,8 @@ class DownloadYearInfo: NSObject, NSURLSessionTaskDelegate {
 			parseAndFetchSession2015(wwdcSession) { (success) -> Void in
 				
 				self.updateUIHandler(update: "Parsing Session \(wwdcSession.sessionID)…")
+
+                self.individualCompletionHandler(session: wwdcSession)
 
 				dispatch_group_leave(sessionGroup)
 			}

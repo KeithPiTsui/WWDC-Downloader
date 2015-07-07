@@ -403,7 +403,7 @@
                                                                                 <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                                                             </textFieldCell>
                                                                         </textField>
-                                                                        <scrollView verticalHuggingPriority="260" verticalCompressionResistancePriority="760" placeholderIntrinsicWidth="400" placeholderIntrinsicHeight="15" borderType="none" horizontalLineScroll="10" horizontalPageScroll="10" verticalLineScroll="10" verticalPageScroll="10" hasHorizontalScroller="NO" hasVerticalScroller="NO" usesPredominantAxisScrolling="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Ax9-07-ryC" customClass="DisabledScrollingScrollView" customModule="WWDCapp" customModuleProvider="target">
+                                                                        <scrollView verticalHuggingPriority="260" verticalCompressionResistancePriority="760" placeholderIntrinsicWidth="400" placeholderIntrinsicHeight="15" borderType="none" horizontalLineScroll="10" horizontalPageScroll="10" verticalLineScroll="10" verticalPageScroll="10" hasHorizontalScroller="NO" hasVerticalScroller="NO" usesPredominantAxisScrolling="NO" horizontalScrollElasticity="none" verticalScrollElasticity="none" translatesAutoresizingMaskIntoConstraints="NO" id="Ax9-07-ryC" customClass="DisabledScrollingScrollView" customModule="WWDCapp" customModuleProvider="target">
                                                                             <rect key="frame" x="0.0" y="25" width="400" height="15"/>
                                                                             <clipView key="contentView" drawsBackground="NO" copiesOnScroll="NO" id="6Br-BP-Tno">
                                                                                 <rect key="frame" x="0.0" y="0.0" width="400" height="15"/>
@@ -440,7 +440,7 @@
                                                                                 <outlet property="textView" destination="SY7-hN-yFX" id="NcA-Qa-ULC"/>
                                                                             </connections>
                                                                         </scrollView>
-                                                                        <scrollView placeholderIntrinsicWidth="400" placeholderIntrinsicHeight="15" borderType="none" horizontalLineScroll="10" horizontalPageScroll="10" verticalLineScroll="10" verticalPageScroll="10" hasHorizontalScroller="NO" usesPredominantAxisScrolling="NO" translatesAutoresizingMaskIntoConstraints="NO" id="K7q-GE-dhi" customClass="DisabledScrollingScrollView" customModule="WWDCapp" customModuleProvider="target">
+                                                                        <scrollView placeholderIntrinsicWidth="400" placeholderIntrinsicHeight="15" borderType="none" horizontalLineScroll="10" horizontalPageScroll="10" verticalLineScroll="10" verticalPageScroll="10" hasHorizontalScroller="NO" hasVerticalScroller="NO" usesPredominantAxisScrolling="NO" horizontalScrollElasticity="none" verticalScrollElasticity="none" translatesAutoresizingMaskIntoConstraints="NO" id="K7q-GE-dhi" customClass="DisabledScrollingScrollView" customModule="WWDCapp" customModuleProvider="target">
                                                                             <rect key="frame" x="0.0" y="10" width="400" height="15"/>
                                                                             <clipView key="contentView" drawsBackground="NO" copiesOnScroll="NO" id="qu8-f7-ivC">
                                                                                 <rect key="frame" x="0.0" y="0.0" width="400" height="15"/>
@@ -467,8 +467,8 @@
                                                                                 <autoresizingMask key="autoresizingMask"/>
                                                                                 <animations/>
                                                                             </scroller>
-                                                                            <scroller key="verticalScroller" wantsLayer="YES" verticalHuggingPriority="750" horizontal="NO" id="aC2-k3-Mvy">
-                                                                                <rect key="frame" x="384" y="0.0" width="16" height="15"/>
+                                                                            <scroller key="verticalScroller" hidden="YES" wantsLayer="YES" verticalHuggingPriority="750" horizontal="NO" id="aC2-k3-Mvy">
+                                                                                <rect key="frame" x="-100" y="-100" width="16" height="15"/>
                                                                                 <autoresizingMask key="autoresizingMask"/>
                                                                                 <animations/>
                                                                             </scroller>

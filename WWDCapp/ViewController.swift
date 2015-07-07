@@ -380,7 +380,7 @@ class ViewController: NSViewController, NSURLSessionDelegate, NSURLSessionDataDe
 	}
     
 	@IBAction func hideSessionsChecked(sender: NSButton) {
-		
+        
 		myTableView.beginUpdates()
 		
 		if !isFiltered {
@@ -391,7 +391,17 @@ class ViewController: NSViewController, NSURLSessionDelegate, NSURLSessionDataDe
 		}
 		
 		myTableView.endUpdates()
-	}
+        
+    
+        let delayTime = dispatch_time(DISPATCH_TIME_NOW, Int64(0.05 * Double(NSEC_PER_SEC)))
+        dispatch_after(delayTime, dispatch_get_main_queue()) { [unowned self] in
+           
+            if let visibleRect = self.myTableView.enclosingScrollView?.contentView.visibleRect {
+                let range  = self.myTableView.rowsInRect(visibleRect)
+                self.myTableView.reloadDataForRowIndexes(NSIndexSet(indexesInRange:range), columnIndexes: NSIndexSet(indexesInRange: NSMakeRange(0,self.myTableView.numberOfColumns)))
+            }
+        }
+    }
 	
 	@IBAction func startDownloadButton(sender: NSButton) {
 		
@@ -665,7 +675,7 @@ class ViewController: NSViewController, NSURLSessionDelegate, NSURLSessionDataDe
                 cell.highlightText(searchField.stringValue)
             }
             
-            cell.updateCell(wwdcSession.title, description: wwdcSession.sessionDescription, descriptionVisible: false)
+            cell.updateCell(wwdcSession.title, description: wwdcSession.sessionDescription, descriptionVisible: (hideDescriptionsCheckBox.state == 0))
             
             return cell
 		}
@@ -678,15 +688,6 @@ class ViewController: NSViewController, NSURLSessionDelegate, NSURLSessionDataDe
 			if let file = wwdcSession.pdfFile {
 				cell.fileArray = [file]
 				cell.updateCell(isYearInfoFetchComplete, isDownloadSessionActive: isDownloading)
-			}
-			
-			if wwdcSession.isInfoFetchComplete {
-				cell.loadingProgressView.stopAnimation(nil)
-				cell.loadingProgressView.hidden = true
-			}
-			else {
-				cell.loadingProgressView.startAnimation(nil)
-				cell.loadingProgressView.hidden = false
 			}
 			
 			return cell
@@ -702,15 +703,6 @@ class ViewController: NSViewController, NSURLSessionDelegate, NSURLSessionDataDe
 				cell.updateCell(isYearInfoFetchComplete, isDownloadSessionActive: isDownloading)
 			}
 			
-			if wwdcSession.isInfoFetchComplete {
-				cell.loadingProgressView.stopAnimation(nil)
-				cell.loadingProgressView.hidden = true
-			}
-			else {
-				cell.loadingProgressView.startAnimation(nil)
-				cell.loadingProgressView.hidden = false
-			}
-			
 			return cell
 		}
 		else if tableColumn?.identifier == "HD" {
@@ -723,16 +715,7 @@ class ViewController: NSViewController, NSURLSessionDelegate, NSURLSessionDataDe
 				cell.fileArray = [file]
 				cell.updateCell(isYearInfoFetchComplete, isDownloadSessionActive: isDownloading)
 			}
-			
-			if wwdcSession.isInfoFetchComplete {
-				cell.loadingProgressView.stopAnimation(nil)
-				cell.loadingProgressView.hidden = true
-			}
-			else {
-				cell.loadingProgressView.startAnimation(nil)
-				cell.loadingProgressView.hidden = false
-			}
-			
+        
 			return cell
 		}
 		else if tableColumn?.identifier == "Code" {
@@ -744,15 +727,6 @@ class ViewController: NSViewController, NSURLSessionDelegate, NSURLSessionDataDe
 			if wwdcSession.sampleCodeArray.count > 0 {
 				cell.fileArray = wwdcSession.sampleCodeArray
 				cell.updateCell(isYearInfoFetchComplete, isDownloadSessionActive: isDownloading)
-			}
-			
-			if wwdcSession.isInfoFetchComplete {
-				cell.loadingProgressView.stopAnimation(nil)
-				cell.loadingProgressView.hidden = true
-			}
-			else {
-				cell.loadingProgressView.startAnimation(nil)
-				cell.loadingProgressView.hidden = false
 			}
 			
 			return cell
