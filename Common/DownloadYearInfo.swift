@@ -15,6 +15,7 @@ let videos2013baseURL = "/videos/wwdc/2013/"
 enum DownloadYearState {
     case Idle
     case FetchingYear
+	case FetchingSessionInfo
     case FetchingFileSizes
     case FetchingASCIIExtendedinfo
 }
@@ -28,7 +29,7 @@ class DownloadYearInfo: NSObject, NSURLSessionTaskDelegate {
     private let year : WWDCYear
 	private let parsingCompletionHandler : (sessions: [WWDCSession]) -> Void
 	private let updateUIHandler : (update : String) -> Void
-	private let individualCompletionHandler : (session : WWDCSession) -> Void
+	private let individualSessionUpdateHandler : (session : WWDCSession) -> Void
     private let sessionInfoCompletionHandler : (success : Bool) -> Void
 	
 	private var state : DownloadYearState
@@ -43,7 +44,7 @@ class DownloadYearInfo: NSObject, NSURLSessionTaskDelegate {
         self.year = year
 		self.parsingCompletionHandler = parsingCompleteHandler
 		self.updateUIHandler = messageForUIupdateHandler
-		self.individualCompletionHandler = individualSessionUpdateHandler
+		self.individualSessionUpdateHandler = individualSessionUpdateHandler
         self.sessionInfoCompletionHandler = completionHandler
 	
         self.state = .Idle
@@ -69,7 +70,7 @@ class DownloadYearInfo: NSObject, NSURLSessionTaskDelegate {
 
             state = .FetchingYear
 			
-			updateUIHandler(update: "Fetching main web page for \(year.description)")
+			updateUIHandler(update: "Fetching web page for \(year.description)…")
             
             let task = sessionManager?.dataTaskWithURL(videoURLString) { [unowned self]  (data, response, error) in
                 self.downloadMainPageFinished(data, response: response as? NSHTTPURLResponse, error: error)
@@ -98,17 +99,17 @@ class DownloadYearInfo: NSObject, NSURLSessionTaskDelegate {
             }
             else if let error = error {
 				updateUIHandler(update: "Main Page Error - \(error)")
-                self.sessionInfoCompletionHandler(success: false)
+                sessionInfoCompletionHandler(success: false)
             }
             else {
-                // Do nothing, and the operation will automatically finish.
-            }
+				
+			}
         }
         else {
-            self.sessionInfoCompletionHandler(success: false)
+            sessionInfoCompletionHandler(success: false)
         }
         
-        self.state = .Idle
+        state = .Idle
     }
 	
 	
@@ -117,7 +118,7 @@ class DownloadYearInfo: NSObject, NSURLSessionTaskDelegate {
 	// - Has Main Page with links to a Separate page to each Session
     private func parse2015Doc(doc : TFHpple) {
 		
-		updateUIHandler(update: "Parsing data…")
+		updateUIHandler(update: "Parsing web page…")
 
         // find sections
         let sections : [TFHppleElement] = doc.searchWithXPathQuery("//*[@class='inner_v_section']") as! [TFHppleElement]
@@ -144,85 +145,56 @@ class DownloadYearInfo: NSObject, NSURLSessionTaskDelegate {
 		
         if isCancelled {
             sessionInfoCompletionHandler(success: false)
+			state = .Idle
             return
         }
-        
-		parsingCompletionHandler(sessions: wwdcSessions)
 		
+		parsingCompletionHandler(sessions: wwdcSessions)		// returns Array of Sessions with only title + ID + (year) for UI
+		
+        state = .FetchingSessionInfo
 		updateUIHandler(update: "Fetching Each Session Info…")
-		
-        state = .FetchingFileSizes
 
-		let sessionGroup = dispatch_group_create()
+		parseAndFetchAllSessions(wwdcSessions) {
 		
-		for wwdcSession in wwdcSessions {
+			// ALL Session Page Info Feteched
 			
-			dispatch_group_enter(sessionGroup)
+			if self.isCancelled {
+				self.sessionInfoCompletionHandler(success: false)
+				self.state = .Idle
+				return
+			}
 			
-			parseAndFetchSession2015(wwdcSession) { (success) -> Void in
+			self.state = .FetchingFileSizes
+			self.updateUIHandler(update: "Fetching Size of Session Files…")
+
+			self.fetchAllFileSizesForSessions(self.wwdcSessions) {
+			
+				if self.isCancelled {
+					self.sessionInfoCompletionHandler(success: false)
+					self.state = .Idle
+					return
+				}
 				
-				self.updateUIHandler(update: "Parsing Session \(wwdcSession.sessionID)…")
-
-                self.individualCompletionHandler(session: wwdcSession)
-
-				dispatch_group_leave(sessionGroup)
+				self.state = .FetchingASCIIExtendedinfo
+				self.updateUIHandler(update: "Fetching ASCIIwwdc Extra Info…")
+				
+				self.fetchAllASCIIWWDCInfoForSessions(self.wwdcSessions) {
+					
+					self.state = .Idle
+					self.updateUIHandler(update: "Completed All Session Info!")
+					self.sessionInfoCompletionHandler(success: true)
+				}
 			}
 		}
-        
-		dispatch_group_notify(sessionGroup,dispatch_get_main_queue(),{ [unowned self] in
-			
-            if !self.isCancelled {
-				
-                self.updateUIHandler(update: "Fetching ASCIIwwdc Extra Info…")
-				
-                self.state = .FetchingASCIIExtendedinfo
-                
-                let transcriptGroup = dispatch_group_create()
-                
-                for wwdcSession in self.wwdcSessions {
-                    
-                    dispatch_group_enter(transcriptGroup)
-                    
-                    DownloadTranscriptManager.sharedManager.fetchTranscript(wwdcSession, completion: {  (success, errorCode) -> Void in
-
-                        wwdcSession.isInfoFetchComplete = true
-                        
-                        self.individualCompletionHandler(session: wwdcSession)
-                        
-                        if success {
-							self.updateUIHandler(update: "Completed Info for Session \(wwdcSession.sessionID)")
-                        }
-                        else {
-							self.updateUIHandler(update: "Failed for Session \(wwdcSession.sessionID)")
-                        }
-                        
-                        dispatch_group_leave(transcriptGroup)
-                    })
-                }
-                
-                dispatch_group_notify(transcriptGroup,dispatch_get_main_queue(),{ [unowned self] in
-                    
-                        self.state = .Idle
-					
-						self.updateUIHandler(update: "Completed All Session Info!")
-
-                        self.sessionInfoCompletionHandler(success: true)
-                    })
-            }
-            else {
-                self.sessionInfoCompletionHandler(success: false)
-            }
-            
-        })
 	}
 	
-	private func parseAndFetchSession2015 (wwdcSession : WWDCSession, completion: (success: Bool) -> Void) {
+	private func parseAndFetchSessionFrom2015 (wwdcSession : WWDCSession, completion: (success: Bool) -> Void) {
 		
 		let wwdcSessionPage = developerBaseURL+videos2015baseURL+"?id="+wwdcSession.sessionID
 		
 		guard let wwdcSessionPageURL = NSURL(string: wwdcSessionPage) else { return }
-        
-        let urlSessionTask : NSURLSessionDataTask? = sessionManager?.dataTaskWithRequest(NSURLRequest(URL: wwdcSessionPageURL)) { [unowned self] (pageData, response, error) -> Void in
+		
+		let urlSessionTask : NSURLSessionDataTask? = sessionManager?.dataTaskWithRequest(NSURLRequest(URL: wwdcSessionPageURL)) { [unowned self] (pageData, response, error) -> Void in
 			
 			if let pageData = pageData  {
 				
@@ -273,9 +245,9 @@ class DownloadYearInfo: NSObject, NSURLSessionTaskDelegate {
 							
 							// Links not consistant - can either be on samplecode page in or prelease directory
 							if let _ = link.rangeOfString("/sample-code/wwdc/2015/downloads/") {   // link appears to be direct link
-
+								
 								let codelink = developerBaseURL+link
-
+								
 								let file = FileInfo(session: wwdcSession, fileType: .SampleCode)
 								file.remoteFileURL = NSURL(string: codelink)
 								wwdcSession.sampleCodeArray.append(file)
@@ -307,26 +279,18 @@ class DownloadYearInfo: NSObject, NSURLSessionTaskDelegate {
 						}
 					}
 					
-					dispatch_group_notify(downloadGroup,dispatch_get_main_queue(),{ [unowned self] in
-							self.fetchFileSizes(wwdcSession) { (success) -> Void in
-								self.updateUIHandler(update: "Fetching Size of files in Session \(wwdcSession.sessionID)…")
-								completion(success: true)
-							}
-						})
+					dispatch_group_notify(downloadGroup,dispatch_get_main_queue(),{
+						completion(success: true)
+					})
 				}
 				else {
-					self.fetchFileSizes(wwdcSession) { (success) -> Void in
-						self.updateUIHandler(update: "Fetching Size of files in Session \(wwdcSession.sessionID)…")
-						completion(success: true)
-					}
+					completion(success: true)
 				}
 			}
 			else if let _ = error {
 				completion(success: false)
 			}
-
 		}
-		
 		urlSessionTask?.resume()
 	}
 	
@@ -334,7 +298,9 @@ class DownloadYearInfo: NSObject, NSURLSessionTaskDelegate {
 	// MARK: 2014
 	// - Has Main Page with all sessions
     private func parse2014Doc(doc : TFHpple) {
-        
+		
+		state = .FetchingSessionInfo
+
         // find sections
         let sessionSections : [TFHppleElement] = doc.searchWithXPathQuery("//*[@class='session']") as! [TFHppleElement]
 		
@@ -393,76 +359,115 @@ class DownloadYearInfo: NSObject, NSURLSessionTaskDelegate {
 		wwdcSessions.sortInPlace { ($1.sessionID > $0.sessionID) }
 		
         if isCancelled {
-            self.sessionInfoCompletionHandler(success: false)
+            sessionInfoCompletionHandler(success: false)
+			state = .Idle
             return
         }
         
-		self.parsingCompletionHandler(sessions: wwdcSessions)
-
+		parsingCompletionHandler(sessions: wwdcSessions)
+		
+		state = .FetchingFileSizes
 		updateUIHandler(update: "Fetching Size of Session Files…")
-        
-        state = .FetchingFileSizes
+		
+		fetchAllFileSizesForSessions(wwdcSessions) {
+			
+			if self.isCancelled {
+				self.sessionInfoCompletionHandler(success: false)
+				self.state = .Idle
+				return
+			}
+			
+			self.state = .FetchingASCIIExtendedinfo
+			self.updateUIHandler(update: "Fetching ASCIIwwdc Extra Info…")
+			
+			self.fetchAllASCIIWWDCInfoForSessions(self.wwdcSessions) {
+				
+				self.state = .Idle
+				self.updateUIHandler(update: "Completed All Session Info!")
+				self.sessionInfoCompletionHandler(success: true)
+			}
+		}
+    }
+	
+	
+	// MARK: - Helpers
+	private func parseAndFetchAllSessions(wwdcSessions:[WWDCSession], completion:() -> Void) {
+		
+		let sessionGroup = dispatch_group_create()
+		
+		for wwdcSession in wwdcSessions {
+			
+			dispatch_group_enter(sessionGroup)
+			
+			parseAndFetchSessionFrom2015(wwdcSession) { [unowned self] (success) -> Void in
+				
+				self.updateUIHandler(update: "Session Info - \(wwdcSession.sessionID)…")
+				
+				self.individualSessionUpdateHandler(session: wwdcSession)
+				
+				dispatch_group_leave(sessionGroup)
+			}
+		}
+		
+		dispatch_group_notify(sessionGroup,dispatch_get_main_queue(),{
+			completion()
+		})
+	}
+	
+	private func fetchAllFileSizesForSessions(wwdcSessions: [WWDCSession], completion:() -> Void) {
 		
 		let fileSizeGroup = dispatch_group_create()
-
+		
 		for wwdcSession in wwdcSessions {
 			
 			dispatch_group_enter(fileSizeGroup)
-
-			self.fetchFileSizes(wwdcSession) { (success) -> Void in
+			
+			fetchFileSizes(wwdcSession) { [unowned self] (success) -> Void in
 				
 				self.updateUIHandler(update: "Fetching Size of files in Session \(wwdcSession.sessionID)…")
-
+				
+				self.individualSessionUpdateHandler(session: wwdcSession)
+				
 				dispatch_group_leave(fileSizeGroup)
 			}
 		}
-
-		dispatch_group_notify(fileSizeGroup,dispatch_get_main_queue(),{ [unowned self] in
-			
-            if !self.isCancelled {
-                
-                self.updateUIHandler(update:"Fetching ASCIIwwdc Extra Info…")
-                
-                self.state = .FetchingASCIIExtendedinfo
-                
-                let transcriptGroup = dispatch_group_create()
-                
-                for wwdcSession in self.wwdcSessions {
-                    
-                    dispatch_group_enter(transcriptGroup)
-                    
-                    DownloadTranscriptManager.sharedManager.fetchTranscript(wwdcSession, completion: {  (success, errorCode) -> Void in
-                        
-                        wwdcSession.isInfoFetchComplete = true
-
-                        self.individualCompletionHandler(session: wwdcSession)
-                        
-						if success {
-							self.updateUIHandler(update: "Completed Info for Session \(wwdcSession.sessionID)")
-						}
-						else {
-							self.updateUIHandler(update: "Failed for Session \(wwdcSession.sessionID)")
-						}
-						
-                        dispatch_group_leave(transcriptGroup)
-                    })
-                }
-                
-                dispatch_group_notify(transcriptGroup,dispatch_get_main_queue(),{ [unowned self] in
-                    
-                        self.state = .Idle
-
-						self.updateUIHandler(update: "Completed All Session Info!")
-					
-                        self.sessionInfoCompletionHandler(success: true)
-                    })
-            }
-            else {
-                self.sessionInfoCompletionHandler(success: false)
-            }
+		
+		dispatch_group_notify(fileSizeGroup,dispatch_get_main_queue(),{
+			completion()
 		})
-    }
+	}
 	
+	private func fetchAllASCIIWWDCInfoForSessions(wwdcSessions: [WWDCSession], completion:() -> Void) {
+		
+		let transcriptGroup = dispatch_group_create()
+		
+		for wwdcSession in wwdcSessions {
+			
+			dispatch_group_enter(transcriptGroup)
+			
+			DownloadTranscriptManager.sharedManager.fetchTranscript(wwdcSession, completion: { [unowned self] (success, errorCode) -> Void in
+				
+				wwdcSession.isInfoFetchComplete = true
+				
+				self.individualSessionUpdateHandler(session: wwdcSession)
+				
+				if success {
+					self.updateUIHandler(update: "Completed Info for Session \(wwdcSession.sessionID)")
+				}
+				else {
+					self.updateUIHandler(update: "Failed for Session \(wwdcSession.sessionID)")
+				}
+				
+				dispatch_group_leave(transcriptGroup)
+			})
+		}
+		
+		dispatch_group_notify(transcriptGroup,dispatch_get_main_queue(),{
+			completion()
+		})
+	}
+	
+
 	
 	// MARK: - FileSize
 	private func fetchFileSizes (wwdcSession : WWDCSession, completion: (success: Bool) -> Void) {
@@ -534,7 +539,7 @@ class DownloadYearInfo: NSObject, NSURLSessionTaskDelegate {
         switch state {
         case .Idle:
             break
-        case .FetchingYear:
+		case .FetchingSessionInfo, .FetchingYear:
             if #available(OSX 10.11, *) {
                 sessionManager?.getAllTasksWithCompletionHandler({ (tasks) -> Void in
                     for task in tasks {

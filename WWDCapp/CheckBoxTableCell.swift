@@ -38,6 +38,7 @@ class CheckBoxTableViewCell : NSTableCellView {
     
 		checkBox.hidden = true
 		label.hidden = true
+		label.stringValue = ""
 		downloadProgressView.hidden = true
 		downloadCompleteImage.hidden = true
 		checkBox.enabled = false
@@ -46,9 +47,9 @@ class CheckBoxTableViewCell : NSTableCellView {
 	
 	func updateCell(isYearInfoFetchComplete:Bool, isDownloadSessionActive:Bool) {
         
-        var isThereFilesToDownload = true
-        var isAllFilesSizeFetchComplete = true
-        var isAllFilesAlreadyDownloaded = true
+		var isThereFilesToDownload = true
+		var isAllFilesSizeFetchComplete = true
+		var isAllFilesAlreadyDownloaded = true
         var isAllFilesDownloading = false
         var isAllFilesShouldDownload = true
         var currentDownloadBytes : Int64 = 0
@@ -142,7 +143,7 @@ class CheckBoxTableViewCell : NSTableCellView {
             }
             else {
                 
-                if isAllFilesShouldDownload == true {
+                if isAllFilesShouldDownload {
                     checkBox.state = 1
                 }
                 else {
@@ -155,6 +156,14 @@ class CheckBoxTableViewCell : NSTableCellView {
                 else {
                     checkBox.enabled = true
                 }
+				
+				if !isAllFilesSizeFetchComplete {
+					// we couldnt get file size
+					loadingProgressView.stopAnimation(nil)
+					
+					label.hidden = false
+					label.stringValue = "(404) 😡"
+				}
             }
         }
         else {

@@ -577,8 +577,6 @@ class ViewController: NSViewController, NSURLSessionDelegate, NSURLSessionDataDe
                         
                         self.myTableView.sortDescriptors = [sessionIDSortDescriptor]
                         
-                        self.reEnableCheckboxes()
-                        
                         self.coordinateAllCheckBoxUI()
                         
                         self.hideDescriptionsCheckBox.enabled = true
@@ -1089,14 +1087,6 @@ class ViewController: NSViewController, NSURLSessionDelegate, NSURLSessionDataDe
 		allHDCheckBox.enabled = false
 		allCodeCheckbox.enabled = false
 	}
-	
-	func reEnableCheckboxes () {
-		
-		allPDFCheckBox.enabled = true
-		allSDCheckBox.enabled = true
-		allHDCheckBox.enabled = true
-		allCodeCheckbox.enabled = true
-	}
     
     private func coordinateAllCheckBoxUI() {
         
@@ -1220,7 +1210,7 @@ class ViewController: NSViewController, NSURLSessionDelegate, NSURLSessionDataDe
         combinePDFButton.enabled = true
         startDownload.enabled = true
         yearSeletor.enabled = true
-        reEnableCheckboxes()
+        coordinateAllCheckBoxUI()
     }
 
 	
