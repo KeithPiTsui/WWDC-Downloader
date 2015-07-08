@@ -27,7 +27,6 @@ class FetchFileSizeManager : NSObject, NSURLSessionDownloadDelegate {
         super.init()
         
         let headerconfig = NSURLSessionConfiguration.defaultSessionConfiguration()
-        headerconfig.HTTPMaximumConnectionsPerHost = 3
         headerSessionManager = NSURLSession(configuration: headerconfig, delegate: self, delegateQueue: nil)
     }
 
