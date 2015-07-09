@@ -9,7 +9,6 @@
 import Foundation
 import Cocoa
 
-@available(OSX 10.11, *)
 class HighlightableTextStorage : NSTextStorage {
 	
 	var textToHighlight : String = ""
@@ -38,14 +37,23 @@ class HighlightableTextStorage : NSTextStorage {
 		
 		tmpString.replaceCharactersInRange(range, withString: str)
 		
-		self.edited(NSTextStorageEditActions.EditedCharacters, range: range, changeInLength: str.characters.count-range.length)
+		if #available(OSX 10.11, *) {
+		    self.edited(NSTextStorageEditActions.EditedCharacters, range: range, changeInLength: str.characters.count-range.length)
+		} else {
+			self.edited(self.editedMask, range: range, changeInLength: str.characters.count-range.length)
+		}
 	}
 	
 	override func setAttributes(attrs: [String : AnyObject]?, range: NSRange) {
 		
 		tmpString.setAttributes(attrs, range: range)
 		
-		self.edited(NSTextStorageEditActions.EditedAttributes, range: range, changeInLength: 0)
+		if #available(OSX 10.11, *) {
+		    self.edited(NSTextStorageEditActions.EditedAttributes, range: range, changeInLength: 0)
+		} else {
+		    // Fallback on earlier versions
+			self.edited(self.editedMask, range: range, changeInLength: 0)
+		}
 		
 	}
 	

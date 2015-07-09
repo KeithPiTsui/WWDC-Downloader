@@ -231,7 +231,8 @@ class ViewController: NSViewController, NSURLSessionDelegate, NSURLSessionDataDe
 					    if wwdcSession.title.localizedStandardContainsString(sender.stringValue.stringByTrimmingCharactersInSet(NSCharacterSet.whitespaceCharacterSet())) || description.localizedStandardContainsString(sender.stringValue.stringByTrimmingCharactersInSet(NSCharacterSet.whitespaceCharacterSet())) {
     						newArray.append(wwdcSession)
     					}
-					} else {
+					}
+					else {
 					    // Fallback on earlier versions
 						let searchTerm = sender.stringValue.stringByTrimmingCharactersInSet(NSCharacterSet.whitespaceCharacterSet())
 						let rangeTitle = wwdcSession.title.rangeOfString(searchTerm, options: NSStringCompareOptions.CaseInsensitiveSearch, range: nil, locale: NSLocale.systemLocale())
@@ -248,7 +249,8 @@ class ViewController: NSViewController, NSURLSessionDelegate, NSURLSessionDataDe
     						newArray.append(wwdcSession)
     					}
 					
-					} else {
+					}
+					else {
 					    // Fallback on earlier versions
 						let searchTerm = sender.stringValue.stringByTrimmingCharactersInSet(NSCharacterSet.whitespaceCharacterSet())
 						let rangeTitle = wwdcSession.title.rangeOfString(searchTerm, options: NSStringCompareOptions.CaseInsensitiveSearch, range: nil, locale: NSLocale.systemLocale())
@@ -729,10 +731,10 @@ class ViewController: NSViewController, NSURLSessionDelegate, NSURLSessionDataDe
 			
 			let cell = (tableView.makeViewWithIdentifier("sessionName", owner: self) as? SessionNameDescriptionCell)!
 				
-            if #available(OSX 10.11, *) {
+			// if #available(OSX 10.11, *) {
                 cell.highlightText(searchField.stringValue)
-            }
-            
+			// }
+			
             cell.updateCell(wwdcSession.title, description: wwdcSession.sessionDescription, descriptionVisible: (hideDescriptionsCheckBox.state == 0))
             
             return cell

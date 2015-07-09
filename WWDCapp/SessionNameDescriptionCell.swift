@@ -43,7 +43,7 @@ class SessionNameDescriptionCell : NSTableCellView, NSTextViewDelegate {
 	
 	override func awakeFromNib() {
 
-        if #available(OSX 10.11, *) {
+		// if #available(OSX 10.11, *) {
 				
             textField!.stringValue = ""
             
@@ -65,12 +65,12 @@ class SessionNameDescriptionCell : NSTableCellView, NSTextViewDelegate {
             if let layoutManager = sessionDescriptionTextView.layoutManager {
                 (descriptionTextStorage as! HighlightableTextStorage).addLayoutManager(layoutManager)
             }
-		}
+		//}
 	}
 	
 	func updateCell(name:String, description:String?, descriptionVisible:Bool) {
 		
-        if #available(OSX 10.11, *) {
+		//    if #available(OSX 10.11, *) {
             sessionName.string = name
             
             if descriptionVisible {
@@ -119,20 +119,20 @@ class SessionNameDescriptionCell : NSTableCellView, NSTextViewDelegate {
                 sessionDescriptionTextViewScrollView.frame = scrollFrame
                 sessionDescriptionTextView.frame = textviewFrame
             }
-        }
-		else {
-			textField!.stringValue = name
-            
-            if let description = description {
-                descriptionField.stringValue = description
-            }
-            else {
-                descriptionField.stringValue = ""
-            }
-		}
+		//}
+//		else {
+//			textField!.stringValue = name
+//            
+//            if let description = description {
+//                descriptionField.stringValue = description
+//            }
+//            else {
+//                descriptionField.stringValue = ""
+//            }
+//		}
 	}
     
-    @available(OSX 10.11, *)
+//  @available(OSX 10.11, *)
     func highlightText (searchString: String) {
         
         let nameTextStorage = self.nameTextStorage as! HighlightableTextStorage
