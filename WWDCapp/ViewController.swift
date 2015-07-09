@@ -902,6 +902,9 @@ class ViewController: NSViewController, NSURLSessionDelegate, NSURLSessionDataDe
 						}
 						
 						self.updateTotalProgress()
+                        if progress < 0.05 {
+                            self.scrollToFirstRowOfFilesCurrentlyDownloading(index)
+                        }
 					}
 				}
 
@@ -1089,6 +1092,20 @@ class ViewController: NSViewController, NSURLSessionDelegate, NSURLSessionDataDe
                 self.downloadProgressView.doubleValue = Double(progress)
                 })
             })
+    }
+    
+    func scrollToFirstRowOfFilesCurrentlyDownloading(index : Int) {
+        
+        let rowRect = myTableView.rectOfRow(index)
+        let viewRect = myTableView.superview?.frame
+        var scrollOrigin = rowRect.origin
+        if let viewRect = viewRect {
+            scrollOrigin.y = scrollOrigin.y + (rowRect.size.height - viewRect.size.height) / 2;
+            if (scrollOrigin.y < 0) {
+                scrollOrigin.y = 0
+            }
+            myTableView.superview?.animator().setBoundsOrigin(scrollOrigin)
+        }
     }
     
 	func selectedDownloadInformation() -> (totalSize: Int64, numberOfFiles: Int) {
