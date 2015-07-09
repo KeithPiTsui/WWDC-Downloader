@@ -724,16 +724,23 @@ class ViewController: NSViewController, NSURLSessionDelegate, NSURLSessionDataDe
 			let cell = (tableView.makeViewWithIdentifier("sessionID", owner: self) as? NSTableCellView)!
 			
 			cell.textField?.stringValue = wwdcSession.sessionID
-			
+            
+            if row % 2 == 0
+            {
+                cell.textField?.backgroundColor = NSColor.whiteColor()
+            }
+            else {
+                let rowView = tableView.rowViewAtRow(row, makeIfNecessary: false)
+                cell.textField?.backgroundColor = rowView?.backgroundColor
+            }
+            
 			return cell
 		}
 		else if tableColumn?.identifier == "sessionName" {
 			
 			let cell = (tableView.makeViewWithIdentifier("sessionName", owner: self) as? SessionNameDescriptionCell)!
 				
-			// if #available(OSX 10.11, *) {
-                cell.highlightText(searchField.stringValue)
-			// }
+            cell.highlightText(searchField.stringValue)
 			
             cell.updateCell(wwdcSession.title, description: wwdcSession.sessionDescription, descriptionVisible: (hideDescriptionsCheckBox.state == 0))
             
@@ -748,8 +755,17 @@ class ViewController: NSViewController, NSURLSessionDelegate, NSURLSessionDataDe
 			if let file = wwdcSession.pdfFile {
 				cell.fileArray = [file]
 				cell.updateCell(isYearInfoFetchComplete, isDownloadSessionActive: isDownloading)
+                
+                if row % 2 == 0
+                {
+                    cell.label?.backgroundColor = NSColor.whiteColor()
+                }
+                else {
+                    let rowView = tableView.rowViewAtRow(row, makeIfNecessary: false)
+                    cell.label?.backgroundColor = rowView?.backgroundColor
+                }
 			}
-			
+            			
 			return cell
 		}
 		else if tableColumn?.identifier == "SD" {
@@ -761,6 +777,15 @@ class ViewController: NSViewController, NSURLSessionDelegate, NSURLSessionDataDe
 			if let file = wwdcSession.sdFile {
 				cell.fileArray = [file]
 				cell.updateCell(isYearInfoFetchComplete, isDownloadSessionActive: isDownloading)
+                
+                if row % 2 == 0
+                {
+                    cell.label?.backgroundColor = NSColor.whiteColor()
+                }
+                else {
+                    let rowView = tableView.rowViewAtRow(row, makeIfNecessary: false)
+                    cell.label?.backgroundColor = rowView?.backgroundColor
+                }
 			}
 			
 			return cell
@@ -774,6 +799,15 @@ class ViewController: NSViewController, NSURLSessionDelegate, NSURLSessionDataDe
 			if let file = wwdcSession.hdFile {
 				cell.fileArray = [file]
 				cell.updateCell(isYearInfoFetchComplete, isDownloadSessionActive: isDownloading)
+                
+                if row % 2 == 0
+                {
+                    cell.label?.backgroundColor = NSColor.whiteColor()
+                }
+                else {
+                    let rowView = tableView.rowViewAtRow(row, makeIfNecessary: false)
+                    cell.label?.backgroundColor = rowView?.backgroundColor
+                }
 			}
         
 			return cell
@@ -787,6 +821,15 @@ class ViewController: NSViewController, NSURLSessionDelegate, NSURLSessionDataDe
 			if wwdcSession.sampleCodeArray.count > 0 {
 				cell.fileArray = wwdcSession.sampleCodeArray
 				cell.updateCell(isYearInfoFetchComplete, isDownloadSessionActive: isDownloading)
+                
+                if row % 2 == 0
+                {
+                    cell.label?.backgroundColor = NSColor.whiteColor()
+                }
+                else {
+                    let rowView = tableView.rowViewAtRow(row, makeIfNecessary: false)
+                    cell.label?.backgroundColor = rowView?.backgroundColor
+                }
 			}
 			
 			return cell

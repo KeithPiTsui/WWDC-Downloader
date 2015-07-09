@@ -39,6 +39,7 @@ class CheckBoxTableViewCell : NSTableCellView {
 		checkBox.hidden = true
 		label.hidden = true
 		label.stringValue = ""
+        loadingProgressView.hidden = true
 		downloadProgressView.hidden = true
 		downloadCompleteImage.hidden = true
 		checkBox.enabled = false
@@ -109,6 +110,7 @@ class CheckBoxTableViewCell : NSTableCellView {
         if isThereFilesToDownload {
             if isAllFilesSizeFetchComplete {
                 
+                loadingProgressView.hidden = true
                 loadingProgressView.stopAnimation(nil)
                 checkBox.hidden = false
                 label.hidden = false
@@ -141,6 +143,7 @@ class CheckBoxTableViewCell : NSTableCellView {
             }
             else {
                 resetCell()
+                loadingProgressView.hidden = false
                 loadingProgressView.startAnimation(nil)
             }
             
@@ -165,6 +168,7 @@ class CheckBoxTableViewCell : NSTableCellView {
 				
 				if !isAllFilesSizeFetchComplete {
 					// we couldnt get file size
+                    loadingProgressView.hidden = true
 					loadingProgressView.stopAnimation(nil)
 					
 					label.hidden = false
@@ -174,6 +178,7 @@ class CheckBoxTableViewCell : NSTableCellView {
         }
         else {
             resetCell()
+            loadingProgressView.hidden = true
             loadingProgressView.stopAnimation(nil)
         }
     }

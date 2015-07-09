@@ -18,8 +18,6 @@ class SessionNameDescriptionCell : NSTableCellView, NSTextViewDelegate {
     @IBOutlet var sessionDescriptionTextViewScrollView: NSScrollView!
     var nameTextStorage : AnyObject!
     var descriptionTextStorage : AnyObject!
-
-	@IBOutlet var descriptionField: NSTextField! // pre 10.11
     
     var nameAttributes : [String : NSObject] {
         get {
@@ -44,9 +42,7 @@ class SessionNameDescriptionCell : NSTableCellView, NSTextViewDelegate {
 	override func awakeFromNib() {
 
 		// if #available(OSX 10.11, *) {
-				
-            textField!.stringValue = ""
-            
+				            
             sessionName.verticallyResizable = false
             sessionDescriptionTextView.verticallyResizable = false
             

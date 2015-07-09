@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.Storyboard.XIB" version="3.0" toolsVersion="8152.3" systemVersion="15A216g" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" initialViewController="B8D-0N-5wS">
+<document type="com.apple.InterfaceBuilder3.Cocoa.Storyboard.XIB" version="3.0" toolsVersion="8152.3" systemVersion="14E46" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" initialViewController="B8D-0N-5wS">
     <dependencies>
         <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="8152.3"/>
     </dependencies>
@@ -329,7 +329,7 @@
                                     <scrollView fixedFrame="YES" autohidesScrollers="YES" horizontalLineScroll="52" horizontalPageScroll="10" verticalLineScroll="52" verticalPageScroll="10" usesPredominantAxisScrolling="NO" translatesAutoresizingMaskIntoConstraints="NO" id="DUe-MO-CLA">
                                         <rect key="frame" x="20" y="64" width="890" height="480"/>
                                         <clipView key="contentView" ambiguous="YES" drawsBackground="NO" id="Hod-g6-9bx">
-                                            <rect key="frame" x="1" y="0.0" width="888" height="479"/>
+                                            <rect key="frame" x="1" y="23" width="888" height="456"/>
                                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                             <subviews>
                                                 <tableView verticalHuggingPriority="750" allowsExpansionToolTips="YES" columnAutoresizingStyle="none" alternatingRowBackgroundColors="YES" columnReordering="NO" columnResizing="NO" multipleSelection="NO" emptySelection="NO" autosaveColumns="NO" typeSelect="NO" rowHeight="50" headerView="GLv-Gv-fqk" viewBased="YES" id="SSh-0R-MKF">
@@ -346,7 +346,7 @@
                                                                 <color key="textColor" name="headerTextColor" catalog="System" colorSpace="catalog"/>
                                                                 <color key="backgroundColor" name="headerColor" catalog="System" colorSpace="catalog"/>
                                                             </tableHeaderCell>
-                                                            <textFieldCell key="dataCell" lineBreakMode="truncatingTail" selectable="YES" editable="YES" title="Text Cell" id="yan-4t-ab9">
+                                                            <textFieldCell key="dataCell" lineBreakMode="truncatingTail" selectable="YES" editable="YES" title="Text Cell" drawsBackground="YES" id="yan-4t-ab9">
                                                                 <font key="font" metaFont="system"/>
                                                                 <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
                                                                 <color key="backgroundColor" name="controlBackgroundColor" catalog="System" colorSpace="catalog"/>
@@ -364,7 +364,7 @@
                                                                                 <constraint firstAttribute="height" constant="24" id="xjk-Hc-OFP"/>
                                                                             </constraints>
                                                                             <animations/>
-                                                                            <textFieldCell key="cell" lineBreakMode="truncatingTail" sendsActionOnEndEditing="YES" alignment="center" title="Table View Cell" id="erZ-ME-7Gm">
+                                                                            <textFieldCell key="cell" lineBreakMode="truncatingTail" sendsActionOnEndEditing="YES" alignment="center" title="Table View Cell" drawsBackground="YES" id="erZ-ME-7Gm">
                                                                                 <font key="font" metaFont="system"/>
                                                                                 <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
                                                                                 <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
@@ -372,9 +372,9 @@
                                                                         </textField>
                                                                     </subviews>
                                                                     <constraints>
+                                                                        <constraint firstItem="y3w-TZ-YZi" firstAttribute="width" secondItem="I6T-jp-6sv" secondAttribute="width" id="VPQ-PV-0zn"/>
                                                                         <constraint firstItem="y3w-TZ-YZi" firstAttribute="centerX" secondItem="I6T-jp-6sv" secondAttribute="centerX" id="Y0s-Fg-0mS"/>
                                                                         <constraint firstItem="y3w-TZ-YZi" firstAttribute="centerY" secondItem="I6T-jp-6sv" secondAttribute="centerY" id="km2-Pg-W1N"/>
-                                                                        <constraint firstItem="y3w-TZ-YZi" firstAttribute="leading" secondItem="I6T-jp-6sv" secondAttribute="leading" constant="2" id="pwz-wm-BKm"/>
                                                                     </constraints>
                                                                     <animations/>
                                                                     <connections>
@@ -389,7 +389,7 @@
                                                                 <color key="textColor" name="headerTextColor" catalog="System" colorSpace="catalog"/>
                                                                 <color key="backgroundColor" name="headerColor" catalog="System" colorSpace="catalog"/>
                                                             </tableHeaderCell>
-                                                            <textFieldCell key="dataCell" lineBreakMode="truncatingTail" selectable="YES" editable="YES" title="Text Cell" id="n1n-xb-uRU">
+                                                            <textFieldCell key="dataCell" lineBreakMode="truncatingTail" selectable="YES" editable="YES" title="Text Cell" drawsBackground="YES" id="n1n-xb-uRU">
                                                                 <font key="font" metaFont="system"/>
                                                                 <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
                                                                 <color key="backgroundColor" name="controlBackgroundColor" catalog="System" colorSpace="catalog"/>
@@ -401,27 +401,6 @@
                                                                     <rect key="frame" x="74" y="1" width="400" height="50"/>
                                                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                                     <subviews>
-                                                                        <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" ambiguous="YES" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="ygr-QC-bnS" userLabel="Name Field">
-                                                                            <rect key="frame" x="0.0" y="20" width="400" height="20"/>
-                                                                            <constraints>
-                                                                                <constraint firstAttribute="height" constant="20" id="maE-tc-3te"/>
-                                                                            </constraints>
-                                                                            <animations/>
-                                                                            <textFieldCell key="cell" lineBreakMode="truncatingTail" sendsActionOnEndEditing="YES" title="Table View Cell" id="ZXt-bm-zgP">
-                                                                                <font key="font" metaFont="systemBold"/>
-                                                                                <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
-                                                                                <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
-                                                                            </textFieldCell>
-                                                                        </textField>
-                                                                        <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" fixedFrame="YES" setsMaxLayoutWidthAtFirstLayout="YES" translatesAutoresizingMaskIntoConstraints="NO" id="nZf-66-To1">
-                                                                            <rect key="frame" x="0.0" y="5" width="400" height="17"/>
-                                                                            <animations/>
-                                                                            <textFieldCell key="cell" truncatesLastVisibleLine="YES" selectable="YES" refusesFirstResponder="YES" allowsUndo="NO" sendsActionOnEndEditing="YES" state="on" alignment="left" id="gFm-Tg-WgZ">
-                                                                                <font key="font" metaFont="system"/>
-                                                                                <color key="textColor" name="textColor" catalog="System" colorSpace="catalog"/>
-                                                                                <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
-                                                                            </textFieldCell>
-                                                                        </textField>
                                                                         <scrollView verticalHuggingPriority="260" verticalCompressionResistancePriority="760" placeholderIntrinsicWidth="400" placeholderIntrinsicHeight="15" borderType="none" horizontalLineScroll="10" horizontalPageScroll="10" verticalLineScroll="10" verticalPageScroll="10" hasHorizontalScroller="NO" hasVerticalScroller="NO" usesPredominantAxisScrolling="NO" horizontalScrollElasticity="none" verticalScrollElasticity="none" translatesAutoresizingMaskIntoConstraints="NO" id="Ax9-07-ryC" customClass="DisabledScrollingScrollView" customModule="WWDCapp" customModuleProvider="target">
                                                                             <rect key="frame" x="0.0" y="25" width="400" height="15"/>
                                                                             <clipView key="contentView" drawsBackground="NO" copiesOnScroll="NO" id="6Br-BP-Tno">
@@ -507,12 +486,10 @@
                                                                     </constraints>
                                                                     <animations/>
                                                                     <connections>
-                                                                        <outlet property="descriptionField" destination="nZf-66-To1" id="ZAB-tJ-yna"/>
                                                                         <outlet property="sessionDescriptionTextView" destination="4AP-Fn-m4a" id="uxX-vr-Yf7"/>
                                                                         <outlet property="sessionDescriptionTextViewScrollView" destination="K7q-GE-dhi" id="uCc-pB-rIZ"/>
                                                                         <outlet property="sessionName" destination="SY7-hN-yFX" id="BSB-71-Kgm"/>
                                                                         <outlet property="sessionNameScrollView" destination="Ax9-07-ryC" id="zc7-3z-SaR"/>
-                                                                        <outlet property="textField" destination="ygr-QC-bnS" id="2zC-Ak-lPF"/>
                                                                     </connections>
                                                                 </tableCellView>
                                                             </prototypeCellViews>
@@ -523,7 +500,7 @@
                                                                 <color key="textColor" name="headerTextColor" catalog="System" colorSpace="catalog"/>
                                                                 <color key="backgroundColor" name="headerColor" catalog="System" colorSpace="catalog"/>
                                                             </tableHeaderCell>
-                                                            <textFieldCell key="dataCell" lineBreakMode="truncatingTail" selectable="YES" editable="YES" title="Text Cell" id="9z8-22-0nQ">
+                                                            <textFieldCell key="dataCell" lineBreakMode="truncatingTail" selectable="YES" editable="YES" title="Text Cell" drawsBackground="YES" id="9z8-22-0nQ">
                                                                 <font key="font" metaFont="system"/>
                                                                 <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
                                                                 <color key="backgroundColor" name="controlBackgroundColor" catalog="System" colorSpace="catalog"/>
@@ -553,12 +530,12 @@
                                                                                     <animations/>
                                                                                 </progressIndicator>
                                                                                 <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="djj-Az-BU3">
-                                                                                    <rect key="frame" x="1" y="14" width="98" height="17"/>
+                                                                                    <rect key="frame" x="3" y="14" width="94" height="17"/>
                                                                                     <animations/>
-                                                                                    <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" alignment="center" id="Jsd-Oo-x4U">
+                                                                                    <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" alignment="center" drawsBackground="YES" id="Jsd-Oo-x4U">
                                                                                         <font key="font" metaFont="smallSystem"/>
                                                                                         <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
-                                                                                        <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
+                                                                                        <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                                                                     </textFieldCell>
                                                                                 </textField>
                                                                                 <progressIndicator wantsLayer="YES" horizontalHuggingPriority="750" verticalHuggingPriority="750" maxValue="100" displayedWhenStopped="NO" bezeled="NO" indeterminate="YES" controlSize="small" style="spinning" translatesAutoresizingMaskIntoConstraints="NO" id="rlj-5i-n0V">
@@ -650,13 +627,13 @@
                                                                                     <rect key="frame" x="3" y="2" width="94" height="20"/>
                                                                                     <animations/>
                                                                                 </progressIndicator>
-                                                                                <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="uwa-vg-dVW">
+                                                                                <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="uwa-vg-dVW">
                                                                                     <rect key="frame" x="1" y="14" width="98" height="17"/>
                                                                                     <animations/>
-                                                                                    <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" alignment="center" id="rDb-Wk-z0d">
+                                                                                    <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" alignment="center" drawsBackground="YES" id="rDb-Wk-z0d">
                                                                                         <font key="font" metaFont="smallSystem"/>
                                                                                         <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
-                                                                                        <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
+                                                                                        <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                                                                     </textFieldCell>
                                                                                 </textField>
                                                                                 <button translatesAutoresizingMaskIntoConstraints="NO" id="c5i-OA-A5W">
@@ -748,13 +725,13 @@
                                                                                     <rect key="frame" x="3" y="2" width="94" height="20"/>
                                                                                     <animations/>
                                                                                 </progressIndicator>
-                                                                                <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="RTl-b9-Pcu">
+                                                                                <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="RTl-b9-Pcu">
                                                                                     <rect key="frame" x="1" y="14" width="98" height="17"/>
                                                                                     <animations/>
-                                                                                    <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" alignment="center" id="A9B-B0-997">
+                                                                                    <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" alignment="center" drawsBackground="YES" id="A9B-B0-997">
                                                                                         <font key="font" metaFont="smallSystem"/>
                                                                                         <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
-                                                                                        <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
+                                                                                        <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                                                                     </textFieldCell>
                                                                                 </textField>
                                                                                 <button translatesAutoresizingMaskIntoConstraints="NO" id="i0J-B1-u0v">
@@ -846,13 +823,13 @@
                                                                                     <rect key="frame" x="3" y="2" width="94" height="20"/>
                                                                                     <animations/>
                                                                                 </progressIndicator>
-                                                                                <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="dS8-HG-4eW">
+                                                                                <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="dS8-HG-4eW">
                                                                                     <rect key="frame" x="1" y="14" width="98" height="17"/>
                                                                                     <animations/>
-                                                                                    <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" alignment="center" id="gD9-Fu-OyN">
+                                                                                    <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" alignment="center" drawsBackground="YES" id="gD9-Fu-OyN">
                                                                                         <font key="font" metaFont="smallSystem"/>
                                                                                         <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
-                                                                                        <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
+                                                                                        <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                                                                     </textFieldCell>
                                                                                 </textField>
                                                                                 <button translatesAutoresizingMaskIntoConstraints="NO" id="8g0-hP-VeM">
