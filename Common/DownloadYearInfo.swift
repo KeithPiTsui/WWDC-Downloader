@@ -566,5 +566,4 @@ class DownloadYearInfo: NSObject, NSURLSessionTaskDelegate {
             DownloadTranscriptManager.sharedManager.stopAllTranscriptFetchs()
         }
     }
-	
 }

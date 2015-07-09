@@ -45,7 +45,7 @@ enum FileType: CustomStringConvertible {
     }
 }
 
-@objc class FileInfo : NSObject {
+@objc class FileInfo : NSObject, NSCoding {
 	
 	let fileType : FileType
 	weak var session : WWDCSession?
@@ -187,7 +187,46 @@ enum FileType: CustomStringConvertible {
 		}
 	}
 	
+	// MARK: - Encoding
+	required init(coder aDecoder: NSCoder) {
+		self.session  = aDecoder.decodeObjectForKey("session") as? WWDCSession
+		let fileTypeString  = aDecoder.decodeObjectForKey("fileType") as! String
+		switch fileTypeString {
+		case "PDF":
+			self.fileType = .PDF
+		case "SD":
+			self.fileType = .SD
+		case "HD":
+			self.fileType = .HD
+		case "Sample Code":
+			self.fileType = .SampleCode
+		default:
+			self.fileType = .PDF
+		}
+		
+		super.init()
+		
+		self.remoteFileURL = aDecoder.decodeObjectOfClass(NSURL.self, forKey: "sampleCodeArray") as? NSURL
+		let fileSize = Int(aDecoder.decodeInt64ForKey("fileSize"))
+		if fileSize > 0 {
+			self.fileSize = fileSize
+		}
+		self.shouldDownloadFile = aDecoder.decodeBoolForKey("shouldDownloadFile")
+	}
 	
+	func encodeWithCoder(aCoder: NSCoder) {
+		aCoder.encodeObject(session, forKey: "session")
+		aCoder.encodeObject(fileType.description, forKey: "fileType")
+		if let remoteFileURL = self.remoteFileURL {
+			aCoder.encodeObject(remoteFileURL, forKey: "remoteFileURL")
+		}
+		if let fileSize = self.fileSize {
+			aCoder.encodeInt64(Int64(fileSize), forKey: "fileSize")
+		}
+		aCoder.encodeBool(shouldDownloadFile, forKey: "shouldDownloadFile")
+	}
+
+	// MARK:  File Helpers
 	func fileExistsLocallyForFile() -> Bool {
 		if let localFileURL = self.localFileURL {
 			if let localFileURLString = localFileURL.path {

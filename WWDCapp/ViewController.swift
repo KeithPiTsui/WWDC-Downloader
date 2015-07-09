@@ -146,15 +146,35 @@ class ViewController: NSViewController, NSURLSessionDelegate, NSURLSessionDataDe
 	@IBAction func yearSelected(sender: NSPopUpButton) {
 
         guard let title = sender.selectedItem?.title else { return }
-        
+		
+		resetUIForYearFetch()
+
         switch title {
             case "2015":
-                fetchSessionInfoForYear(.WWDC2015)
+				if let archiveSessions = Archiving.unArchiveDataForYear(.WWDC2015) {
+					self.allWWDCSessionsArray = archiveSessions
+					self.setupUIForCompletedInfo()
+				}
+				else {
+					fetchSessionInfoForYear(.WWDC2015)
+				}
             case "2014":
-                fetchSessionInfoForYear(.WWDC2014)
-            case "2013":
-                fetchSessionInfoForYear(.WWDC2013)
-            default:
+				if let archiveSessions = Archiving.unArchiveDataForYear(.WWDC2014) {
+					self.allWWDCSessionsArray = archiveSessions
+					self.setupUIForCompletedInfo()
+				}
+				else {
+					fetchSessionInfoForYear(.WWDC2014)
+				}
+			case "2013":
+				if let archiveSessions = Archiving.unArchiveDataForYear(.WWDC2013) {
+					self.allWWDCSessionsArray = archiveSessions
+					self.setupUIForCompletedInfo()
+				}
+				else {
+					fetchSessionInfoForYear(.WWDC2013)
+				}
+			default:
 				break
         }
 	}
@@ -526,8 +546,6 @@ class ViewController: NSViewController, NSURLSessionDelegate, NSURLSessionDataDe
 	// MARK: Fetch Year Info
 	func fetchSessionInfoForYear(year : WWDCYear) {
 		
-		resetUIForYearFetch()
-		
 		yearSeletor.enabled = false
 		
         stopFetchButton.hidden = false
@@ -565,34 +583,16 @@ class ViewController: NSViewController, NSURLSessionDelegate, NSURLSessionDataDe
 
                     if (success) {
                         
-                        self.isYearInfoFetchComplete = true
-                        
-                        self.stopFetchButton.hidden = true
-
-                        self.searchField.enabled = true
-                        
-                        self.startDownload.enabled = true
-                        
-                        let sessionIDSortDescriptor = NSSortDescriptor(key: "sessionID", ascending: true, selector: "localizedStandardCompare:")
-                        
-                        self.myTableView.sortDescriptors = [sessionIDSortDescriptor]
-                        
-                        self.coordinateAllCheckBoxUI()
-                        
-                        self.hideDescriptionsCheckBox.enabled = true
-                        self.hideDescriptionsCheckBox.state = 0
-                        
-                        self.myTableView.reloadData()
-                        
-                        self.updateCombinePDFButtonState()
-						
-						self.updateTotalToDownloadLabel()
-						
-						self.checkDownloadButtonState()
+                        self.setupUIForCompletedInfo()
 						
 						let delayTime = dispatch_time(DISPATCH_TIME_NOW, Int64(3 * Double(NSEC_PER_SEC)))
 						dispatch_after(delayTime, dispatch_get_main_queue()) {
 							self.loggingLabel.stringValue = ""
+						}
+						
+						Archiving.archiveDataForYear(year, sessions: self.allWWDCSessionsArray) { (success) in
+							
+							print("Archive Outcome for \(year.description) - \(success)")
 						}
 						
                     }
@@ -609,6 +609,34 @@ class ViewController: NSViewController, NSURLSessionDelegate, NSURLSessionDataDe
 			})
 	}
 	
+	func setupUIForCompletedInfo () {
+		
+		isYearInfoFetchComplete = true
+		
+		stopFetchButton.hidden = true
+		
+		searchField.enabled = true
+		
+		startDownload.enabled = true
+		
+		let sessionIDSortDescriptor = NSSortDescriptor(key: "sessionID", ascending: true, selector: "localizedStandardCompare:")
+		
+		myTableView.sortDescriptors = [sessionIDSortDescriptor]
+		
+		coordinateAllCheckBoxUI()
+		
+		hideDescriptionsCheckBox.enabled = true
+		hideDescriptionsCheckBox.state = 0
+		
+		myTableView.reloadData()
+		
+		updateCombinePDFButtonState()
+		
+		updateTotalToDownloadLabel()
+		
+		checkDownloadButtonState()
+	}
+	
 	
 	// MARK: - TableView
 	func numberOfRowsInTableView(tableView: NSTableView) -> Int {
@@ -622,12 +650,12 @@ class ViewController: NSViewController, NSURLSessionDelegate, NSURLSessionDataDe
 	}
 	
     func tableView(tableView: NSTableView, heightOfRow row: Int) -> CGFloat {
-        
+		
         if hideDescriptionsCheckBox.state == 1 {
             return 50
         }
         else {
-            
+			
             let wwdcSession = (!isFiltered ? allWWDCSessionsArray[row] : visibleWWDCSessionsArray[row])
             
             if let referenceCell = referenceCell {

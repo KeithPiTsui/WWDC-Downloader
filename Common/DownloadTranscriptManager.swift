@@ -54,14 +54,15 @@ class DownloadTranscriptManager : NSObject, NSURLSessionDataDelegate {
 										if timeCodes.count == annotations.count {
 											
 											autoreleasepool {
-												var transcript : [(Double, String)] = []
+												var transcript : [TranscriptInfo] = []
 												
 												for var i = 0;  i < timeCodes.count; ++i {
 													let timeCode = timeCodes[i] as? NSNumber
 													let annotation = annotations[i] as? NSString
 													
 													if let timeCode = timeCode, let annotation = annotation {
-														transcript.append(Double(timeCode), annotation as String)
+														let transcriptPoint = TranscriptInfo(tuple:(Double(timeCode), annotation as String))
+														transcript.append(transcriptPoint)
 													}
 												}
 												
