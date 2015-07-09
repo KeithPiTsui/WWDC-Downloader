@@ -37,10 +37,30 @@ typealias SimpleCompletionHandler = ((success: Bool) -> Void)
         super.init()
         
         let config = NSURLSessionConfiguration.defaultSessionConfiguration()
-        config.HTTPMaximumConnectionsPerHost = 2
+        config.HTTPMaximumConnectionsPerHost = NSUserDefaults.standardUserDefaults().integerForKey(simultaneousDownloadsKey)
 		config.timeoutIntervalForResource = NSTimeInterval(300)
         sessionManager = NSURLSession(configuration: config, delegate: self, delegateQueue: NSOperationQueue.mainQueue())
-	}
+        
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: "preferenceChanged", name:NSUserDefaultsDidChangeNotification, object: nil)
+    }
+    
+    deinit {
+        NSNotificationCenter.defaultCenter().removeObserver(self)
+    }
+    
+    func preferenceChanged() {
+        
+        stopFileDownloads()
+        
+        if let config = sessionManager?.configuration {
+            config.HTTPMaximumConnectionsPerHost = NSUserDefaults.standardUserDefaults().integerForKey(simultaneousDownloadsKey)
+            config.timeoutIntervalForResource = NSTimeInterval(300)
+
+            sessionManager?.invalidateAndCancel()
+            
+            sessionManager = NSURLSession(configuration: config, delegate: self, delegateQueue: NSOperationQueue.mainQueue())
+        }
+    }
 	
     // MARK: - Download File Transfer
     func downloadFile(file: FileInfo, progressWrapper: ProgressWrapper?, completionWrapper:SimpleCompletionWrapper?) {
@@ -109,37 +129,32 @@ typealias SimpleCompletionHandler = ((success: Bool) -> Void)
     
     func URLSession(session: NSURLSession, downloadTask: NSURLSessionDownloadTask, didWriteData bytesWritten: Int64, totalBytesWritten: Int64, totalBytesExpectedToWrite: Int64)  {
 		
-		if session == sessionManager {
-			var progress = Float(totalBytesWritten)/Float(totalBytesExpectedToWrite)
-			if progress > 1 {
-				progress = 1
-			}
-			
-			if let fileInfo = backgroundRequestsForFiles[downloadTask.taskIdentifier] {
-				
-				fileInfo.downloadProgress = progress
-				
-				if let callback = backgroundHandlersForFiles[fileInfo] {
-					callback.notifyProgress(progress)
-				}
-			}
-		}
+        var progress = Float(totalBytesWritten)/Float(totalBytesExpectedToWrite)
+        if progress > 1 {
+            progress = 1
+        }
+        
+        if let fileInfo = backgroundRequestsForFiles[downloadTask.taskIdentifier] {
+            
+            fileInfo.downloadProgress = progress
+            
+            if let callback = backgroundHandlersForFiles[fileInfo] {
+                callback.notifyProgress(progress)
+            }
+        }
     }
 	
 	
     func URLSession(session: NSURLSession, downloadTask: NSURLSessionDownloadTask, didFinishDownloadingToURL location: NSURL) {
 		
-		if session == sessionManager {
-			if let fileInfo = backgroundRequestsForFiles[downloadTask.taskIdentifier] {
-				fileInfo.saveFileLocallyFrom(location)
-			}
-		}
+        if let fileInfo = backgroundRequestsForFiles[downloadTask.taskIdentifier] {
+            fileInfo.saveFileLocallyFrom(location)
+        }
     }
     
     func URLSession(session: NSURLSession, task: NSURLSessionTask, didCompleteWithError error: NSError?) {
 		
-		if session == sessionManager {
-			if  let downloadTask = task as? NSURLSessionDownloadTask {
+        if  let downloadTask = task as? NSURLSessionDownloadTask {
 				if let fileInfo = backgroundRequestsForFiles[downloadTask.taskIdentifier] {
 					if let callback = backgroundHandlersForFiles[fileInfo] {
 						
@@ -177,7 +192,6 @@ typealias SimpleCompletionHandler = ((success: Bool) -> Void)
 					}
 				}
 			}
-		}
     }
 
 

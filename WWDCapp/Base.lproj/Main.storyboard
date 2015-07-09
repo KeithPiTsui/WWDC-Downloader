@@ -902,7 +902,7 @@
                                         </clipView>
                                         <animations/>
                                         <scroller key="horizontalScroller" hidden="YES" wantsLayer="YES" verticalHuggingPriority="750" horizontal="YES" id="EQ4-3v-gQf">
-                                            <rect key="frame" x="1" y="7" width="0.0" height="16"/>
+                                            <rect key="frame" x="1" y="463" width="888" height="16"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <animations/>
                                         </scroller>
@@ -1031,7 +1031,103 @@
                 </viewController>
                 <customObject id="rPt-NT-nkU" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="75" y="1048"/>
+            <point key="canvasLocation" x="75" y="1086"/>
+        </scene>
+        <!--Window Controller-->
+        <scene sceneID="aOx-QI-hUM">
+            <objects>
+                <windowController storyboardIdentifier="Preferences" id="UpY-Wp-LwS" sceneMemberID="viewController">
+                    <window key="window" title="Preferences" allowsToolTipsWhenApplicationIsInactive="NO" autorecalculatesKeyViewLoop="NO" oneShot="NO" releasedWhenClosed="NO" showsToolbarButton="NO" visibleAtLaunch="NO" frameAutosaveName="" animationBehavior="default" id="TPC-Yd-56w">
+                        <windowStyleMask key="styleMask" titled="YES" closable="YES" miniaturizable="YES" resizable="YES"/>
+                        <windowPositionMask key="initialPositionMask" leftStrut="YES" rightStrut="YES" topStrut="YES" bottomStrut="YES"/>
+                        <rect key="contentRect" x="196" y="240" width="306" height="160"/>
+                        <rect key="screenRect" x="0.0" y="0.0" width="1440" height="877"/>
+                        <value key="minSize" type="size" width="306" height="160"/>
+                        <value key="maxSize" type="size" width="306" height="160"/>
+                        <value key="minFullScreenContentSize" type="size" width="306" height="160"/>
+                        <value key="maxFullScreenContentSize" type="size" width="306" height="160"/>
+                    </window>
+                    <connections>
+                        <segue destination="qXZ-A2-IF8" kind="relationship" relationship="window.shadowedContentViewController" id="LYK-qk-649"/>
+                    </connections>
+                </windowController>
+                <customObject id="JkS-dC-Ofi" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="859" y="103"/>
+        </scene>
+        <!--Preferences Controller-->
+        <scene sceneID="Gdf-IF-hup">
+            <objects>
+                <viewController id="qXZ-A2-IF8" customClass="PreferencesController" customModule="WWDCapp" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" id="wFC-AX-EVm">
+                        <rect key="frame" x="0.0" y="0.0" width="306" height="160"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                        <subviews>
+                            <stepper horizontalHuggingPriority="750" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="iZN-lW-FPv">
+                                <rect key="frame" x="277" y="99" width="19" height="27"/>
+                                <animations/>
+                                <stepperCell key="cell" continuous="YES" alignment="left" minValue="1" maxValue="10" doubleValue="1" id="tgd-PT-rdH"/>
+                                <connections>
+                                    <action selector="stepperChanged:" target="qXZ-A2-IF8" id="3Au-Ai-BDG"/>
+                                </connections>
+                            </stepper>
+                            <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Gzl-0E-hBY">
+                                <rect key="frame" x="11" y="104" width="225" height="17"/>
+                                <animations/>
+                                <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="Number of Simultaneous Downloads" id="cTS-Sb-PRa">
+                                    <font key="font" metaFont="system"/>
+                                    <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                                    <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
+                                </textFieldCell>
+                            </textField>
+                            <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Hun-dr-LMw">
+                                <rect key="frame" x="242" y="102" width="37" height="22"/>
+                                <animations/>
+                                <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" borderStyle="bezel" alignment="center" title="3" id="fNs-Hb-Q07">
+                                    <font key="font" metaFont="system"/>
+                                    <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                                    <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
+                                </textFieldCell>
+                            </textField>
+                            <popUpButton verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="amL-V1-rde">
+                                <rect key="frame" x="11" y="34" width="285" height="26"/>
+                                <animations/>
+                                <popUpButtonCell key="cell" type="push" bezelStyle="rounded" alignment="left" lineBreakMode="truncatingTail" borderStyle="borderAndBezel" imageScaling="proportionallyDown" inset="2" id="1u4-ak-Q8V">
+                                    <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
+                                    <font key="font" metaFont="menu"/>
+                                    <menu key="menu" id="KdX-L2-PyF">
+                                        <items>
+                                            <menuItem title="Downloads Folder" id="ptH-l6-aIN"/>
+                                            <menuItem title="Documents Folder" id="dMh-ad-yZN"/>
+                                            <menuItem title="Desktop" id="Bhg-E6-Skp"/>
+                                        </items>
+                                    </menu>
+                                </popUpButtonCell>
+                                <connections>
+                                    <action selector="folderSelected:" target="qXZ-A2-IF8" id="A3j-vD-rXZ"/>
+                                </connections>
+                            </popUpButton>
+                            <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="guo-ex-wk1">
+                                <rect key="frame" x="15" y="60" width="166" height="17"/>
+                                <animations/>
+                                <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="Location for WWDC Folder" id="rl8-Cz-1dn">
+                                    <font key="font" metaFont="system"/>
+                                    <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                                    <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
+                                </textFieldCell>
+                            </textField>
+                        </subviews>
+                        <animations/>
+                    </view>
+                    <connections>
+                        <outlet property="connectionsLabel" destination="Hun-dr-LMw" id="muS-n4-IyN"/>
+                        <outlet property="downloadLocationMenu" destination="amL-V1-rde" id="Opd-iI-6fY"/>
+                        <outlet property="stepper" destination="iZN-lW-FPv" id="KNZ-Ns-qRE"/>
+                    </connections>
+                </viewController>
+                <customObject id="Wfa-10-3jS" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="859" y="385"/>
         </scene>
     </scenes>
     <resources>

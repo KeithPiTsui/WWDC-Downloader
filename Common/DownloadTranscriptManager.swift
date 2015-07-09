@@ -24,7 +24,6 @@ class DownloadTranscriptManager : NSObject, NSURLSessionDataDelegate {
         super.init()
         
         let config = NSURLSessionConfiguration.defaultSessionConfiguration()
-        config.HTTPMaximumConnectionsPerHost = 3
         sessionManager = NSURLSession(configuration: config, delegate: self, delegateQueue: nil)
     }
     

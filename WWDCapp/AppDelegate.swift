@@ -14,9 +14,17 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     var dockTile : NSDockTile?
     var dockProgress : NSProgressIndicator?
 	
+    var preferencesWindowController : NSWindowController?
+    
     func applicationDidFinishLaunching(aNotification: NSNotification) {
         // Insert code here to initialize your application
 		
+        let simultaneousDownloads = NSUserDefaults.standardUserDefaults().integerForKey(simultaneousDownloadsKey)
+
+        if simultaneousDownloads < 1 || simultaneousDownloads > 10 {
+            NSUserDefaults.standardUserDefaults().setInteger(3, forKey: simultaneousDownloadsKey)
+        }
+        
 		if let window = NSApplication.sharedApplication().windows.first {
 			
 			let zoomButton = window.standardWindowButton(NSWindowButton.ZoomButton)
@@ -71,7 +79,22 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     }
 
     @IBAction func showPreferencesPanel(sender: NSMenuItem) {
-        print("Show Preferences")
+        
+        let storyboard = NSStoryboard(name: "Main", bundle: nil)
+        preferencesWindowController = storyboard.instantiateControllerWithIdentifier("Preferences") as? NSWindowController
+        
+        if let window = preferencesWindowController?.window {
+            
+            let min = window.standardWindowButton(NSWindowButton.MiniaturizeButton)
+            let full = window.standardWindowButton(NSWindowButton.FullScreenButton)
+            let zoomButton = window.standardWindowButton(NSWindowButton.ZoomButton)
+            
+            min?.hidden = true
+            full?.hidden = true
+            zoomButton?.hidden = true
+        }
+        
+        preferencesWindowController?.showWindow(self)
     }
 	
 	

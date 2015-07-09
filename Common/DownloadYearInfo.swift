@@ -52,7 +52,6 @@ class DownloadYearInfo: NSObject, NSURLSessionTaskDelegate {
         super.init()
         
         let config = NSURLSessionConfiguration.defaultSessionConfiguration()
-        config.HTTPMaximumConnectionsPerHost = 3
         sessionManager = NSURLSession(configuration: config, delegate: self, delegateQueue: nil)
 		
         var videoURLString : NSURL?
