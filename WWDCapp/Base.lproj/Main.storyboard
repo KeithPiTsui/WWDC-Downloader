@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.Storyboard.XIB" version="3.0" toolsVersion="8152.3" systemVersion="14E46" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" initialViewController="B8D-0N-5wS">
+<document type="com.apple.InterfaceBuilder3.Cocoa.Storyboard.XIB" version="3.0" toolsVersion="8152.3" systemVersion="15A216g" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" initialViewController="B8D-0N-5wS">
     <dependencies>
         <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="8152.3"/>
     </dependencies>
@@ -329,7 +329,7 @@
                                     <scrollView fixedFrame="YES" autohidesScrollers="YES" horizontalLineScroll="52" horizontalPageScroll="10" verticalLineScroll="52" verticalPageScroll="10" usesPredominantAxisScrolling="NO" translatesAutoresizingMaskIntoConstraints="NO" id="DUe-MO-CLA">
                                         <rect key="frame" x="20" y="64" width="890" height="480"/>
                                         <clipView key="contentView" ambiguous="YES" drawsBackground="NO" id="Hod-g6-9bx">
-                                            <rect key="frame" x="1" y="23" width="888" height="456"/>
+                                            <rect key="frame" x="1" y="0.0" width="888" height="479"/>
                                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                             <subviews>
                                                 <tableView verticalHuggingPriority="750" allowsExpansionToolTips="YES" columnAutoresizingStyle="none" alternatingRowBackgroundColors="YES" columnReordering="NO" columnResizing="NO" multipleSelection="NO" emptySelection="NO" autosaveColumns="NO" typeSelect="NO" rowHeight="50" headerView="GLv-Gv-fqk" viewBased="YES" id="SSh-0R-MKF">
@@ -514,6 +514,10 @@
                                                                         <customView translatesAutoresizingMaskIntoConstraints="NO" id="tXJ-sr-iuI">
                                                                             <rect key="frame" x="0.0" y="0.0" width="100" height="50"/>
                                                                             <subviews>
+                                                                                <progressIndicator wantsLayer="YES" horizontalHuggingPriority="750" verticalHuggingPriority="750" maxValue="100" displayedWhenStopped="NO" bezeled="NO" indeterminate="YES" controlSize="small" style="spinning" translatesAutoresizingMaskIntoConstraints="NO" id="rlj-5i-n0V">
+                                                                                    <rect key="frame" x="42" y="17" width="16" height="16"/>
+                                                                                    <animations/>
+                                                                                </progressIndicator>
                                                                                 <button translatesAutoresizingMaskIntoConstraints="NO" id="je1-LR-Pjn">
                                                                                     <rect key="frame" x="41" y="31" width="18" height="18"/>
                                                                                     <animations/>
@@ -525,10 +529,6 @@
                                                                                         <action selector="singleChecked:" target="XfG-lQ-9wD" id="bVK-oa-aVI"/>
                                                                                     </connections>
                                                                                 </button>
-                                                                                <progressIndicator wantsLayer="YES" maxValue="1" style="bar" translatesAutoresizingMaskIntoConstraints="NO" id="lZ2-UJ-cEH">
-                                                                                    <rect key="frame" x="3" y="2" width="94" height="20"/>
-                                                                                    <animations/>
-                                                                                </progressIndicator>
                                                                                 <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="djj-Az-BU3">
                                                                                     <rect key="frame" x="3" y="14" width="94" height="17"/>
                                                                                     <animations/>
@@ -538,8 +538,8 @@
                                                                                         <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                                                                     </textFieldCell>
                                                                                 </textField>
-                                                                                <progressIndicator wantsLayer="YES" horizontalHuggingPriority="750" verticalHuggingPriority="750" maxValue="100" displayedWhenStopped="NO" bezeled="NO" indeterminate="YES" controlSize="small" style="spinning" translatesAutoresizingMaskIntoConstraints="NO" id="rlj-5i-n0V">
-                                                                                    <rect key="frame" x="42" y="17" width="16" height="16"/>
+                                                                                <progressIndicator wantsLayer="YES" maxValue="1" style="bar" translatesAutoresizingMaskIntoConstraints="NO" id="lZ2-UJ-cEH">
+                                                                                    <rect key="frame" x="3" y="2" width="94" height="20"/>
                                                                                     <animations/>
                                                                                 </progressIndicator>
                                                                                 <button translatesAutoresizingMaskIntoConstraints="NO" id="REE-pX-qcw">
@@ -612,6 +612,10 @@
                                                                         <customView translatesAutoresizingMaskIntoConstraints="NO" id="zFI-ua-BZb">
                                                                             <rect key="frame" x="0.0" y="0.0" width="100" height="50"/>
                                                                             <subviews>
+                                                                                <progressIndicator wantsLayer="YES" horizontalHuggingPriority="750" verticalHuggingPriority="750" maxValue="100" displayedWhenStopped="NO" bezeled="NO" indeterminate="YES" controlSize="small" style="spinning" translatesAutoresizingMaskIntoConstraints="NO" id="o9h-TZ-POI">
+                                                                                    <rect key="frame" x="42" y="17" width="16" height="16"/>
+                                                                                    <animations/>
+                                                                                </progressIndicator>
                                                                                 <button translatesAutoresizingMaskIntoConstraints="NO" id="KFf-Bl-TwU">
                                                                                     <rect key="frame" x="41" y="31" width="18" height="18"/>
                                                                                     <animations/>
@@ -623,10 +627,6 @@
                                                                                         <action selector="singleChecked:" target="XfG-lQ-9wD" id="Yrp-le-7vq"/>
                                                                                     </connections>
                                                                                 </button>
-                                                                                <progressIndicator wantsLayer="YES" maxValue="1" style="bar" translatesAutoresizingMaskIntoConstraints="NO" id="iuT-PE-Bxv">
-                                                                                    <rect key="frame" x="3" y="2" width="94" height="20"/>
-                                                                                    <animations/>
-                                                                                </progressIndicator>
                                                                                 <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="uwa-vg-dVW">
                                                                                     <rect key="frame" x="1" y="14" width="98" height="17"/>
                                                                                     <animations/>
@@ -636,6 +636,10 @@
                                                                                         <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                                                                     </textFieldCell>
                                                                                 </textField>
+                                                                                <progressIndicator wantsLayer="YES" maxValue="1" style="bar" translatesAutoresizingMaskIntoConstraints="NO" id="iuT-PE-Bxv">
+                                                                                    <rect key="frame" x="3" y="2" width="94" height="20"/>
+                                                                                    <animations/>
+                                                                                </progressIndicator>
                                                                                 <button translatesAutoresizingMaskIntoConstraints="NO" id="c5i-OA-A5W">
                                                                                     <rect key="frame" x="25" y="0.0" width="50" height="50"/>
                                                                                     <animations/>
@@ -647,10 +651,6 @@
                                                                                         <action selector="fileClicked:" target="XfG-lQ-9wD" id="WLv-gJ-zyB"/>
                                                                                     </connections>
                                                                                 </button>
-                                                                                <progressIndicator wantsLayer="YES" horizontalHuggingPriority="750" verticalHuggingPriority="750" maxValue="100" displayedWhenStopped="NO" bezeled="NO" indeterminate="YES" controlSize="small" style="spinning" translatesAutoresizingMaskIntoConstraints="NO" id="o9h-TZ-POI">
-                                                                                    <rect key="frame" x="42" y="17" width="16" height="16"/>
-                                                                                    <animations/>
-                                                                                </progressIndicator>
                                                                             </subviews>
                                                                             <constraints>
                                                                                 <constraint firstAttribute="bottom" secondItem="c5i-OA-A5W" secondAttribute="bottom" id="7Iq-WR-79L"/>
@@ -710,6 +710,10 @@
                                                                         <customView translatesAutoresizingMaskIntoConstraints="NO" id="gfW-cf-WbL">
                                                                             <rect key="frame" x="0.0" y="0.0" width="100" height="50"/>
                                                                             <subviews>
+                                                                                <progressIndicator wantsLayer="YES" horizontalHuggingPriority="750" verticalHuggingPriority="750" maxValue="100" displayedWhenStopped="NO" bezeled="NO" indeterminate="YES" controlSize="small" style="spinning" translatesAutoresizingMaskIntoConstraints="NO" id="Xaz-o6-8u8">
+                                                                                    <rect key="frame" x="42" y="17" width="16" height="16"/>
+                                                                                    <animations/>
+                                                                                </progressIndicator>
                                                                                 <button translatesAutoresizingMaskIntoConstraints="NO" id="NMm-4V-eo0">
                                                                                     <rect key="frame" x="41" y="31" width="18" height="18"/>
                                                                                     <animations/>
@@ -721,10 +725,6 @@
                                                                                         <action selector="singleChecked:" target="XfG-lQ-9wD" id="A8E-c5-lFx"/>
                                                                                     </connections>
                                                                                 </button>
-                                                                                <progressIndicator wantsLayer="YES" maxValue="1" style="bar" translatesAutoresizingMaskIntoConstraints="NO" id="YQ9-Gz-LAK">
-                                                                                    <rect key="frame" x="3" y="2" width="94" height="20"/>
-                                                                                    <animations/>
-                                                                                </progressIndicator>
                                                                                 <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="RTl-b9-Pcu">
                                                                                     <rect key="frame" x="1" y="14" width="98" height="17"/>
                                                                                     <animations/>
@@ -734,6 +734,10 @@
                                                                                         <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                                                                     </textFieldCell>
                                                                                 </textField>
+                                                                                <progressIndicator wantsLayer="YES" maxValue="1" style="bar" translatesAutoresizingMaskIntoConstraints="NO" id="YQ9-Gz-LAK">
+                                                                                    <rect key="frame" x="3" y="2" width="94" height="20"/>
+                                                                                    <animations/>
+                                                                                </progressIndicator>
                                                                                 <button translatesAutoresizingMaskIntoConstraints="NO" id="i0J-B1-u0v">
                                                                                     <rect key="frame" x="25" y="0.0" width="50" height="50"/>
                                                                                     <animations/>
@@ -745,10 +749,6 @@
                                                                                         <action selector="fileClicked:" target="XfG-lQ-9wD" id="UFV-Ww-Ay2"/>
                                                                                     </connections>
                                                                                 </button>
-                                                                                <progressIndicator wantsLayer="YES" horizontalHuggingPriority="750" verticalHuggingPriority="750" maxValue="100" displayedWhenStopped="NO" bezeled="NO" indeterminate="YES" controlSize="small" style="spinning" translatesAutoresizingMaskIntoConstraints="NO" id="Xaz-o6-8u8">
-                                                                                    <rect key="frame" x="42" y="17" width="16" height="16"/>
-                                                                                    <animations/>
-                                                                                </progressIndicator>
                                                                             </subviews>
                                                                             <constraints>
                                                                                 <constraint firstItem="i0J-B1-u0v" firstAttribute="top" secondItem="gfW-cf-WbL" secondAttribute="top" id="0Rh-I8-pbk"/>
@@ -808,6 +808,10 @@
                                                                         <customView translatesAutoresizingMaskIntoConstraints="NO" id="V9Q-4y-WHw">
                                                                             <rect key="frame" x="0.0" y="0.0" width="100" height="50"/>
                                                                             <subviews>
+                                                                                <progressIndicator wantsLayer="YES" horizontalHuggingPriority="750" verticalHuggingPriority="750" maxValue="100" displayedWhenStopped="NO" bezeled="NO" indeterminate="YES" controlSize="small" style="spinning" translatesAutoresizingMaskIntoConstraints="NO" id="9s2-9m-UxR">
+                                                                                    <rect key="frame" x="42" y="17" width="16" height="16"/>
+                                                                                    <animations/>
+                                                                                </progressIndicator>
                                                                                 <button translatesAutoresizingMaskIntoConstraints="NO" id="Cam-Lz-VWB">
                                                                                     <rect key="frame" x="41" y="31" width="18" height="18"/>
                                                                                     <animations/>
@@ -819,10 +823,6 @@
                                                                                         <action selector="singleChecked:" target="XfG-lQ-9wD" id="HF0-IY-xuW"/>
                                                                                     </connections>
                                                                                 </button>
-                                                                                <progressIndicator wantsLayer="YES" maxValue="1" style="bar" translatesAutoresizingMaskIntoConstraints="NO" id="nee-rf-5ea">
-                                                                                    <rect key="frame" x="3" y="2" width="94" height="20"/>
-                                                                                    <animations/>
-                                                                                </progressIndicator>
                                                                                 <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="dS8-HG-4eW">
                                                                                     <rect key="frame" x="1" y="14" width="98" height="17"/>
                                                                                     <animations/>
@@ -832,6 +832,10 @@
                                                                                         <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                                                                     </textFieldCell>
                                                                                 </textField>
+                                                                                <progressIndicator wantsLayer="YES" maxValue="1" style="bar" translatesAutoresizingMaskIntoConstraints="NO" id="nee-rf-5ea">
+                                                                                    <rect key="frame" x="3" y="2" width="94" height="20"/>
+                                                                                    <animations/>
+                                                                                </progressIndicator>
                                                                                 <button translatesAutoresizingMaskIntoConstraints="NO" id="8g0-hP-VeM">
                                                                                     <rect key="frame" x="25" y="0.0" width="50" height="50"/>
                                                                                     <animations/>
@@ -843,10 +847,6 @@
                                                                                         <action selector="fileClicked:" target="XfG-lQ-9wD" id="vEO-WX-YTg"/>
                                                                                     </connections>
                                                                                 </button>
-                                                                                <progressIndicator wantsLayer="YES" horizontalHuggingPriority="750" verticalHuggingPriority="750" maxValue="100" displayedWhenStopped="NO" bezeled="NO" indeterminate="YES" controlSize="small" style="spinning" translatesAutoresizingMaskIntoConstraints="NO" id="9s2-9m-UxR">
-                                                                                    <rect key="frame" x="42" y="17" width="16" height="16"/>
-                                                                                    <animations/>
-                                                                                </progressIndicator>
                                                                             </subviews>
                                                                             <constraints>
                                                                                 <constraint firstAttribute="bottom" secondItem="dS8-HG-4eW" secondAttribute="bottom" constant="14" id="1GA-Z8-SGb"/>
