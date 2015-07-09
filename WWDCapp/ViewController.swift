@@ -21,6 +21,16 @@ class ViewController: NSViewController, NSURLSessionDelegate, NSURLSessionDataDe
 		}
 	}
 	
+	var forceRefreshButton: NSButton! {
+		get {
+			if let windowController = NSApplication.sharedApplication().windows.first?.windowController  as? ToolbarHookableWindowSubclass {
+				return windowController.forceRefreshButton
+			}
+			assertionFailure("IBOutlet Fail!")
+			return NSButton()
+		}
+	}
+	
 	var yearFetchIndicator: NSProgressIndicator! {
 		get {
 			if let windowController = NSApplication.sharedApplication().windows.first?.windowController  as? ToolbarHookableWindowSubclass {
@@ -177,6 +187,24 @@ class ViewController: NSViewController, NSURLSessionDelegate, NSURLSessionDataDe
 			default:
 				break
         }
+	}
+	
+	@IBAction func forceRefresh(sender: NSButton) {
+		
+		guard let title = yearSeletor.selectedItem?.title else { return }
+		switch title {
+		case "2015":
+			Archiving.deleteDataForYear(.WWDC2015)
+			yearSelected(self.yearSeletor)
+		case "2014":
+			Archiving.deleteDataForYear(.WWDC2014)
+			yearSelected(self.yearSeletor)
+		case "2013":
+			Archiving.deleteDataForYear(.WWDC2013)
+			yearSelected(self.yearSeletor)
+		default:
+			break
+		}
 	}
 	
     @IBAction func stopFetchingYearInfo(sender: NSButton) {
@@ -512,6 +540,8 @@ class ViewController: NSViewController, NSURLSessionDelegate, NSURLSessionDataDe
         stopFetchButton.hidden = true
 		
         isYearInfoFetchComplete = false
+		
+		forceRefreshButton.enabled = false
         
 		isFiltered = false
 		
@@ -610,6 +640,8 @@ class ViewController: NSViewController, NSURLSessionDelegate, NSURLSessionDataDe
 	}
 	
 	func setupUIForCompletedInfo () {
+		
+		forceRefreshButton.enabled = true
 		
 		isYearInfoFetchComplete = true
 		
@@ -939,6 +971,8 @@ class ViewController: NSViewController, NSURLSessionDelegate, NSURLSessionDataDe
 	
 	func stopDownloading () {
 		
+		forceRefreshButton.enabled = true
+		
 		isDownloading = false
 
 		startDownload.title = "Start Downloading"
@@ -1096,6 +1130,8 @@ class ViewController: NSViewController, NSURLSessionDelegate, NSURLSessionDataDe
     func disableUIForDownloading () {
         
         yearSeletor.enabled = false
+		
+		forceRefreshButton.enabled = false
         
         allPDFCheckBox.enabled = false
         allSDCheckBox.enabled = false

@@ -31,6 +31,21 @@ class Archiving {
 		return nil
 	}
 	
+	class func deleteDataForYear(year:WWDCYear) -> Void {
+		
+		let path = pathForArchiving(year)
+		
+		if NSFileManager.defaultManager().fileExistsAtPath(path) {
+			
+			do {
+				try NSFileManager.defaultManager().removeItemAtPath(path)
+			}
+			catch {
+				print(error)
+			}
+		}
+	}
+	
 	class private func pathForArchiving(year: WWDCYear) -> String {
 		
 		let fileManager = NSFileManager.defaultManager()

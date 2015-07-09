@@ -12,6 +12,7 @@ import Cocoa
 class ToolbarHookableWindowSubclass : NSWindowController {
 	
 	@IBOutlet weak var yearSeletor: NSPopUpButton!
+	@IBOutlet weak var forceRefreshButton: NSButton!
 	@IBOutlet weak var yearFetchIndicator: NSProgressIndicator!
 	@IBOutlet weak var stopFetchButton: NSButton!
 	@IBOutlet weak var searchField: NSSearchField!
