@@ -77,12 +77,6 @@ class CheckBoxTableViewCell : NSTableCellView {
                                 isAllFilesDownloading = true
                             }
                         }
-						
-//						if fileSize == 0 {
-//							if isAllFilesSizeFetchComplete == true {
-//								isAllFilesSizeFetchComplete = false
-//							}
-//						}
                     }
                     else {
                         if isAllFilesDownloading == true {

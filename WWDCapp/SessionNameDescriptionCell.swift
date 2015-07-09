@@ -40,95 +40,79 @@ class SessionNameDescriptionCell : NSTableCellView, NSTextViewDelegate {
     }
 	
 	override func awakeFromNib() {
+        
+        sessionName.verticallyResizable = false
+        sessionDescriptionTextView.verticallyResizable = false
+        
+        sessionName.string = ""
+        sessionName.typingAttributes = nameAttributes
+        
+        sessionDescriptionTextView.string = ""
+        sessionDescriptionTextView.typingAttributes = descriptionAttributesFull
+        
+        nameTextStorage = HighlightableTextStorage()
+        descriptionTextStorage = HighlightableTextStorage()
 
-		// if #available(OSX 10.11, *) {
-				            
-            sessionName.verticallyResizable = false
-            sessionDescriptionTextView.verticallyResizable = false
-            
-            sessionName.string = ""
-            sessionName.typingAttributes = nameAttributes
-            
-            sessionDescriptionTextView.string = ""
-            sessionDescriptionTextView.typingAttributes = descriptionAttributesFull
-            
-		    nameTextStorage = HighlightableTextStorage()
-            descriptionTextStorage = HighlightableTextStorage()
-
-			if let layoutManager = sessionName.layoutManager {
-				(nameTextStorage as! HighlightableTextStorage).addLayoutManager(layoutManager)
-			}
-            if let layoutManager = sessionDescriptionTextView.layoutManager {
-                (descriptionTextStorage as! HighlightableTextStorage).addLayoutManager(layoutManager)
-            }
-		//}
+        if let layoutManager = sessionName.layoutManager {
+            (nameTextStorage as! HighlightableTextStorage).addLayoutManager(layoutManager)
+        }
+        if let layoutManager = sessionDescriptionTextView.layoutManager {
+            (descriptionTextStorage as! HighlightableTextStorage).addLayoutManager(layoutManager)
+        }
 	}
 	
 	func updateCell(name:String, description:String?, descriptionVisible:Bool) {
 		
-		//    if #available(OSX 10.11, *) {
-            sessionName.string = name
+        sessionName.string = name
+        
+        if descriptionVisible {
+            var attributes = sessionDescriptionTextView.typingAttributes
+            if let pstyle = attributes[NSParagraphStyleAttributeName] as? NSMutableParagraphStyle {
+                pstyle.lineBreakMode = NSLineBreakMode.ByWordWrapping
+                attributes[NSParagraphStyleAttributeName] = pstyle
+                sessionDescriptionTextView.typingAttributes = attributes
+            }
+        }
+        else {
+            var attributes = sessionDescriptionTextView.typingAttributes
+            if let pstyle = attributes[NSParagraphStyleAttributeName] as? NSMutableParagraphStyle {
+                pstyle.lineBreakMode = NSLineBreakMode.ByTruncatingTail
+                attributes[NSParagraphStyleAttributeName] = pstyle
+                sessionDescriptionTextView.typingAttributes = attributes
+            }
+        }
+        
+        if let description = description {
+            sessionDescriptionTextView.hidden = false
+            sessionDescriptionTextView.string = description
+          //  sessionDescriptionTextView.didChangeText()
+        }
+        else {
+            sessionDescriptionTextView.hidden = true
+            sessionDescriptionTextView.string = ""
+          //  sessionDescriptionTextView.didChangeText()
+        }
+        
+        if descriptionVisible {
             
-            if descriptionVisible {
-                var attributes = sessionDescriptionTextView.typingAttributes
-                if let pstyle = attributes[NSParagraphStyleAttributeName] as? NSMutableParagraphStyle {
-                    pstyle.lineBreakMode = NSLineBreakMode.ByWordWrapping
-                    attributes[NSParagraphStyleAttributeName] = pstyle
-                    sessionDescriptionTextView.typingAttributes = attributes
-                }
-            }
-            else {
-                var attributes = sessionDescriptionTextView.typingAttributes
-                if let pstyle = attributes[NSParagraphStyleAttributeName] as? NSMutableParagraphStyle {
-                    pstyle.lineBreakMode = NSLineBreakMode.ByTruncatingTail
-                    attributes[NSParagraphStyleAttributeName] = pstyle
-                    sessionDescriptionTextView.typingAttributes = attributes
-                }
-            }
+            var scrollFrame = sessionDescriptionTextViewScrollView.frame
+            var textviewFrame = sessionDescriptionTextView.frame
+            scrollFrame.size.height = sessionDescriptionTextView.intrinsicContentSize.height
+            textviewFrame.size.height = sessionDescriptionTextView.intrinsicContentSize.height
+            sessionDescriptionTextViewScrollView.frame = scrollFrame
+            sessionDescriptionTextView.frame = textviewFrame
+        }
+        else {
             
-            if let description = description {
-                sessionDescriptionTextView.hidden = false
-                sessionDescriptionTextView.string = description
-              //  sessionDescriptionTextView.didChangeText()
-            }
-            else {
-                sessionDescriptionTextView.hidden = true
-                sessionDescriptionTextView.string = ""
-              //  sessionDescriptionTextView.didChangeText()
-            }
-            
-            if descriptionVisible {
-                
-                var scrollFrame = sessionDescriptionTextViewScrollView.frame
-                var textviewFrame = sessionDescriptionTextView.frame
-                scrollFrame.size.height = sessionDescriptionTextView.intrinsicContentSize.height
-                textviewFrame.size.height = sessionDescriptionTextView.intrinsicContentSize.height
-                sessionDescriptionTextViewScrollView.frame = scrollFrame
-                sessionDescriptionTextView.frame = textviewFrame
-            }
-            else {
-                
-                var scrollFrame = sessionDescriptionTextViewScrollView.frame
-                var textviewFrame = sessionDescriptionTextView.frame
-                scrollFrame.size.height = 15
-                textviewFrame.size.height = 15
-                sessionDescriptionTextViewScrollView.frame = scrollFrame
-                sessionDescriptionTextView.frame = textviewFrame
-            }
-		//}
-//		else {
-//			textField!.stringValue = name
-//            
-//            if let description = description {
-//                descriptionField.stringValue = description
-//            }
-//            else {
-//                descriptionField.stringValue = ""
-//            }
-//		}
+            var scrollFrame = sessionDescriptionTextViewScrollView.frame
+            var textviewFrame = sessionDescriptionTextView.frame
+            scrollFrame.size.height = 15
+            textviewFrame.size.height = 15
+            sessionDescriptionTextViewScrollView.frame = scrollFrame
+            sessionDescriptionTextView.frame = textviewFrame
+        }
 	}
     
-//  @available(OSX 10.11, *)
     func highlightText (searchString: String) {
         
         let nameTextStorage = self.nameTextStorage as! HighlightableTextStorage
@@ -136,6 +120,4 @@ class SessionNameDescriptionCell : NSTableCellView, NSTextViewDelegate {
         nameTextStorage.textToHighlight = searchString.stringByTrimmingCharactersInSet(NSCharacterSet.whitespaceCharacterSet())
         descriptionTextStorage.textToHighlight = searchString.stringByTrimmingCharactersInSet(NSCharacterSet.whitespaceCharacterSet())
     }
-
-	
 }
