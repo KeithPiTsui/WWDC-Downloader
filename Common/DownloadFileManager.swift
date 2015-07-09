@@ -125,8 +125,15 @@ typealias SimpleCompletionHandler = ((success: Bool) -> Void)
                 }
             }
         }
+		else {
+			if let callback = backgroundHandlersForFiles[file] {
+				print("Download Fail No RemoteURL! - \(file.displayName!)")
+				callback.notifyCompletion(false)
+				backgroundHandlersForFiles[file] = nil
+			}
+		}
     }
-    
+	
     func URLSession(session: NSURLSession, downloadTask: NSURLSessionDownloadTask, didWriteData bytesWritten: Int64, totalBytesWritten: Int64, totalBytesExpectedToWrite: Int64)  {
 		
         var progress = Float(totalBytesWritten)/Float(totalBytesExpectedToWrite)

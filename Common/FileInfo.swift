@@ -206,7 +206,7 @@ enum FileType: CustomStringConvertible {
 		
 		super.init()
 		
-		self.remoteFileURL = aDecoder.decodeObjectOfClass(NSURL.self, forKey: "sampleCodeArray") as? NSURL
+		self.remoteFileURL = aDecoder.decodeObjectForKey("remoteFileURL") as? NSURL
 		let fileSize = Int(aDecoder.decodeInt64ForKey("fileSize"))
 		if fileSize > 0 {
 			self.fileSize = fileSize
