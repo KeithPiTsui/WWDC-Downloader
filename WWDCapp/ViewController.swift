@@ -138,7 +138,10 @@ class ViewController: NSViewController, NSURLSessionDelegate, NSURLSessionDataDe
     
     private var referenceCell : SessionNameDescriptionCell?
 	
-	// MARK: - Init
+	private var scrollToCurrentDownloadTimer : NSTimer?
+	private var lastTableViewInteractionTime : CFTimeInterval?
+	
+	// MARK: - Init?
 	required init?(coder: NSCoder) {
 	
 		byteFormatter = NSByteCountFormatter()
@@ -519,10 +522,14 @@ class ViewController: NSViewController, NSURLSessionDelegate, NSURLSessionDataDe
 		allSDCheckBox.attributedTitle = NSAttributedString(string: "All SD", attributes: attributesForCheckboxLabelLeft)
 		allCodeCheckbox.attributedTitle = NSAttributedString(string: "All Code", attributes: attributesForCheckboxLabelLeft)
 
-		
 		myTableView.allowsMultipleSelection = false
 		myTableView.allowsMultipleSelection = false
 		myTableView.allowsEmptySelection = false
+		
+		if let contentView = myTableView.superview {
+			contentView.postsBoundsChangedNotifications = true
+			NSNotificationCenter.defaultCenter().addObserver(self, selector: "tableViewScrolled", name:NSViewBoundsDidChangeNotification, object: contentView)
+		}
 		
 		if #available(OSX 10.11, *) {
 		    totallabel.font = NSFont.monospacedDigitSystemFontOfSize(NSFont.systemFontSizeForControlSize(NSControlSize.SmallControlSize), weight: NSFontWeightRegular)
@@ -902,9 +909,6 @@ class ViewController: NSViewController, NSURLSessionDelegate, NSURLSessionDataDe
 						}
 						
 						self.updateTotalProgress()
-                        if progress < 0.05 {
-                            self.scrollToFirstRowOfFilesCurrentlyDownloading(index)
-                        }
 					}
 				}
 
@@ -931,9 +935,8 @@ class ViewController: NSViewController, NSURLSessionDelegate, NSURLSessionDataDe
 						dispatch_async(dispatch_get_main_queue()) { [unowned self] in
                             self.myTableView.beginUpdates()
 							self.myTableView.reloadDataForRowIndexes(NSIndexSet(index: index), columnIndexes:NSIndexSet(indexesInRange: NSMakeRange(0,self.myTableView.numberOfColumns)))
-//                            self.myTableView.scrollRowToVisible(index)
                             self.myTableView.endUpdates()
-
+							self.autoScrollToCurrentDownload()
 							self.updateTotalProgress()
 						}
 					}
@@ -943,9 +946,8 @@ class ViewController: NSViewController, NSURLSessionDelegate, NSURLSessionDataDe
 						dispatch_async(dispatch_get_main_queue()) { [unowned self] in
                             self.myTableView.beginUpdates()
 							self.myTableView.reloadDataForRowIndexes(NSIndexSet(index: index), columnIndexes:NSIndexSet(indexesInRange: NSMakeRange(0,self.myTableView.numberOfColumns)))
-//                            self.myTableView.scrollRowToVisible(index)
                             self.myTableView.endUpdates()
-
+							self.autoScrollToCurrentDownload()
 							self.updateTotalProgress()
 						}
 					}
@@ -1014,6 +1016,9 @@ class ViewController: NSViewController, NSURLSessionDelegate, NSURLSessionDataDe
 		
 		startUpdatingDockIcon()
 		
+		lastTableViewInteractionTime = CACurrentMediaTime()
+		scrollToCurrentDownloadTimer = NSTimer.scheduledTimerWithTimeInterval(5, target: self, selector: "autoScrollToCurrentDownload", userInfo: nil, repeats: true)
+
 		downloadFiles(filesToDownload)
 	}
 	
@@ -1040,6 +1045,13 @@ class ViewController: NSViewController, NSURLSessionDelegate, NSURLSessionDataDe
 		stopUpdatingDockIcon()
 		
         updateCombinePDFButtonState()
+		
+		if let timer = scrollToCurrentDownloadTimer {
+			if timer.valid {
+				timer.invalidate()
+			}
+			scrollToCurrentDownloadTimer = nil
+		}
         
         print("Completed File Downloads")
 	}
@@ -1085,27 +1097,13 @@ class ViewController: NSViewController, NSURLSessionDelegate, NSURLSessionDataDe
             
             dispatch_async(dispatch_get_main_queue(), { [unowned self] in
                 
-                self.currentlabel.stringValue = self.byteFormatter.stringFromByteCount(currentDownloadBytes)
-                
-                let progress = Float(currentDownloadBytes)/Float(self.totalBytesToDownload)
-                
-                self.downloadProgressView.doubleValue = Double(progress)
+					self.currentlabel.stringValue = self.byteFormatter.stringFromByteCount(currentDownloadBytes)
+					
+					let progress = Float(currentDownloadBytes)/Float(self.totalBytesToDownload)
+					
+					self.downloadProgressView.doubleValue = Double(progress)
                 })
             })
-    }
-    
-    func scrollToFirstRowOfFilesCurrentlyDownloading(index : Int) {
-        
-        let rowRect = myTableView.rectOfRow(index)
-        let viewRect = myTableView.superview?.frame
-        var scrollOrigin = rowRect.origin
-        if let viewRect = viewRect {
-            scrollOrigin.y = scrollOrigin.y + (rowRect.size.height - viewRect.size.height) / 2;
-            if (scrollOrigin.y < 0) {
-                scrollOrigin.y = 0
-            }
-            myTableView.superview?.animator().setBoundsOrigin(scrollOrigin)
-        }
     }
     
 	func selectedDownloadInformation() -> (totalSize: Int64, numberOfFiles: Int) {
@@ -1338,7 +1336,78 @@ class ViewController: NSViewController, NSURLSessionDelegate, NSURLSessionDataDe
         yearSeletor.enabled = true
         coordinateAllCheckBoxUI()
     }
+	
 
+	// MARK: - AutoScrollToCurrent
+	func tableViewScrolled() {
+		lastTableViewInteractionTime = CACurrentMediaTime()
+	}
+	
+	let autoScrollTimeout : CFTimeInterval = 5
+	
+	func autoScrollToCurrentDownload() {
+		
+		let currentTime = CACurrentMediaTime()
+		
+		if let lastTime = lastTableViewInteractionTime {
+			
+			let diff = currentTime - lastTime
+			
+			if diff > autoScrollTimeout {
+				
+				for file in filesToDownload {
+					if file.downloadProgress < 1 {
+						
+						guard let session = file.session else { return }
+						
+						if self.isFiltered {
+							if let index = self.visibleWWDCSessionsArray.indexOf(session) {
+								dispatch_async(dispatch_get_main_queue()) { [unowned self] in
+									self.scrollToFirstRowOfFilesCurrentlyDownloading(index)
+								}
+							}
+						}
+						else {
+							if let index = self.allWWDCSessionsArray.indexOf(session) {
+								dispatch_async(dispatch_get_main_queue()) { [unowned self] in
+									self.scrollToFirstRowOfFilesCurrentlyDownloading(index)
+								}
+							}
+						}
+						
+						break
+					}
+				}
+			}
+		}
+	}
+	
+	func scrollToFirstRowOfFilesCurrentlyDownloading(index : Int) {
+		
+		let rowRect = myTableView.rectOfRow(index)
+		let viewRect = myTableView.superview?.frame
+		var scrollOrigin = rowRect.origin
+		if let viewRect = viewRect {
+			scrollOrigin.y = scrollOrigin.y + (rowRect.size.height - viewRect.size.height) / 2;
+			if (scrollOrigin.y < 0) {
+				scrollOrigin.y = 0
+			}
+			
+			NSAnimationContext.beginGrouping()
+			
+			let completionBlock : (() -> Void) = { [unowned self] in
+				// reset higher than timeout so will keep tracking from an autoScroll event
+				self.lastTableViewInteractionTime = CACurrentMediaTime() - self.autoScrollTimeout - 1
+			}
+			
+			NSAnimationContext.currentContext().completionHandler = completionBlock
+			
+			NSAnimationContext.currentContext().duration = 0.3
+			myTableView.superview?.animator().setBoundsOrigin(scrollOrigin)
+			NSAnimationContext.endGrouping()
+		}
+	}
+	
 	
     // MARK: Dock Icon
     func startUpdatingDockIcon () {
