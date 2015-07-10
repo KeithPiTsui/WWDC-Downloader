@@ -720,6 +720,39 @@ class ViewController: NSViewController, NSURLSessionDelegate, NSURLSessionDataDe
         }
     }
 	
+	func tableViewColumnDidResize(notification: NSNotification) {
+		
+		if let userInfo = notification.userInfo {
+			
+			if let column = userInfo["NSTableColumn"] as? NSTableColumn, let referenceCell = referenceCell {
+				var frame = referenceCell.frame
+				frame.size.width = column.width
+				referenceCell.frame = frame
+				
+				referenceCell.sessionName.invalidateIntrinsicContentSize()
+				referenceCell.sessionDescriptionTextView.invalidateIntrinsicContentSize()
+				
+				print("Column Did Resize - ref cell - \(referenceCell.bounds)")
+				
+				
+//				if self.myTableView.numberOfRows > 0 {
+//
+//					myTableView.beginUpdates()
+//					
+//					if !isFiltered {
+//						myTableView.noteHeightOfRowsWithIndexesChanged(NSIndexSet(indexesInRange: NSMakeRange(0,allWWDCSessionsArray.count)))
+//					}
+//					else {
+//						myTableView.noteHeightOfRowsWithIndexesChanged(NSIndexSet(indexesInRange: NSMakeRange(0,visibleWWDCSessionsArray.count)))
+//					}
+//					
+//					myTableView.endUpdates()
+//				}
+			}
+		}
+		
+	}
+	
 	func selectionShouldChangeInTableView(tableView: NSTableView) -> Bool {
 		return false
 	}
@@ -733,7 +766,7 @@ class ViewController: NSViewController, NSURLSessionDelegate, NSURLSessionDataDe
 			let cell = (tableView.makeViewWithIdentifier("sessionID", owner: self) as? NSTableCellView)!
 			
 			cell.textField?.stringValue = wwdcSession.sessionID
-            
+			
             if row % 2 == 0
             {
                 cell.textField?.backgroundColor = NSColor.whiteColor()

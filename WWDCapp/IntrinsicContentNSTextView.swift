@@ -21,6 +21,7 @@ class IntrinsicContentNSTextView : NSTextView {
                     }
                     else {
                         let size = layoutManager.usedRectForTextContainer(textContainer).size
+						NSLog("\(size)")
                         return size
                     }
                 }
@@ -34,9 +35,17 @@ class IntrinsicContentNSTextView : NSTextView {
         }
     }
     
-//    override func didChangeText() {
-//        super.didChangeText()
-//
-//        self.invalidateIntrinsicContentSize()
-//    }
+    override func didChangeText() {
+        super.didChangeText()
+
+        self.invalidateIntrinsicContentSize()
+    }
+
+//	override var bounds : CGRect {
+//		didSet {
+//			self.invalidateIntrinsicContentSize()
+//			self.layoutSubtreeIfNeeded()
+//		}
+//	}
+	
 }

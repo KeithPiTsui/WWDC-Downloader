@@ -27,10 +27,10 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         
 		if let window = NSApplication.sharedApplication().windows.first {
 			
-			let zoomButton = window.standardWindowButton(NSWindowButton.ZoomButton)
-
-			zoomButton?.enabled = false
-			zoomButton?.hidden = true
+//			let zoomButton = window.standardWindowButton(NSWindowButton.ZoomButton)
+//
+//			zoomButton?.enabled = false
+//			zoomButton?.hidden = true
 			
 			window.styleMask |= NSFullSizeContentViewWindowMask
 			window.titlebarAppearsTransparent = true
