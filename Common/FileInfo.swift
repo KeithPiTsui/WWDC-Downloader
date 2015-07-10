@@ -159,6 +159,7 @@ enum FileType: CustomStringConvertible {
 									downloadProgress = 1
 									return true
 								}
+								downloadProgress = 0
 							}
 						}
 					}

@@ -40,8 +40,6 @@ typealias SimpleCompletionHandler = ((success: Bool) -> Void)
         config.HTTPMaximumConnectionsPerHost = NSUserDefaults.standardUserDefaults().integerForKey(simultaneousDownloadsKey)
 		config.timeoutIntervalForResource = NSTimeInterval(300)
         sessionManager = NSURLSession(configuration: config, delegate: self, delegateQueue: NSOperationQueue.mainQueue())
-        
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: "preferenceChanged", name:NSUserDefaultsDidChangeNotification, object: nil)
     }
     
     deinit {
@@ -49,7 +47,9 @@ typealias SimpleCompletionHandler = ((success: Bool) -> Void)
     }
     
     func preferenceChanged() {
-        
+		
+		print("Preference Changed!!!!!!!")
+		
         stopFileDownloads()
         
         if let config = sessionManager?.configuration {
@@ -59,6 +59,8 @@ typealias SimpleCompletionHandler = ((success: Bool) -> Void)
             sessionManager?.invalidateAndCancel()
             
             sessionManager = NSURLSession(configuration: config, delegate: self, delegateQueue: NSOperationQueue.mainQueue())
+			
+			
         }
     }
 	

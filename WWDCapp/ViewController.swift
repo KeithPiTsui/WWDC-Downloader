@@ -577,6 +577,8 @@ class ViewController: NSViewController, NSURLSessionDelegate, NSURLSessionDataDe
 		hideDescriptionsCheckBox.state = 0
 		
 		updateCombinePDFButtonState()
+		
+		checkDownloadButtonState()
 
         myTableView.reloadData()
     }

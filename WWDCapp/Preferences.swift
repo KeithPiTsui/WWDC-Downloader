@@ -19,7 +19,9 @@ class PreferencesController : NSViewController {
     @IBOutlet weak var connectionsLabel: NSTextField!
     
     @IBOutlet weak var downloadLocationMenu: NSPopUpButton!
-    
+	
+	@IBOutlet weak var applyChangesButton: NSButton!
+
     override func awakeFromNib() {
         
         let defaults = NSUserDefaults.standardUserDefaults()
@@ -37,19 +39,21 @@ class PreferencesController : NSViewController {
     
     @IBAction func stepperChanged(sender: NSStepper) {
         
-        let defaults = NSUserDefaults.standardUserDefaults()
-        defaults.setInteger(sender.integerValue
-, forKey: simultaneousDownloadsKey)
-        defaults.synchronize()
-        
-        connectionsLabel.stringValue = String(sender.integerValue)
+		connectionsLabel.stringValue = String(sender.integerValue)
     }
     
     @IBAction func folderSelected(sender: NSPopUpButton) {
-        
-        let defaults = NSUserDefaults.standardUserDefaults()
-        defaults.setInteger(sender.indexOfSelectedItem, forKey: downloadFolderPreferencesKey)
-        defaults.synchronize()
-    }
-    
+		
+	}
+	
+	@IBAction func applyChanges(sender: NSButton) {
+
+		let defaults = NSUserDefaults.standardUserDefaults()
+		defaults.setInteger(stepper.integerValue
+			, forKey: simultaneousDownloadsKey)
+		defaults.setInteger(downloadLocationMenu.indexOfSelectedItem, forKey: downloadFolderPreferencesKey)
+		defaults.synchronize()
+		
+		DownloadFileManager.sharedManager.preferenceChanged()
+	}
 }
