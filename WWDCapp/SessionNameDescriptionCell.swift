@@ -43,13 +43,15 @@ class SessionNameDescriptionCell : NSTableCellView, NSTextViewDelegate {
         
         sessionName.verticallyResizable = false
         sessionDescriptionTextView.verticallyResizable = false
-        
+		
         sessionName.string = ""
         sessionName.typingAttributes = nameAttributes
-        
+		sessionName.didChangeText()
+		
         sessionDescriptionTextView.string = ""
         sessionDescriptionTextView.typingAttributes = descriptionAttributesFull
-        
+		sessionDescriptionTextView.didChangeText()
+
         nameTextStorage = HighlightableTextStorage()
         descriptionTextStorage = HighlightableTextStorage()
 
@@ -64,7 +66,8 @@ class SessionNameDescriptionCell : NSTableCellView, NSTextViewDelegate {
 	func updateCell(name:String, description:String?, descriptionVisible:Bool) {
 		
         sessionName.string = name
-        
+		sessionName.didChangeText()
+		
         if descriptionVisible {
             var attributes = sessionDescriptionTextView.typingAttributes
             if let pstyle = attributes[NSParagraphStyleAttributeName] as? NSMutableParagraphStyle {
@@ -85,12 +88,12 @@ class SessionNameDescriptionCell : NSTableCellView, NSTextViewDelegate {
         if let description = description {
             sessionDescriptionTextView.hidden = false
             sessionDescriptionTextView.string = description
-          //  sessionDescriptionTextView.didChangeText()
+            sessionDescriptionTextView.didChangeText()
         }
         else {
             sessionDescriptionTextView.hidden = true
             sessionDescriptionTextView.string = ""
-          //  sessionDescriptionTextView.didChangeText()
+            sessionDescriptionTextView.didChangeText()
         }
         
         if descriptionVisible {

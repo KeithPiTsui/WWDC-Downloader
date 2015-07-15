@@ -17,7 +17,6 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     var preferencesWindowController : NSWindowController?
     
     func applicationDidFinishLaunching(aNotification: NSNotification) {
-        // Insert code here to initialize your application
 		
         let simultaneousDownloads = NSUserDefaults.standardUserDefaults().integerForKey(simultaneousDownloadsKey)
 
@@ -26,11 +25,6 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         }
         
 		if let window = NSApplication.sharedApplication().windows.first {
-			
-			let zoomButton = window.standardWindowButton(NSWindowButton.ZoomButton)
-
-			zoomButton?.enabled = false
-			zoomButton?.hidden = true
 			
 			window.styleMask |= NSFullSizeContentViewWindowMask
 			window.titlebarAppearsTransparent = true
