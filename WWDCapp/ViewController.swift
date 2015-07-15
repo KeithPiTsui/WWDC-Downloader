@@ -103,7 +103,7 @@ class ViewController: NSViewController, NSURLSessionDelegate, NSURLSessionDataDe
 	@IBOutlet weak var allHDCheckBox: NSButton!
 	@IBOutlet weak var allPDFCheckBox: NSButton!
 	
-	@IBOutlet weak var myTableView: NSTableView!
+	@IBOutlet weak var myTableView: ResizeAwareTableView!
 	@IBOutlet weak var hideDescriptionsCheckBox: NSButton!
 	
 	@IBOutlet weak var totalDescriptionlabel: NSTextField!
@@ -706,7 +706,9 @@ class ViewController: NSViewController, NSURLSessionDelegate, NSURLSessionDataDe
                 referenceCell.updateCell(wwdcSession.title, description: wwdcSession.sessionDescription, descriptionVisible: true)
                 
                 let rowHeight = 10 + referenceCell.sessionName.intrinsicContentSize.height + referenceCell.sessionDescriptionTextView.intrinsicContentSize.height + 10
-                
+				
+				//NSLog("\(wwdcSession.sessionID) - \(rowHeight)")
+
                 if rowHeight < 50 {
                     return 50
                 }
@@ -729,29 +731,25 @@ class ViewController: NSViewController, NSURLSessionDelegate, NSURLSessionDataDe
 				frame.size.width = column.width
 				referenceCell.frame = frame
 				
-				referenceCell.sessionName.invalidateIntrinsicContentSize()
-				referenceCell.sessionDescriptionTextView.invalidateIntrinsicContentSize()
+				referenceCell.layoutSubtreeIfNeeded()
 				
-				print("Column Did Resize - ref cell - \(referenceCell.bounds)")
-				
-				
-//				if self.myTableView.numberOfRows > 0 {
-//
-//					myTableView.beginUpdates()
-//					
-//					if !isFiltered {
-//						myTableView.noteHeightOfRowsWithIndexesChanged(NSIndexSet(indexesInRange: NSMakeRange(0,allWWDCSessionsArray.count)))
-//					}
-//					else {
-//						myTableView.noteHeightOfRowsWithIndexesChanged(NSIndexSet(indexesInRange: NSMakeRange(0,visibleWWDCSessionsArray.count)))
-//					}
-//					
-//					myTableView.endUpdates()
-//				}
+				if self.myTableView.numberOfRows > 0 {
+
+					myTableView.beginUpdates()
+					
+					if !isFiltered {
+						myTableView.noteHeightOfRowsWithIndexesChanged(NSIndexSet(indexesInRange: NSMakeRange(0,allWWDCSessionsArray.count)))
+					}
+					else {
+						myTableView.noteHeightOfRowsWithIndexesChanged(NSIndexSet(indexesInRange: NSMakeRange(0,visibleWWDCSessionsArray.count)))
+					}
+					
+					myTableView.endUpdates()
+				}
 			}
 		}
-		
 	}
+	
 	
 	func selectionShouldChangeInTableView(tableView: NSTableView) -> Bool {
 		return false
@@ -1118,6 +1116,8 @@ class ViewController: NSViewController, NSURLSessionDelegate, NSURLSessionDataDe
 	}
 	
     // MARK: - UI State changes / checks
+
+	
     func updateTotalProgress() {
         
         dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), { [unowned self] in

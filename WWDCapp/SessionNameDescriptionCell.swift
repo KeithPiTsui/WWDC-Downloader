@@ -44,9 +44,6 @@ class SessionNameDescriptionCell : NSTableCellView, NSTextViewDelegate {
         sessionName.verticallyResizable = false
         sessionDescriptionTextView.verticallyResizable = false
 		
-		sessionName.textContainer?.widthTracksTextView = true
-		sessionDescriptionTextView.textContainer?.widthTracksTextView = true
-
         sessionName.string = ""
         sessionName.typingAttributes = nameAttributes
 		sessionName.didChangeText()

@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		4408A7F91B43F20A00AB4A10 /* PDFMerge.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4408A7F81B43F20A00AB4A10 /* PDFMerge.swift */; };
 		442D010B1B399A9D0081C56C /* FileInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 44776DA81B399950004B9178 /* FileInfo.swift */; };
+		443F87A61B566E7600637F6F /* ResizeAwareTableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 443F87A51B566E7600637F6F /* ResizeAwareTableView.swift */; };
 		446C7A1D1B42D3C7007CA3C2 /* SessionNameDescriptionCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 446C7A1C1B42D3C7007CA3C2 /* SessionNameDescriptionCell.swift */; };
 		4479EA761B3C114600D5558D /* CheckBoxTableCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4479EA751B3C114600D5558D /* CheckBoxTableCell.swift */; };
 		44A507021B4EBA7C0033C6BE /* Archiving.swift in Sources */ = {isa = PBXBuildFile; fileRef = 44A507011B4EBA7C0033C6BE /* Archiving.swift */; };
@@ -36,6 +37,7 @@
 
 /* Begin PBXFileReference section */
 		4408A7F81B43F20A00AB4A10 /* PDFMerge.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PDFMerge.swift; sourceTree = "<group>"; };
+		443F87A51B566E7600637F6F /* ResizeAwareTableView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ResizeAwareTableView.swift; sourceTree = "<group>"; };
 		446C7A1C1B42D3C7007CA3C2 /* SessionNameDescriptionCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SessionNameDescriptionCell.swift; sourceTree = "<group>"; };
 		44776DA81B399950004B9178 /* FileInfo.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = FileInfo.swift; path = Common/FileInfo.swift; sourceTree = "<group>"; };
 		4479EA751B3C114600D5558D /* CheckBoxTableCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CheckBoxTableCell.swift; sourceTree = "<group>"; };
@@ -97,6 +99,7 @@
 				44F5EE911B45A2CA00CE683D /* DisabledScrollingScrollView.swift */,
 				44F5EE931B45A4BB00CE683D /* HighlightableTextStorage.swift */,
 				A9C98DBA1B48678100DB11C8 /* IntrinsicContentNSTextView.swift */,
+				443F87A51B566E7600637F6F /* ResizeAwareTableView.swift */,
 			);
 			name = Subclasses;
 			sourceTree = "<group>";
@@ -291,6 +294,7 @@
 				A9528F351B34C427002290D3 /* WWDCSession.swift in Sources */,
 				A90D14EB1B41A8CF00A30590 /* FetchFileSizeManager.swift in Sources */,
 				A9528F361B34C427002290D3 /* BlockWrappers.swift in Sources */,
+				443F87A61B566E7600637F6F /* ResizeAwareTableView.swift in Sources */,
 				A9528F271B34C40E002290D3 /* AppDelegate.swift in Sources */,
 				44F5EE901B457B9800CE683D /* XPathQuery.m in Sources */,
 			);
