@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <document type="com.apple.InterfaceBuilder3.Cocoa.Storyboard.XIB" version="3.0" toolsVersion="8152.3" systemVersion="15A216g" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" initialViewController="B8D-0N-5wS">
     <dependencies>
-        <deployment identifier="macosx"/>
         <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="8152.3"/>
     </dependencies>
     <scenes>
@@ -95,7 +94,7 @@
                 <customObject id="Voe-Tx-rLC" customClass="AppDelegate" customModule="WWDCapp" customModuleProvider="target"/>
                 <customObject id="Ady-hI-5gd" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="75.5" y="-135"/>
+            <point key="canvasLocation" x="-325" y="1078"/>
         </scene>
         <!--Window Controller-->
         <scene sceneID="R2V-B0-nI4">
@@ -103,7 +102,7 @@
                 <windowController showSeguePresentationStyle="single" id="B8D-0N-5wS" customClass="ToolbarHookableWindowSubclass" customModule="WWDCapp" customModuleProvider="target" sceneMemberID="viewController">
                     <window key="window" title="WWDC Downloader" allowsToolTipsWhenApplicationIsInactive="NO" autorecalculatesKeyViewLoop="NO" oneShot="NO" releasedWhenClosed="NO" showsToolbarButton="NO" visibleAtLaunch="NO" animationBehavior="default" id="IQv-IB-iLA">
                         <windowStyleMask key="styleMask" titled="YES" closable="YES" miniaturizable="YES" resizable="YES" unifiedTitleAndToolbar="YES"/>
-                        <rect key="contentRect" x="-320" y="-473" width="2000" height="1500"/>
+                        <rect key="contentRect" x="-320" y="-611" width="2000" height="1638"/>
                         <rect key="screenRect" x="0.0" y="0.0" width="1680" height="1027"/>
                         <value key="minSize" type="size" width="930" height="620"/>
                         <toolbar key="toolbar" implicitIdentifier="D23EA452-BF7E-4DD3-B69C-80F7D6DD2E08" autosavesConfiguration="NO" allowsUserCustomization="NO" displayMode="iconOnly" sizeMode="regular" id="lqY-rv-Jos">
@@ -269,7 +268,7 @@
                 </windowController>
                 <customObject id="Oky-zY-oP4" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="75" y="311"/>
+            <point key="canvasLocation" x="70" y="114"/>
         </scene>
         <!--View Controller-->
         <scene sceneID="hIz-AP-VOD">
@@ -1007,7 +1006,7 @@
                                         </clipView>
                                         <animations/>
                                         <scroller key="horizontalScroller" hidden="YES" wantsLayer="YES" verticalHuggingPriority="750" horizontal="YES" id="EQ4-3v-gQf">
-                                            <rect key="frame" x="1" y="7" width="0.0" height="16"/>
+                                            <rect key="frame" x="1" y="463" width="888" height="16"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <animations/>
                                         </scroller>
@@ -1111,7 +1110,7 @@
                 </windowController>
                 <customObject id="JkS-dC-Ofi" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="859" y="103"/>
+            <point key="canvasLocation" x="899" y="1367"/>
         </scene>
         <!--Preferences Controller-->
         <scene sceneID="Gdf-IF-hup">
@@ -1197,7 +1196,65 @@
                 </viewController>
                 <customObject id="Wfa-10-3jS" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="859" y="385"/>
+            <point key="canvasLocation" x="899" y="1713"/>
+        </scene>
+        <!--Transcript Panel Controller-->
+        <scene sceneID="MHV-7l-9QQ">
+            <objects>
+                <viewController storyboardIdentifier="Transcript" id="XIu-NO-yav" customClass="TranscriptPanelController" customModule="WWDCapp" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" id="xNC-KZ-pjf">
+                        <rect key="frame" x="0.0" y="0.0" width="450" height="300"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                        <subviews>
+                            <scrollView horizontalLineScroll="10" horizontalPageScroll="10" verticalLineScroll="10" verticalPageScroll="10" hasHorizontalScroller="NO" usesPredominantAxisScrolling="NO" translatesAutoresizingMaskIntoConstraints="NO" id="xkI-Ce-G1O">
+                                <rect key="frame" x="5" y="5" width="440" height="290"/>
+                                <clipView key="contentView" id="PuH-Pv-I4J">
+                                    <rect key="frame" x="1" y="1" width="438" height="288"/>
+                                    <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                                    <subviews>
+                                        <textView editable="NO" importsGraphics="NO" findStyle="panel" verticallyResizable="YES" allowsNonContiguousLayout="YES" linkDetection="YES" id="kWS-AO-27m">
+                                            <rect key="frame" x="0.0" y="0.0" width="447" height="288"/>
+                                            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                                            <animations/>
+                                            <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                            <size key="minSize" width="438" height="288"/>
+                                            <size key="maxSize" width="463" height="10000000"/>
+                                            <color key="insertionPointColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
+                                            <size key="minSize" width="438" height="288"/>
+                                            <size key="maxSize" width="463" height="10000000"/>
+                                        </textView>
+                                    </subviews>
+                                    <animations/>
+                                    <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                </clipView>
+                                <animations/>
+                                <scroller key="horizontalScroller" hidden="YES" wantsLayer="YES" verticalHuggingPriority="750" doubleValue="1" horizontal="YES" id="bc8-j9-aHA">
+                                    <rect key="frame" x="-100" y="-100" width="87" height="18"/>
+                                    <autoresizingMask key="autoresizingMask"/>
+                                    <animations/>
+                                </scroller>
+                                <scroller key="verticalScroller" wantsLayer="YES" verticalHuggingPriority="750" doubleValue="1" horizontal="NO" id="SGk-fW-p92">
+                                    <rect key="frame" x="423" y="1" width="16" height="288"/>
+                                    <autoresizingMask key="autoresizingMask"/>
+                                    <animations/>
+                                </scroller>
+                            </scrollView>
+                        </subviews>
+                        <constraints>
+                            <constraint firstAttribute="trailing" secondItem="xkI-Ce-G1O" secondAttribute="trailing" constant="5" id="Bkg-fr-bUs"/>
+                            <constraint firstAttribute="bottom" secondItem="xkI-Ce-G1O" secondAttribute="bottom" constant="5" id="PTo-9g-hWe"/>
+                            <constraint firstItem="xkI-Ce-G1O" firstAttribute="leading" secondItem="xNC-KZ-pjf" secondAttribute="leading" constant="5" id="Rbq-Ts-TTM"/>
+                            <constraint firstItem="xkI-Ce-G1O" firstAttribute="top" secondItem="xNC-KZ-pjf" secondAttribute="top" constant="5" id="pa7-k1-OWq"/>
+                        </constraints>
+                        <animations/>
+                    </view>
+                    <connections>
+                        <outlet property="textView" destination="kWS-AO-27m" id="T9P-xX-WpM"/>
+                    </connections>
+                </viewController>
+                <customObject id="Xj3-LX-Zqg" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="240" y="2072"/>
         </scene>
     </scenes>
     <resources>

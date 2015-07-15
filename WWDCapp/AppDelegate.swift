@@ -14,8 +14,15 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     var dockTile : NSDockTile?
     var dockProgress : NSProgressIndicator?
 	
+    var mainViewController : ViewController!
+
     var preferencesWindowController : NSWindowController?
+
+    var transcriptDrawer : NSDrawer?
     
+    var mainApplicationController: ToolbarHookableWindowSubclass?
+    var transcriptController: TranscriptPanelController?
+
     func applicationDidFinishLaunching(aNotification: NSNotification) {
 		
         let simultaneousDownloads = NSUserDefaults.standardUserDefaults().integerForKey(simultaneousDownloadsKey)
@@ -31,6 +38,8 @@ class AppDelegate: NSObject, NSApplicationDelegate {
 			window.appearance = NSAppearance(named: NSAppearanceNameVibrantLight)
 			
 			window.titleVisibility = NSWindowTitleVisibility.Hidden
+            
+            mainApplicationController = window.windowController as? ToolbarHookableWindowSubclass
 		}
         
         dockTile = NSApplication.sharedApplication().dockTile
@@ -62,6 +71,41 @@ class AppDelegate: NSObject, NSApplicationDelegate {
 				dockTile.display()
             }
         }
+        
+        setupTranscriptDrawer()
+    }
+    
+    func setupTranscriptDrawer() {
+        
+        if let mainWindowController = mainApplicationController {
+
+            if let viewController = mainWindowController.contentViewController as? ViewController {
+                
+                transcriptDrawer = NSDrawer(contentSize: NSSizeFromCGSize(CGSizeMake( viewController.view.frame.size.width, 130)), preferredEdge: NSRectEdge.MinY)
+                
+                if let transcriptDrawer = transcriptDrawer {
+                    transcriptDrawer.parentWindow = mainWindowController.window
+                    
+                    let storyboard = NSStoryboard(name: "Main", bundle: nil)
+                    transcriptController = storyboard.instantiateControllerWithIdentifier("Transcript") as?TranscriptPanelController
+                    
+                    transcriptDrawer.contentView = transcriptController?.view
+                    
+                    transcriptDrawer.contentView?.autoresizingMask = [NSAutoresizingMaskOptions.ViewHeightSizable, NSAutoresizingMaskOptions.ViewWidthSizable]
+                }
+            }
+        }
+    }
+    
+    func showTranscript(wwdcSession : WWDCSession) {
+        transcriptController?.wwdcSession = wwdcSession
+        if transcriptDrawer?.state == Int(NSDrawerState.ClosedState.rawValue) {
+            transcriptDrawer?.openOnEdge(NSRectEdge.MinY)
+        }
+    }
+    
+    func hideTranscript() {
+        transcriptDrawer?.close()
     }
     
     func updateDockProgress(progress: Double) {
@@ -90,7 +134,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         
         preferencesWindowController?.showWindow(self)
     }
-	
+    
 	
 	func applicationShouldTerminateAfterLastWindowClosed(sender: NSApplication) -> Bool {
 		return true

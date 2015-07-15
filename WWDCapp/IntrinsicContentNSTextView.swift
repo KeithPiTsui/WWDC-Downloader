@@ -39,5 +39,9 @@ class IntrinsicContentNSTextView : NSTextView {
 
         self.invalidateIntrinsicContentSize()
     }
-	
+    
+    override func mouseDown(theEvent: NSEvent) {
+        
+        self.nextResponder?.mouseDown(theEvent)
+    }
 }

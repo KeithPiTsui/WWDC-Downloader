@@ -57,7 +57,7 @@ func ==(lhs: WWDCSession, rhs: WWDCSession)-> Bool {
 				var fullTranscript : String = ""
 				
 				for transcriptInfo in transcript {
-					fullTranscript = fullTranscript+(transcriptInfo.caption+"\n\n")
+					fullTranscript = fullTranscript+((String(transcriptInfo.timeStamp))+"  "+transcriptInfo.caption+"\n\n")
 				}
 				
 				if fullTranscript.isEmpty {

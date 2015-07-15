@@ -38,6 +38,11 @@ class DisabledScrollingScrollView : NSScrollView {
 		self.nextResponder?.swipeWithEvent(event)
 	}
     
+    override func mouseDown(theEvent: NSEvent) {
+        
+        self.nextResponder?.mouseDown(theEvent)
+    }
+    
     override var intrinsicContentSize : CGSize {
         get {
             return textView.intrinsicContentSize

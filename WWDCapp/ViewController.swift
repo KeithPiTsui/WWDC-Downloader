@@ -750,8 +750,22 @@ class ViewController: NSViewController, NSURLSessionDelegate, NSURLSessionDataDe
 	
 	
 	func selectionShouldChangeInTableView(tableView: NSTableView) -> Bool {
-		return false
+		return true
 	}
+    
+    func tableViewSelectionDidChange(notification: NSNotification) {
+        
+        let tableview = notification.object as? ResizeAwareTableView
+        if let row = tableview?.selectedRow {
+            
+            let wwdcSession = (!isFiltered ? allWWDCSessionsArray[row] : visibleWWDCSessionsArray[row])
+            
+            dispatch_async(dispatch_get_main_queue()) {
+                let appDelegate = NSApplication.sharedApplication().delegate as! AppDelegate
+                appDelegate.showTranscript(wwdcSession)
+            }
+        }
+    }
 	
 	func tableView(tableView: NSTableView, viewForTableColumn tableColumn: NSTableColumn?, row: Int) -> NSView? {
 		
