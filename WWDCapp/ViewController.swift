@@ -734,17 +734,15 @@ class ViewController: NSViewController, NSURLSessionDelegate, NSURLSessionDataDe
 				referenceCell.layoutSubtreeIfNeeded()
 				
 				if self.myTableView.numberOfRows > 0 {
+					
+					if let visibleRect = self.myTableView.enclosingScrollView?.contentView.visibleRect {
+						
+						let range = self.myTableView.rowsInRect(visibleRect)
 
-					myTableView.beginUpdates()
-					
-					if !isFiltered {
-						myTableView.noteHeightOfRowsWithIndexesChanged(NSIndexSet(indexesInRange: NSMakeRange(0,allWWDCSessionsArray.count)))
+						myTableView.beginUpdates()
+						myTableView.noteHeightOfRowsWithIndexesChanged(NSIndexSet(indexesInRange: range))
+						myTableView.endUpdates()
 					}
-					else {
-						myTableView.noteHeightOfRowsWithIndexesChanged(NSIndexSet(indexesInRange: NSMakeRange(0,visibleWWDCSessionsArray.count)))
-					}
-					
-					myTableView.endUpdates()
 				}
 			}
 		}
