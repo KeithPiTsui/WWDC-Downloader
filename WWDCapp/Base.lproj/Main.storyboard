@@ -599,11 +599,23 @@
                                                                                 <outlet property="textView" destination="4AP-Fn-m4a" id="zCO-Of-7bj"/>
                                                                             </connections>
                                                                         </scrollView>
+                                                                        <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="0PV-Zl-SQ7">
+                                                                            <rect key="frame" x="3" y="0.0" width="396" height="11"/>
+                                                                            <animations/>
+                                                                            <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" alignment="right" title="Label" id="MYs-2M-dc0">
+                                                                                <font key="font" metaFont="miniSystem"/>
+                                                                                <color key="textColor" name="secondaryLabelColor" catalog="System" colorSpace="catalog"/>
+                                                                                <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
+                                                                            </textFieldCell>
+                                                                        </textField>
                                                                     </subviews>
                                                                     <constraints>
                                                                         <constraint firstItem="K7q-GE-dhi" firstAttribute="trailing" secondItem="Ax9-07-ryC" secondAttribute="trailing" id="E5l-Tg-ptg"/>
+                                                                        <constraint firstAttribute="bottom" secondItem="0PV-Zl-SQ7" secondAttribute="bottom" id="EVO-eI-aIE"/>
+                                                                        <constraint firstAttribute="trailing" secondItem="0PV-Zl-SQ7" secondAttribute="trailing" constant="3" id="ZsL-O7-Dq3"/>
                                                                         <constraint firstItem="Ax9-07-ryC" firstAttribute="top" secondItem="RoC-Vv-kEq" secondAttribute="top" constant="10" id="cBA-Gs-exp"/>
                                                                         <constraint firstItem="Ax9-07-ryC" firstAttribute="leading" secondItem="RoC-Vv-kEq" secondAttribute="leading" id="dJI-uM-jBl"/>
+                                                                        <constraint firstItem="0PV-Zl-SQ7" firstAttribute="leading" secondItem="RoC-Vv-kEq" secondAttribute="leading" constant="5" id="lHG-qb-sIC"/>
                                                                         <constraint firstItem="K7q-GE-dhi" firstAttribute="leading" secondItem="Ax9-07-ryC" secondAttribute="leading" id="mey-Il-NjS"/>
                                                                         <constraint firstAttribute="trailing" secondItem="Ax9-07-ryC" secondAttribute="trailing" id="pRW-da-Iq0"/>
                                                                         <constraint firstItem="K7q-GE-dhi" firstAttribute="top" secondItem="Ax9-07-ryC" secondAttribute="bottom" id="s4o-m9-UEy"/>
@@ -615,6 +627,7 @@
                                                                         <outlet property="sessionDescriptionTextViewScrollView" destination="K7q-GE-dhi" id="uCc-pB-rIZ"/>
                                                                         <outlet property="sessionName" destination="SY7-hN-yFX" id="BSB-71-Kgm"/>
                                                                         <outlet property="sessionNameScrollView" destination="Ax9-07-ryC" id="zc7-3z-SaR"/>
+                                                                        <outlet property="transcriptSearchCountLabel" destination="0PV-Zl-SQ7" id="5tg-4y-SXO"/>
                                                                     </connections>
                                                                 </tableCellView>
                                                             </prototypeCellViews>

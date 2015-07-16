@@ -776,7 +776,7 @@ class ViewController: NSViewController, NSURLSessionDelegate, NSURLSessionDataDe
             
             if let referenceCell = referenceCell {
                 
-                referenceCell.updateCell(wwdcSession.title, description: wwdcSession.sessionDescription, descriptionVisible: true)
+                referenceCell.updateCell(wwdcSession.title, description: wwdcSession.sessionDescription, descriptionVisible: true, searchActive:false, searchCount:0)
                 
                 let rowHeight = 10 + referenceCell.sessionName.intrinsicContentSize.height + referenceCell.sessionDescriptionTextView.intrinsicContentSize.height + 10
 				
@@ -865,7 +865,7 @@ class ViewController: NSViewController, NSURLSessionDelegate, NSURLSessionDataDe
 				
             cell.highlightText(searchField.stringValue)
 			
-            cell.updateCell(wwdcSession.title, description: wwdcSession.sessionDescription, descriptionVisible: (hideDescriptionsCheckBox.state == 0))
+            cell.updateCell(wwdcSession.title, description: wwdcSession.sessionDescription, descriptionVisible: (hideDescriptionsCheckBox.state == 0), searchActive:(includeTranscriptsInSearchCheckBox.state == 1) && isFiltered == true, searchCount:0)
             
             return cell
 		}

@@ -17,6 +17,8 @@ class SessionNameDescriptionCell : NSTableCellView, NSTextViewDelegate {
     @IBOutlet var sessionDescriptionTextView: IntrinsicContentNSTextView!
     @IBOutlet var sessionDescriptionTextViewScrollView: NSScrollView!
 	
+	@IBOutlet var transcriptSearchCountLabel : NSTextField!
+
     private var nameTextStorage : HighlightableTextStorage!
     private var descriptionTextStorage : HighlightableTextStorage!
 	
@@ -59,6 +61,8 @@ class SessionNameDescriptionCell : NSTableCellView, NSTextViewDelegate {
         sessionDescriptionTextView.string = ""
         sessionDescriptionTextView.typingAttributes = descriptionAttributesFull
 		sessionDescriptionTextView.didChangeText()
+		
+		transcriptSearchCountLabel.stringValue = ""
 
         nameTextStorage = HighlightableTextStorage()
         descriptionTextStorage = HighlightableTextStorage()
@@ -71,7 +75,7 @@ class SessionNameDescriptionCell : NSTableCellView, NSTextViewDelegate {
         }
 	}
 	
-	func updateCell(name:String, description:String?, descriptionVisible:Bool) {
+	func updateCell(name:String, description:String?, descriptionVisible:Bool, searchActive:Bool, searchCount:Int) {
 		
         sessionName.string = name
 		sessionName.didChangeText()
@@ -122,6 +126,13 @@ class SessionNameDescriptionCell : NSTableCellView, NSTextViewDelegate {
             sessionDescriptionTextViewScrollView.frame = scrollFrame
             sessionDescriptionTextView.frame = textviewFrame
         }
+		
+		if searchActive {
+			transcriptSearchCountLabel.stringValue = "Nº found in transcript: \(searchCount)"
+		}
+		else {
+			transcriptSearchCountLabel.stringValue = ""
+		}
 	}
     
     func highlightText (searchString: String) {
