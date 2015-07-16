@@ -24,6 +24,12 @@ class CheckBoxTableViewCell : NSTableCellView {
 		aFormatter.zeroPadsFractionDigits = true
 		return aFormatter
 	}()
+	
+	override var backgroundStyle : NSBackgroundStyle {
+		didSet {
+			label.textColor = (backgroundStyle == NSBackgroundStyle.Light ? NSColor.labelColor() : NSColor.whiteColor())
+		}
+	}
     
     override func awakeFromNib() {
         

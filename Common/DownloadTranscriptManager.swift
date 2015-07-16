@@ -12,6 +12,14 @@ class DownloadTranscriptManager : NSObject, NSURLSessionDataDelegate {
     
     private var sessionManager : NSURLSession?
 	
+	static let timeFormatter : NSDateComponentsFormatter = {
+		let aFormatter = NSDateComponentsFormatter()
+		aFormatter.zeroFormattingBehavior = NSDateComponentsFormatterZeroFormattingBehavior.Pad
+		aFormatter.unitsStyle = NSDateComponentsFormatterUnitsStyle.Positional
+		aFormatter.allowedUnits = [NSCalendarUnit.Hour, NSCalendarUnit.Minute, NSCalendarUnit.Second]
+		return aFormatter
+		}()
+	
     class var sharedManager: DownloadTranscriptManager {
         struct Singleton {
             static let instance = DownloadTranscriptManager()
@@ -55,6 +63,8 @@ class DownloadTranscriptManager : NSObject, NSURLSessionDataDelegate {
 											autoreleasepool {
 												var transcript : [TranscriptInfo] = []
 												
+												var fullTranscript : String = ""
+
 												for var i = 0;  i < timeCodes.count; ++i {
 													let timeCode = timeCodes[i] as? NSNumber
 													let annotation = annotations[i] as? NSString
@@ -62,10 +72,15 @@ class DownloadTranscriptManager : NSObject, NSURLSessionDataDelegate {
 													if let timeCode = timeCode, let annotation = annotation {
 														let transcriptPoint = TranscriptInfo(tuple:(Double(timeCode), annotation as String))
 														transcript.append(transcriptPoint)
+														
+														if let timeString = DownloadTranscriptManager.timeFormatter.stringFromTimeInterval(Double(timeCode)) {
+															fullTranscript = fullTranscript+(timeString+"  "+(annotation as String)+"\n\n")
+														}
 													}
 												}
 												
 												session.transcript = transcript
+												session.fullTranscriptPrettyPrint = fullTranscript
 											}
 										}
 									}

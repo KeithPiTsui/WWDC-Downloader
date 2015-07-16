@@ -90,6 +90,16 @@ class ViewController: NSViewController, NSURLSessionDelegate, NSURLSessionDataDe
             return NSButton()
         }
     }
+	
+	var toggleTranscriptButton: NSButton! {
+		get {
+			if let windowController = NSApplication.sharedApplication().windows.first?.windowController  as? ToolbarHookableWindowSubclass {
+				return windowController.toggleTranscriptButton
+			}
+			assertionFailure("IBOutlet Fail!")
+			return NSButton()
+		}
+	}
 
 	
 	// MARK: IBOutlets
@@ -105,7 +115,8 @@ class ViewController: NSViewController, NSURLSessionDelegate, NSURLSessionDataDe
 	
 	@IBOutlet weak var myTableView: ResizeAwareTableView!
 	@IBOutlet weak var hideDescriptionsCheckBox: NSButton!
-	
+	@IBOutlet weak var includeTranscriptsInSearchCheckBox: NSButton!
+
 	@IBOutlet weak var totalDescriptionlabel: NSTextField!
     @IBOutlet weak var currentlabel: NSTextField!
     @IBOutlet weak var oflabel: NSTextField!
@@ -216,7 +227,13 @@ class ViewController: NSViewController, NSURLSessionDelegate, NSURLSessionDataDe
             downloadYearInfo.stopDownloading()
         }
     }
-    
+	
+	@IBAction func transcriptToggled(sender: NSButton) {
+		
+		let appDelegate = NSApplication.sharedApplication().delegate as! AppDelegate
+		appDelegate.toggleTranscript()
+	}
+	
 	@IBAction func searchEntered(sender: NSSearchField) {
 	
 		if sender.stringValue.isEmpty {
@@ -227,36 +244,76 @@ class ViewController: NSViewController, NSURLSessionDelegate, NSURLSessionDataDe
 			
 			var newArray = [WWDCSession]()
 			
+			let cleanString = sender.stringValue.stringByTrimmingCharactersInSet(NSCharacterSet.whitespaceCharacterSet())
+			
 			for wwdcSession in allWWDCSessionsArray {
 				
 				if let description = wwdcSession.sessionDescription {
-					if #available(OSX 10.11, *) {
-					    if wwdcSession.title.localizedStandardContainsString(sender.stringValue.stringByTrimmingCharactersInSet(NSCharacterSet.whitespaceCharacterSet())) || description.localizedStandardContainsString(sender.stringValue.stringByTrimmingCharactersInSet(NSCharacterSet.whitespaceCharacterSet())) {
-    						newArray.append(wwdcSession)
-    					}
-					}
-					else {
-					    // Fallback on earlier versions
-						let searchTerm = sender.stringValue.stringByTrimmingCharactersInSet(NSCharacterSet.whitespaceCharacterSet())
-						let rangeTitle = wwdcSession.title.rangeOfString(searchTerm, options: NSStringCompareOptions.CaseInsensitiveSearch, range: nil, locale: NSLocale.systemLocale())
-						let rangeDescription = description.rangeOfString(searchTerm, options: NSStringCompareOptions.CaseInsensitiveSearch, range: nil, locale: NSLocale.systemLocale())
-
-						if rangeTitle != nil || rangeDescription != nil {
-							newArray.append(wwdcSession)
+					
+					if includeTranscriptsInSearchCheckBox.state == 1 {
+						
+						if let transcript = wwdcSession.fullTranscriptPrettyPrint {
+							
+							if #available(OSX 10.11, *) {
+								if wwdcSession.title.localizedStandardContainsString(cleanString) || description.localizedStandardContainsString(cleanString) || transcript.localizedStandardContainsString(cleanString) {
+									newArray.append(wwdcSession)
+								}
+							}
+							else {
+								// Fallback on earlier versions
+								let rangeTitle = wwdcSession.title.rangeOfString(cleanString, options: NSStringCompareOptions.CaseInsensitiveSearch, range: nil, locale: NSLocale.systemLocale())
+								let rangeDescription = description.rangeOfString(cleanString, options: NSStringCompareOptions.CaseInsensitiveSearch, range: nil, locale: NSLocale.systemLocale())
+								let rangeTranscript = description.rangeOfString(cleanString, options: NSStringCompareOptions.CaseInsensitiveSearch, range: nil, locale: NSLocale.systemLocale())
+								
+								if rangeTitle != nil || rangeDescription != nil || rangeTranscript != nil {
+									newArray.append(wwdcSession)
+								}
+							}
+						}
+						else {
+							if #available(OSX 10.11, *) {
+								if wwdcSession.title.localizedStandardContainsString(cleanString) || description.localizedStandardContainsString(cleanString) {
+									newArray.append(wwdcSession)
+								}
+							}
+							else {
+								// Fallback on earlier versions
+								let rangeTitle = wwdcSession.title.rangeOfString(cleanString, options: NSStringCompareOptions.CaseInsensitiveSearch, range: nil, locale: NSLocale.systemLocale())
+								let rangeDescription = description.rangeOfString(cleanString, options: NSStringCompareOptions.CaseInsensitiveSearch, range: nil, locale: NSLocale.systemLocale())
+								
+								if rangeTitle != nil || rangeDescription != nil {
+									newArray.append(wwdcSession)
+								}
+							}
 						}
 					}
+					else {
+						if #available(OSX 10.11, *) {
+							if wwdcSession.title.localizedStandardContainsString(cleanString) || description.localizedStandardContainsString(cleanString) {
+								newArray.append(wwdcSession)
+							}
+						}
+						else {
+							// Fallback on earlier versions
+							let rangeTitle = wwdcSession.title.rangeOfString(cleanString, options: NSStringCompareOptions.CaseInsensitiveSearch, range: nil, locale: NSLocale.systemLocale())
+							let rangeDescription = description.rangeOfString(cleanString, options: NSStringCompareOptions.CaseInsensitiveSearch, range: nil, locale: NSLocale.systemLocale())
+							
+							if rangeTitle != nil || rangeDescription != nil {
+								newArray.append(wwdcSession)
+							}
+						}
+					}
+	
 				}
 				else {
 					if #available(OSX 10.11, *) {
-					    if wwdcSession.title.localizedStandardContainsString(sender.stringValue.stringByTrimmingCharactersInSet(NSCharacterSet.whitespaceCharacterSet())) {
+					    if wwdcSession.title.localizedStandardContainsString(cleanString) {
     						newArray.append(wwdcSession)
     					}
-					
 					}
 					else {
 					    // Fallback on earlier versions
-						let searchTerm = sender.stringValue.stringByTrimmingCharactersInSet(NSCharacterSet.whitespaceCharacterSet())
-						let rangeTitle = wwdcSession.title.rangeOfString(searchTerm, options: NSStringCompareOptions.CaseInsensitiveSearch, range: nil, locale: NSLocale.systemLocale())
+						let rangeTitle = wwdcSession.title.rangeOfString(cleanString, options: NSStringCompareOptions.CaseInsensitiveSearch, range: nil, locale: NSLocale.systemLocale())
 						if rangeTitle != nil {
 							newArray.append(wwdcSession)
 						}
@@ -268,8 +325,11 @@ class ViewController: NSViewController, NSURLSessionDelegate, NSURLSessionDataDe
 		}
 		
 		myTableView.reloadData()
+		
+		let appDelegate = NSApplication.sharedApplication().delegate as! AppDelegate
+		appDelegate.highlightTranscript()
 	}
-    
+	
     @IBAction func combinePDF(sender: NSButton) {
 
         combinePDFIndicator.startAnimation(nil)
@@ -456,6 +516,11 @@ class ViewController: NSViewController, NSURLSessionDelegate, NSURLSessionDataDe
         }
     }
 	
+	@IBAction func includeTranscriptsInSearchChecked(sender: NSButton) {
+
+		searchEntered(searchField)
+	}
+	
 	@IBAction func startDownloadButton(sender: NSButton) {
 		
 		if isDownloading {
@@ -517,6 +582,7 @@ class ViewController: NSViewController, NSURLSessionDelegate, NSURLSessionDataDe
 		visualEffectView.state = NSVisualEffectState.FollowsWindowActiveState
 		
 		hideDescriptionsCheckBox.attributedTitle = NSAttributedString(string: "Hide Session Descriptions", attributes: attributesForCheckboxLabelLeft)
+		includeTranscriptsInSearchCheckBox.attributedTitle = NSAttributedString(string: "Include Transcripts in Search", attributes: attributesForCheckboxLabelLeft)
 		allPDFCheckBox.attributedTitle = NSAttributedString(string: "All PDFs", attributes: attributesForCheckboxLabelLeft)
 		allHDCheckBox.attributedTitle = NSAttributedString(string: "All HD", attributes: attributesForCheckboxLabelLeft)
 		allSDCheckBox.attributedTitle = NSAttributedString(string: "All SD", attributes: attributesForCheckboxLabelLeft)
@@ -575,6 +641,10 @@ class ViewController: NSViewController, NSURLSessionDelegate, NSURLSessionDataDe
 		hideDescriptionsCheckBox.enabled = false
 		
 		hideDescriptionsCheckBox.state = 0
+		
+		includeTranscriptsInSearchCheckBox.enabled = false
+		
+		includeTranscriptsInSearchCheckBox.state = 0
 		
 		updateCombinePDFButtonState()
 		
@@ -671,6 +741,9 @@ class ViewController: NSViewController, NSURLSessionDelegate, NSURLSessionDataDe
 		hideDescriptionsCheckBox.enabled = true
 		hideDescriptionsCheckBox.state = 0
 		
+		includeTranscriptsInSearchCheckBox.enabled = true
+		includeTranscriptsInSearchCheckBox.state = 0
+		
 		myTableView.reloadData()
 		
 		updateCombinePDFButtonState()
@@ -750,7 +823,7 @@ class ViewController: NSViewController, NSURLSessionDelegate, NSURLSessionDataDe
 	
 	
 	func selectionShouldChangeInTableView(tableView: NSTableView) -> Bool {
-		return true
+		return false
 	}
     
     func tableViewSelectionDidChange(notification: NSNotification) {
@@ -760,10 +833,8 @@ class ViewController: NSViewController, NSURLSessionDelegate, NSURLSessionDataDe
             
             let wwdcSession = (!isFiltered ? allWWDCSessionsArray[row] : visibleWWDCSessionsArray[row])
             
-            dispatch_async(dispatch_get_main_queue()) {
-                let appDelegate = NSApplication.sharedApplication().delegate as! AppDelegate
-                appDelegate.showTranscript(wwdcSession)
-            }
+			let appDelegate = NSApplication.sharedApplication().delegate as! AppDelegate
+			appDelegate.updateTranscript(wwdcSession)
         }
     }
 	

@@ -16,17 +16,25 @@ class SessionNameDescriptionCell : NSTableCellView, NSTextViewDelegate {
     
     @IBOutlet var sessionDescriptionTextView: IntrinsicContentNSTextView!
     @IBOutlet var sessionDescriptionTextViewScrollView: NSScrollView!
-    var nameTextStorage : AnyObject!
-    var descriptionTextStorage : AnyObject!
+	
+    private var nameTextStorage : HighlightableTextStorage!
+    private var descriptionTextStorage : HighlightableTextStorage!
+	
+	override var backgroundStyle : NSBackgroundStyle {
+		didSet {
+			sessionName.textColor = (backgroundStyle == NSBackgroundStyle.Light ? NSColor.labelColor() : NSColor.whiteColor())
+			sessionDescriptionTextView.textColor = (backgroundStyle == NSBackgroundStyle.Light ? NSColor.labelColor() : NSColor.whiteColor())
+		}
+	}
     
     var nameAttributes : [String : NSObject] {
         get {
             let pstyle = NSMutableParagraphStyle()
             pstyle.alignment = NSTextAlignment.Left
             pstyle.lineBreakMode = NSLineBreakMode.ByWordWrapping
-            let attributes = [ NSForegroundColorAttributeName : NSColor.labelColor(), NSParagraphStyleAttributeName : pstyle , NSFontAttributeName : NSFont.boldSystemFontOfSize(12.0)]
+            let attributes = [ NSParagraphStyleAttributeName : pstyle , NSFontAttributeName : NSFont.boldSystemFontOfSize(12.0)]
             return attributes
-        }
+		}
     }
     
     var descriptionAttributesFull : [String : NSObject] {
@@ -34,7 +42,7 @@ class SessionNameDescriptionCell : NSTableCellView, NSTextViewDelegate {
             let pstyle = NSMutableParagraphStyle()
             pstyle.alignment = NSTextAlignment.Left
             pstyle.lineBreakMode = NSLineBreakMode.ByTruncatingTail
-            let attributes = [ NSForegroundColorAttributeName : NSColor.labelColor(), NSParagraphStyleAttributeName : pstyle , NSFontAttributeName : NSFont.systemFontOfSize(12.0)]
+            let attributes = [ NSParagraphStyleAttributeName : pstyle , NSFontAttributeName : NSFont.systemFontOfSize(12.0)]
             return attributes
         }
     }
@@ -56,10 +64,10 @@ class SessionNameDescriptionCell : NSTableCellView, NSTextViewDelegate {
         descriptionTextStorage = HighlightableTextStorage()
 
         if let layoutManager = sessionName.layoutManager {
-            (nameTextStorage as! HighlightableTextStorage).addLayoutManager(layoutManager)
+            nameTextStorage.addLayoutManager(layoutManager)
         }
         if let layoutManager = sessionDescriptionTextView.layoutManager {
-            (descriptionTextStorage as! HighlightableTextStorage).addLayoutManager(layoutManager)
+            descriptionTextStorage.addLayoutManager(layoutManager)
         }
 	}
 	
@@ -117,9 +125,6 @@ class SessionNameDescriptionCell : NSTableCellView, NSTextViewDelegate {
 	}
     
     func highlightText (searchString: String) {
-        
-        let nameTextStorage = self.nameTextStorage as! HighlightableTextStorage
-        let descriptionTextStorage = self.descriptionTextStorage as! HighlightableTextStorage
         nameTextStorage.textToHighlight = searchString.stringByTrimmingCharactersInSet(NSCharacterSet.whitespaceCharacterSet())
         descriptionTextStorage.textToHighlight = searchString.stringByTrimmingCharactersInSet(NSCharacterSet.whitespaceCharacterSet())
     }

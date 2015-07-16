@@ -50,28 +50,8 @@ func ==(lhs: WWDCSession, rhs: WWDCSession)-> Bool {
 	
 	// ASCIIwwdc fetchedInfo
 	var sessionDescription : String?
-	var fullTranscriptPrettyPrint : String? {	// Full Print Out
-		get {
-			if let transcript = self.transcript {
-				
-				var fullTranscript : String = ""
-				
-				for transcriptInfo in transcript {
-					fullTranscript = fullTranscript+((String(transcriptInfo.timeStamp))+"  "+transcriptInfo.caption+"\n\n")
-				}
-				
-				if fullTranscript.isEmpty {
-					return nil
-				}
-				else {
-					return fullTranscript
-				}
-			}
-			else {
-				return nil
-			}
-		}
-	}
+	
+	var fullTranscriptPrettyPrint : String?
 	
 	var transcript : [TranscriptInfo]?
 	
@@ -111,6 +91,7 @@ func ==(lhs: WWDCSession, rhs: WWDCSession)-> Bool {
 			self.transcript = boxed
 		}
 		
+		self.fullTranscriptPrettyPrint  = aDecoder.decodeObjectForKey("fullTranscriptPrettyPrint") as? String
 	}
 	
 	func encodeWithCoder(aCoder: NSCoder) {
@@ -133,6 +114,9 @@ func ==(lhs: WWDCSession, rhs: WWDCSession)-> Bool {
 		}
 		if let transcript = self.transcript {
 			aCoder.encodeObject(transcript, forKey: "transcript")
+		}
+		if let fullTranscriptPrettyPrint = self.fullTranscriptPrettyPrint {
+			aCoder.encodeObject(fullTranscriptPrettyPrint, forKey: "fullTranscriptPrettyPrint")
 		}
 	}
 }
