@@ -130,6 +130,9 @@ class ViewController: NSViewController, NSURLSessionDelegate, NSURLSessionDataDe
 	// MARK: Variables
 	var allWWDCSessionsArray : [WWDCSession] = []
 	var visibleWWDCSessionsArray : [WWDCSession] = []
+	
+	// Search
+	var searchTranscriptReference : [WWDCSession:Int] = [:]
 
 	private var downloadYearInfo : DownloadYearInfo?
 	
@@ -243,6 +246,7 @@ class ViewController: NSViewController, NSURLSessionDelegate, NSURLSessionDataDe
 			isFiltered = true
 			
 			var newArray = [WWDCSession]()
+			var newSearchDict = [WWDCSession:Int]()
 			
 			let cleanString = sender.stringValue.stringByTrimmingCharactersInSet(NSCharacterSet.whitespaceCharacterSet())
 			
@@ -257,6 +261,23 @@ class ViewController: NSViewController, NSURLSessionDelegate, NSURLSessionDataDe
 							if #available(OSX 10.11, *) {
 								if wwdcSession.title.localizedStandardContainsString(cleanString) || description.localizedStandardContainsString(cleanString) || transcript.localizedStandardContainsString(cleanString) {
 									newArray.append(wwdcSession)
+									
+									var count = 0
+									let length = transcript.characters.count
+									var range = NSMakeRange(0, length)
+									
+									while(range.location != NSNotFound)
+									{
+										range = (transcript as NSString).rangeOfString(cleanString, options: NSStringCompareOptions.CaseInsensitiveSearch, range: range)
+										
+										if(range.location != NSNotFound)
+										{
+											range = NSMakeRange(range.location + range.length, length - (range.location + range.length));
+											count++; 
+										}
+									}
+														
+									newSearchDict[wwdcSession] = count
 								}
 							}
 							else {
@@ -322,6 +343,7 @@ class ViewController: NSViewController, NSURLSessionDelegate, NSURLSessionDataDe
 			}
 
 			visibleWWDCSessionsArray = newArray
+			searchTranscriptReference = newSearchDict
 		}
 		
 		myTableView.reloadData()
@@ -865,7 +887,13 @@ class ViewController: NSViewController, NSURLSessionDelegate, NSURLSessionDataDe
 				
             cell.highlightText(searchField.stringValue)
 			
-            cell.updateCell(wwdcSession.title, description: wwdcSession.sessionDescription, descriptionVisible: (hideDescriptionsCheckBox.state == 0), searchActive:(includeTranscriptsInSearchCheckBox.state == 1) && isFiltered == true, searchCount:0)
+			var count = 0
+			
+			if let transcriptCount = searchTranscriptReference[wwdcSession] {
+				count = transcriptCount
+			}
+			
+            cell.updateCell(wwdcSession.title, description: wwdcSession.sessionDescription, descriptionVisible: (hideDescriptionsCheckBox.state == 0), searchActive:(includeTranscriptsInSearchCheckBox.state == 1) && isFiltered == true, searchCount:count)
             
             return cell
 		}
