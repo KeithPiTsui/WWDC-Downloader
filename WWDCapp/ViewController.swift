@@ -131,9 +131,6 @@ class ViewController: NSViewController, NSURLSessionDelegate, NSURLSessionDataDe
 	var allWWDCSessionsArray : [WWDCSession] = []
 	var visibleWWDCSessionsArray : [WWDCSession] = []
 	
-	// Search
-	var searchTranscriptReference : [WWDCSession:Int] = [:]
-
 	private var downloadYearInfo : DownloadYearInfo?
 	
 	private var isYearInfoFetchComplete = false
@@ -246,7 +243,6 @@ class ViewController: NSViewController, NSURLSessionDelegate, NSURLSessionDataDe
 			isFiltered = true
 			
 			var newArray = [WWDCSession]()
-			var newSearchDict = [WWDCSession:Int]()
 			
 			let cleanString = sender.stringValue.stringByTrimmingCharactersInSet(NSCharacterSet.whitespaceCharacterSet())
 			
@@ -262,23 +258,8 @@ class ViewController: NSViewController, NSURLSessionDelegate, NSURLSessionDataDe
 								if wwdcSession.title.localizedStandardContainsString(cleanString) || description.localizedStandardContainsString(cleanString) || transcript.localizedStandardContainsString(cleanString) {
 									newArray.append(wwdcSession)
 									
-									var count = 0
-									let length = transcript.characters.count
-									var range = NSMakeRange(0, length)
-									
-									while(range.location != NSNotFound)
-									{
-										range = (transcript as NSString).rangeOfString(cleanString, options: NSStringCompareOptions.CaseInsensitiveSearch, range: range)
-										
-										if(range.location != NSNotFound)
-										{
-											range = NSMakeRange(range.location + range.length, length - (range.location + range.length));
-											count++; 
-										}
-									}
-														
-									newSearchDict[wwdcSession] = count
-								}
+                                    Searching.sharedManager.countOfStringsFor(wwdcSession, searchString: cleanString)
+                                }
 							}
 							else {
 								// Fallback on earlier versions
@@ -343,7 +324,12 @@ class ViewController: NSViewController, NSURLSessionDelegate, NSURLSessionDataDe
 			}
 
 			visibleWWDCSessionsArray = newArray
-			searchTranscriptReference = newSearchDict
+            
+            Searching.sharedManager.archiveSearchData{ (success) -> Void in
+                if !success {
+                    print("Failed to Archive Search Data")
+                }
+            }
 		}
 		
 		myTableView.reloadData()
@@ -885,14 +871,15 @@ class ViewController: NSViewController, NSURLSessionDelegate, NSURLSessionDataDe
 			
 			let cell = (tableView.makeViewWithIdentifier("sessionName", owner: self) as? SessionNameDescriptionCell)!
 				
+            var count = 0
+
             cell.highlightText(searchField.stringValue)
-			
-			var count = 0
-			
-			if let transcriptCount = searchTranscriptReference[wwdcSession] {
-				count = transcriptCount
-			}
-			
+
+            if isFiltered {
+                let cleanString = searchField.stringValue.stringByTrimmingCharactersInSet(NSCharacterSet.whitespaceCharacterSet())
+                count = Searching.sharedManager.countOfStringsFor(wwdcSession, searchString: cleanString)
+            }
+        			
             cell.updateCell(wwdcSession.title, description: wwdcSession.sessionDescription, descriptionVisible: (hideDescriptionsCheckBox.state == 0), searchActive:(includeTranscriptsInSearchCheckBox.state == 1) && isFiltered == true, searchCount:count)
             
             return cell
