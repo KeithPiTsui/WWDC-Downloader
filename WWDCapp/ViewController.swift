@@ -135,6 +135,8 @@ class ViewController: NSViewController, NSURLSessionDelegate, NSURLSessionDataDe
 	
 	private var isYearInfoFetchComplete = false
 	
+    private var isTranscriptDrawerOpen = false
+
 	private var isDownloading = false
     private var filesToDownload : [FileInfo] = []
     private var totalBytesToDownload : Int64 = 0
@@ -241,95 +243,104 @@ class ViewController: NSViewController, NSURLSessionDelegate, NSURLSessionDataDe
 		}
 		else {
 			isFiltered = true
-			
-			var newArray = [WWDCSession]()
-			
+						
 			let cleanString = sender.stringValue.stringByTrimmingCharactersInSet(NSCharacterSet.whitespaceCharacterSet())
 			
-			for wwdcSession in allWWDCSessionsArray {
-				
-				if let description = wwdcSession.sessionDescription {
-					
-					if includeTranscriptsInSearchCheckBox.state == 1 {
-						
-						if let transcript = wwdcSession.fullTranscriptPrettyPrint {
-							
-							if #available(OSX 10.11, *) {
-								if wwdcSession.title.localizedStandardContainsString(cleanString) || description.localizedStandardContainsString(cleanString) || transcript.localizedStandardContainsString(cleanString) {
-									newArray.append(wwdcSession)
-									
-                                    Searching.sharedManager.countOfStringsFor(wwdcSession, searchString: cleanString)
+            visibleWWDCSessionsArray = allWWDCSessionsArray.filter({ (wwdcSession) -> Bool in
+                
+                if let description = wwdcSession.sessionDescription {
+                    
+                    if includeTranscriptsInSearchCheckBox.state == 1 {
+                        
+                        if let transcript = wwdcSession.fullTranscriptPrettyPrint {
+                            
+                            if #available(OSX 10.11, *) {
+                                if wwdcSession.title.localizedStandardContainsString(cleanString) || description.localizedStandardContainsString(cleanString) || transcript.localizedStandardContainsString(cleanString) {                                    return true
                                 }
-							}
-							else {
-								// Fallback on earlier versions
-								let rangeTitle = wwdcSession.title.rangeOfString(cleanString, options: NSStringCompareOptions.CaseInsensitiveSearch, range: nil, locale: NSLocale.systemLocale())
-								let rangeDescription = description.rangeOfString(cleanString, options: NSStringCompareOptions.CaseInsensitiveSearch, range: nil, locale: NSLocale.systemLocale())
-								let rangeTranscript = description.rangeOfString(cleanString, options: NSStringCompareOptions.CaseInsensitiveSearch, range: nil, locale: NSLocale.systemLocale())
-								
-								if rangeTitle != nil || rangeDescription != nil || rangeTranscript != nil {
-									newArray.append(wwdcSession)
-								}
-							}
-						}
-						else {
-							if #available(OSX 10.11, *) {
-								if wwdcSession.title.localizedStandardContainsString(cleanString) || description.localizedStandardContainsString(cleanString) {
-									newArray.append(wwdcSession)
-								}
-							}
-							else {
-								// Fallback on earlier versions
-								let rangeTitle = wwdcSession.title.rangeOfString(cleanString, options: NSStringCompareOptions.CaseInsensitiveSearch, range: nil, locale: NSLocale.systemLocale())
-								let rangeDescription = description.rangeOfString(cleanString, options: NSStringCompareOptions.CaseInsensitiveSearch, range: nil, locale: NSLocale.systemLocale())
-								
-								if rangeTitle != nil || rangeDescription != nil {
-									newArray.append(wwdcSession)
-								}
-							}
-						}
-					}
-					else {
-						if #available(OSX 10.11, *) {
-							if wwdcSession.title.localizedStandardContainsString(cleanString) || description.localizedStandardContainsString(cleanString) {
-								newArray.append(wwdcSession)
-							}
-						}
-						else {
-							// Fallback on earlier versions
-							let rangeTitle = wwdcSession.title.rangeOfString(cleanString, options: NSStringCompareOptions.CaseInsensitiveSearch, range: nil, locale: NSLocale.systemLocale())
-							let rangeDescription = description.rangeOfString(cleanString, options: NSStringCompareOptions.CaseInsensitiveSearch, range: nil, locale: NSLocale.systemLocale())
-							
-							if rangeTitle != nil || rangeDescription != nil {
-								newArray.append(wwdcSession)
-							}
-						}
-					}
-	
-				}
-				else {
-					if #available(OSX 10.11, *) {
-					    if wwdcSession.title.localizedStandardContainsString(cleanString) {
-    						newArray.append(wwdcSession)
-    					}
-					}
-					else {
-					    // Fallback on earlier versions
-						let rangeTitle = wwdcSession.title.rangeOfString(cleanString, options: NSStringCompareOptions.CaseInsensitiveSearch, range: nil, locale: NSLocale.systemLocale())
-						if rangeTitle != nil {
-							newArray.append(wwdcSession)
-						}
-					}
-				}
-			}
-
-			visibleWWDCSessionsArray = newArray
-            
-            Searching.sharedManager.archiveSearchData{ (success) -> Void in
-                if !success {
-                    print("Failed to Archive Search Data")
+                            }
+                            else {
+                                // Fallback on earlier versions
+                                let rangeTitle = wwdcSession.title.rangeOfString(cleanString, options: NSStringCompareOptions.CaseInsensitiveSearch, range: nil, locale: NSLocale.systemLocale())
+                                let rangeDescription = description.rangeOfString(cleanString, options: NSStringCompareOptions.CaseInsensitiveSearch, range: nil, locale: NSLocale.systemLocale())
+                                let rangeTranscript = description.rangeOfString(cleanString, options: NSStringCompareOptions.CaseInsensitiveSearch, range: nil, locale: NSLocale.systemLocale())
+                                
+                                if rangeTitle != nil || rangeDescription != nil || rangeTranscript != nil {
+                                    return true
+                                }
+                            }
+                        }
+                        else {
+                            if #available(OSX 10.11, *) {
+                                if wwdcSession.title.localizedStandardContainsString(cleanString) || description.localizedStandardContainsString(cleanString) {
+                                    return true
+                                }
+                            }
+                            else {
+                                // Fallback on earlier versions
+                                let rangeTitle = wwdcSession.title.rangeOfString(cleanString, options: NSStringCompareOptions.CaseInsensitiveSearch, range: nil, locale: NSLocale.systemLocale())
+                                let rangeDescription = description.rangeOfString(cleanString, options: NSStringCompareOptions.CaseInsensitiveSearch, range: nil, locale: NSLocale.systemLocale())
+                                
+                                if rangeTitle != nil || rangeDescription != nil {
+                                    return true
+                                }
+                            }
+                        }
+                    }
+                    else {
+                        if #available(OSX 10.11, *) {
+                            if wwdcSession.title.localizedStandardContainsString(cleanString) || description.localizedStandardContainsString(cleanString) {
+                                return true
+                            }
+                        }
+                        else {
+                            // Fallback on earlier versions
+                            let rangeTitle = wwdcSession.title.rangeOfString(cleanString, options: NSStringCompareOptions.CaseInsensitiveSearch, range: nil, locale: NSLocale.systemLocale())
+                            let rangeDescription = description.rangeOfString(cleanString, options: NSStringCompareOptions.CaseInsensitiveSearch, range: nil, locale: NSLocale.systemLocale())
+                            
+                            if rangeTitle != nil || rangeDescription != nil {
+                                return true
+                            }
+                        }
+                    }
+                    
                 }
-            }
+                else {
+                    if #available(OSX 10.11, *) {
+                        if wwdcSession.title.localizedStandardContainsString(cleanString) {
+                            return true
+                        }
+                    }
+                    else {
+                        // Fallback on earlier versions
+                        let rangeTitle = wwdcSession.title.rangeOfString(cleanString, options: NSStringCompareOptions.CaseInsensitiveSearch, range: nil, locale: NSLocale.systemLocale())
+                        if rangeTitle != nil {
+                           return true
+                        }
+                    }
+                }
+                return false
+            })
+            
+            
+            if includeTranscriptsInSearchCheckBox.state == 1 {
+                for wwdcSession in visibleWWDCSessionsArray {
+                    
+                    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), {
+
+                            Searching.sharedManager.countOfStringsFor(wwdcSession, searchString: cleanString)
+
+                            dispatch_async(dispatch_get_main_queue()) { [unowned self] in
+                                
+                                if cleanString == self.searchField.stringValue.stringByTrimmingCharactersInSet(NSCharacterSet.whitespaceCharacterSet()) {
+                                    
+                                    if let index = self.visibleWWDCSessionsArray.indexOf(wwdcSession) {
+                                        self.myTableView.reloadDataForRowIndexes(NSIndexSet(index: index), columnIndexes: NSIndexSet(indexesInRange: NSMakeRange(0,self.myTableView.numberOfColumns)))
+                                    }
+                                }
+                            }
+                        })
+                }
+            }            
 		}
 		
 		myTableView.reloadData()
@@ -602,8 +613,24 @@ class ViewController: NSViewController, NSURLSessionDelegate, NSURLSessionDataDe
 		
 		if let contentView = myTableView.superview {
 			contentView.postsBoundsChangedNotifications = true
-			NSNotificationCenter.defaultCenter().addObserver(self, selector: "tableViewScrolled", name:NSViewBoundsDidChangeNotification, object: contentView)
+            
+            NSNotificationCenter.defaultCenter().addObserverForName(NSViewBoundsDidChangeNotification, object: contentView, queue: NSOperationQueue.mainQueue(), usingBlock: { (notification) -> Void in
+                
+                self.lastTableViewInteractionTime = CACurrentMediaTime()
+            })
 		}
+        
+        NSNotificationCenter.defaultCenter().addObserverForName(NSDrawerDidOpenNotification, object: nil, queue: NSOperationQueue.mainQueue(), usingBlock: { [unowned self] (notification) -> Void in
+            
+            self.isTranscriptDrawerOpen = true
+            self.myTableView.reloadData()
+        })
+        
+        NSNotificationCenter.defaultCenter().addObserverForName(NSDrawerDidCloseNotification, object: nil, queue: NSOperationQueue.mainQueue(), usingBlock: { [unowned self] (notification) -> Void in
+            
+            self.isTranscriptDrawerOpen = false
+            self.myTableView.reloadData()
+        })
 		
 		if #available(OSX 10.11, *) {
 		    totallabel.font = NSFont.monospacedDigitSystemFontOfSize(NSFont.systemFontSizeForControlSize(NSControlSize.SmallControlSize), weight: NSFontWeightRegular)
@@ -829,9 +856,8 @@ class ViewController: NSViewController, NSURLSessionDelegate, NSURLSessionDataDe
 		}
 	}
 	
-	
 	func selectionShouldChangeInTableView(tableView: NSTableView) -> Bool {
-		return false
+		return isTranscriptDrawerOpen
 	}
     
     func tableViewSelectionDidChange(notification: NSNotification) {
@@ -995,6 +1021,30 @@ class ViewController: NSViewController, NSURLSessionDelegate, NSURLSessionDataDe
 		tableView.reloadData()
 	}
 	
+    @available(OSX 10.11, *)
+    func tableView(tableView: NSTableView, rowActionsForRow row: Int, edge: NSTableRowActionEdge) -> [NSTableViewRowAction] {
+        
+        let wwdcSession = (!isFiltered ? allWWDCSessionsArray[row] : visibleWWDCSessionsArray[row])
+        
+        switch edge {
+        case .Leading:
+            return [NSTableViewRowAction(style: .Regular, title: "Mark as Watched", handler: { (action, int) -> Void in
+                
+            })]
+        case .Trailing:
+            if wwdcSession.hasAnyDownloadedFiles == true {
+                return [NSTableViewRowAction(style: .Destructive, title: "Delete Files for Session", handler: { [unowned self] (action, int) -> Void in
+                        wwdcSession.deleteDownloadedFiles()
+                        //self.myTableView.reloadData()
+                        self.myTableView.reloadDataForRowIndexes(NSIndexSet(index: int), columnIndexes:NSIndexSet(indexesInRange: NSMakeRange(0,self.myTableView.numberOfColumns)))
+                    })]
+            }
+            else {
+                return []
+            }
+        }
+    }
+
 	
 	// MARK: - Download
 	func  downloadFiles(files : [FileInfo] ) {
@@ -1472,9 +1522,6 @@ class ViewController: NSViewController, NSURLSessionDelegate, NSURLSessionDataDe
 	
 
 	// MARK: - AutoScrollToCurrent
-	func tableViewScrolled() {
-		lastTableViewInteractionTime = CACurrentMediaTime()
-	}
 	
 	let autoScrollTimeout : CFTimeInterval = 5
 	

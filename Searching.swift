@@ -20,7 +20,7 @@ class Searching {
         return Singleton.instance
     }
     
-    init() {
+    private init() {
         unArchiveSearchData { (success) -> Void in
             if !success {
                 print("Failed to Unarchive Search Data")
@@ -76,20 +76,23 @@ class Searching {
     func archiveSearchData(completionSuccess:(success: Bool) -> Void) {
         
         let data = NSKeyedArchiver.archivedDataWithRootObject(searchTranscriptReference as NSDictionary)
-        
-        completionSuccess(success: NSKeyedArchiver.archiveRootObject(data, toFile: pathForSearchFile()))
+
+        completionSuccess(success: data.writeToFile(pathForSearchFile(), atomically: true))
     }
     
     private func unArchiveSearchData(completionSuccess:(success: Bool) -> Void) {
         
-        let data = NSKeyedUnarchiver.unarchiveObjectWithFile(pathForSearchFile()) as? NSData
-        
-        if let data = data {
+        do {
+            let data = try NSData(contentsOfFile: pathForSearchFile(), options: NSDataReadingOptions.DataReadingMappedIfSafe)
+            
             if let unarchived = NSKeyedUnarchiver.unarchiveObjectWithData(data) as? [NSString:NSArray] {
-                 searchTranscriptReference = unarchived
+                searchTranscriptReference = unarchived
                 completionSuccess(success: true)
                 return
             }
+        }
+        catch {
+            print(error)
         }
         completionSuccess(success: false)
     }

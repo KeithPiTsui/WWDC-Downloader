@@ -129,6 +129,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
 	}
 	
     func updateTranscript(wwdcSession : WWDCSession) {
+        transcriptController?.textView.scrollToBeginningOfDocument(nil)
         transcriptController?.wwdcSession = wwdcSession
 		highlightTranscript()
     }
@@ -174,8 +175,16 @@ class AppDelegate: NSObject, NSApplicationDelegate {
 	
 	
     func applicationWillTerminate(aNotification: NSNotification) {
-        // Insert code here to tear zown your application
-		
+        
+        Searching.sharedManager.archiveSearchData{ (success) -> Void in
+            if !success {
+                print("Failed to Archive Search Data")
+            }
+            else {
+                print("Successfuly Archived Search Data")
+            }
+        }
     }
+
 }
 

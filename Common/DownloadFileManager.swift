@@ -42,10 +42,6 @@ typealias SimpleCompletionHandler = ((success: Bool) -> Void)
         sessionManager = NSURLSession(configuration: config, delegate: self, delegateQueue: NSOperationQueue.mainQueue())
     }
     
-    deinit {
-        NSNotificationCenter.defaultCenter().removeObserver(self)
-    }
-    
     func preferenceChanged() {
 		
 		print("Preference Changed!!!!!!!")
@@ -58,9 +54,7 @@ typealias SimpleCompletionHandler = ((success: Bool) -> Void)
 
             sessionManager?.invalidateAndCancel()
             
-            sessionManager = NSURLSession(configuration: config, delegate: self, delegateQueue: NSOperationQueue.mainQueue())
-			
-			
+            sessionManager = NSURLSession(configuration: config, delegate: self, delegateQueue: NSOperationQueue.mainQueue())			
         }
     }
 	

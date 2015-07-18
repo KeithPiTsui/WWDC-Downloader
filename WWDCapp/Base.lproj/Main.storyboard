@@ -236,17 +236,17 @@
                                         </connections>
                                     </button>
                                 </toolbarItem>
-                                <toolbarItem implicitItemIdentifier="F9AA2AF0-BBF8-4DB5-A58D-E6C76809DBD9" label="Custom View" paletteLabel="Custom View" image="presets" visibilityPriority="10" id="ekW-3H-Old">
+                                <toolbarItem implicitItemIdentifier="F9AA2AF0-BBF8-4DB5-A58D-E6C76809DBD9" label="Custom View" paletteLabel="Custom View" visibilityPriority="10" id="ekW-3H-Old">
                                     <nil key="toolTip"/>
                                     <size key="minSize" width="14" height="20"/>
-                                    <size key="maxSize" width="28" height="20"/>
+                                    <size key="maxSize" width="40" height="43"/>
                                     <button key="view" toolTip="Toggle Transcript Viewer" verticalHuggingPriority="750" id="fw4-lZ-A2B">
-                                        <rect key="frame" x="24" y="14" width="28" height="20"/>
+                                        <rect key="frame" x="18" y="14" width="40" height="43"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                         <animations/>
-                                        <buttonCell key="cell" type="roundRect" bezelStyle="roundedRect" image="presets" imagePosition="only" alignment="center" lineBreakMode="truncatingTail" state="on" imageScaling="proportionallyDown" inset="2" id="JXJ-3I-Uci">
+                                        <buttonCell key="cell" type="push" bezelStyle="rounded" alignment="center" lineBreakMode="truncatingTail" state="on" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="JXJ-3I-Uci">
                                             <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
-                                            <font key="font" metaFont="cellTitle"/>
+                                            <font key="font" metaFont="system"/>
                                         </buttonCell>
                                     </button>
                                     <connections>
@@ -1308,7 +1308,6 @@
     <resources>
         <image name="movie" width="25" height="25"/>
         <image name="pdf" width="50" height="50"/>
-        <image name="presets" width="24" height="24"/>
         <image name="zip" width="50" height="50"/>
     </resources>
 </document>

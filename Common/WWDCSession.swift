@@ -50,10 +50,31 @@ func ==(lhs: WWDCSession, rhs: WWDCSession)-> Bool {
 	
 	// ASCIIwwdc fetchedInfo
 	var sessionDescription : String?
-	
 	var fullTranscriptPrettyPrint : String?
-	
 	var transcript : [TranscriptInfo]?
+    
+    var hasAnyDownloadedFiles : Bool {
+        get {
+            if hdFile?.isFileAlreadyDownloaded == true {
+                return true
+            }
+            
+            if sdFile?.isFileAlreadyDownloaded == true {
+                return true
+            }
+            
+            if pdfFile?.isFileAlreadyDownloaded == true {
+                return true
+            }
+            
+            for sample in sampleCodeArray {
+                if sample.isFileAlreadyDownloaded == true {
+                    return true
+                }
+            }
+            return false
+        }
+    }
 	
 	init(sessionID: String, title: String, year: WWDCYear) {
         
@@ -63,6 +84,59 @@ func ==(lhs: WWDCSession, rhs: WWDCSession)-> Bool {
 
         sampleCodeArray = []
 	}
+    
+    func deleteDownloadedFiles() {
+        
+        if hdFile?.isFileAlreadyDownloaded == true {
+            if let url = hdFile?.localFileURL {
+                do {
+                    try NSFileManager.defaultManager().removeItemAtURL(url)
+                    hdFile?.downloadProgress = 0
+                }
+                catch {
+                    print(error)
+                }
+            }
+        }
+        
+        if sdFile?.isFileAlreadyDownloaded == true {
+            if let url = sdFile?.localFileURL {
+                do {
+                    try NSFileManager.defaultManager().removeItemAtURL(url)
+                    sdFile?.downloadProgress = 0
+                }
+                catch {
+                    print(error)
+                }
+            }
+        }
+        
+        if pdfFile?.isFileAlreadyDownloaded == true {
+            if let url = pdfFile?.localFileURL {
+                do {
+                    try NSFileManager.defaultManager().removeItemAtURL(url)
+                    pdfFile?.downloadProgress = 0
+                }
+                catch {
+                    print(error)
+                }
+            }
+        }
+        
+        for sample in sampleCodeArray {
+            if sample.isFileAlreadyDownloaded == true {
+                if let url = sample.localFileURL {
+                    do {
+                        try NSFileManager.defaultManager().removeItemAtURL(url)
+                        sample.downloadProgress = 0
+                    }
+                    catch {
+                        print(error)
+                    }
+                }
+            }
+        }
+    }
 	
 	required init(coder aDecoder: NSCoder) {
 		self.title  = aDecoder.decodeObjectForKey("title") as! String
