@@ -31,7 +31,7 @@ class TranscriptInfo : NSObject, NSCoding {
 
 
 func ==(lhs: WWDCSession, rhs: WWDCSession)-> Bool {
-    return lhs.title == rhs.title && lhs.sessionID == rhs.sessionID
+    return lhs.sessionYear == rhs.sessionYear && lhs.sessionID == rhs.sessionID
 }
 
 @objc class WWDCSession : NSObject, NSCoding {

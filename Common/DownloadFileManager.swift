@@ -43,9 +43,7 @@ typealias SimpleCompletionHandler = ((success: Bool) -> Void)
     }
     
     func preferenceChanged() {
-		
-		print("Preference Changed!!!!!!!")
-		
+				
         stopFileDownloads()
         
         if let config = sessionManager?.configuration {
@@ -54,7 +52,7 @@ typealias SimpleCompletionHandler = ((success: Bool) -> Void)
 
             sessionManager?.invalidateAndCancel()
             
-            sessionManager = NSURLSession(configuration: config, delegate: self, delegateQueue: NSOperationQueue.mainQueue())			
+            sessionManager = NSURLSession(configuration: config, delegate: self, delegateQueue: NSOperationQueue.mainQueue())
         }
     }
 	
@@ -80,7 +78,9 @@ typealias SimpleCompletionHandler = ((success: Bool) -> Void)
             callbackWrapper.addCompletionWrapper(completionWrapper)
             backgroundHandlersForFiles[file] = callbackWrapper
             
-            startDownload(file)
+            if file.shouldDownloadFile == true && file.fileSize > 0 {
+                startDownload(file)
+            }
         }
     }
 	
@@ -91,7 +91,7 @@ typealias SimpleCompletionHandler = ((success: Bool) -> Void)
             
             for task in downloadTasks {
                 if let file = self.backgroundRequestsForFiles[task.taskIdentifier] {
-                    task.cancelByProducingResumeData({ (data) -> Void in
+                    task.cancelByProducingResumeData({ (data) -> Void in   // ResumeData saved out in didCompleteMethod
                         if  data == nil{
                             file.resumeData = nil
                             file.downloadProgress = 0
@@ -107,27 +107,30 @@ typealias SimpleCompletionHandler = ((success: Bool) -> Void)
         
         if logFileManager { print("Queue Download of \(file.displayName!)") }
         
-        if let url = file.remoteFileURL {
-            if let resumeData = file.resumeData {
-                if let task = sessionManager?.downloadTaskWithResumeData(resumeData) {
-                    backgroundRequestsForFiles[task.taskIdentifier] = file
-                    task.resume()
-                }
+        guard let url = file.remoteFileURL else
+        {
+            if let callback = backgroundHandlersForFiles[file] {
+                print("Download Fail No RemoteURL! - \(file.displayName!)")
+                callback.notifyCompletion(false)
+                backgroundHandlersForFiles[file] = nil
             }
-            else {
-                if let task = sessionManager?.downloadTaskWithRequest(NSURLRequest(URL: url)) {
-                    backgroundRequestsForFiles[task.taskIdentifier] = file
-                    task.resume()
-                }
+            return
+        }
+
+        // Resume download if possible
+        if let resumeData = file.resumeData {
+            if let task = sessionManager?.downloadTaskWithResumeData(resumeData) {
+                backgroundRequestsForFiles[task.taskIdentifier] = file
+                task.resume()
+                return
             }
         }
-		else {
-			if let callback = backgroundHandlersForFiles[file] {
-				print("Download Fail No RemoteURL! - \(file.displayName!)")
-				callback.notifyCompletion(false)
-				backgroundHandlersForFiles[file] = nil
-			}
-		}
+
+        // New Download
+        if let task = sessionManager?.downloadTaskWithRequest(NSURLRequest(URL: url)) {
+            backgroundRequestsForFiles[task.taskIdentifier] = file
+            task.resume()
+        }
     }
 	
     func URLSession(session: NSURLSession, downloadTask: NSURLSessionDownloadTask, didWriteData bytesWritten: Int64, totalBytesWritten: Int64, totalBytesExpectedToWrite: Int64)  {

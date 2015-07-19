@@ -807,7 +807,7 @@ class ViewController: NSViewController, NSURLSessionDelegate, NSURLSessionDataDe
         }
         else {
 			
-            let wwdcSession = (!isFiltered ? allWWDCSessionsArray[row] : visibleWWDCSessionsArray[row])
+            let wwdcSession = (isFiltered ? visibleWWDCSessionsArray[row] : allWWDCSessionsArray[row])
             
             if let referenceCell = referenceCell {
                 
@@ -865,7 +865,7 @@ class ViewController: NSViewController, NSURLSessionDelegate, NSURLSessionDataDe
         let tableview = notification.object as? ResizeAwareTableView
         if let row = tableview?.selectedRow {
             
-            let wwdcSession = (!isFiltered ? allWWDCSessionsArray[row] : visibleWWDCSessionsArray[row])
+            let wwdcSession = (isFiltered ? visibleWWDCSessionsArray[row] : allWWDCSessionsArray[row])
             
 			let appDelegate = NSApplication.sharedApplication().delegate as! AppDelegate
 			appDelegate.updateTranscript(wwdcSession)
@@ -874,7 +874,7 @@ class ViewController: NSViewController, NSURLSessionDelegate, NSURLSessionDataDe
 	
 	func tableView(tableView: NSTableView, viewForTableColumn tableColumn: NSTableColumn?, row: Int) -> NSView? {
 		
-        let wwdcSession = (!isFiltered ? allWWDCSessionsArray[row] : visibleWWDCSessionsArray[row])
+        let wwdcSession = (isFiltered ? visibleWWDCSessionsArray[row] : allWWDCSessionsArray[row])
 		
 		if tableColumn?.identifier == "sessionID" {
 
@@ -1024,7 +1024,7 @@ class ViewController: NSViewController, NSURLSessionDelegate, NSURLSessionDataDe
     @available(OSX 10.11, *)
     func tableView(tableView: NSTableView, rowActionsForRow row: Int, edge: NSTableRowActionEdge) -> [NSTableViewRowAction] {
         
-        let wwdcSession = (!isFiltered ? allWWDCSessionsArray[row] : visibleWWDCSessionsArray[row])
+        let wwdcSession = (isFiltered ? visibleWWDCSessionsArray[row] : allWWDCSessionsArray[row])
         
         switch edge {
         case .Leading:
@@ -1057,26 +1057,14 @@ class ViewController: NSViewController, NSURLSessionDelegate, NSURLSessionDataDe
         
 		for file in files {
 			
-			dispatch_group_enter(downloadGroup)
+            dispatch_group_enter(downloadGroup)
 			
 			let progressWrapper = ProgressWrapper(handler: { [unowned self] (progress) -> Void in
 				
 				guard let session = file.session else { return }
 				
-				var actualIndex : Int?
-				
-				if self.isFiltered {
-					if let index = self.visibleWWDCSessionsArray.indexOf(session) {
-						actualIndex = index
-					}
-				}
-				else {
-					if let index = self.allWWDCSessionsArray.indexOf(session) {
-						actualIndex = index
-					}
-				}
-
-				if let index = actualIndex {
+				if let index = (self.isFiltered ? self.visibleWWDCSessionsArray.indexOf(session) : self.allWWDCSessionsArray.indexOf(session)) {
+                    
 					dispatch_async(dispatch_get_main_queue()) { [unowned self] in
 						switch file.fileType {
 						case .PDF:
@@ -1100,6 +1088,7 @@ class ViewController: NSViewController, NSURLSessionDelegate, NSURLSessionDataDe
 				if success {
 					
 					file.downloadProgress = 1
+                    file.shouldDownloadFile = false
 					
 					print("Download SUCCESS - \(file.displayName!)")
 				}
@@ -1111,30 +1100,18 @@ class ViewController: NSViewController, NSURLSessionDelegate, NSURLSessionDataDe
 				
 				guard let session = file.session else { return }
 
-				if self.isFiltered {
-					if let index = self.visibleWWDCSessionsArray.indexOf(session) {
-						dispatch_async(dispatch_get_main_queue()) { [unowned self] in
-                            self.myTableView.beginUpdates()
-							self.myTableView.reloadDataForRowIndexes(NSIndexSet(index: index), columnIndexes:NSIndexSet(indexesInRange: NSMakeRange(0,self.myTableView.numberOfColumns)))
-                            self.myTableView.endUpdates()
-							self.autoScrollToCurrentDownload()
-							self.updateTotalProgress()
-						}
-					}
-				}
-				else {
-					if let index = self.allWWDCSessionsArray.indexOf(session) {
-						dispatch_async(dispatch_get_main_queue()) { [unowned self] in
-                            self.myTableView.beginUpdates()
-							self.myTableView.reloadDataForRowIndexes(NSIndexSet(index: index), columnIndexes:NSIndexSet(indexesInRange: NSMakeRange(0,self.myTableView.numberOfColumns)))
-                            self.myTableView.endUpdates()
-							self.autoScrollToCurrentDownload()
-							self.updateTotalProgress()
-						}
-					}
-				}
+                if let index = (self.isFiltered ? self.visibleWWDCSessionsArray.indexOf(session) : self.allWWDCSessionsArray.indexOf(session)) {
+                    
+                    dispatch_async(dispatch_get_main_queue()) { [unowned self] in
+                        self.myTableView.beginUpdates()
+                        self.myTableView.reloadDataForRowIndexes(NSIndexSet(index: index), columnIndexes:NSIndexSet(indexesInRange: NSMakeRange(0,self.myTableView.numberOfColumns)))
+                        self.myTableView.endUpdates()
+                        self.autoScrollToCurrentDownload()
+                        self.updateTotalProgress()
+                    }
+                }
 
-				dispatch_group_leave(downloadGroup)
+                dispatch_group_leave(downloadGroup)
 			})
 			
 			DownloadFileManager.sharedManager.downloadFile(file, progressWrapper: progressWrapper, completionWrapper: completionWrapper)
@@ -1540,21 +1517,13 @@ class ViewController: NSViewController, NSURLSessionDelegate, NSURLSessionDataDe
 						
 						guard let session = file.session else { return }
 						
-						if self.isFiltered {
-							if let index = self.visibleWWDCSessionsArray.indexOf(session) {
-								dispatch_async(dispatch_get_main_queue()) { [unowned self] in
-									self.scrollToFirstRowOfFilesCurrentlyDownloading(index)
-								}
-							}
-						}
-						else {
-							if let index = self.allWWDCSessionsArray.indexOf(session) {
-								dispatch_async(dispatch_get_main_queue()) { [unowned self] in
-									self.scrollToFirstRowOfFilesCurrentlyDownloading(index)
-								}
-							}
-						}
-						
+                        if let index = (self.isFiltered ? self.visibleWWDCSessionsArray.indexOf(session) : self.allWWDCSessionsArray.indexOf(session)) {
+                            
+                            dispatch_async(dispatch_get_main_queue()) { [unowned self] in
+                                self.scrollToFirstRowOfFilesCurrentlyDownloading(index)
+                            }
+                        }
+                        
 						break
 					}
 				}
