@@ -1,7 +1,10 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <document type="com.apple.InterfaceBuilder3.Cocoa.Storyboard.XIB" version="3.0" toolsVersion="8152.3" systemVersion="15A216g" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" initialViewController="B8D-0N-5wS">
     <dependencies>
+        <plugIn identifier="com.apple.AVKitIBPlugin" version="8152.3"/>
         <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="8152.3"/>
+        <plugIn identifier="com.apple.pdfkit.ibplugin" version="8152.3"/>
+        <capability name="stacking Non-gravity area distributions on NSStackView" minToolsVersion="7.0" minSystemVersion="10.11"/>
     </dependencies>
     <scenes>
         <!--Application-->
@@ -23,7 +26,7 @@
                                         <menuItem isSeparatorItem="YES" id="VOq-y0-SEH"/>
                                         <menuItem title="Preferences…" keyEquivalent="," id="BOF-NM-1cW">
                                             <connections>
-                                                <action selector="showPreferencesPanel:" target="Voe-Tx-rLC" id="fFz-1i-9Nb"/>
+                                                <segue destination="UpY-Wp-LwS" kind="modal" identifier="preferencesSegue" id="PRE-q1-HP5"/>
                                             </connections>
                                         </menuItem>
                                         <menuItem isSeparatorItem="YES" id="wFC-TO-SCJ"/>
@@ -94,7 +97,7 @@
                 <customObject id="Voe-Tx-rLC" customClass="AppDelegate" customModule="WWDCapp" customModuleProvider="target"/>
                 <customObject id="Ady-hI-5gd" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-330.5" y="492"/>
+            <point key="canvasLocation" x="-272.5" y="-420"/>
         </scene>
         <!--Window Controller-->
         <scene sceneID="R2V-B0-nI4">
@@ -285,7 +288,100 @@
                 </windowController>
                 <customObject id="Oky-zY-oP4" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="70" y="114"/>
+            <point key="canvasLocation" x="109" y="176"/>
+        </scene>
+        <!--Window Controller-->
+        <scene sceneID="wRy-W9-hW1">
+            <objects>
+                <windowController id="QWk-MP-YM6" sceneMemberID="viewController">
+                    <window key="window" title="Window" allowsToolTipsWhenApplicationIsInactive="NO" autorecalculatesKeyViewLoop="NO" oneShot="NO" releasedWhenClosed="NO" showsToolbarButton="NO" visibleAtLaunch="NO" frameAutosaveName="" animationBehavior="default" id="GJ9-KD-h28">
+                        <windowStyleMask key="styleMask" titled="YES" closable="YES" miniaturizable="YES" resizable="YES"/>
+                        <windowPositionMask key="initialPositionMask" leftStrut="YES" rightStrut="YES" topStrut="YES" bottomStrut="YES"/>
+                        <rect key="contentRect" x="425" y="461" width="480" height="270"/>
+                        <rect key="screenRect" x="0.0" y="0.0" width="2560" height="1417"/>
+                    </window>
+                    <connections>
+                        <segue destination="aWE-7x-JMo" kind="relationship" relationship="window.shadowedContentViewController" id="IUm-pW-iJo"/>
+                    </connections>
+                </windowController>
+                <customObject id="6EE-eh-TF8" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="1298" y="-10"/>
+        </scene>
+        <!--View Controller-->
+        <scene sceneID="THB-mM-Tij">
+            <objects>
+                <viewController id="aWE-7x-JMo" sceneMemberID="viewController">
+                    <view key="view" id="X3y-bH-4tN">
+                        <rect key="frame" x="0.0" y="0.0" width="1012" height="565"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                        <subviews>
+                            <stackView distribution="fill" orientation="vertical" alignment="leading" horizontalStackHuggingPriority="249.99998474121094" verticalStackHuggingPriority="249.99998474121094" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="WUn-Eg-7a1">
+                                <rect key="frame" x="20" y="20" width="972" height="525"/>
+                                <subviews>
+                                    <stackView distribution="fill" orientation="horizontal" alignment="top" horizontalStackHuggingPriority="249.99998474121094" verticalStackHuggingPriority="249.99998474121094" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="MOT-eF-LB3">
+                                        <rect key="frame" x="0.0" y="300" width="972" height="225"/>
+                                        <subviews>
+                                            <avPlayerView fixedFrame="YES" controlsStyle="floating" translatesAutoresizingMaskIntoConstraints="NO" id="wot-qa-gpW">
+                                                <rect key="frame" x="0.0" y="0.0" width="456" height="225"/>
+                                                <animations/>
+                                            </avPlayerView>
+                                            <stackView distribution="fill" orientation="horizontal" alignment="top" horizontalStackHuggingPriority="249.99998474121094" verticalStackHuggingPriority="249.99998474121094" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Xrv-zn-OYA">
+                                                <rect key="frame" x="464" y="0.0" width="508" height="225"/>
+                                                <subviews>
+                                                    <pdfView autoresizesSubviews="NO" wantsLayer="YES" fixedFrame="YES" scaleFactor="0.62105466305183643" autoScales="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Ksq-7p-kg5">
+                                                        <rect key="frame" x="0.0" y="0.0" width="400" height="225"/>
+                                                        <animations/>
+                                                    </pdfView>
+                                                    <pdfThumbnailView fixedFrame="YES" allowsDragging="NO" translatesAutoresizingMaskIntoConstraints="NO" id="U8L-O2-2dP">
+                                                        <rect key="frame" x="408" y="0.0" width="100" height="225"/>
+                                                        <animations/>
+                                                        <size key="thumbnailSize" width="64" height="64"/>
+                                                    </pdfThumbnailView>
+                                                </subviews>
+                                                <animations/>
+                                                <visibilityPriorities>
+                                                    <integer value="1000"/>
+                                                    <integer value="1000"/>
+                                                </visibilityPriorities>
+                                                <customSpacing>
+                                                    <real value="3.4028234663852886e+38"/>
+                                                    <real value="3.4028234663852886e+38"/>
+                                                </customSpacing>
+                                            </stackView>
+                                        </subviews>
+                                        <animations/>
+                                        <visibilityPriorities>
+                                            <integer value="1000"/>
+                                            <integer value="1000"/>
+                                        </visibilityPriorities>
+                                        <customSpacing>
+                                            <real value="3.4028234663852886e+38"/>
+                                            <real value="3.4028234663852886e+38"/>
+                                        </customSpacing>
+                                    </stackView>
+                                    <customView fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Leg-Mu-Ly7">
+                                        <rect key="frame" x="0.0" y="0.0" width="972" height="292"/>
+                                        <animations/>
+                                    </customView>
+                                </subviews>
+                                <animations/>
+                                <visibilityPriorities>
+                                    <integer value="1000"/>
+                                    <integer value="1000"/>
+                                </visibilityPriorities>
+                                <customSpacing>
+                                    <real value="3.4028234663852886e+38"/>
+                                    <real value="3.4028234663852886e+38"/>
+                                </customSpacing>
+                            </stackView>
+                        </subviews>
+                        <animations/>
+                    </view>
+                </viewController>
+                <customObject id="rgn-Kq-QhB" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="1298" y="652.5"/>
         </scene>
         <!--View Controller-->
         <scene sceneID="hIz-AP-VOD">
@@ -646,7 +742,7 @@
                                                             <tableColumnResizingMask key="resizingMask" resizeWithTable="YES" userResizable="YES"/>
                                                             <prototypeCellViews>
                                                                 <tableCellView identifier="PDF" id="XN5-Bl-Ag6" customClass="CheckBoxTableViewCell" customModule="WWDCapp" customModuleProvider="target">
-                                                                    <rect key="frame" x="477" y="1" width="100" height="50"/>
+                                                                    <rect key="frame" x="479" y="1" width="100" height="50"/>
                                                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                                     <subviews>
                                                                         <customView translatesAutoresizingMaskIntoConstraints="NO" id="tXJ-sr-iuI">
@@ -744,7 +840,7 @@
                                                             <tableColumnResizingMask key="resizingMask" resizeWithTable="YES" userResizable="YES"/>
                                                             <prototypeCellViews>
                                                                 <tableCellView identifier="SD" id="lke-Gm-rNp" customClass="CheckBoxTableViewCell" customModule="WWDCapp" customModuleProvider="target">
-                                                                    <rect key="frame" x="580" y="1" width="100" height="50"/>
+                                                                    <rect key="frame" x="584" y="1" width="100" height="50"/>
                                                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                                     <subviews>
                                                                         <customView translatesAutoresizingMaskIntoConstraints="NO" id="zFI-ua-BZb">
@@ -842,7 +938,7 @@
                                                             <tableColumnResizingMask key="resizingMask" resizeWithTable="YES" userResizable="YES"/>
                                                             <prototypeCellViews>
                                                                 <tableCellView identifier="HD" id="BRJ-vK-4k4" customClass="CheckBoxTableViewCell" customModule="WWDCapp" customModuleProvider="target">
-                                                                    <rect key="frame" x="683" y="1" width="100" height="50"/>
+                                                                    <rect key="frame" x="689" y="1" width="100" height="50"/>
                                                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                                     <subviews>
                                                                         <customView translatesAutoresizingMaskIntoConstraints="NO" id="gfW-cf-WbL">
@@ -940,7 +1036,7 @@
                                                             <tableColumnResizingMask key="resizingMask" resizeWithTable="YES" userResizable="YES"/>
                                                             <prototypeCellViews>
                                                                 <tableCellView identifier="Code" id="fVV-S8-xk2" customClass="CheckBoxTableViewCell" customModule="WWDCapp" customModuleProvider="target">
-                                                                    <rect key="frame" x="786" y="1" width="100" height="50"/>
+                                                                    <rect key="frame" x="794" y="1" width="100" height="50"/>
                                                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                                     <subviews>
                                                                         <customView translatesAutoresizingMaskIntoConstraints="NO" id="V9Q-4y-WHw">
@@ -1035,7 +1131,7 @@
                                             <nil key="backgroundColor"/>
                                         </clipView>
                                         <animations/>
-                                        <scroller key="horizontalScroller" hidden="YES" wantsLayer="YES" verticalHuggingPriority="750" horizontal="YES" id="EQ4-3v-gQf">
+                                        <scroller key="horizontalScroller" wantsLayer="YES" verticalHuggingPriority="750" horizontal="YES" id="EQ4-3v-gQf">
                                             <rect key="frame" x="1" y="463" width="888" height="16"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <animations/>
@@ -1135,7 +1231,7 @@
                 </viewController>
                 <customObject id="rPt-NT-nkU" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="70" y="954"/>
+            <point key="canvasLocation" x="109" y="953"/>
         </scene>
         <!--Window Controller-->
         <scene sceneID="aOx-QI-hUM">
@@ -1157,7 +1253,7 @@
                 </windowController>
                 <customObject id="JkS-dC-Ofi" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="899" y="1367"/>
+            <point key="canvasLocation" x="109" y="-416"/>
         </scene>
         <!--Preferences Controller-->
         <scene sceneID="Gdf-IF-hup">
@@ -1243,7 +1339,7 @@
                 </viewController>
                 <customObject id="Wfa-10-3jS" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="899" y="1713"/>
+            <point key="canvasLocation" x="529" y="-424"/>
         </scene>
         <!--Transcript Panel Controller-->
         <scene sceneID="MHV-7l-9QQ">
@@ -1302,7 +1398,7 @@
                 </viewController>
                 <customObject id="Xj3-LX-Zqg" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="240" y="2072"/>
+            <point key="canvasLocation" x="1272" y="1216"/>
         </scene>
     </scenes>
     <resources>

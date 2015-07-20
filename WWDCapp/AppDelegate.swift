@@ -139,26 +139,6 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     }
     
 
-	// MARK: - Preferences
-    @IBAction func showPreferencesPanel(sender: NSMenuItem) {
-        
-        let storyboard = NSStoryboard(name: "Main", bundle: nil)
-        preferencesWindowController = storyboard.instantiateControllerWithIdentifier("Preferences") as? NSWindowController
-        
-        if let window = preferencesWindowController?.window {
-            
-            let min = window.standardWindowButton(NSWindowButton.MiniaturizeButton)
-            let full = window.standardWindowButton(NSWindowButton.FullScreenButton)
-            let zoomButton = window.standardWindowButton(NSWindowButton.ZoomButton)
-            
-            min?.hidden = true
-            full?.hidden = true
-            zoomButton?.hidden = true
-        }
-        
-        preferencesWindowController?.showWindow(self)
-    }
-	
 	// MARK: - DockTile
 	func updateDockProgress(progress: Double) {
 		
