@@ -12,6 +12,7 @@
 		443F87A61B566E7600637F6F /* ResizeAwareTableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 443F87A51B566E7600637F6F /* ResizeAwareTableView.swift */; };
 		446C7A1D1B42D3C7007CA3C2 /* SessionNameDescriptionCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 446C7A1C1B42D3C7007CA3C2 /* SessionNameDescriptionCell.swift */; };
 		4479EA761B3C114600D5558D /* CheckBoxTableCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4479EA751B3C114600D5558D /* CheckBoxTableCell.swift */; };
+		448E3D481B5D0226006A3988 /* SessionViewerController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 448E3D471B5D0226006A3988 /* SessionViewerController.swift */; };
 		44A507021B4EBA7C0033C6BE /* Archiving.swift in Sources */ = {isa = PBXBuildFile; fileRef = 44A507011B4EBA7C0033C6BE /* Archiving.swift */; };
 		44A647911B44634900157487 /* ToolbarHookableWindowSubclass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 44A647901B44634900157487 /* ToolbarHookableWindowSubclass.swift */; };
 		44D546221B4296FB00197B23 /* DownloadYearInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 44D546211B4296FB00197B23 /* DownloadYearInfo.swift */; };
@@ -30,7 +31,6 @@
 		A9528F361B34C427002290D3 /* BlockWrappers.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9F9BADA1B34689300BEA874 /* BlockWrappers.swift */; };
 		A9528F371B34C427002290D3 /* DownloadFileManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9F9BADB1B34689300BEA874 /* DownloadFileManager.swift */; };
 		A9528F381B34C427002290D3 /* StringExtras.swift in Sources */ = {isa = PBXBuildFile; fileRef = A96E4D651B2F62340030F908 /* StringExtras.swift */; };
-		A95DA47A1B56EEEF00619971 /* TranscriptPanelController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A95DA4791B56EEEF00619971 /* TranscriptPanelController.swift */; };
 		A95DA47C1B59788500619971 /* Searching.swift in Sources */ = {isa = PBXBuildFile; fileRef = A95DA47B1B59788500619971 /* Searching.swift */; };
 		A96EF1CF1B4D423800494E45 /* Preferences.swift in Sources */ = {isa = PBXBuildFile; fileRef = A96EF1CE1B4D423800494E45 /* Preferences.swift */; };
 		A97D90A11B34CDF70008CED5 /* libxml2.2.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = A96E4D611B2D44910030F908 /* libxml2.2.dylib */; };
@@ -43,6 +43,7 @@
 		446C7A1C1B42D3C7007CA3C2 /* SessionNameDescriptionCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SessionNameDescriptionCell.swift; sourceTree = "<group>"; };
 		44776DA81B399950004B9178 /* FileInfo.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = FileInfo.swift; path = Common/FileInfo.swift; sourceTree = "<group>"; };
 		4479EA751B3C114600D5558D /* CheckBoxTableCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CheckBoxTableCell.swift; sourceTree = "<group>"; };
+		448E3D471B5D0226006A3988 /* SessionViewerController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SessionViewerController.swift; sourceTree = "<group>"; };
 		44A507011B4EBA7C0033C6BE /* Archiving.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Archiving.swift; sourceTree = "<group>"; };
 		44A647901B44634900157487 /* ToolbarHookableWindowSubclass.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ToolbarHookableWindowSubclass.swift; sourceTree = "<group>"; };
 		44D546211B4296FB00197B23 /* DownloadYearInfo.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = DownloadYearInfo.swift; path = Common/DownloadYearInfo.swift; sourceTree = "<group>"; };
@@ -64,7 +65,6 @@
 		A9528F2D1B34C40E002290D3 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		A9528F2F1B34C40E002290D3 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		A9528F3E1B34C5D4002290D3 /* WWDCapp-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "WWDCapp-Bridging-Header.h"; sourceTree = "<group>"; };
-		A95DA4791B56EEEF00619971 /* TranscriptPanelController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TranscriptPanelController.swift; sourceTree = "<group>"; };
 		A95DA47B1B59788500619971 /* Searching.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Searching.swift; sourceTree = "<group>"; };
 		A96E4D611B2D44910030F908 /* libxml2.2.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libxml2.2.dylib; path = /usr/lib/libxml2.2.dylib; sourceTree = "<absolute>"; };
 		A96E4D631B2EB2770030F908 /* WWDCSession.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = WWDCSession.swift; path = Common/WWDCSession.swift; sourceTree = "<group>"; };
@@ -152,8 +152,8 @@
 				444D79891B456B6600F552C4 /* Subclasses */,
 				444D79881B456B5100F552C4 /* Cells */,
 				A9528F281B34C40E002290D3 /* ViewController.swift */,
+				448E3D471B5D0226006A3988 /* SessionViewerController.swift */,
 				A96EF1CE1B4D423800494E45 /* Preferences.swift */,
-				A95DA4791B56EEEF00619971 /* TranscriptPanelController.swift */,
 				A9528F261B34C40E002290D3 /* AppDelegate.swift */,
 				A9528F2C1B34C40E002290D3 /* Main.storyboard */,
 				A9528F2A1B34C40E002290D3 /* Assets.xcassets */,
@@ -282,6 +282,7 @@
 			files = (
 				446C7A1D1B42D3C7007CA3C2 /* SessionNameDescriptionCell.swift in Sources */,
 				44D546221B4296FB00197B23 /* DownloadYearInfo.swift in Sources */,
+				448E3D481B5D0226006A3988 /* SessionViewerController.swift in Sources */,
 				A9528F291B34C40E002290D3 /* ViewController.swift in Sources */,
 				44A647911B44634900157487 /* ToolbarHookableWindowSubclass.swift in Sources */,
 				44F5EE941B45A4BB00CE683D /* HighlightableTextStorage.swift in Sources */,
@@ -297,7 +298,6 @@
 				A9C98DBB1B48678100DB11C8 /* IntrinsicContentNSTextView.swift in Sources */,
 				442D010B1B399A9D0081C56C /* FileInfo.swift in Sources */,
 				44A507021B4EBA7C0033C6BE /* Archiving.swift in Sources */,
-				A95DA47A1B56EEEF00619971 /* TranscriptPanelController.swift in Sources */,
 				44F5EE8E1B457B9800CE683D /* TFHpple.m in Sources */,
 				A9528F351B34C427002290D3 /* WWDCSession.swift in Sources */,
 				A90D14EB1B41A8CF00A30590 /* FetchFileSizeManager.swift in Sources */,

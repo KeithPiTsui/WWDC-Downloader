@@ -19,5 +19,4 @@ class ToolbarHookableWindowSubclass : NSWindowController {
 	@IBOutlet weak var combineProgressLabel: NSTextField!
     @IBOutlet weak var combinePDFIndicator: NSProgressIndicator!
     @IBOutlet weak var combinePDFButton: NSButton!
-	@IBOutlet weak var toggleTranscriptButton: NSButton!
 }

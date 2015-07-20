@@ -21,7 +21,6 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     var transcriptDrawer : NSDrawer?
     
     var mainApplicationController: ToolbarHookableWindowSubclass?
-    var transcriptController: TranscriptPanelController?
 
     func applicationDidFinishLaunching(aNotification: NSNotification) {
 		
@@ -44,9 +43,8 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         
 
 		setupDockTile()
-        
-        setupTranscriptDrawer()
-    }
+		
+	}
 	
 	func setupDockTile() {
 		
@@ -81,64 +79,6 @@ class AppDelegate: NSObject, NSApplicationDelegate {
 		}
 	}
 	
-	// MARK: - Transcript Drawer
-    func setupTranscriptDrawer() {
-		
-        if let mainWindowController = mainApplicationController {
-
-            if let mainViewController = mainWindowController.contentViewController as? ViewController {
-				
-				self.mainViewController = mainViewController
-                
-                transcriptDrawer = NSDrawer(contentSize: NSSizeFromCGSize(CGSizeMake(400, mainViewController.view.frame.size.height)), preferredEdge: NSRectEdge.MaxX)
-				
-                if let transcriptDrawer = transcriptDrawer {
-					
-					transcriptDrawer.leadingOffset = 10
-					
-                    transcriptDrawer.parentWindow = mainWindowController.window
-					
-					transcriptDrawer.minContentSize = NSSizeFromCGSize(CGSizeMake(160, mainViewController.view.frame.size.height))
-					
-                    let storyboard = NSStoryboard(name: "Main", bundle: nil)
-                    transcriptController = storyboard.instantiateControllerWithIdentifier("Transcript") as? TranscriptPanelController
-					
-					if let transcriptController = transcriptController {
-						
-						transcriptDrawer.contentView = transcriptController.view
-												
-						transcriptDrawer.contentView?.autoresizingMask = [NSAutoresizingMaskOptions.ViewHeightSizable, NSAutoresizingMaskOptions.ViewWidthSizable]
-					}
-				}
-            }
-        }
-    }
-	
-	func highlightTranscript() {
-		transcriptController?.highlightText(mainViewController.searchField.stringValue)
-	}
-	
-	func toggleTranscript() {
-		
-		if transcriptDrawer?.state == Int(NSDrawerState.ClosedState.rawValue) {
-			transcriptDrawer?.openOnEdge(NSRectEdge.MaxX)
-		}
-		else {
-			transcriptDrawer?.close()
-		}
-	}
-	
-    func updateTranscript(wwdcSession : WWDCSession) {
-        transcriptController?.textView.scrollToBeginningOfDocument(nil)
-        transcriptController?.wwdcSession = wwdcSession
-		highlightTranscript()
-    }
-    
-    func hideTranscript() {
-        transcriptDrawer?.close()
-    }
-    
-
 	// MARK: - DockTile
 	func updateDockProgress(progress: Double) {
 		

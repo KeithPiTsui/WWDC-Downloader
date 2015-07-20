@@ -89,16 +89,6 @@ class ViewController: NSViewController, NSURLSessionDelegate, NSURLSessionDataDe
             assertionFailure("IBOutlet Fail!")
             return NSButton()
         }
-    }
-	
-	var toggleTranscriptButton: NSButton! {
-		get {
-			if let windowController = NSApplication.sharedApplication().windows.first?.windowController  as? ToolbarHookableWindowSubclass {
-				return windowController.toggleTranscriptButton
-			}
-			assertionFailure("IBOutlet Fail!")
-			return NSButton()
-		}
 	}
 
 	
@@ -232,8 +222,6 @@ class ViewController: NSViewController, NSURLSessionDelegate, NSURLSessionDataDe
 	
 	@IBAction func transcriptToggled(sender: NSButton) {
 		
-		let appDelegate = NSApplication.sharedApplication().delegate as! AppDelegate
-		appDelegate.toggleTranscript()
 	}
 	
 	@IBAction func searchEntered(sender: NSSearchField) {
@@ -345,8 +333,8 @@ class ViewController: NSViewController, NSURLSessionDelegate, NSURLSessionDataDe
 		
 		myTableView.reloadData()
 		
-		let appDelegate = NSApplication.sharedApplication().delegate as! AppDelegate
-		appDelegate.highlightTranscript()
+//		let appDelegate = NSApplication.sharedApplication().delegate as! AppDelegate
+//		appDelegate.highlightTranscript()
 	}
 	
     @IBAction func combinePDF(sender: NSButton) {
@@ -583,6 +571,13 @@ class ViewController: NSViewController, NSURLSessionDelegate, NSURLSessionDataDe
 	}
 	
 	
+	@IBAction func  doubleClick(sender:AnyObject?) {
+		
+		if myTableView.clickedRow >= 0 {
+			self.performSegueWithIdentifier("showViewer", sender: myTableView.clickedRow)
+		}
+	}
+	
 
 	// MARK: - View / UI
     override func viewDidLoad() {
@@ -688,6 +683,25 @@ class ViewController: NSViewController, NSURLSessionDelegate, NSURLSessionDataDe
         myTableView.reloadData()
     }
 
+	// MARK: - Segues
+	
+	override func prepareForSegue(segue: NSStoryboardSegue, sender: AnyObject?) {
+		
+		if segue.identifier == "showViewer" {
+			
+			let windowController = segue.destinationController as! NSWindowController
+			
+			if let primarySplitController = windowController.contentViewController as? ViewerPrimarySplitViewController {
+				let wwdcSession = (isFiltered ? visibleWWDCSessionsArray[sender as! Int] : allWWDCSessionsArray[sender as! Int])
+				
+				primarySplitController.wwdcSession = wwdcSession
+			}
+		}
+	}
+	
+	
+	
+	
 	
 	// MARK: Fetch Year Info
 	func fetchSessionInfoForYear(year : WWDCYear) {
@@ -864,11 +878,11 @@ class ViewController: NSViewController, NSURLSessionDelegate, NSURLSessionDataDe
         
         let tableview = notification.object as? ResizeAwareTableView
         if let row = tableview?.selectedRow {
-            
-            let wwdcSession = (isFiltered ? visibleWWDCSessionsArray[row] : allWWDCSessionsArray[row])
-            
-			let appDelegate = NSApplication.sharedApplication().delegate as! AppDelegate
-			appDelegate.updateTranscript(wwdcSession)
+			
+//			self.performSegueWithIdentifier("show", sender: row)
+			
+//			let appDelegate = NSApplication.sharedApplication().delegate as! AppDelegate
+//			appDelegate.updateTranscript(wwdcSession)
         }
     }
 	

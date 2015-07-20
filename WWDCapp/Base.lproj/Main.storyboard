@@ -4,7 +4,6 @@
         <plugIn identifier="com.apple.AVKitIBPlugin" version="8152.3"/>
         <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="8152.3"/>
         <plugIn identifier="com.apple.pdfkit.ibplugin" version="8152.3"/>
-        <capability name="stacking Non-gravity area distributions on NSStackView" minToolsVersion="7.0" minSystemVersion="10.11"/>
     </dependencies>
     <scenes>
         <!--Application-->
@@ -99,10 +98,10 @@
             </objects>
             <point key="canvasLocation" x="-272.5" y="-420"/>
         </scene>
-        <!--Window Controller-->
+        <!--MainWindow Controller-->
         <scene sceneID="R2V-B0-nI4">
             <objects>
-                <windowController showSeguePresentationStyle="single" id="B8D-0N-5wS" customClass="ToolbarHookableWindowSubclass" customModule="WWDCapp" customModuleProvider="target" sceneMemberID="viewController">
+                <windowController showSeguePresentationStyle="single" id="B8D-0N-5wS" userLabel="MainWindow Controller" customClass="ToolbarHookableWindowSubclass" customModule="WWDCapp" customModuleProvider="target" sceneMemberID="viewController">
                     <window key="window" title="WWDC Downloader" allowsToolTipsWhenApplicationIsInactive="NO" autorecalculatesKeyViewLoop="NO" oneShot="NO" releasedWhenClosed="NO" showsToolbarButton="NO" visibleAtLaunch="NO" animationBehavior="default" id="IQv-IB-iLA">
                         <windowStyleMask key="styleMask" titled="YES" closable="YES" miniaturizable="YES" resizable="YES" unifiedTitleAndToolbar="YES"/>
                         <rect key="contentRect" x="-320" y="-611" width="930" height="620"/>
@@ -239,23 +238,6 @@
                                         </connections>
                                     </button>
                                 </toolbarItem>
-                                <toolbarItem implicitItemIdentifier="F9AA2AF0-BBF8-4DB5-A58D-E6C76809DBD9" label="Custom View" paletteLabel="Custom View" visibilityPriority="10" id="ekW-3H-Old">
-                                    <nil key="toolTip"/>
-                                    <size key="minSize" width="14" height="20"/>
-                                    <size key="maxSize" width="40" height="43"/>
-                                    <button key="view" toolTip="Toggle Transcript Viewer" verticalHuggingPriority="750" id="fw4-lZ-A2B">
-                                        <rect key="frame" x="18" y="14" width="40" height="43"/>
-                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                        <animations/>
-                                        <buttonCell key="cell" type="push" bezelStyle="rounded" alignment="center" lineBreakMode="truncatingTail" state="on" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="JXJ-3I-Uci">
-                                            <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
-                                            <font key="font" metaFont="system"/>
-                                        </buttonCell>
-                                    </button>
-                                    <connections>
-                                        <action selector="transcriptToggled:" target="Oky-zY-oP4" id="Pxu-LV-6S6"/>
-                                    </connections>
-                                </toolbarItem>
                                 <toolbarItem implicitItemIdentifier="NSToolbarFlexibleSpaceItem" id="ZvG-MR-TjA"/>
                             </allowedToolbarItems>
                             <defaultToolbarItems>
@@ -269,7 +251,6 @@
                                 <toolbarItem reference="BEh-Vj-KiM"/>
                                 <toolbarItem reference="k4i-b5-wK2"/>
                                 <toolbarItem reference="ovu-se-0G5"/>
-                                <toolbarItem reference="ekW-3H-Old"/>
                             </defaultToolbarItems>
                         </toolbar>
                     </window>
@@ -280,7 +261,6 @@
                         <outlet property="forceRefreshButton" destination="zFR-02-9RH" id="oVV-BL-1UV"/>
                         <outlet property="searchField" destination="sJr-P1-XUA" id="MuO-Kc-4la"/>
                         <outlet property="stopFetchButton" destination="9wu-A9-w09" id="vYV-aZ-w4i"/>
-                        <outlet property="toggleTranscriptButton" destination="fw4-lZ-A2B" id="j2D-Ll-piI"/>
                         <outlet property="yearFetchIndicator" destination="iez-ZM-vRx" id="6rS-E2-pWz"/>
                         <outlet property="yearSeletor" destination="DoE-gp-43a" id="jJd-au-n1P"/>
                         <segue destination="XfG-lQ-9wD" kind="relationship" relationship="window.shadowedContentViewController" id="cq2-FE-JQM"/>
@@ -290,103 +270,244 @@
             </objects>
             <point key="canvasLocation" x="109" y="176"/>
         </scene>
-        <!--Window Controller-->
+        <!--Viewer Window Controller-->
         <scene sceneID="wRy-W9-hW1">
             <objects>
-                <windowController id="QWk-MP-YM6" sceneMemberID="viewController">
-                    <window key="window" title="Window" allowsToolTipsWhenApplicationIsInactive="NO" autorecalculatesKeyViewLoop="NO" oneShot="NO" releasedWhenClosed="NO" showsToolbarButton="NO" visibleAtLaunch="NO" frameAutosaveName="" animationBehavior="default" id="GJ9-KD-h28">
-                        <windowStyleMask key="styleMask" titled="YES" closable="YES" miniaturizable="YES" resizable="YES"/>
+                <windowController showSeguePresentationStyle="single" id="QWk-MP-YM6" userLabel="Viewer Window Controller" sceneMemberID="viewController">
+                    <window key="window" title="Window" autorecalculatesKeyViewLoop="NO" oneShot="NO" showsToolbarButton="NO" visibleAtLaunch="NO" animationBehavior="documentWindow" frameAutosaveName="" id="GJ9-KD-h28">
+                        <windowStyleMask key="styleMask" titled="YES" closable="YES" miniaturizable="YES" resizable="YES" texturedBackground="YES" unifiedTitleAndToolbar="YES"/>
                         <windowPositionMask key="initialPositionMask" leftStrut="YES" rightStrut="YES" topStrut="YES" bottomStrut="YES"/>
-                        <rect key="contentRect" x="425" y="461" width="480" height="270"/>
+                        <rect key="contentRect" x="998" y="478" width="1000" height="480"/>
                         <rect key="screenRect" x="0.0" y="0.0" width="2560" height="1417"/>
+                        <value key="minSize" type="size" width="480" height="480"/>
                     </window>
                     <connections>
-                        <segue destination="aWE-7x-JMo" kind="relationship" relationship="window.shadowedContentViewController" id="IUm-pW-iJo"/>
+                        <segue destination="yHW-Wg-Clc" kind="relationship" relationship="window.shadowedContentViewController" id="eE3-fr-XrD"/>
                     </connections>
                 </windowController>
                 <customObject id="6EE-eh-TF8" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1298" y="-10"/>
+            <point key="canvasLocation" x="1311" y="-211"/>
         </scene>
-        <!--View Controller-->
-        <scene sceneID="THB-mM-Tij">
+        <!--Viewer Primary Split View Controller-->
+        <scene sceneID="Izd-8v-qcn">
             <objects>
-                <viewController id="aWE-7x-JMo" sceneMemberID="viewController">
-                    <view key="view" id="X3y-bH-4tN">
-                        <rect key="frame" x="0.0" y="0.0" width="1012" height="565"/>
+                <splitViewController id="yHW-Wg-Clc" customClass="ViewerPrimarySplitViewController" customModule="WWDCapp" customModuleProvider="target" sceneMemberID="viewController">
+                    <splitViewItems>
+                        <splitViewItem canCollapse="YES" holdingPriority="249" id="d7S-Ia-Y95" userLabel="Top Container Split View Item"/>
+                        <splitViewItem canCollapse="YES" id="fw8-Jv-J78" userLabel="Transcript Split View Item"/>
+                    </splitViewItems>
+                    <splitView key="splitView" wantsLayer="YES" dividerStyle="paneSplitter" id="sdN-U3-ThV">
+                        <rect key="frame" x="0.0" y="-26" width="1000" height="480"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                        <animations/>
+                    </splitView>
+                    <connections>
+                        <segue destination="Sda-Mf-ub4" kind="relationship" relationship="splitItems" id="GU1-vo-XzQ"/>
+                        <segue destination="YJS-3Z-qZ0" kind="relationship" relationship="splitItems" id="sBd-2J-hJF"/>
+                    </connections>
+                </splitViewController>
+                <customObject id="7V4-12-iB6" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="1311" y="454"/>
+        </scene>
+        <!--Viewer Top Split View Controller-->
+        <scene sceneID="zQo-0x-fj1">
+            <objects>
+                <splitViewController id="Sda-Mf-ub4" customClass="ViewerTopSplitViewController" customModule="WWDCapp" customModuleProvider="target" sceneMemberID="viewController">
+                    <splitViewItems>
+                        <splitViewItem canCollapse="YES" holdingPriority="249" id="ZtO-lI-PjP" userLabel="Video View Item"/>
+                        <splitViewItem canCollapse="YES" id="bDc-BX-zaY" userLabel="PDF SplitController View Item"/>
+                    </splitViewItems>
+                    <splitView key="splitView" dividerStyle="paneSplitter" vertical="YES" id="v4H-yr-Wtf">
+                        <rect key="frame" x="0.0" y="0.0" width="1000" height="199"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                        <animations/>
+                    </splitView>
+                    <connections>
+                        <segue destination="GNp-IE-Z6O" kind="relationship" relationship="splitItems" id="sDN-hA-cWG"/>
+                        <segue destination="HuX-s2-f43" kind="relationship" relationship="splitItems" id="1Ui-Ff-Rbj"/>
+                    </connections>
+                </splitViewController>
+                <customObject id="TKE-eV-qeY" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="2480" y="-486.5"/>
+        </scene>
+        <!--ViewerPDF Split View Controller-->
+        <scene sceneID="lQ5-yr-Ybz">
+            <objects>
+                <splitViewController id="HuX-s2-f43" customClass="ViewerPDFSplitViewController" customModule="WWDCapp" customModuleProvider="target" sceneMemberID="viewController">
+                    <splitViewItems>
+                        <splitViewItem id="ghj-6d-jOd" userLabel="PDF View Item"/>
+                        <splitViewItem canCollapse="YES" behavior="sidebar" id="eYv-SE-yYw" userLabel="Thumbnail View Item"/>
+                    </splitViewItems>
+                    <splitView key="splitView" dividerStyle="paneSplitter" vertical="YES" id="rHM-R7-HW4">
+                        <rect key="frame" x="0.0" y="0.0" width="450" height="300"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                        <animations/>
+                    </splitView>
+                    <connections>
+                        <segue destination="frV-ed-I3f" kind="relationship" relationship="splitItems" id="cdb-cN-vww"/>
+                        <segue destination="hUb-Zx-zNC" kind="relationship" relationship="splitItems" id="xXe-Qr-Eed"/>
+                    </connections>
+                </splitViewController>
+                <customObject id="Zwh-Jz-jup" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="2784" y="-86"/>
+        </scene>
+        <!--Main View Controller-->
+        <scene sceneID="u95-8K-79o">
+            <objects>
+                <viewController id="frV-ed-I3f" customClass="PDFMainViewController" customModule="WWDCapp" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" id="tR4-My-oZ9">
+                        <rect key="frame" x="0.0" y="0.0" width="353" height="199"/>
                         <autoresizingMask key="autoresizingMask"/>
                         <subviews>
-                            <stackView distribution="fill" orientation="vertical" alignment="leading" horizontalStackHuggingPriority="249.99998474121094" verticalStackHuggingPriority="249.99998474121094" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="WUn-Eg-7a1">
-                                <rect key="frame" x="20" y="20" width="972" height="525"/>
-                                <subviews>
-                                    <stackView distribution="fill" orientation="horizontal" alignment="top" horizontalStackHuggingPriority="249.99998474121094" verticalStackHuggingPriority="249.99998474121094" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="MOT-eF-LB3">
-                                        <rect key="frame" x="0.0" y="300" width="972" height="225"/>
-                                        <subviews>
-                                            <avPlayerView fixedFrame="YES" controlsStyle="floating" translatesAutoresizingMaskIntoConstraints="NO" id="wot-qa-gpW">
-                                                <rect key="frame" x="0.0" y="0.0" width="456" height="225"/>
-                                                <animations/>
-                                            </avPlayerView>
-                                            <stackView distribution="fill" orientation="horizontal" alignment="top" horizontalStackHuggingPriority="249.99998474121094" verticalStackHuggingPriority="249.99998474121094" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Xrv-zn-OYA">
-                                                <rect key="frame" x="464" y="0.0" width="508" height="225"/>
-                                                <subviews>
-                                                    <pdfView autoresizesSubviews="NO" wantsLayer="YES" fixedFrame="YES" scaleFactor="0.62105466305183643" autoScales="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Ksq-7p-kg5">
-                                                        <rect key="frame" x="0.0" y="0.0" width="400" height="225"/>
-                                                        <animations/>
-                                                    </pdfView>
-                                                    <pdfThumbnailView fixedFrame="YES" allowsDragging="NO" translatesAutoresizingMaskIntoConstraints="NO" id="U8L-O2-2dP">
-                                                        <rect key="frame" x="408" y="0.0" width="100" height="225"/>
-                                                        <animations/>
-                                                        <size key="thumbnailSize" width="64" height="64"/>
-                                                    </pdfThumbnailView>
-                                                </subviews>
-                                                <animations/>
-                                                <visibilityPriorities>
-                                                    <integer value="1000"/>
-                                                    <integer value="1000"/>
-                                                </visibilityPriorities>
-                                                <customSpacing>
-                                                    <real value="3.4028234663852886e+38"/>
-                                                    <real value="3.4028234663852886e+38"/>
-                                                </customSpacing>
-                                            </stackView>
-                                        </subviews>
-                                        <animations/>
-                                        <visibilityPriorities>
-                                            <integer value="1000"/>
-                                            <integer value="1000"/>
-                                        </visibilityPriorities>
-                                        <customSpacing>
-                                            <real value="3.4028234663852886e+38"/>
-                                            <real value="3.4028234663852886e+38"/>
-                                        </customSpacing>
-                                    </stackView>
-                                    <customView fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Leg-Mu-Ly7">
-                                        <rect key="frame" x="0.0" y="0.0" width="972" height="292"/>
-                                        <animations/>
-                                    </customView>
-                                </subviews>
+                            <pdfView autoresizesSubviews="NO" wantsLayer="YES" horizontalCompressionResistancePriority="749" verticalCompressionResistancePriority="749" translatesAutoresizingMaskIntoConstraints="NO" id="3ld-ho-fDE">
+                                <rect key="frame" x="0.0" y="0.0" width="353" height="199"/>
                                 <animations/>
-                                <visibilityPriorities>
-                                    <integer value="1000"/>
-                                    <integer value="1000"/>
-                                </visibilityPriorities>
-                                <customSpacing>
-                                    <real value="3.4028234663852886e+38"/>
-                                    <real value="3.4028234663852886e+38"/>
-                                </customSpacing>
-                            </stackView>
+                            </pdfView>
                         </subviews>
+                        <constraints>
+                            <constraint firstItem="3ld-ho-fDE" firstAttribute="leading" secondItem="tR4-My-oZ9" secondAttribute="leading" id="7y0-SD-ebj"/>
+                            <constraint firstItem="3ld-ho-fDE" firstAttribute="top" secondItem="tR4-My-oZ9" secondAttribute="top" id="9vW-f5-470"/>
+                            <constraint firstAttribute="trailing" secondItem="3ld-ho-fDE" secondAttribute="trailing" id="hQH-EP-pa9"/>
+                            <constraint firstAttribute="bottom" secondItem="3ld-ho-fDE" secondAttribute="bottom" id="iAv-4L-97m"/>
+                        </constraints>
                         <animations/>
                     </view>
+                    <connections>
+                        <outlet property="pdfView" destination="3ld-ho-fDE" id="lto-1X-Q87"/>
+                    </connections>
                 </viewController>
-                <customObject id="rgn-Kq-QhB" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>
+                <customObject id="E9Q-QR-wiX" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1298" y="652.5"/>
+            <point key="canvasLocation" x="2662" y="298.5"/>
         </scene>
-        <!--View Controller-->
+        <!--Thumbnail View Controller-->
+        <scene sceneID="1uQ-kw-dIf">
+            <objects>
+                <viewController id="hUb-Zx-zNC" customClass="PDFThumbnailViewController" customModule="WWDCapp" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" id="0J6-CP-vPM">
+                        <rect key="frame" x="0.0" y="0.0" width="88" height="197"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                        <subviews>
+                            <pdfThumbnailView placeholderIntrinsicWidth="88" placeholderIntrinsicHeight="197" maximumNumberOfColumns="1" allowsDragging="NO" translatesAutoresizingMaskIntoConstraints="NO" id="4wL-MN-XVe">
+                                <rect key="frame" x="0.0" y="0.0" width="88" height="197"/>
+                                <animations/>
+                                <size key="thumbnailSize" width="64" height="64"/>
+                            </pdfThumbnailView>
+                        </subviews>
+                        <constraints>
+                            <constraint firstItem="4wL-MN-XVe" firstAttribute="bottom" secondItem="0J6-CP-vPM" secondAttribute="bottom" id="99Y-Lo-0fo"/>
+                            <constraint firstItem="4wL-MN-XVe" firstAttribute="top" secondItem="0J6-CP-vPM" secondAttribute="top" id="Phz-IN-nvV"/>
+                            <constraint firstItem="4wL-MN-XVe" firstAttribute="leading" secondItem="0J6-CP-vPM" secondAttribute="leading" id="TGV-S5-vNN"/>
+                            <constraint firstItem="4wL-MN-XVe" firstAttribute="trailing" secondItem="0J6-CP-vPM" secondAttribute="trailing" id="kj7-sQ-L8B"/>
+                        </constraints>
+                        <animations/>
+                    </view>
+                    <connections>
+                        <outlet property="thumbnailView" destination="4wL-MN-XVe" id="pZ8-Ys-BR5"/>
+                    </connections>
+                </viewController>
+                <customObject id="x5V-LV-TaL" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="2938" y="298.50000073388219"/>
+        </scene>
+        <!--Video View Controller-->
+        <scene sceneID="vS2-fl-fw1">
+            <objects>
+                <viewController id="GNp-IE-Z6O" customClass="VideoViewController" customModule="WWDCapp" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" id="fQH-DM-KPo">
+                        <rect key="frame" x="0.0" y="0.0" width="352" height="198"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                        <subviews>
+                            <avPlayerView horizontalHuggingPriority="249" verticalHuggingPriority="249" horizontalCompressionResistancePriority="749" verticalCompressionResistancePriority="749" controlsStyle="inline" translatesAutoresizingMaskIntoConstraints="NO" id="0al-5m-NZd">
+                                <rect key="frame" x="0.0" y="0.0" width="352" height="198"/>
+                                <animations/>
+                            </avPlayerView>
+                        </subviews>
+                        <constraints>
+                            <constraint firstAttribute="bottom" secondItem="0al-5m-NZd" secondAttribute="bottom" id="YcE-55-Q63"/>
+                            <constraint firstAttribute="trailing" secondItem="0al-5m-NZd" secondAttribute="trailing" id="gUP-Cy-QCR"/>
+                            <constraint firstItem="0al-5m-NZd" firstAttribute="top" secondItem="fQH-DM-KPo" secondAttribute="top" id="kNz-g2-FTd"/>
+                            <constraint firstItem="0al-5m-NZd" firstAttribute="leading" secondItem="fQH-DM-KPo" secondAttribute="leading" id="xfM-Ew-OPb"/>
+                        </constraints>
+                        <animations/>
+                    </view>
+                    <connections>
+                        <outlet property="avPlayerView" destination="0al-5m-NZd" id="Z7s-e1-lh1"/>
+                    </connections>
+                </viewController>
+                <customObject id="uU9-MX-Uk1" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="2207" y="299.49999633058906"/>
+        </scene>
+        <!--Transcript View Controller-->
+        <scene sceneID="V5B-WU-VHm">
+            <objects>
+                <viewController id="YJS-3Z-qZ0" customClass="TranscriptViewController" customModule="WWDCapp" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" id="vtw-Xt-7ls">
+                        <rect key="frame" x="0.0" y="0.0" width="1000" height="160"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                        <subviews>
+                            <scrollView verticalCompressionResistancePriority="751" horizontalLineScroll="10" horizontalPageScroll="10" verticalLineScroll="10" verticalPageScroll="10" hasHorizontalScroller="NO" usesPredominantAxisScrolling="NO" translatesAutoresizingMaskIntoConstraints="NO" id="lB2-Ns-d8k">
+                                <rect key="frame" x="20" y="20" width="960" height="120"/>
+                                <clipView key="contentView" id="NCp-KY-iSf">
+                                    <rect key="frame" x="1" y="1" width="958" height="118"/>
+                                    <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                                    <subviews>
+                                        <textView editable="NO" importsGraphics="NO" findStyle="panel" continuousSpellChecking="YES" usesRuler="YES" usesFontPanel="YES" verticallyResizable="YES" allowsNonContiguousLayout="YES" quoteSubstitution="YES" dashSubstitution="YES" spellingCorrection="YES" smartInsertDelete="YES" id="dM5-vI-Ov8">
+                                            <rect key="frame" x="0.0" y="0.0" width="987" height="118"/>
+                                            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                                            <animations/>
+                                            <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                            <size key="minSize" width="958" height="118"/>
+                                            <size key="maxSize" width="1076" height="10000000"/>
+                                            <color key="insertionPointColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
+                                            <size key="minSize" width="958" height="118"/>
+                                            <size key="maxSize" width="1076" height="10000000"/>
+                                        </textView>
+                                    </subviews>
+                                    <animations/>
+                                    <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                </clipView>
+                                <constraints>
+                                    <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="120" id="xHp-F1-Fdo"/>
+                                </constraints>
+                                <animations/>
+                                <scroller key="horizontalScroller" hidden="YES" wantsLayer="YES" verticalHuggingPriority="750" doubleValue="1" horizontal="YES" id="mUi-wW-ldw">
+                                    <rect key="frame" x="-100" y="-100" width="87" height="18"/>
+                                    <autoresizingMask key="autoresizingMask"/>
+                                    <animations/>
+                                </scroller>
+                                <scroller key="verticalScroller" wantsLayer="YES" verticalHuggingPriority="750" doubleValue="1" horizontal="NO" id="kmh-19-Q4K">
+                                    <rect key="frame" x="943" y="1" width="16" height="118"/>
+                                    <autoresizingMask key="autoresizingMask"/>
+                                    <animations/>
+                                </scroller>
+                            </scrollView>
+                        </subviews>
+                        <constraints>
+                            <constraint firstAttribute="bottom" secondItem="lB2-Ns-d8k" secondAttribute="bottom" constant="20" id="1mW-cZ-8RB"/>
+                            <constraint firstItem="lB2-Ns-d8k" firstAttribute="leading" secondItem="vtw-Xt-7ls" secondAttribute="leading" constant="20" id="4zn-Vg-pNS"/>
+                            <constraint firstItem="lB2-Ns-d8k" firstAttribute="top" secondItem="vtw-Xt-7ls" secondAttribute="top" constant="20" id="HBq-GV-BH3"/>
+                            <constraint firstAttribute="trailing" secondItem="lB2-Ns-d8k" secondAttribute="trailing" constant="20" id="exW-4G-Ic1"/>
+                        </constraints>
+                        <animations/>
+                    </view>
+                    <connections>
+                        <outlet property="textView" destination="dM5-vI-Ov8" id="4TJ-8i-yS6"/>
+                    </connections>
+                </viewController>
+                <customObject id="xQr-BK-ikb" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="2482" y="600"/>
+        </scene>
+        <!--Download View Controller-->
         <scene sceneID="hIz-AP-VOD">
             <objects>
-                <viewController id="XfG-lQ-9wD" customClass="ViewController" customModule="WWDCapp" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController id="XfG-lQ-9wD" userLabel="Download View Controller" customClass="ViewController" customModule="WWDCapp" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" id="m2S-Jp-Qdl">
                         <rect key="frame" x="0.0" y="0.0" width="930" height="620"/>
                         <autoresizingMask key="autoresizingMask"/>
@@ -742,7 +863,7 @@
                                                             <tableColumnResizingMask key="resizingMask" resizeWithTable="YES" userResizable="YES"/>
                                                             <prototypeCellViews>
                                                                 <tableCellView identifier="PDF" id="XN5-Bl-Ag6" customClass="CheckBoxTableViewCell" customModule="WWDCapp" customModuleProvider="target">
-                                                                    <rect key="frame" x="479" y="1" width="100" height="50"/>
+                                                                    <rect key="frame" x="477" y="1" width="100" height="50"/>
                                                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                                     <subviews>
                                                                         <customView translatesAutoresizingMaskIntoConstraints="NO" id="tXJ-sr-iuI">
@@ -840,7 +961,7 @@
                                                             <tableColumnResizingMask key="resizingMask" resizeWithTable="YES" userResizable="YES"/>
                                                             <prototypeCellViews>
                                                                 <tableCellView identifier="SD" id="lke-Gm-rNp" customClass="CheckBoxTableViewCell" customModule="WWDCapp" customModuleProvider="target">
-                                                                    <rect key="frame" x="584" y="1" width="100" height="50"/>
+                                                                    <rect key="frame" x="580" y="1" width="100" height="50"/>
                                                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                                     <subviews>
                                                                         <customView translatesAutoresizingMaskIntoConstraints="NO" id="zFI-ua-BZb">
@@ -938,7 +1059,7 @@
                                                             <tableColumnResizingMask key="resizingMask" resizeWithTable="YES" userResizable="YES"/>
                                                             <prototypeCellViews>
                                                                 <tableCellView identifier="HD" id="BRJ-vK-4k4" customClass="CheckBoxTableViewCell" customModule="WWDCapp" customModuleProvider="target">
-                                                                    <rect key="frame" x="689" y="1" width="100" height="50"/>
+                                                                    <rect key="frame" x="683" y="1" width="100" height="50"/>
                                                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                                     <subviews>
                                                                         <customView translatesAutoresizingMaskIntoConstraints="NO" id="gfW-cf-WbL">
@@ -1036,7 +1157,7 @@
                                                             <tableColumnResizingMask key="resizingMask" resizeWithTable="YES" userResizable="YES"/>
                                                             <prototypeCellViews>
                                                                 <tableCellView identifier="Code" id="fVV-S8-xk2" customClass="CheckBoxTableViewCell" customModule="WWDCapp" customModuleProvider="target">
-                                                                    <rect key="frame" x="794" y="1" width="100" height="50"/>
+                                                                    <rect key="frame" x="786" y="1" width="100" height="50"/>
                                                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                                     <subviews>
                                                                         <customView translatesAutoresizingMaskIntoConstraints="NO" id="V9Q-4y-WHw">
@@ -1122,6 +1243,7 @@
                                                         </tableColumn>
                                                     </tableColumns>
                                                     <connections>
+                                                        <action trigger="doubleAction" selector="doubleClick:" target="XfG-lQ-9wD" id="aRr-3y-Geo"/>
                                                         <outlet property="dataSource" destination="XfG-lQ-9wD" id="LrG-ZG-wLT"/>
                                                         <outlet property="delegate" destination="XfG-lQ-9wD" id="Mhc-oJ-Q50"/>
                                                     </connections>
@@ -1131,7 +1253,7 @@
                                             <nil key="backgroundColor"/>
                                         </clipView>
                                         <animations/>
-                                        <scroller key="horizontalScroller" wantsLayer="YES" verticalHuggingPriority="750" horizontal="YES" id="EQ4-3v-gQf">
+                                        <scroller key="horizontalScroller" hidden="YES" wantsLayer="YES" verticalHuggingPriority="750" horizontal="YES" id="EQ4-3v-gQf">
                                             <rect key="frame" x="1" y="463" width="888" height="16"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <animations/>
@@ -1227,16 +1349,17 @@
                         <outlet property="totalDescriptionlabel" destination="OeA-4Q-HGv" id="15I-ga-6Yu"/>
                         <outlet property="totallabel" destination="LdI-VT-wO4" id="NHk-ad-W5R"/>
                         <outlet property="visualEffectView" destination="ZwT-7T-fue" id="GF7-Xc-3Qf"/>
+                        <segue destination="QWk-MP-YM6" kind="show" identifier="showViewer" id="kkZ-LZ-0mS"/>
                     </connections>
                 </viewController>
                 <customObject id="rPt-NT-nkU" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="109" y="953"/>
         </scene>
-        <!--Window Controller-->
+        <!--Preferences Window Controller-->
         <scene sceneID="aOx-QI-hUM">
             <objects>
-                <windowController storyboardIdentifier="Preferences" id="UpY-Wp-LwS" sceneMemberID="viewController">
+                <windowController storyboardIdentifier="Preferences" id="UpY-Wp-LwS" userLabel="Preferences Window Controller" sceneMemberID="viewController">
                     <window key="window" title="Preferences" allowsToolTipsWhenApplicationIsInactive="NO" autorecalculatesKeyViewLoop="NO" oneShot="NO" releasedWhenClosed="NO" showsToolbarButton="NO" visibleAtLaunch="NO" frameAutosaveName="" animationBehavior="default" id="TPC-Yd-56w">
                         <windowStyleMask key="styleMask" titled="YES" closable="YES" miniaturizable="YES" resizable="YES"/>
                         <windowPositionMask key="initialPositionMask" leftStrut="YES" rightStrut="YES" topStrut="YES" bottomStrut="YES"/>
@@ -1340,65 +1463,6 @@
                 <customObject id="Wfa-10-3jS" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="529" y="-424"/>
-        </scene>
-        <!--Transcript Panel Controller-->
-        <scene sceneID="MHV-7l-9QQ">
-            <objects>
-                <viewController storyboardIdentifier="Transcript" id="XIu-NO-yav" customClass="TranscriptPanelController" customModule="WWDCapp" customModuleProvider="target" sceneMemberID="viewController">
-                    <view key="view" id="xNC-KZ-pjf">
-                        <rect key="frame" x="0.0" y="0.0" width="450" height="300"/>
-                        <autoresizingMask key="autoresizingMask"/>
-                        <subviews>
-                            <scrollView horizontalLineScroll="10" horizontalPageScroll="10" verticalLineScroll="10" verticalPageScroll="10" hasHorizontalScroller="NO" usesPredominantAxisScrolling="NO" horizontalScrollElasticity="none" translatesAutoresizingMaskIntoConstraints="NO" id="xkI-Ce-G1O">
-                                <rect key="frame" x="8" y="8" width="434" height="284"/>
-                                <clipView key="contentView" id="PuH-Pv-I4J">
-                                    <rect key="frame" x="1" y="1" width="432" height="282"/>
-                                    <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                                    <subviews>
-                                        <textView editable="NO" importsGraphics="NO" findStyle="panel" verticallyResizable="YES" allowsNonContiguousLayout="YES" linkDetection="YES" id="kWS-AO-27m">
-                                            <rect key="frame" x="0.0" y="0.0" width="432" height="282"/>
-                                            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                                            <animations/>
-                                            <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                                            <size key="minSize" width="432" height="282"/>
-                                            <size key="maxSize" width="463" height="10000000"/>
-                                            <color key="insertionPointColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
-                                            <size key="minSize" width="432" height="282"/>
-                                            <size key="maxSize" width="463" height="10000000"/>
-                                        </textView>
-                                    </subviews>
-                                    <animations/>
-                                    <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                                </clipView>
-                                <animations/>
-                                <scroller key="horizontalScroller" hidden="YES" wantsLayer="YES" verticalHuggingPriority="750" doubleValue="1" horizontal="YES" id="bc8-j9-aHA">
-                                    <rect key="frame" x="-100" y="-100" width="438" height="16"/>
-                                    <autoresizingMask key="autoresizingMask"/>
-                                    <animations/>
-                                </scroller>
-                                <scroller key="verticalScroller" wantsLayer="YES" verticalHuggingPriority="750" doubleValue="1" horizontal="NO" id="SGk-fW-p92">
-                                    <rect key="frame" x="417" y="1" width="16" height="282"/>
-                                    <autoresizingMask key="autoresizingMask"/>
-                                    <animations/>
-                                </scroller>
-                            </scrollView>
-                        </subviews>
-                        <constraints>
-                            <constraint firstItem="xkI-Ce-G1O" firstAttribute="leading" secondItem="xNC-KZ-pjf" secondAttribute="leading" constant="8" id="2zr-ob-l43"/>
-                            <constraint firstAttribute="trailing" secondItem="xkI-Ce-G1O" secondAttribute="trailing" constant="8" id="7A3-WX-D4Z"/>
-                            <constraint firstAttribute="bottom" secondItem="xkI-Ce-G1O" secondAttribute="bottom" constant="8" id="hRZ-SA-ffH"/>
-                            <constraint firstItem="xkI-Ce-G1O" firstAttribute="top" secondItem="xNC-KZ-pjf" secondAttribute="top" constant="8" id="kXa-Hl-r88"/>
-                        </constraints>
-                        <animations/>
-                    </view>
-                    <connections>
-                        <outlet property="textView" destination="kWS-AO-27m" id="oJJ-eC-jiH"/>
-                        <outlet property="view" destination="xNC-KZ-pjf" id="TKl-SL-a7E"/>
-                    </connections>
-                </viewController>
-                <customObject id="Xj3-LX-Zqg" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>
-            </objects>
-            <point key="canvasLocation" x="1272" y="1216"/>
         </scene>
     </scenes>
     <resources>
