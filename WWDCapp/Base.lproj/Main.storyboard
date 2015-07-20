@@ -276,6 +276,7 @@
                 <windowController showSeguePresentationStyle="single" id="QWk-MP-YM6" userLabel="Viewer Window Controller" sceneMemberID="viewController">
                     <window key="window" title="Window" autorecalculatesKeyViewLoop="NO" oneShot="NO" showsToolbarButton="NO" visibleAtLaunch="NO" animationBehavior="documentWindow" frameAutosaveName="" id="GJ9-KD-h28">
                         <windowStyleMask key="styleMask" titled="YES" closable="YES" miniaturizable="YES" resizable="YES" texturedBackground="YES" unifiedTitleAndToolbar="YES"/>
+                        <windowCollectionBehavior key="collectionBehavior" fullScreenAuxiliary="YES"/>
                         <windowPositionMask key="initialPositionMask" leftStrut="YES" rightStrut="YES" topStrut="YES" bottomStrut="YES"/>
                         <rect key="contentRect" x="998" y="478" width="1000" height="480"/>
                         <rect key="screenRect" x="0.0" y="0.0" width="2560" height="1417"/>
@@ -319,7 +320,7 @@
                         <splitViewItem canCollapse="YES" holdingPriority="249" id="ZtO-lI-PjP" userLabel="Video View Item"/>
                         <splitViewItem canCollapse="YES" id="bDc-BX-zaY" userLabel="PDF SplitController View Item"/>
                     </splitViewItems>
-                    <splitView key="splitView" dividerStyle="paneSplitter" vertical="YES" id="v4H-yr-Wtf">
+                    <splitView key="splitView" dividerStyle="thin" vertical="YES" id="v4H-yr-Wtf">
                         <rect key="frame" x="0.0" y="0.0" width="1000" height="199"/>
                         <autoresizingMask key="autoresizingMask"/>
                         <animations/>
@@ -339,9 +340,9 @@
                 <splitViewController id="HuX-s2-f43" customClass="ViewerPDFSplitViewController" customModule="WWDCapp" customModuleProvider="target" sceneMemberID="viewController">
                     <splitViewItems>
                         <splitViewItem id="ghj-6d-jOd" userLabel="PDF View Item"/>
-                        <splitViewItem canCollapse="YES" behavior="sidebar" id="eYv-SE-yYw" userLabel="Thumbnail View Item"/>
+                        <splitViewItem canCollapse="YES" holdingPriority="260" behavior="sidebar" id="eYv-SE-yYw" userLabel="Thumbnail View Item"/>
                     </splitViewItems>
-                    <splitView key="splitView" dividerStyle="paneSplitter" vertical="YES" id="rHM-R7-HW4">
+                    <splitView key="splitView" dividerStyle="thin" vertical="YES" id="rHM-R7-HW4">
                         <rect key="frame" x="0.0" y="0.0" width="450" height="300"/>
                         <autoresizingMask key="autoresizingMask"/>
                         <animations/>
@@ -363,7 +364,7 @@
                         <rect key="frame" x="0.0" y="0.0" width="353" height="199"/>
                         <autoresizingMask key="autoresizingMask"/>
                         <subviews>
-                            <pdfView autoresizesSubviews="NO" wantsLayer="YES" horizontalCompressionResistancePriority="749" verticalCompressionResistancePriority="749" translatesAutoresizingMaskIntoConstraints="NO" id="3ld-ho-fDE">
+                            <pdfView autoresizesSubviews="NO" wantsLayer="YES" horizontalCompressionResistancePriority="749" verticalCompressionResistancePriority="749" autoScales="YES" translatesAutoresizingMaskIntoConstraints="NO" id="3ld-ho-fDE">
                                 <rect key="frame" x="0.0" y="0.0" width="353" height="199"/>
                                 <animations/>
                             </pdfView>
@@ -392,10 +393,10 @@
                         <rect key="frame" x="0.0" y="0.0" width="88" height="197"/>
                         <autoresizingMask key="autoresizingMask"/>
                         <subviews>
-                            <pdfThumbnailView placeholderIntrinsicWidth="88" placeholderIntrinsicHeight="197" maximumNumberOfColumns="1" allowsDragging="NO" translatesAutoresizingMaskIntoConstraints="NO" id="4wL-MN-XVe">
+                            <pdfThumbnailView placeholderIntrinsicWidth="88" placeholderIntrinsicHeight="197" maximumNumberOfColumns="1" allowsDragging="NO" bezeled="NO" translatesAutoresizingMaskIntoConstraints="NO" id="4wL-MN-XVe">
                                 <rect key="frame" x="0.0" y="0.0" width="88" height="197"/>
                                 <animations/>
-                                <size key="thumbnailSize" width="64" height="64"/>
+                                <size key="thumbnailSize" width="88" height="64"/>
                             </pdfThumbnailView>
                         </subviews>
                         <constraints>
@@ -451,22 +452,25 @@
                         <rect key="frame" x="0.0" y="0.0" width="1000" height="160"/>
                         <autoresizingMask key="autoresizingMask"/>
                         <subviews>
-                            <scrollView verticalCompressionResistancePriority="751" horizontalLineScroll="10" horizontalPageScroll="10" verticalLineScroll="10" verticalPageScroll="10" hasHorizontalScroller="NO" allowsMagnification="YES" usesPredominantAxisScrolling="NO" horizontalScrollElasticity="none" translatesAutoresizingMaskIntoConstraints="NO" id="lB2-Ns-d8k">
-                                <rect key="frame" x="20" y="20" width="960" height="120"/>
+                            <scrollView borderType="none" horizontalLineScroll="10" horizontalPageScroll="10" verticalLineScroll="10" verticalPageScroll="10" hasHorizontalScroller="NO" hasVerticalScroller="NO" usesPredominantAxisScrolling="NO" translatesAutoresizingMaskIntoConstraints="NO" id="lB2-Ns-d8k">
+                                <rect key="frame" x="5" y="5" width="990" height="150"/>
                                 <clipView key="contentView" id="NCp-KY-iSf">
-                                    <rect key="frame" x="1" y="1" width="958" height="118"/>
+                                    <rect key="frame" x="0.0" y="0.0" width="990" height="150"/>
                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                     <subviews>
-                                        <textView editable="NO" importsGraphics="NO" findStyle="panel" continuousSpellChecking="YES" usesRuler="YES" usesFontPanel="YES" verticallyResizable="YES" allowsNonContiguousLayout="YES" quoteSubstitution="YES" dashSubstitution="YES" spellingCorrection="YES" smartInsertDelete="YES" id="dM5-vI-Ov8">
-                                            <rect key="frame" x="0.0" y="0.0" width="987" height="118"/>
+                                        <textView editable="NO" importsGraphics="NO" horizontallyResizable="YES" findStyle="bar" usesRuler="YES" verticallyResizable="YES" allowsNonContiguousLayout="YES" linkDetection="YES" id="dM5-vI-Ov8">
+                                            <rect key="frame" x="0.0" y="0.0" width="1019" height="150"/>
                                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                             <animations/>
                                             <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                                            <size key="minSize" width="958" height="118"/>
-                                            <size key="maxSize" width="1076" height="10000000"/>
+                                            <size key="minSize" width="200" height="150"/>
+                                            <size key="maxSize" width="5000" height="10000000"/>
                                             <color key="insertionPointColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
-                                            <size key="minSize" width="958" height="118"/>
-                                            <size key="maxSize" width="1076" height="10000000"/>
+                                            <size key="minSize" width="200" height="150"/>
+                                            <size key="maxSize" width="5000" height="10000000"/>
+                                            <connections>
+                                                <outlet property="delegate" destination="YJS-3Z-qZ0" id="bJd-oN-fGI"/>
+                                            </connections>
                                         </textView>
                                     </subviews>
                                     <animations/>
@@ -476,24 +480,24 @@
                                     <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="120" id="xHp-F1-Fdo"/>
                                 </constraints>
                                 <animations/>
-                                <edgeInsets key="contentInsets" left="10" right="10" top="10" bottom="10"/>
+                                <edgeInsets key="contentInsets" left="0.0" right="0.0" top="0.0" bottom="0.0"/>
                                 <scroller key="horizontalScroller" hidden="YES" wantsLayer="YES" verticalHuggingPriority="750" doubleValue="1" horizontal="YES" id="mUi-wW-ldw">
                                     <rect key="frame" x="-100" y="-100" width="87" height="18"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                     <animations/>
                                 </scroller>
-                                <scroller key="verticalScroller" wantsLayer="YES" verticalHuggingPriority="750" doubleValue="0.5" horizontal="NO" id="kmh-19-Q4K">
-                                    <rect key="frame" x="934" y="10" width="16" height="100"/>
+                                <scroller key="verticalScroller" hidden="YES" wantsLayer="YES" verticalHuggingPriority="750" doubleValue="0.020871181663074712" horizontal="NO" id="kmh-19-Q4K">
+                                    <rect key="frame" x="-100" y="-100" width="16" height="130"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                     <animations/>
                                 </scroller>
                             </scrollView>
                         </subviews>
                         <constraints>
-                            <constraint firstAttribute="bottom" secondItem="lB2-Ns-d8k" secondAttribute="bottom" constant="20" id="1mW-cZ-8RB"/>
-                            <constraint firstItem="lB2-Ns-d8k" firstAttribute="leading" secondItem="vtw-Xt-7ls" secondAttribute="leading" constant="20" id="4zn-Vg-pNS"/>
-                            <constraint firstItem="lB2-Ns-d8k" firstAttribute="top" secondItem="vtw-Xt-7ls" secondAttribute="top" constant="20" id="HBq-GV-BH3"/>
-                            <constraint firstAttribute="trailing" secondItem="lB2-Ns-d8k" secondAttribute="trailing" constant="20" id="exW-4G-Ic1"/>
+                            <constraint firstAttribute="bottom" secondItem="lB2-Ns-d8k" secondAttribute="bottom" constant="5" id="1mW-cZ-8RB"/>
+                            <constraint firstItem="lB2-Ns-d8k" firstAttribute="leading" secondItem="vtw-Xt-7ls" secondAttribute="leading" constant="5" id="4zn-Vg-pNS"/>
+                            <constraint firstItem="lB2-Ns-d8k" firstAttribute="top" secondItem="vtw-Xt-7ls" secondAttribute="top" constant="5" id="HBq-GV-BH3"/>
+                            <constraint firstAttribute="trailing" secondItem="lB2-Ns-d8k" secondAttribute="trailing" constant="5" id="exW-4G-Ic1"/>
                         </constraints>
                         <animations/>
                     </view>

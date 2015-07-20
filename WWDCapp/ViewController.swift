@@ -698,9 +698,7 @@ class ViewController: NSViewController, NSURLSessionDelegate, NSURLSessionDataDe
 			}
 		}
 	}
-	
-	
-	
+		
 	
 	
 	// MARK: Fetch Year Info
