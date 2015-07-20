@@ -451,7 +451,7 @@
                         <rect key="frame" x="0.0" y="0.0" width="1000" height="160"/>
                         <autoresizingMask key="autoresizingMask"/>
                         <subviews>
-                            <scrollView verticalCompressionResistancePriority="751" horizontalLineScroll="10" horizontalPageScroll="10" verticalLineScroll="10" verticalPageScroll="10" hasHorizontalScroller="NO" usesPredominantAxisScrolling="NO" translatesAutoresizingMaskIntoConstraints="NO" id="lB2-Ns-d8k">
+                            <scrollView verticalCompressionResistancePriority="751" horizontalLineScroll="10" horizontalPageScroll="10" verticalLineScroll="10" verticalPageScroll="10" hasHorizontalScroller="NO" allowsMagnification="YES" usesPredominantAxisScrolling="NO" horizontalScrollElasticity="none" translatesAutoresizingMaskIntoConstraints="NO" id="lB2-Ns-d8k">
                                 <rect key="frame" x="20" y="20" width="960" height="120"/>
                                 <clipView key="contentView" id="NCp-KY-iSf">
                                     <rect key="frame" x="1" y="1" width="958" height="118"/>
@@ -476,13 +476,14 @@
                                     <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="120" id="xHp-F1-Fdo"/>
                                 </constraints>
                                 <animations/>
+                                <edgeInsets key="contentInsets" left="10" right="10" top="10" bottom="10"/>
                                 <scroller key="horizontalScroller" hidden="YES" wantsLayer="YES" verticalHuggingPriority="750" doubleValue="1" horizontal="YES" id="mUi-wW-ldw">
                                     <rect key="frame" x="-100" y="-100" width="87" height="18"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                     <animations/>
                                 </scroller>
-                                <scroller key="verticalScroller" wantsLayer="YES" verticalHuggingPriority="750" doubleValue="1" horizontal="NO" id="kmh-19-Q4K">
-                                    <rect key="frame" x="943" y="1" width="16" height="118"/>
+                                <scroller key="verticalScroller" wantsLayer="YES" verticalHuggingPriority="750" doubleValue="0.5" horizontal="NO" id="kmh-19-Q4K">
+                                    <rect key="frame" x="934" y="10" width="16" height="100"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                     <animations/>
                                 </scroller>

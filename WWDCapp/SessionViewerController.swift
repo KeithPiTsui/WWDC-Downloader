@@ -16,6 +16,22 @@ class ViewerPrimarySplitViewController : NSSplitViewController {
 	var wwdcSession : WWDCSession? {
 		didSet {
 			print(wwdcSession?.sessionID)
+			
+			let splitItems = self.splitViewItems
+			
+			let transcriptController = splitItems.last!.viewController as! TranscriptViewController
+			
+			transcriptController.wwdcSession = wwdcSession
+			
+			let viewerTopSplitController = splitItems.first!.viewController as! ViewerTopSplitViewController
+			
+			let topSplitItems = viewerTopSplitController.splitViewItems
+			
+			
+			let videoController = topSplitItems.first!.viewController as! VideoViewController
+			
+			videoController.avPlayerView
+
 		}
 	}
 
