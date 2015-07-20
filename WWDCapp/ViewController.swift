@@ -543,7 +543,7 @@ class ViewController: NSViewController, NSURLSessionDelegate, NSURLSessionDataDe
 	@IBAction func startDownloadButton(sender: NSButton) {
 		
 		if isDownloading {
-			DownloadFileManager.sharedManager.stopFileDownloads()   // Causes dispatch_group_notify to fire in downloadFiles eventually when tasks finished/cancelled
+			DownloadFileManager.sharedManager.stopAllFileDownloads()   // Causes dispatch_group_notify to fire in downloadFiles eventually when tasks finished/cancelled
 		}
 		else {
 			

@@ -62,6 +62,30 @@ class FetchFileSizeManager : NSObject, NSURLSessionDownloadDelegate {
         fileSizeTask?.resume()
     }
     
+    func stopAllFileSizeFetchs() {
+        if #available(OSX 10.11, *) {
+            headerSessionManager?.getAllTasksWithCompletionHandler({ (tasks) -> Void in
+                for task in tasks {
+                    task.cancel()
+                }
+            })
+        } else {
+            // Fallback on earlier versions
+            headerSessionManager?.getTasksWithCompletionHandler({ (data, upload, download) -> Void in
+                for task in data {
+                    task.cancel()
+                }
+                for task in upload {
+                    task.cancel()
+                }
+                for task in download {
+                    task.cancel()
+                }
+            })
+        }
+    }
+
+    
     func URLSession(session: NSURLSession, downloadTask: NSURLSessionDownloadTask, didWriteData bytesWritten: Int64, totalBytesWritten: Int64, totalBytesExpectedToWrite: Int64)  {
 
         if session == headerSessionManager {
@@ -110,27 +134,5 @@ class FetchFileSizeManager : NSObject, NSURLSessionDownloadDelegate {
         }
     }
     
-    func stopAllFileSizeFetchs() {
-        if #available(OSX 10.11, *) {
-            headerSessionManager?.getAllTasksWithCompletionHandler({ (tasks) -> Void in
-                for task in tasks {
-                    task.cancel()
-                }
-            })
-        } else {
-            // Fallback on earlier versions
-			headerSessionManager?.getTasksWithCompletionHandler({ (data, upload, download) -> Void in
-				for task in data {
-					task.cancel()
-				}
-				for task in upload {
-					task.cancel()
-				}
-				for task in download {
-					task.cancel()
-				}
-			})
-        }
-    }
-
+   
 }

@@ -44,7 +44,7 @@ typealias SimpleCompletionHandler = ((success: Bool) -> Void)
     
     func preferenceChanged() {
 				
-        stopFileDownloads()
+        stopAllFileDownloads()
         
         if let config = sessionManager?.configuration {
             config.HTTPMaximumConnectionsPerHost = NSUserDefaults.standardUserDefaults().integerForKey(simultaneousDownloadsKey)
@@ -85,7 +85,7 @@ typealias SimpleCompletionHandler = ((success: Bool) -> Void)
     }
 	
 	
-	func stopFileDownloads() {
+	func stopAllFileDownloads() {
 					
         sessionManager?.getTasksWithCompletionHandler{ [unowned self] (dataTasks, uploadTasks, downloadTasks) -> Void in
             
