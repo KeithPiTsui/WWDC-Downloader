@@ -14,20 +14,22 @@ class Archiving {
 		
 		let data = NSKeyedArchiver.archivedDataWithRootObject(sessions as NSArray)
 		
-		completionSuccess(success: NSKeyedArchiver.archiveRootObject(data, toFile: pathForArchiving(year)))
+		completionSuccess(success: data.writeToFile(pathForArchiving(year), atomically: true))
 	}
 	
 	class func unArchiveDataForYear(year: WWDCYear) -> [WWDCSession]? {
 		
-		let data = NSKeyedUnarchiver.unarchiveObjectWithFile(pathForArchiving(year)) as? NSData
-		
-		if let data = data {
+		do {
+			let data = try NSData(contentsOfFile: pathForArchiving(year), options: NSDataReadingOptions.DataReadingMappedIfSafe)
+			
 			if let sessions = NSKeyedUnarchiver.unarchiveObjectWithData(data) as? [WWDCSession] {
 				return sessions
 			}
-
 		}
-		
+		catch {
+			print(error)
+		}
+
 		return nil
 	}
 	

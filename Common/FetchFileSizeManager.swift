@@ -11,17 +11,12 @@ import Foundation
 typealias HeaderCompletionHandler = ((success:Bool, errorCode:Int?) -> Void)
 
 class FetchFileSizeManager : NSObject, NSURLSessionDownloadDelegate {
-    
+	
+	static let sharedManager = FetchFileSizeManager()
+
     private var headerSessionManager : NSURLSession?
     private var downloadHandlers: [Int : (FileInfo,HeaderCompletionHandler)] = [:]			// Int is taskIdentifier of NSURLSessionTask
 
-    class var sharedManager: FetchFileSizeManager {
-        struct Singleton {
-            static let instance = FetchFileSizeManager()
-        }
-        return Singleton.instance
-    }
-    
     private override init() {
         
         super.init()

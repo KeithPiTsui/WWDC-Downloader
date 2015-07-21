@@ -17,18 +17,13 @@ typealias SimpleCompletionHandler = ((success: Bool) -> Void)
 	
 	// MARK: - Instance Variables
 	
+	static let sharedManager = DownloadFileManager()
+
 	// File Download
 	private var sessionManager : NSURLSession?
 	private var backgroundHandlersForFiles: [FileInfo : CallbackWrapper] = [:]
 	private var backgroundRequestsForFiles: [Int : FileInfo] = [:]				// Int is taskIdentifier of NSURLSessionTask
 	
-  	// MARK: - Singleton Status
-	class var sharedManager: DownloadFileManager {
-		struct Singleton {
-			static let instance = DownloadFileManager()
-		}
-		return Singleton.instance
-	}
 	
 	// MARK: - Object Lifecycle Methods
 	// Singleton so prevent init outside of class by marking private

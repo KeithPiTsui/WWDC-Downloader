@@ -9,7 +9,9 @@
 import Foundation
 
 class DownloadTranscriptManager : NSObject, NSURLSessionDataDelegate {
-    
+	
+	static let sharedManager = DownloadTranscriptManager()
+
     private var sessionManager : NSURLSession?
 	
 	static let timeFormatter : NSDateComponentsFormatter = {
@@ -19,13 +21,6 @@ class DownloadTranscriptManager : NSObject, NSURLSessionDataDelegate {
 		aFormatter.allowedUnits = [NSCalendarUnit.Hour, NSCalendarUnit.Minute, NSCalendarUnit.Second]
 		return aFormatter
 		}()
-	
-    class var sharedManager: DownloadTranscriptManager {
-        struct Singleton {
-            static let instance = DownloadTranscriptManager()
-        }
-        return Singleton.instance
-    }
     
     private override init() {
         

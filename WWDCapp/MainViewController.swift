@@ -144,7 +144,7 @@ class ViewController: NSViewController, NSURLSessionDelegate, NSURLSessionDataDe
 	private var scrollToCurrentDownloadTimer : NSTimer?
 	private var lastTableViewInteractionTime : CFTimeInterval?
     
- //   weak var sessionViewerController :
+    weak var sessionViewerController : SessionViewerWindowController?
 	
 	// MARK: - Init?
 	required init?(coder: NSCoder) {
@@ -576,7 +576,15 @@ class ViewController: NSViewController, NSURLSessionDelegate, NSURLSessionDataDe
 	@IBAction func  doubleClick(sender:AnyObject?) {
 		
 		if myTableView.clickedRow >= 0 {
-			self.performSegueWithIdentifier("showViewer", sender: myTableView.clickedRow)
+
+			let wwdcSession = (isFiltered ? visibleWWDCSessionsArray[myTableView.clickedRow] : allWWDCSessionsArray[myTableView.clickedRow])
+
+			if let _ = sessionViewerController {
+				loadSessionIntoViewer(wwdcSession)
+			}
+			else {
+				self.performSegueWithIdentifier("showViewer", sender: wwdcSession)
+			}
 		}
 	}
 	
@@ -691,17 +699,24 @@ class ViewController: NSViewController, NSURLSessionDelegate, NSURLSessionDataDe
 		
 		if segue.identifier == "showViewer" {
 			
-			let windowController = segue.destinationController as! NSWindowController
+			sessionViewerController = segue.destinationController as? SessionViewerWindowController
 			
-			if let primarySplitController = windowController.contentViewController as? ViewerPrimarySplitViewController {
-				let wwdcSession = (isFiltered ? visibleWWDCSessionsArray[sender as! Int] : allWWDCSessionsArray[sender as! Int])
-				
-				primarySplitController.wwdcSession = wwdcSession
+			if let _ = sessionViewerController {
+				loadSessionIntoViewer(sender as! WWDCSession)
 			}
 		}
 	}
-		
 	
+	func loadSessionIntoViewer(wwdcSession :WWDCSession) {
+		
+		if let sessionViewerController = sessionViewerController {
+			sessionViewerController.pdfController.wwdcSession = wwdcSession
+			sessionViewerController.videoController.wwdcSession = wwdcSession
+			sessionViewerController.transcriptController.wwdcSession = wwdcSession
+			
+			sessionViewerController.titleLabel.stringValue =  "WWDC \(wwdcSession.sessionYear), Session: \(wwdcSession.sessionID) - \(wwdcSession.title)"
+		}
+	}
 	
 	// MARK: Fetch Year Info
 	func fetchSessionInfoForYear(year : WWDCYear) {
@@ -874,17 +889,17 @@ class ViewController: NSViewController, NSURLSessionDelegate, NSURLSessionDataDe
 		return isTranscriptDrawerOpen
 	}
     
-    func tableViewSelectionDidChange(notification: NSNotification) {
-        
-        let tableview = notification.object as? ResizeAwareTableView
-        if let row = tableview?.selectedRow {
-			
-//			self.performSegueWithIdentifier("show", sender: row)
-			
-//			let appDelegate = NSApplication.sharedApplication().delegate as! AppDelegate
-//			appDelegate.updateTranscript(wwdcSession)
-        }
-    }
+//    func tableViewSelectionDidChange(notification: NSNotification) {
+//        
+//        let tableview = notification.object as? ResizeAwareTableView
+//        if let row = tableview?.selectedRow {
+//			
+////			self.performSegueWithIdentifier("show", sender: row)
+//			
+////			let appDelegate = NSApplication.sharedApplication().delegate as! AppDelegate
+////			appDelegate.updateTranscript(wwdcSession)
+//        }
+//    }
 	
 	func tableView(tableView: NSTableView, viewForTableColumn tableColumn: NSTableColumn?, row: Int) -> NSView? {
 		
