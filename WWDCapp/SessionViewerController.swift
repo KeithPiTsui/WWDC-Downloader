@@ -97,6 +97,12 @@ class SessionViewerWindowController : NSWindowController, NSWindowDelegate {
 			}
 		}
 	}
+    
+    func windowShouldClose(sender: AnyObject) -> Bool {
+        videoController.avPlayerView.player?.pause()
+        videoController.avPlayerView.player = nil
+        return true
+    }
 }
 
 class ViewerPrimarySplitViewController : NSSplitViewController {
@@ -191,9 +197,9 @@ class VideoViewController : NSViewController {
 			if let _ = avPlayerView.player?.currentItem {
 				avPlayerView.player?.pause()
 				avPlayerView.player = nil
-				avPlayerView.controlsStyle = AVPlayerViewControlsStyle.None
 			}
 			
+            avPlayerView.controlsStyle = AVPlayerViewControlsStyle.None
 			noVideoLabel.animator().alphaValue = 1
 			
 			return

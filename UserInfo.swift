@@ -11,10 +11,8 @@ import Foundation
 class UserSessionInfo : NSObject, NSCoding {
 	
 	let sessionID : String
-	
-	var markAsWatched: Bool = false
 	var markAsFavorite: Bool = false
-	var currentTimePlayed: NSTimeInterval = 0
+    var currentProgress: Float = 0
 	
 	init(sessionID: String) {
 		self.sessionID = sessionID
@@ -25,18 +23,16 @@ class UserSessionInfo : NSObject, NSCoding {
 	required init(coder aDecoder: NSCoder) {
 		
 		self.sessionID  = aDecoder.decodeObjectForKey("sessionID") as! String
-		self.markAsWatched = aDecoder.decodeBoolForKey("markAsWatched")
 		self.markAsFavorite = aDecoder.decodeBoolForKey("markAsFavorite")
-		self.currentTimePlayed = aDecoder.decodeDoubleForKey("currentTimePlayed") as NSTimeInterval
+		self.currentProgress = aDecoder.decodeFloatForKey("currentProgress") as Float
 
 		super.init()
 	}
 	
 	func encodeWithCoder(aCoder: NSCoder) {
 		aCoder.encodeObject(sessionID, forKey: "sessionID")
-		aCoder.encodeBool(markAsWatched, forKey: "markAsWatched")
 		aCoder.encodeBool(markAsFavorite, forKey: "markAsFavorite")
-		aCoder.encodeDouble(currentTimePlayed, forKey: "currentTimePlayed")
+		aCoder.encodeFloat(currentProgress, forKey: "currentProgress")
 	}
 }
 
@@ -46,7 +42,19 @@ class UserInfo {
 	static let sharedManager = UserInfo()
 	
 	var userInfoDictionary : [String: UserSessionInfo] = [:]
-	
+    
+    func userInfo(wwdcSession: WWDCSession) -> UserSessionInfo? {
+        
+        if let userInfo = userInfoDictionary["\(wwdcSession.sessionYear)-\(wwdcSession.sessionID)"] {
+            return userInfo
+        }
+        else {
+            let userInfo = UserSessionInfo(sessionID: "\(wwdcSession.sessionYear)-\(wwdcSession.sessionID)")
+            userInfoDictionary["\(wwdcSession.sessionYear)-\(wwdcSession.sessionID)"] = userInfo
+            return userInfo
+        }
+    }
+    
 	private init() {
 		
 		unArchiveUserInfo { (success) -> Void in

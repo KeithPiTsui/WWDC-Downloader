@@ -495,7 +495,7 @@ class ViewController: NSViewController, NSURLSessionDelegate, NSURLSessionDataDe
 				case .HD:
 					NSWorkspace.sharedWorkspace().openURL(localFileURL)
 				case .SampleCode:
-					NSWorkspace.sharedWorkspace().selectFile(localFileURL.filePathURL?.path, inFileViewerRootedAtPath: localFileURL.filePathURL?.absoluteString.stringByDeletingLastPathComponent)
+					NSWorkspace.sharedWorkspace().selectFile(localFileURL.filePathURL?.path, inFileViewerRootedAtPath: (localFileURL.filePathURL?.absoluteString.stringByDeletingLastPathComponent)!)
 				}
 			}
 		}
@@ -642,7 +642,7 @@ class ViewController: NSViewController, NSURLSessionDelegate, NSURLSessionDataDe
 			oflabel.font = NSFont.monospacedDigitSystemFontOfSize(NSFont.systemFontSizeForControlSize(NSControlSize.SmallControlSize), weight: NSFontWeightRegular)
 			currentlabel.font = NSFont.monospacedDigitSystemFontOfSize(NSFont.systemFontSizeForControlSize(NSControlSize.SmallControlSize), weight: NSFontWeightRegular)
 		}
-		
+        		
 		resetUIForYearFetch()
 	}
 	
@@ -808,13 +808,13 @@ class ViewController: NSViewController, NSURLSessionDelegate, NSURLSessionDataDe
 		includeTranscriptsInSearchCheckBox.enabled = true
 		includeTranscriptsInSearchCheckBox.state = 0
 		
-		myTableView.reloadData()
-		
 		updateCombinePDFButtonState()
 		
 		updateTotalToDownloadLabel()
 		
 		checkDownloadButtonState()
+        
+        myTableView.reloadData()
 	}
 	
 	
@@ -907,7 +907,7 @@ class ViewController: NSViewController, NSURLSessionDelegate, NSURLSessionDataDe
 		
 		if tableColumn?.identifier == "sessionID" {
 
-			let cell = (tableView.makeViewWithIdentifier("sessionID", owner: self) as? NSTableCellView)!
+			let cell = (tableView.makeViewWithIdentifier("sessionID", owner: self) as? SessionIDCell)!
 			
 			cell.textField?.stringValue = wwdcSession.sessionID
 			
@@ -918,6 +918,10 @@ class ViewController: NSViewController, NSURLSessionDelegate, NSURLSessionDataDe
             else {
                 let rowView = tableView.rowViewAtRow(row, makeIfNecessary: false)
                 cell.textField?.backgroundColor = rowView?.backgroundColor
+            }
+            
+            if let userInfoForSession = UserInfo.sharedManager.userInfo(wwdcSession) {
+                cell.updateUserInfo(userInfoForSession)
             }
             
 			return cell
@@ -1057,9 +1061,41 @@ class ViewController: NSViewController, NSURLSessionDelegate, NSURLSessionDataDe
         
         switch edge {
         case .Leading:
-            return [NSTableViewRowAction(style: .Regular, title: "Mark as Watched", handler: { (action, int) -> Void in
+            if let userInfoForSession = UserInfo.sharedManager.userInfo(wwdcSession) {
+
+                let favoriteAction : NSTableViewRowAction
+                let watchedAction : NSTableViewRowAction
                 
-            })]
+                if userInfoForSession.currentProgress == 1 {
+                    watchedAction = NSTableViewRowAction(style: .Regular, title: "Unmark as watched", handler: { (action, int) -> Void in
+                        userInfoForSession.currentProgress = 0
+                    })
+                }
+                else {
+                    watchedAction = NSTableViewRowAction(style: .Regular, title: "Mark as Watched", handler: { (action, int) -> Void in
+                        userInfoForSession.currentProgress = 1
+                    })
+                }
+                
+                if userInfoForSession.markAsFavorite == true {
+                    favoriteAction = NSTableViewRowAction(style: .Regular, title: "Unmark as Favorite", handler: { (action, int) -> Void in
+                        userInfoForSession.markAsFavorite = false
+                    })
+                }
+                else {
+                    favoriteAction = NSTableViewRowAction(style: .Regular, title: "Mark as Favorite", handler: { (action, int) -> Void in
+                        userInfoForSession.markAsFavorite = true
+                    })
+                }
+                
+                favoriteAction.backgroundColor = NSColor.grayColor()
+                
+                return [watchedAction, favoriteAction]
+            }
+            else {
+                return []
+            }
+            
         case .Trailing:
             if wwdcSession.hasAnyDownloadedFiles == true {
                 return [NSTableViewRowAction(style: .Destructive, title: "Delete Files for Session", handler: { [unowned self] (action, int) -> Void in

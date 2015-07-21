@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.Storyboard.XIB" version="3.0" toolsVersion="8152.3" systemVersion="15A216g" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" initialViewController="B8D-0N-5wS">
+<document type="com.apple.InterfaceBuilder3.Cocoa.Storyboard.XIB" version="3.0" toolsVersion="8164.2" systemVersion="15A216g" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" initialViewController="B8D-0N-5wS">
     <dependencies>
-        <plugIn identifier="com.apple.AVKitIBPlugin" version="8152.3"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="8152.3"/>
-        <plugIn identifier="com.apple.pdfkit.ibplugin" version="8152.3"/>
+        <plugIn identifier="com.apple.AVKitIBPlugin" version="8164.2"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="8164.2"/>
+        <plugIn identifier="com.apple.pdfkit.ibplugin" version="8164.2"/>
     </dependencies>
     <scenes>
         <!--Application-->
@@ -858,7 +858,7 @@ CA
                                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                             <subviews>
                                                 <tableView verticalHuggingPriority="750" allowsExpansionToolTips="YES" alternatingRowBackgroundColors="YES" columnReordering="NO" columnResizing="NO" multipleSelection="NO" emptySelection="NO" autosaveColumns="NO" typeSelect="NO" rowHeight="50" headerView="GLv-Gv-fqk" viewBased="YES" id="SSh-0R-MKF" customClass="ResizeAwareTableView" customModule="WWDCapp" customModuleProvider="target">
-                                                    <rect key="frame" x="0.0" y="0.0" width="888" height="456"/>
+                                                    <rect key="frame" x="0.0" y="0.0" width="888" height="0.0"/>
                                                     <autoresizingMask key="autoresizingMask"/>
                                                     <animations/>
                                                     <size key="intercellSpacing" width="3" height="2"/>
@@ -879,7 +879,7 @@ CA
                                                             <sortDescriptor key="sortDescriptorPrototype" selector="localizedStandardCompare:" sortKey="sessionID"/>
                                                             <tableColumnResizingMask key="resizingMask" resizeWithTable="YES" userResizable="YES"/>
                                                             <prototypeCellViews>
-                                                                <tableCellView identifier="sessionID" id="I6T-jp-6sv">
+                                                                <tableCellView identifier="sessionID" id="I6T-jp-6sv" customClass="SessionIDCell" customModule="WWDCapp" customModuleProvider="target">
                                                                     <rect key="frame" x="1" y="1" width="70" height="50"/>
                                                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                                     <subviews>
@@ -895,6 +895,11 @@ CA
                                                                                 <color key="backgroundColor" white="1" alpha="0.0" colorSpace="calibratedWhite"/>
                                                                             </textFieldCell>
                                                                         </textField>
+                                                                        <imageView horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Pak-H0-M21">
+                                                                            <rect key="frame" x="0.0" y="0.0" width="32" height="32"/>
+                                                                            <animations/>
+                                                                            <imageCell key="cell" refusesFirstResponder="YES" alignment="left" imageScaling="proportionallyDown" id="NAp-z4-9rr"/>
+                                                                        </imageView>
                                                                     </subviews>
                                                                     <constraints>
                                                                         <constraint firstItem="y3w-TZ-YZi" firstAttribute="width" secondItem="I6T-jp-6sv" secondAttribute="width" id="VPQ-PV-0zn"/>
@@ -903,6 +908,7 @@ CA
                                                                     </constraints>
                                                                     <animations/>
                                                                     <connections>
+                                                                        <outlet property="imageView" destination="Pak-H0-M21" id="N86-m4-MnR"/>
                                                                         <outlet property="textField" destination="y3w-TZ-YZi" id="uNZ-ZM-GAg"/>
                                                                     </connections>
                                                                 </tableCellView>
