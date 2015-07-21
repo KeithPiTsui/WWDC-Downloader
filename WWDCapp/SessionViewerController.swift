@@ -1,5 +1,5 @@
 //
-//  ViewerController.swift
+//  SessionViewerController.swift
 //  WWDC
 //
 //  Created by David Roberts on 20/07/2015.
@@ -14,6 +14,10 @@ import AVFoundation
 
 class ViewerPrimarySplitViewController : NSSplitViewController {
 	
+    weak var videoController : VideoViewController?
+    weak var pdfController : PDFMainViewController?
+    weak var transcriptController : TranscriptViewController?
+    
 	var wwdcSession : WWDCSession? {
 		didSet {
 			print(wwdcSession?.sessionID)
@@ -24,37 +28,26 @@ class ViewerPrimarySplitViewController : NSSplitViewController {
                 
                 let splitItems = self.splitViewItems
                 
-                let transcriptController = splitItems.last!.viewController as! TranscriptViewController
+                transcriptController = splitItems.last!.viewController as? TranscriptViewController
                 
-                transcriptController.wwdcSession = wwdcSession
+                if let transcriptController = transcriptController {
+                    transcriptController.wwdcSession = wwdcSession
+                }
                 
                 let viewerTopSplitController = splitItems.first!.viewController as! ViewerTopSplitViewController
-                
                 let topSplitItems = viewerTopSplitController.splitViewItems
                 
-                let videoController = topSplitItems.first!.viewController as! VideoViewController
-                
-                if let localFileURL = wwdcSession.hdFile?.localFileURL {
-                    videoController.videoURL = localFileURL
-                }
-                else {
-                    if let localFileURL = wwdcSession.sdFile?.localFileURL {
-                        videoController.videoURL = localFileURL
-                    }
-                }
-                
-                if let localFileURL = wwdcSession.pdfFile?.localFileURL {
+                videoController = topSplitItems.first!.viewController as? VideoViewController
+               // videoController.wwdcSession = wwdcSession
+               
+                let viewerPDFSplitController = topSplitItems.last!.viewController as! ViewerPDFSplitViewController
+                let pdfSplitItems = viewerPDFSplitController.splitViewItems
                     
-                    let viewerPDFSplitController = topSplitItems.last!.viewController as! ViewerPDFSplitViewController
-                    let pdfSplitItems = viewerPDFSplitController.splitViewItems
+                pdfController = pdfSplitItems.first!.viewController as? PDFMainViewController
+               // pdfController.wwdcSession = wwdcSession
                     
-                    
-                    let pdfMainViewController = pdfSplitItems.first!.viewController as! PDFMainViewController
-                    pdfMainViewController.pdfURL = localFileURL
-                    
-                    let thumbnailMainViewController = pdfSplitItems.last!.viewController as! PDFThumbnailViewController
-                    thumbnailMainViewController.thumbnailView.setPDFView(pdfMainViewController.pdfView)
-                }
+                let thumbnailMainViewController = pdfSplitItems.last!.viewController as! PDFThumbnailViewController
+               // thumbnailMainViewController.thumbnailView.setPDFView(pdfController.pdfView)
             }
 		}
 	}
@@ -77,7 +70,6 @@ class TranscriptViewController : NSViewController {
 	override func viewDidLoad() {
 		super.viewDidLoad()
         
-       
         transcriptTextStorage = HighlightableTextStorage()
 		
 		if let layoutManager = textView.layoutManager {
@@ -106,24 +98,40 @@ class VideoViewController : NSViewController {
 
 	@IBOutlet weak var avPlayerView: AVPlayerView!
     
-    var videoURL : NSURL?{
-        didSet {
-            if let videoURL = videoURL{
-                let asset = AVAsset(URL: videoURL)
-                let item = AVPlayerItem(asset: asset)
-                let player = AVPlayer(playerItem: item)
-                
-                avPlayerView.player = player
-            }
-        }
-    }
-	
+    weak var wwdcSession : WWDCSession?
+    
 	override func viewDidLoad() {
+        super.viewDidLoad()
 
 		avPlayerView.videoGravity = "AVLayerVideoGravityResizeAspect"
 		avPlayerView.controlsStyle = AVPlayerViewControlsStyle.Floating
 		avPlayerView.showsFullScreenToggleButton = true
        	
+    }
+    
+    func loadVideo () {
+        
+        guard let wwdcSession = wwdcSession else { return }
+        
+        self.view.window?.title = wwdcSession.title
+        
+        var videoURL : NSURL?
+        
+        if let localFileURL = wwdcSession.hdFile?.localFileURL {
+            videoURL = localFileURL
+        }
+        else {
+            if let localFileURL = wwdcSession.sdFile?.localFileURL {
+                videoURL = localFileURL
+            }
+        }
+        
+        guard let url = videoURL else { return }
+
+        let asset = AVAsset(URL: url)
+        let item = AVPlayerItem(asset: asset)
+        let player = AVPlayer(playerItem: item)
+        avPlayerView.player = player
     }
 	
 }
@@ -132,17 +140,17 @@ class PDFMainViewController : NSViewController {
 	
 	@IBOutlet weak var pdfView: PDFView!
 	
-    var pdfURL : NSURL?{
+    weak var wwdcSession : WWDCSession? {
         didSet {
-            if let pdfURL = pdfURL {
-                let document = PDFDocument(URL: pdfURL)
+            if let localFileURL = wwdcSession?.pdfFile?.localFileURL {
+                let document = PDFDocument(URL: localFileURL)
                 pdfView.setDocument(document)
             }
         }
     }
     
 	override func viewDidLoad() {
-
+        super.viewDidLoad()
 	}
 }
 
@@ -151,7 +159,8 @@ class PDFThumbnailViewController : NSViewController {
 	@IBOutlet weak var thumbnailView: PDFThumbnailView!
 	
 	override func viewDidLoad() {
-		
+        super.viewDidLoad()
+
 	}
 }
 

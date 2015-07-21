@@ -23,7 +23,7 @@
 		A90D14EB1B41A8CF00A30590 /* FetchFileSizeManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = A90D14EA1B41A8CF00A30590 /* FetchFileSizeManager.swift */; };
 		A90D14ED1B41C5F000A30590 /* DownloadTranscriptManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = A90D14EC1B41C5F000A30590 /* DownloadTranscriptManager.swift */; };
 		A9528F271B34C40E002290D3 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9528F261B34C40E002290D3 /* AppDelegate.swift */; };
-		A9528F291B34C40E002290D3 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9528F281B34C40E002290D3 /* ViewController.swift */; };
+		A9528F291B34C40E002290D3 /* MainViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9528F281B34C40E002290D3 /* MainViewController.swift */; };
 		A9528F2B1B34C40E002290D3 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = A9528F2A1B34C40E002290D3 /* Assets.xcassets */; };
 		A9528F2E1B34C40E002290D3 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = A9528F2C1B34C40E002290D3 /* Main.storyboard */; };
 		A9528F351B34C427002290D3 /* WWDCSession.swift in Sources */ = {isa = PBXBuildFile; fileRef = A96E4D631B2EB2770030F908 /* WWDCSession.swift */; };
@@ -60,7 +60,7 @@
 		A90D14EC1B41C5F000A30590 /* DownloadTranscriptManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = DownloadTranscriptManager.swift; path = Common/DownloadTranscriptManager.swift; sourceTree = "<group>"; };
 		A9528F241B34C40D002290D3 /* WWDCapp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = WWDCapp.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		A9528F261B34C40E002290D3 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
-		A9528F281B34C40E002290D3 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
+		A9528F281B34C40E002290D3 /* MainViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainViewController.swift; sourceTree = "<group>"; };
 		A9528F2A1B34C40E002290D3 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		A9528F2D1B34C40E002290D3 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		A9528F2F1B34C40E002290D3 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -151,7 +151,7 @@
 			children = (
 				444D79891B456B6600F552C4 /* Subclasses */,
 				444D79881B456B5100F552C4 /* Cells */,
-				A9528F281B34C40E002290D3 /* ViewController.swift */,
+				A9528F281B34C40E002290D3 /* MainViewController.swift */,
 				448E3D471B5D0226006A3988 /* SessionViewerController.swift */,
 				A96EF1CE1B4D423800494E45 /* Preferences.swift */,
 				A9528F261B34C40E002290D3 /* AppDelegate.swift */,
@@ -282,7 +282,7 @@
 			files = (
 				446C7A1D1B42D3C7007CA3C2 /* SessionNameDescriptionCell.swift in Sources */,
 				44D546221B4296FB00197B23 /* DownloadYearInfo.swift in Sources */,
-				A9528F291B34C40E002290D3 /* ViewController.swift in Sources */,
+				A9528F291B34C40E002290D3 /* MainViewController.swift in Sources */,
 				44A647911B44634900157487 /* ToolbarHookableWindowSubclass.swift in Sources */,
 				44F5EE941B45A4BB00CE683D /* HighlightableTextStorage.swift in Sources */,
 				A90D14ED1B41C5F000A30590 /* DownloadTranscriptManager.swift in Sources */,

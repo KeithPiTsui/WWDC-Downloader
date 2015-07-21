@@ -143,6 +143,8 @@ class ViewController: NSViewController, NSURLSessionDelegate, NSURLSessionDataDe
 	
 	private var scrollToCurrentDownloadTimer : NSTimer?
 	private var lastTableViewInteractionTime : CFTimeInterval?
+    
+ //   weak var sessionViewerController :
 	
 	// MARK: - Init?
 	required init?(coder: NSCoder) {
