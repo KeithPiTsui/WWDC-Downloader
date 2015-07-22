@@ -94,24 +94,10 @@ class AppDelegate: NSObject, NSApplicationDelegate {
 	
     func applicationWillTerminate(aNotification: NSNotification) {
         
-        UserInfo.sharedManager.archiveUserInfo({ (success) -> Void in
-            if !success {
-                print("Failed to save UserInfo")
-            }
-            else {
-                print("Successfully Saved UserInfo")
-            }
-        })
-        
-        Searching.sharedManager.archiveSearchData{ (success) -> Void in
-            if !success {
-                print("Failed to Archive Search Data")
-            }
-            else {
-                print("Successfully Archived Search Data")
-            }
-        }
-    }
+        UserInfo.sharedManager.save()
+		
+        Searching.sharedManager.save()
+	}
 
 }
 

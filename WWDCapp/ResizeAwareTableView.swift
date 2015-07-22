@@ -18,4 +18,43 @@ class ResizeAwareTableView : NSTableView {
 			self.reloadData()
 		}
 	}
+	
+	override func mouseDown(theEvent: NSEvent) {
+		
+		let indexes = self.selectedRowIndexes
+		
+		let windowLocation = theEvent.locationInWindow
+		
+		let localLocation = self.convertPoint(windowLocation, fromView: nil)
+		
+		var deselect = false
+		
+		if indexes.count == 1 {
+			if self.isRowSelected(self.rowAtPoint(localLocation)) == true {
+				deselect = true
+			}
+		}
+		
+		super.mouseDown(theEvent)
+
+		if deselect {
+			self.deselectAll(nil)
+		}
+	}
+	
+	override func menuForEvent(event: NSEvent) -> NSMenu? {
+		
+		let windowLocation = event.locationInWindow
+		
+		let localLocation = self.convertPoint(windowLocation, fromView: nil)
+		
+		let rowClicked = self.rowAtPoint(localLocation)
+		
+		if self.isRowSelected(rowClicked) == false {
+			self.selectRowIndexes(NSIndexSet(index: rowClicked), byExtendingSelection: false)
+		}
+				
+		return super.menuForEvent(event)
+	}
+	
 }

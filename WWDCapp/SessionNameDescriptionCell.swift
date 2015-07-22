@@ -26,6 +26,8 @@ class SessionNameDescriptionCell : NSTableCellView, NSTextViewDelegate {
 		didSet {
 			sessionName.textColor = (backgroundStyle == NSBackgroundStyle.Light ? NSColor.labelColor() : NSColor.whiteColor())
 			sessionDescriptionTextView.textColor = (backgroundStyle == NSBackgroundStyle.Light ? NSColor.labelColor() : NSColor.whiteColor())
+			sessionName.needsDisplay = true
+			sessionDescriptionTextView.needsDisplay = true
 		}
 	}
     
@@ -76,6 +78,9 @@ class SessionNameDescriptionCell : NSTableCellView, NSTextViewDelegate {
 	}
 	
 	func updateCell(name:String, description:String?, descriptionVisible:Bool, searchActive:Bool, searchCount:Int) {
+		
+		sessionName.textColor = NSColor.labelColor()
+		sessionDescriptionTextView.textColor = NSColor.labelColor()
 		
         sessionName.string = name
 		sessionName.didChangeText()

@@ -41,30 +41,61 @@ class UserInfo {
 	
 	static let sharedManager = UserInfo()
 	
-	var userInfoDictionary : [String: UserSessionInfo] = [:]
-    
-    func userInfo(wwdcSession: WWDCSession) -> UserSessionInfo? {
-        
-        if let userInfo = userInfoDictionary["\(wwdcSession.sessionYear)-\(wwdcSession.sessionID)"] {
+    func userInfo(wwdcSession: WWDCSession) -> UserSessionInfo {
+		
+		let identifier = "\(wwdcSession.sessionYear)-\(wwdcSession.sessionID)"
+		
+        if let userInfo = userInfoDictionary[identifier] {
             return userInfo
         }
         else {
-            let userInfo = UserSessionInfo(sessionID: "\(wwdcSession.sessionYear)-\(wwdcSession.sessionID)")
-            userInfoDictionary["\(wwdcSession.sessionYear)-\(wwdcSession.sessionID)"] = userInfo
+            let userInfo = UserSessionInfo(sessionID: identifier)
+            userInfoDictionary[identifier] = userInfo
             return userInfo
         }
     }
-    
-	private init() {
+	
+	func save() {
 		
-		unArchiveUserInfo { (success) -> Void in
+		archiveUserInfo { (success) -> Void in
 			if !success {
-				print("Failed to Unarchive User Info")
+				print("User Info Failed to Save")
+			}
+			else {
+				print("User Info Saved!")
 			}
 		}
 	}
 	
-	func archiveUserInfo(completionSuccess:(success: Bool) -> Void) {
+	func delete() -> Void {
+		
+		let path = pathForUserInfo()
+		
+		if NSFileManager.defaultManager().fileExistsAtPath(path) {
+			
+			do {
+				try NSFileManager.defaultManager().removeItemAtPath(path)
+			}
+			catch {
+				print(error)
+			}
+		}
+	}
+	
+
+	// MARK: Private
+	private var userInfoDictionary : [String: UserSessionInfo] = [:]
+
+	private init() {
+		unArchiveUserInfo { [unowned self] (success) -> Void in
+			if !success {
+				print("Failed to Unarchive User Info - creating new Archive")
+				self.save()
+			}
+		}
+	}
+
+	private func archiveUserInfo(completionSuccess:(success: Bool) -> Void) {
 		
 		let data = NSKeyedArchiver.archivedDataWithRootObject(userInfoDictionary as NSDictionary)
 		
@@ -87,21 +118,6 @@ class UserInfo {
 		}
 		
 		completionSuccess(success: false)
-	}
-	
-	func delete() -> Void {
-		
-		let path = pathForUserInfo()
-		
-		if NSFileManager.defaultManager().fileExistsAtPath(path) {
-			
-			do {
-				try NSFileManager.defaultManager().removeItemAtPath(path)
-			}
-			catch {
-				print(error)
-			}
-		}
 	}
 	
 	private func pathForUserInfo() -> String {

@@ -875,18 +875,11 @@ class ViewController: NSViewController, NSURLSessionDelegate, NSURLSessionDataDe
 	func selectionShouldChangeInTableView(tableView: NSTableView) -> Bool {
 		return true
 	}
-    
-//    func tableViewSelectionDidChange(notification: NSNotification) {
-//        
-//        let tableview = notification.object as? ResizeAwareTableView
-//        if let row = tableview?.selectedRow {
-//			
-////			self.performSegueWithIdentifier("show", sender: row)
-//			
-////			let appDelegate = NSApplication.sharedApplication().delegate as! AppDelegate
-////			appDelegate.updateTranscript(wwdcSession)
-//        }
-//    }
+	
+	func tableViewSelectionDidChange(notification: NSNotification) {
+		
+		
+	}
 	
 	func tableView(tableView: NSTableView, viewForTableColumn tableColumn: NSTableColumn?, row: Int) -> NSView? {
 		
@@ -907,9 +900,7 @@ class ViewController: NSViewController, NSURLSessionDelegate, NSURLSessionDataDe
                 cell.textField?.backgroundColor = rowView?.backgroundColor
             }
             
-            if let userInfoForSession = UserInfo.sharedManager.userInfo(wwdcSession) {
-                cell.updateUserInfo(userInfoForSession)
-            }
+			cell.updateUserInfo(UserInfo.sharedManager.userInfo(wwdcSession))
             
 			return cell
 		}
@@ -1048,47 +1039,52 @@ class ViewController: NSViewController, NSURLSessionDelegate, NSURLSessionDataDe
         
         switch edge {
         case .Leading:
-            if let userInfoForSession = UserInfo.sharedManager.userInfo(wwdcSession) {
+			
+			let userInfoForSession = UserInfo.sharedManager.userInfo(wwdcSession)
 
-                let favoriteAction : NSTableViewRowAction
-                let watchedAction : NSTableViewRowAction
-                
-                if userInfoForSession.currentProgress == 1 {
-                    watchedAction = NSTableViewRowAction(style: .Regular, title: "Mark as Unwatched", handler: { (action, int) -> Void in
-                        userInfoForSession.currentProgress = 0
-                    })
-                }
-                else {
-                    watchedAction = NSTableViewRowAction(style: .Regular, title: "Mark as Watched", handler: { (action, int) -> Void in
-                        userInfoForSession.currentProgress = 1
-                    })
-                }
-                
-                if userInfoForSession.markAsFavorite == true {
-                    favoriteAction = NSTableViewRowAction(style: .Regular, title: "Remove from Favorites", handler: { (action, int) -> Void in
-                        userInfoForSession.markAsFavorite = false
-                    })
-                }
-                else {
-                    favoriteAction = NSTableViewRowAction(style: .Regular, title: "Add to Favorites", handler: { (action, int) -> Void in
-                        userInfoForSession.markAsFavorite = true
-                    })
-                }
-                
-                favoriteAction.backgroundColor = NSColor.grayColor()
-                
-                return [watchedAction, favoriteAction]
-            }
-            else {
-                return []
-            }
-            
+			let favoriteAction : NSTableViewRowAction
+			let watchedAction : NSTableViewRowAction
+			
+			if userInfoForSession.currentProgress == 1 {
+				watchedAction = NSTableViewRowAction(style: .Regular, title: "Mark as Unwatched", handler: { (action, int) -> Void in
+					userInfoForSession.currentProgress = 0
+					self.myTableView.reloadDataForRowIndexes(NSIndexSet(index: int), columnIndexes:NSIndexSet(indexesInRange: NSMakeRange(0,self.myTableView.numberOfColumns)))
+					self.myTableView.rowActionsVisible = false
+				})
+			}
+			else {
+				watchedAction = NSTableViewRowAction(style: .Regular, title: "Mark as Watched", handler: { (action, int) -> Void in
+					userInfoForSession.currentProgress = 1
+					self.myTableView.reloadDataForRowIndexes(NSIndexSet(index: int), columnIndexes:NSIndexSet(indexesInRange: NSMakeRange(0,self.myTableView.numberOfColumns)))
+					self.myTableView.rowActionsVisible = false
+				})
+			}
+			
+			if userInfoForSession.markAsFavorite == true {
+				favoriteAction = NSTableViewRowAction(style: .Regular, title: "Remove from Favorites", handler: { (action, int) -> Void in
+					userInfoForSession.markAsFavorite = false
+					self.myTableView.reloadDataForRowIndexes(NSIndexSet(index: int), columnIndexes:NSIndexSet(indexesInRange: NSMakeRange(0,self.myTableView.numberOfColumns)))
+					self.myTableView.rowActionsVisible = false
+				})
+			}
+			else {
+				favoriteAction = NSTableViewRowAction(style: .Regular, title: "Add to Favorites", handler: { (action, int) -> Void in
+					userInfoForSession.markAsFavorite = true
+					self.myTableView.reloadDataForRowIndexes(NSIndexSet(index: int), columnIndexes:NSIndexSet(indexesInRange: NSMakeRange(0,self.myTableView.numberOfColumns)))
+					self.myTableView.rowActionsVisible = false
+				})
+			}
+			
+			favoriteAction.backgroundColor = NSColor.grayColor()
+			
+			return [watchedAction, favoriteAction]
+				
         case .Trailing:
             if wwdcSession.hasAnyDownloadedFiles == true {
                 return [NSTableViewRowAction(style: .Destructive, title: "Delete Files for Session", handler: { [unowned self] (action, int) -> Void in
                         wwdcSession.deleteDownloadedFiles()
-                        //self.myTableView.reloadData()
                         self.myTableView.reloadDataForRowIndexes(NSIndexSet(index: int), columnIndexes:NSIndexSet(indexesInRange: NSMakeRange(0,self.myTableView.numberOfColumns)))
+						self.myTableView.rowActionsVisible = false
                     })]
             }
             else {
@@ -1402,59 +1398,128 @@ class ViewController: NSViewController, NSURLSessionDelegate, NSURLSessionDataDe
     @IBAction func markAsWatchedMenuAction(sender: NSMenuItem) {
         
         if myTableView.clickedRow >= 0 {
-            if myTableView.selectedRowIndexes.count < 2 {
-                
-                let wwdcSession = (isFiltered ? visibleWWDCSessionsArray[myTableView.clickedRow] : allWWDCSessionsArray[myTableView.clickedRow])
-                
-                updateWatched([wwdcSession], progress: 1.0)
-                
-            } else {
-
-                myTableView.selectedRowIndexes.enumerateIndexesUsingBlock { [unowned self] index, _ in
-                    
-                     let wwdcSession = (self.isFiltered ? self.visibleWWDCSessionsArray[index] : self.allWWDCSessionsArray[index])
-                    
-                    
-                }
-
-            }
+			let sessions = sessionsCurrentlySelected()
+			updateWatched(sessions, progress: 1.0)
+			myTableView.reloadDataForRowIndexes(myTableView.selectedRowIndexes, columnIndexes: NSIndexSet(indexesInRange: NSMakeRange(0,self.myTableView.numberOfColumns)))
         }
     }
     
     @IBAction func markAsUnwatchedMenuAction(sender: NSMenuItem) {
-       
+		
+		if myTableView.clickedRow >= 0 {
+			let sessions = sessionsCurrentlySelected()
+			updateWatched(sessions, progress:0)
+			myTableView.reloadDataForRowIndexes(myTableView.selectedRowIndexes, columnIndexes: NSIndexSet(indexesInRange: NSMakeRange(0,self.myTableView.numberOfColumns)))
+		}
     }
     
     @IBAction func addToFavoritesMenuAction(sender: NSMenuItem) {
-        
+		
+		if myTableView.clickedRow >= 0 {
+			let sessions = sessionsCurrentlySelected()
+			updateFavorite(sessions, favorite: true)
+			myTableView.reloadDataForRowIndexes(myTableView.selectedRowIndexes, columnIndexes: NSIndexSet(indexesInRange: NSMakeRange(0,self.myTableView.numberOfColumns)))
+		}
     }
     
     @IBAction func removeFromFavoritesMenuAction(sender: NSMenuItem) {
-       
+		
+		if myTableView.clickedRow >= 0 {
+			let sessions = sessionsCurrentlySelected()
+			updateFavorite(sessions, favorite: false)
+			myTableView.reloadDataForRowIndexes(myTableView.selectedRowIndexes, columnIndexes: NSIndexSet(indexesInRange: NSMakeRange(0,self.myTableView.numberOfColumns)))
+		}
     }
     
     @IBAction func deleteFilesForSessionMenuAction(sender: NSMenuItem) {
-        
+		
+		if myTableView.clickedRow >= 0 {
+			let sessions = sessionsCurrentlySelected()
+			for wwdcSession in sessions {
+				wwdcSession.deleteDownloadedFiles()
+			}
+			myTableView.reloadDataForRowIndexes(myTableView.selectedRowIndexes, columnIndexes: NSIndexSet(indexesInRange: NSMakeRange(0,self.myTableView.numberOfColumns)))
+		}
     }
-    
+	
+	private func sessionsCurrentlySelected() -> [WWDCSession] {
+		
+		var wwdcSessionSelected = [WWDCSession]()
+		
+		myTableView.selectedRowIndexes.enumerateIndexesUsingBlock { [unowned self] index, _ in
+			let wwdcSession = (self.isFiltered ? self.visibleWWDCSessionsArray[index] : self.allWWDCSessionsArray[index])
+			wwdcSessionSelected.append(wwdcSession)
+		}
+		
+		return wwdcSessionSelected
+	}
+	
     private func updateWatched(sessions:[WWDCSession], progress: Float) {
     
         for wwdcSession in sessions {
-            if let userInfoForSession = UserInfo.sharedManager.userInfo(wwdcSession) {
-                userInfoForSession.currentProgress = progress
-            }
+			UserInfo.sharedManager.userInfo(wwdcSession).currentProgress = progress
         }
     }
-    
+	
+	private func updateFavorite(sessions:[WWDCSession], favorite: Bool) {
+		
+		for wwdcSession in sessions {
+			UserInfo.sharedManager.userInfo(wwdcSession).markAsFavorite = favorite
+		}
+	}
+
+	
+	
     // MARK: Menu Delegates
     func menuNeedsUpdate(menu: NSMenu) {
         
         let row = myTableView.clickedRow
-        let column = myTableView.clickedColumn
-        
-        if row >= 0 {
-            
-            
+		//let column = myTableView.clickedColumn
+		
+		if row >= 0 {
+		
+			var activateAddFavorite = false
+			var activateRemoveFavorite = false
+			var activateWatched = false
+			var activateUnwatched = false
+			var activateDeleteFiles = false
+			
+			let sessions = sessionsCurrentlySelected()
+			
+			for wwdcSession in sessions {
+				
+				let userInfo = UserInfo.sharedManager.userInfo(wwdcSession)
+				
+				if userInfo.markAsFavorite == false && activateAddFavorite == false {
+					activateAddFavorite = true
+				}
+				
+				if userInfo.markAsFavorite == true && activateRemoveFavorite == false {
+					activateRemoveFavorite = true
+				}
+				
+				if userInfo.currentProgress == 0 && activateWatched == false {
+					activateWatched = true
+				}
+				
+				if userInfo.currentProgress == 1 && activateUnwatched == false {
+					activateUnwatched = true
+				}
+				
+				if wwdcSession.hasAnyDownloadedFiles == true && activateDeleteFiles == false {
+					activateDeleteFiles = true
+				}
+				
+				if activateAddFavorite && activateRemoveFavorite && activateWatched && activateUnwatched && activateDeleteFiles {
+					break
+				}
+			}
+
+			addToFavoritesMenuItem.enabled = activateAddFavorite
+			removeFromFavoritesMenuItem.enabled = activateRemoveFavorite
+			watchedMenuItem.enabled = activateWatched
+			unwatchedMenuItem.enabled = activateUnwatched
+			deleteFilesMenuItem.enabled = activateDeleteFiles
         }
         else {
             addToFavoritesMenuItem.enabled = false

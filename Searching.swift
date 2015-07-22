@@ -10,24 +10,8 @@ import Foundation
 
 class Searching {
     
-    private var searchTranscriptReference : [NSString:NSArray] = [:]
-    
-    // MARK: - Singleton
-    class var sharedManager: Searching {
-        struct Singleton {
-            static let instance = Searching()
-        }
-        return Singleton.instance
-    }
-    
-    private init() {
-        unArchiveSearchData { (success) -> Void in
-            if !success {
-                print("Failed to Unarchive Search Data")
-            }
-        }
-    }
-    
+	static let sharedManager = Searching()
+	
     func countOfStringsFor(wwdcSession : WWDCSession, searchString: String) -> Int {
         
         if let rangeArray = rangeArrayFor(wwdcSession, searchString: searchString) {
@@ -72,9 +56,48 @@ class Searching {
         }
         return nil
     }
-    
-    func archiveSearchData(completionSuccess:(success: Bool) -> Void) {
-        
+	
+	func save() {
+		
+		archiveSearchData{ (success) -> Void in
+			if !success {
+				print("Failed to Archive Search Data")
+			}
+			else {
+				print("Successfully Archived Search Data")
+			}
+		}
+
+	}
+	
+	func deleteSearchHistory() -> Void {
+		
+		let path = pathForSearchFile()
+		
+		if NSFileManager.defaultManager().fileExistsAtPath(path) {
+			
+			do {
+				try NSFileManager.defaultManager().removeItemAtPath(path)
+			}
+			catch {
+				print(error)
+			}
+		}
+	}
+	
+	// MARK: Private
+	private var searchTranscriptReference : [NSString:NSArray] = [:]
+
+	private init() {
+		unArchiveSearchData { (success) -> Void in
+			if !success {
+				print("Failed to Unarchive Search Data")
+			}
+		}
+	}
+
+    private func archiveSearchData(completionSuccess:(success: Bool) -> Void) {
+		
         let data = NSKeyedArchiver.archivedDataWithRootObject(searchTranscriptReference as NSDictionary)
 
         completionSuccess(success: data.writeToFile(pathForSearchFile(), atomically: true))
@@ -96,22 +119,7 @@ class Searching {
         }
         completionSuccess(success: false)
     }
-    
-    func deleteSearchFile() -> Void {
-        
-        let path = pathForSearchFile()
-        
-        if NSFileManager.defaultManager().fileExistsAtPath(path) {
-            
-            do {
-                try NSFileManager.defaultManager().removeItemAtPath(path)
-            }
-            catch {
-                print(error)
-            }
-        }
-    }
-    
+	
     private func pathForSearchFile() -> String {
         
         let fileManager = NSFileManager.defaultManager()

@@ -12,6 +12,15 @@ import Cocoa
 extension NSImage {
 	
 	func tintImageToBrightBlurColor() -> NSImage {
+		return self.tintImageToColor(NSColor(deviceRed: 23.0/255.0, green: 123.0/255.0, blue: 250.0/255.0, alpha: 1))
+	}
+	
+	func tintImageToWhiteColor() -> NSImage {
+		return self.tintImageToColor(NSColor.whiteColor())
+	}
+
+	
+	func tintImageToColor(color:NSColor) -> NSImage {
 		
 		let size = self.size
 		
@@ -21,14 +30,13 @@ extension NSImage {
 		
 		copiedImage.lockFocus()
 		
-		let color = NSColor(deviceRed: 23.0/255.0, green: 123.0/255.0, blue: 250.0/255.0, alpha: 1)
-		
 		color.set()
-
+		
 		NSRectFillUsingOperation(rect, NSCompositingOperation.CompositeSourceAtop)
 		
 		copiedImage.unlockFocus()
 		
 		return copiedImage
 	}
+
 }

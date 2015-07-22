@@ -851,6 +851,20 @@ CA
                                             <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                                         </textFieldCell>
                                     </textField>
+                                    <button toolTip="Show / Hide Session Descriptions" translatesAutoresizingMaskIntoConstraints="NO" id="3IL-nb-Fsz">
+                                        <rect key="frame" x="218" y="36" width="244" height="18"/>
+                                        <constraints>
+                                            <constraint firstAttribute="width" constant="240" id="ZRo-pA-LKI"/>
+                                        </constraints>
+                                        <animations/>
+                                        <buttonCell key="cell" type="check" title="Include Transcripts in Search" bezelStyle="regularSquare" imagePosition="left" alignment="left" state="on" inset="2" id="sSo-b6-mk8">
+                                            <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
+                                            <font key="font" metaFont="system"/>
+                                        </buttonCell>
+                                        <connections>
+                                            <action selector="includeTranscriptsInSearchChecked:" target="XfG-lQ-9wD" id="jTX-Pt-WCC"/>
+                                        </connections>
+                                    </button>
                                     <scrollView autohidesScrollers="YES" horizontalLineScroll="52" horizontalPageScroll="10" verticalLineScroll="52" verticalPageScroll="10" usesPredominantAxisScrolling="NO" translatesAutoresizingMaskIntoConstraints="NO" id="DUe-MO-CLA">
                                         <rect key="frame" x="20" y="60" width="890" height="480"/>
                                         <clipView key="contentView" drawsBackground="NO" copiesOnScroll="NO" id="Hod-g6-9bx">
@@ -884,10 +898,7 @@ CA
                                                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                                     <subviews>
                                                                         <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" translatesAutoresizingMaskIntoConstraints="NO" id="y3w-TZ-YZi" userLabel="Session ID Field">
-                                                                            <rect key="frame" x="-2" y="13" width="74" height="24"/>
-                                                                            <constraints>
-                                                                                <constraint firstAttribute="height" constant="24" id="xjk-Hc-OFP"/>
-                                                                            </constraints>
+                                                                            <rect key="frame" x="-2" y="17" width="74" height="17"/>
                                                                             <animations/>
                                                                             <textFieldCell key="cell" lineBreakMode="truncatingTail" sendsActionOnEndEditing="YES" alignment="center" title="Table View Cell" id="erZ-ME-7Gm">
                                                                                 <font key="font" metaFont="system"/>
@@ -895,13 +906,19 @@ CA
                                                                                 <color key="backgroundColor" white="1" alpha="0.0" colorSpace="calibratedWhite"/>
                                                                             </textFieldCell>
                                                                         </textField>
-                                                                        <imageView horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Pak-H0-M21">
-                                                                            <rect key="frame" x="0.0" y="0.0" width="32" height="32"/>
+                                                                        <imageView horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="Pak-H0-M21">
+                                                                            <rect key="frame" x="5" y="20" width="10" height="10"/>
+                                                                            <constraints>
+                                                                                <constraint firstAttribute="height" constant="10" id="2zg-u5-65p"/>
+                                                                                <constraint firstAttribute="width" constant="10" id="mDD-Rj-CU0"/>
+                                                                            </constraints>
                                                                             <animations/>
                                                                             <imageCell key="cell" refusesFirstResponder="YES" alignment="left" imageScaling="proportionallyDown" id="NAp-z4-9rr"/>
                                                                         </imageView>
                                                                     </subviews>
                                                                     <constraints>
+                                                                        <constraint firstItem="Pak-H0-M21" firstAttribute="centerY" secondItem="I6T-jp-6sv" secondAttribute="centerY" id="4UP-rO-IS2"/>
+                                                                        <constraint firstItem="Pak-H0-M21" firstAttribute="leading" secondItem="I6T-jp-6sv" secondAttribute="leading" constant="5" id="SXv-LH-CXj"/>
                                                                         <constraint firstItem="y3w-TZ-YZi" firstAttribute="width" secondItem="I6T-jp-6sv" secondAttribute="width" id="VPQ-PV-0zn"/>
                                                                         <constraint firstItem="y3w-TZ-YZi" firstAttribute="centerX" secondItem="I6T-jp-6sv" secondAttribute="centerX" id="Y0s-Fg-0mS"/>
                                                                         <constraint firstItem="y3w-TZ-YZi" firstAttribute="centerY" secondItem="I6T-jp-6sv" secondAttribute="centerY" id="km2-Pg-W1N"/>
@@ -1465,20 +1482,6 @@ CA
                                             <animations/>
                                         </tableHeaderView>
                                     </scrollView>
-                                    <button toolTip="Show / Hide Session Descriptions" translatesAutoresizingMaskIntoConstraints="NO" id="3IL-nb-Fsz">
-                                        <rect key="frame" x="218" y="36" width="244" height="18"/>
-                                        <constraints>
-                                            <constraint firstAttribute="width" constant="240" id="ZRo-pA-LKI"/>
-                                        </constraints>
-                                        <animations/>
-                                        <buttonCell key="cell" type="check" title="Include Transcripts in Search" bezelStyle="regularSquare" imagePosition="left" alignment="left" state="on" inset="2" id="sSo-b6-mk8">
-                                            <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
-                                            <font key="font" metaFont="system"/>
-                                        </buttonCell>
-                                        <connections>
-                                            <action selector="includeTranscriptsInSearchChecked:" target="XfG-lQ-9wD" id="jTX-Pt-WCC"/>
-                                        </connections>
-                                    </button>
                                 </subviews>
                                 <constraints>
                                     <constraint firstItem="C8t-xS-mu2" firstAttribute="leading" secondItem="ang-ho-9A3" secondAttribute="trailing" constant="1" id="1Rn-F3-gxH"/>
