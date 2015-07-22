@@ -50,8 +50,10 @@ func ==(lhs: WWDCSession, rhs: WWDCSession)-> Bool {
 	
 	// ASCIIwwdc fetchedInfo
 	var sessionDescription : String?
+	var sessionTrack : String?
 	var fullTranscriptPrettyPrint : String?
 	var transcript : [TranscriptInfo]?
+	var transcriptHTMLFormatted : String?
     
     var hasAnyDownloadedFiles : Bool {
         get {
@@ -161,11 +163,13 @@ func ==(lhs: WWDCSession, rhs: WWDCSession)-> Bool {
 		self.sdFile = aDecoder.decodeObjectForKey("sdFile") as? FileInfo
 		self.pdfFile = aDecoder.decodeObjectForKey("pdfFile") as? FileInfo
 		self.sessionDescription  = aDecoder.decodeObjectForKey("sessionDescription") as? String
+		self.sessionTrack  = aDecoder.decodeObjectForKey("sessionTrack") as? String
 		if let boxed = aDecoder.decodeObjectForKey("transcript") as? [TranscriptInfo] {
 			self.transcript = boxed
 		}
 		
 		self.fullTranscriptPrettyPrint  = aDecoder.decodeObjectForKey("fullTranscriptPrettyPrint") as? String
+		self.transcriptHTMLFormatted  = aDecoder.decodeObjectForKey("transcriptHTMLFormatted") as? String
 	}
 	
 	func encodeWithCoder(aCoder: NSCoder) {
@@ -186,11 +190,17 @@ func ==(lhs: WWDCSession, rhs: WWDCSession)-> Bool {
 		if let sessionDescription = self.sessionDescription {
 			aCoder.encodeObject(sessionDescription, forKey: "sessionDescription")
 		}
+		if let sessionTrack = self.sessionTrack {
+			aCoder.encodeObject(sessionTrack, forKey: "sessionTrack")
+		}
 		if let transcript = self.transcript {
 			aCoder.encodeObject(transcript, forKey: "transcript")
 		}
 		if let fullTranscriptPrettyPrint = self.fullTranscriptPrettyPrint {
 			aCoder.encodeObject(fullTranscriptPrettyPrint, forKey: "fullTranscriptPrettyPrint")
+		}
+		if let transcriptHTMLFormatted = self.transcriptHTMLFormatted {
+			aCoder.encodeObject(transcriptHTMLFormatted, forKey: "transcriptHTMLFormatted")
 		}
 	}
 }

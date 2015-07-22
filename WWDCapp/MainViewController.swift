@@ -649,14 +649,62 @@ class ViewController: NSViewController, NSURLSessionDelegate, NSURLSessionDataDe
 			oflabel.font = NSFont.monospacedDigitSystemFontOfSize(NSFont.systemFontSizeForControlSize(NSControlSize.SmallControlSize), weight: NSFontWeightRegular)
 			currentlabel.font = NSFont.monospacedDigitSystemFontOfSize(NSFont.systemFontSizeForControlSize(NSControlSize.SmallControlSize), weight: NSFontWeightRegular)
 		}
-        		
+		
+		let searchMenu = NSMenu(title: "Search Menu")
+		
+		let clearItem = NSMenuItem(title: "No Recent Searches", action: nil, keyEquivalent: "")
+		clearItem.tag = Int(NSSearchFieldNoRecentsMenuItemTag)
+		searchMenu.insertItem(clearItem, atIndex: 0)
+		
+		let noItem = NSMenuItem(title: "Clear Search History", action: nil, keyEquivalent: "")
+		noItem.tag = Int(NSSearchFieldClearRecentsMenuItemTag)
+		searchMenu.insertItem(noItem, atIndex: 1)
+		
+		let seperator = NSMenuItem.separatorItem()
+		seperator.tag = Int(NSSearchFieldRecentsTitleMenuItemTag)
+		searchMenu.insertItem(seperator, atIndex: 2)
+		
+		let recentTitle = NSMenuItem(title: "Recent Searches", action: nil, keyEquivalent: "")
+		recentTitle.tag = Int(NSSearchFieldRecentsTitleMenuItemTag)
+		searchMenu.insertItem(recentTitle, atIndex: 3)
+
+		let recents = NSMenuItem(title: "Recents", action: nil, keyEquivalent: "")
+		recents.tag = Int(NSSearchFieldRecentsMenuItemTag)
+		searchMenu.insertItem(recents, atIndex: 4)
+		
+		let seperator2 = NSMenuItem.separatorItem()
+		seperator2.tag = Int(NSSearchFieldRecentsTitleMenuItemTag)
+		searchMenu.insertItem(seperator2, atIndex: 5)
+		
+		let focusTitle = NSMenuItem(title: "Session Focus", action: nil, keyEquivalent: "")
+		focusTitle.tag = Int(NSSearchFieldRecentsTitleMenuItemTag)
+		searchMenu.insertItem(focusTitle, atIndex: 6)
+		
+		let iosSearch = NSMenuItem(title: "iOS", action: Selector("searchPreset"), keyEquivalent: "")
+		iosSearch.target = self
+		iosSearch.tag = 4
+		searchMenu.insertItem(iosSearch, atIndex: 7)
+		
+		let osxSearch = NSMenuItem(title: "OS X", action: Selector("searchPreset"), keyEquivalent: "")
+		osxSearch.target = self
+		osxSearch.tag = 5
+		searchMenu.insertItem(osxSearch, atIndex: 8)
+
+
+		searchField.searchMenuTemplate = searchMenu
+
+		
 		resetUIForYearFetch()
+	}
+	
+	func searchPreset(sender: AnyObject?) {
+		
 	}
 	
 	func resetUIForYearFetch () {
 		
 		loggingLabel.stringValue = ""
-        
+		
         combinePDFButton.enabled = false
         
         stopFetchButton.hidden = true

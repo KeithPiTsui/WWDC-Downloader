@@ -51,6 +51,14 @@ class DownloadTranscriptManager : NSObject, NSURLSessionDataDelegate {
 										session.sessionDescription = sessionDescription
 									}
 									
+									if let sessionTrack = jsonObject["track"] as? String {
+										session.sessionTrack = sessionTrack
+									}
+									
+									if let html = jsonObject["markup"] as? String {
+										session.transcriptHTMLFormatted = html
+									}
+									
 									if let timeCodes = jsonObject["timecodes"] as? NSArray, let annotations = jsonObject["annotations"] as? NSArray {
 										
 										if timeCodes.count == annotations.count {
