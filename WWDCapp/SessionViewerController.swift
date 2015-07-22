@@ -99,8 +99,12 @@ class SessionViewerWindowController : NSWindowController, NSWindowDelegate {
 	}
     
     func windowShouldClose(sender: AnyObject) -> Bool {
+		
+		videoController.saveVideoProgress()
+		
         videoController.avPlayerView.player?.pause()
         videoController.avPlayerView.player = nil
+		
         return true
     }
 }
@@ -192,12 +196,10 @@ class VideoViewController : NSViewController {
             }
         }
         
-        guard let url = videoURL else {
+        guard let urlToPlay = videoURL else {
 		
-			if let _ = avPlayerView.player?.currentItem {
-				avPlayerView.player?.pause()
-				avPlayerView.player = nil
-			}
+			// loaded session has no videos so save current and blank
+			saveVideoProgress()
 			
             avPlayerView.controlsStyle = AVPlayerViewControlsStyle.None
 			noVideoLabel.animator().alphaValue = 1
@@ -209,7 +211,7 @@ class VideoViewController : NSViewController {
 		
 		avPlayerView.controlsStyle = AVPlayerViewControlsStyle.Floating
 
-		let asset = AVAsset(URL: url)
+		let asset = AVAsset(URL: urlToPlay)
 		let newItem = AVPlayerItem(asset: asset)
 		
 		if let _ = avPlayerView.player?.currentItem {
@@ -219,10 +221,19 @@ class VideoViewController : NSViewController {
 			avPlayerView.player = AVPlayer(playerItem:newItem)
 			avPlayerView.player?.play()
 		}
-		
-
     }
 	
+	func saveVideoProgress() {
+		
+		if let item = avPlayerView.player?.currentItem, let player = avPlayerView.player, let wwdcSession = wwdcSession  {
+			player.pause()
+			let userInfo = UserInfo.sharedManager.userInfo(wwdcSession)
+			if userInfo.currentProgress < 1 {
+				userInfo.currentProgress = Float(player.currentTime().seconds/item.duration.seconds)
+			}
+			avPlayerView.player = nil
+		}
+	}
 }
 
 class PDFMainViewController : NSViewController {

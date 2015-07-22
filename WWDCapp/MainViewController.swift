@@ -1506,6 +1506,11 @@ class ViewController: NSViewController, NSURLSessionDelegate, NSURLSessionDataDe
 					activateUnwatched = true
 				}
 				
+				if userInfo.currentProgress > 0 && userInfo.currentProgress < 1 {
+					activateUnwatched = true
+					activateWatched = true
+				}
+				
 				if wwdcSession.hasAnyDownloadedFiles == true && activateDeleteFiles == false {
 					activateDeleteFiles = true
 				}
