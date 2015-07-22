@@ -116,6 +116,10 @@ class ViewController: NSViewController, NSURLSessionDelegate, NSURLSessionDataDe
 
 	@IBOutlet weak var startDownload: NSButton!
     
+	@IBOutlet var fileMenu: NSMenu!
+	@IBOutlet weak var showInFinderMenuItem: NSMenuItem!
+	
+	@IBOutlet var sessionMenu: NSMenu!
     @IBOutlet weak var watchedMenuItem: NSMenuItem!
     @IBOutlet weak var unwatchedMenuItem: NSMenuItem!
     @IBOutlet weak var addToFavoritesMenuItem: NSMenuItem!
@@ -591,6 +595,22 @@ class ViewController: NSViewController, NSURLSessionDelegate, NSURLSessionDataDe
 		}
 	}
 	
+	@IBAction func showFileInFinder(sender: NSMenuItem) {
+		
+		guard let menu = sender.menu as? ReferencedMenu else { return }
+		
+		if let cell = menu.menuCalledFromView?.superview?.superview as? CheckBoxTableViewCell {
+			
+			if let fileArray = cell.fileArray {
+				if let fileInfo = fileArray.first {
+					
+					guard let localFileURL = fileInfo.localFileURL else { return }
+					
+					NSWorkspace.sharedWorkspace().selectFile(localFileURL.filePathURL?.path, inFileViewerRootedAtPath: (localFileURL.filePathURL?.absoluteString.stringByDeletingLastPathComponent)!)					
+				}
+			}
+		}
+	}
 
 	// MARK: - View / UI
     override func viewDidLoad() {
@@ -1401,6 +1421,7 @@ class ViewController: NSViewController, NSURLSessionDelegate, NSURLSessionDataDe
 			let sessions = sessionsCurrentlySelected()
 			updateWatched(sessions, progress: 1.0)
 			myTableView.reloadDataForRowIndexes(myTableView.selectedRowIndexes, columnIndexes: NSIndexSet(indexesInRange: NSMakeRange(0,self.myTableView.numberOfColumns)))
+			UserInfo.sharedManager.save()
         }
     }
     
@@ -1410,6 +1431,7 @@ class ViewController: NSViewController, NSURLSessionDelegate, NSURLSessionDataDe
 			let sessions = sessionsCurrentlySelected()
 			updateWatched(sessions, progress:0)
 			myTableView.reloadDataForRowIndexes(myTableView.selectedRowIndexes, columnIndexes: NSIndexSet(indexesInRange: NSMakeRange(0,self.myTableView.numberOfColumns)))
+			UserInfo.sharedManager.save()
 		}
     }
     
@@ -1419,6 +1441,7 @@ class ViewController: NSViewController, NSURLSessionDelegate, NSURLSessionDataDe
 			let sessions = sessionsCurrentlySelected()
 			updateFavorite(sessions, favorite: true)
 			myTableView.reloadDataForRowIndexes(myTableView.selectedRowIndexes, columnIndexes: NSIndexSet(indexesInRange: NSMakeRange(0,self.myTableView.numberOfColumns)))
+			UserInfo.sharedManager.save()
 		}
     }
     
@@ -1428,6 +1451,7 @@ class ViewController: NSViewController, NSURLSessionDelegate, NSURLSessionDataDe
 			let sessions = sessionsCurrentlySelected()
 			updateFavorite(sessions, favorite: false)
 			myTableView.reloadDataForRowIndexes(myTableView.selectedRowIndexes, columnIndexes: NSIndexSet(indexesInRange: NSMakeRange(0,self.myTableView.numberOfColumns)))
+			UserInfo.sharedManager.save()
 		}
     }
     
@@ -1472,68 +1496,76 @@ class ViewController: NSViewController, NSURLSessionDelegate, NSURLSessionDataDe
 	
     // MARK: Menu Delegates
     func menuNeedsUpdate(menu: NSMenu) {
-        
-        let row = myTableView.clickedRow
-		//let column = myTableView.clickedColumn
 		
-		if row >= 0 {
-		
-			var activateAddFavorite = false
-			var activateRemoveFavorite = false
-			var activateWatched = false
-			var activateUnwatched = false
-			var activateDeleteFiles = false
+		if menu == sessionMenu {
 			
-			let sessions = sessionsCurrentlySelected()
+			let row = myTableView.clickedRow
+			//let column = myTableView.clickedColumn
 			
-			for wwdcSession in sessions {
+			if row >= 0 {
 				
-				let userInfo = UserInfo.sharedManager.userInfo(wwdcSession)
+				var activateAddFavorite = false
+				var activateRemoveFavorite = false
+				var activateWatched = false
+				var activateUnwatched = false
+				var activateDeleteFiles = false
 				
-				if userInfo.markAsFavorite == false && activateAddFavorite == false {
-					activateAddFavorite = true
+				let sessions = sessionsCurrentlySelected()
+				
+				for wwdcSession in sessions {
+					
+					let userInfo = UserInfo.sharedManager.userInfo(wwdcSession)
+					
+					if userInfo.markAsFavorite == false && activateAddFavorite == false {
+						activateAddFavorite = true
+					}
+					
+					if userInfo.markAsFavorite == true && activateRemoveFavorite == false {
+						activateRemoveFavorite = true
+					}
+					
+					if userInfo.currentProgress == 0 && activateWatched == false {
+						activateWatched = true
+					}
+					
+					if userInfo.currentProgress == 1 && activateUnwatched == false {
+						activateUnwatched = true
+					}
+					
+					if userInfo.currentProgress > 0 && userInfo.currentProgress < 1 {
+						activateUnwatched = true
+						activateWatched = true
+					}
+					
+					if wwdcSession.hasAnyDownloadedFiles == true && activateDeleteFiles == false {
+						activateDeleteFiles = true
+					}
+					
+					if activateAddFavorite && activateRemoveFavorite && activateWatched && activateUnwatched && activateDeleteFiles {
+						break
+					}
 				}
 				
-				if userInfo.markAsFavorite == true && activateRemoveFavorite == false {
-					activateRemoveFavorite = true
-				}
-				
-				if userInfo.currentProgress == 0 && activateWatched == false {
-					activateWatched = true
-				}
-				
-				if userInfo.currentProgress == 1 && activateUnwatched == false {
-					activateUnwatched = true
-				}
-				
-				if userInfo.currentProgress > 0 && userInfo.currentProgress < 1 {
-					activateUnwatched = true
-					activateWatched = true
-				}
-				
-				if wwdcSession.hasAnyDownloadedFiles == true && activateDeleteFiles == false {
-					activateDeleteFiles = true
-				}
-				
-				if activateAddFavorite && activateRemoveFavorite && activateWatched && activateUnwatched && activateDeleteFiles {
-					break
-				}
+				addToFavoritesMenuItem.enabled = activateAddFavorite
+				removeFromFavoritesMenuItem.enabled = activateRemoveFavorite
+				watchedMenuItem.enabled = activateWatched
+				unwatchedMenuItem.enabled = activateUnwatched
+				deleteFilesMenuItem.enabled = activateDeleteFiles
 			}
-
-			addToFavoritesMenuItem.enabled = activateAddFavorite
-			removeFromFavoritesMenuItem.enabled = activateRemoveFavorite
-			watchedMenuItem.enabled = activateWatched
-			unwatchedMenuItem.enabled = activateUnwatched
-			deleteFilesMenuItem.enabled = activateDeleteFiles
-        }
-        else {
-            addToFavoritesMenuItem.enabled = false
-            removeFromFavoritesMenuItem.enabled = false
-            watchedMenuItem.enabled = false
-            unwatchedMenuItem.enabled = false
-            deleteFilesMenuItem.enabled = false
-        }
-    }
+			else {
+				addToFavoritesMenuItem.enabled = false
+				removeFromFavoritesMenuItem.enabled = false
+				watchedMenuItem.enabled = false
+				unwatchedMenuItem.enabled = false
+				deleteFilesMenuItem.enabled = false
+			}
+		}
+		
+		if menu == fileMenu {
+			
+		}
+		
+	}
 
 
     // MARK: Checkboxes

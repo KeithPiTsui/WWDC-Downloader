@@ -138,9 +138,6 @@ class TranscriptViewController : NSViewController, NSTextFinderClient {
 		textView.incrementalSearchingEnabled = true
 		scrollView.findBarPosition = NSScrollViewFindBarPosition.AboveContent
 		textFinder.performAction(NSTextFinderAction.ShowFindInterface)
-
-		
-
 	}
 	
 	

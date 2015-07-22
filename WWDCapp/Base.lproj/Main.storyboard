@@ -1109,7 +1109,7 @@ CA
                                                                                     <rect key="frame" x="3" y="2" width="94" height="20"/>
                                                                                     <animations/>
                                                                                 </progressIndicator>
-                                                                                <button translatesAutoresizingMaskIntoConstraints="NO" id="REE-pX-qcw">
+                                                                                <button translatesAutoresizingMaskIntoConstraints="NO" id="REE-pX-qcw" customClass="FileButton" customModule="WWDCapp" customModuleProvider="target">
                                                                                     <rect key="frame" x="25" y="0.0" width="50" height="50"/>
                                                                                     <animations/>
                                                                                     <buttonCell key="cell" type="square" bezelStyle="shadowlessSquare" image="pdf" imagePosition="overlaps" alignment="center" imageScaling="proportionallyUpOrDown" inset="2" id="XR4-UB-n8S">
@@ -1118,6 +1118,7 @@ CA
                                                                                     </buttonCell>
                                                                                     <connections>
                                                                                         <action selector="fileClicked:" target="XfG-lQ-9wD" id="gzz-RZ-4jA"/>
+                                                                                        <outlet property="menu" destination="Mm9-WC-PK1" id="dVF-7V-jdQ"/>
                                                                                     </connections>
                                                                                 </button>
                                                                             </subviews>
@@ -1207,15 +1208,16 @@ CA
                                                                                     <rect key="frame" x="3" y="2" width="94" height="20"/>
                                                                                     <animations/>
                                                                                 </progressIndicator>
-                                                                                <button translatesAutoresizingMaskIntoConstraints="NO" id="c5i-OA-A5W">
+                                                                                <button translatesAutoresizingMaskIntoConstraints="NO" id="c5i-OA-A5W" customClass="FileButton" customModule="WWDCapp" customModuleProvider="target">
                                                                                     <rect key="frame" x="25" y="0.0" width="50" height="50"/>
                                                                                     <animations/>
-                                                                                    <buttonCell key="cell" type="square" bezelStyle="shadowlessSquare" image="movie" imagePosition="only" alignment="center" imageScaling="proportionallyUpOrDown" inset="2" id="WYO-5U-kIc">
+                                                                                    <buttonCell key="cell" type="square" bezelStyle="shadowlessSquare" image="movie" imagePosition="overlaps" alignment="center" imageScaling="proportionallyUpOrDown" inset="2" id="WYO-5U-kIc">
                                                                                         <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                                                                                         <font key="font" metaFont="system"/>
                                                                                     </buttonCell>
                                                                                     <connections>
                                                                                         <action selector="fileClicked:" target="XfG-lQ-9wD" id="WLv-gJ-zyB"/>
+                                                                                        <outlet property="menu" destination="Mm9-WC-PK1" id="nKd-lL-sXR"/>
                                                                                     </connections>
                                                                                 </button>
                                                                             </subviews>
@@ -1305,7 +1307,7 @@ CA
                                                                                     <rect key="frame" x="3" y="2" width="94" height="20"/>
                                                                                     <animations/>
                                                                                 </progressIndicator>
-                                                                                <button translatesAutoresizingMaskIntoConstraints="NO" id="i0J-B1-u0v">
+                                                                                <button translatesAutoresizingMaskIntoConstraints="NO" id="i0J-B1-u0v" customClass="FileButton" customModule="WWDCapp" customModuleProvider="target">
                                                                                     <rect key="frame" x="25" y="0.0" width="50" height="50"/>
                                                                                     <animations/>
                                                                                     <buttonCell key="cell" type="square" bezelStyle="shadowlessSquare" image="movie" imagePosition="overlaps" alignment="center" imageScaling="proportionallyUpOrDown" inset="2" id="zg5-nb-ATt">
@@ -1314,6 +1316,7 @@ CA
                                                                                     </buttonCell>
                                                                                     <connections>
                                                                                         <action selector="fileClicked:" target="XfG-lQ-9wD" id="UFV-Ww-Ay2"/>
+                                                                                        <outlet property="menu" destination="Mm9-WC-PK1" id="mIv-rs-7Pu"/>
                                                                                     </connections>
                                                                                 </button>
                                                                             </subviews>
@@ -1403,7 +1406,7 @@ CA
                                                                                     <rect key="frame" x="3" y="2" width="94" height="20"/>
                                                                                     <animations/>
                                                                                 </progressIndicator>
-                                                                                <button translatesAutoresizingMaskIntoConstraints="NO" id="8g0-hP-VeM">
+                                                                                <button translatesAutoresizingMaskIntoConstraints="NO" id="8g0-hP-VeM" customClass="FileButton" customModule="WWDCapp" customModuleProvider="target">
                                                                                     <rect key="frame" x="25" y="0.0" width="50" height="50"/>
                                                                                     <animations/>
                                                                                     <buttonCell key="cell" type="square" bezelStyle="shadowlessSquare" image="zip" imagePosition="overlaps" alignment="center" imageScaling="proportionallyUpOrDown" inset="2" id="KLx-vV-LTK">
@@ -1412,6 +1415,7 @@ CA
                                                                                     </buttonCell>
                                                                                     <connections>
                                                                                         <action selector="fileClicked:" target="XfG-lQ-9wD" id="vEO-WX-YTg"/>
+                                                                                        <outlet property="menu" destination="Mm9-WC-PK1" id="iFa-tr-psm"/>
                                                                                     </connections>
                                                                                 </button>
                                                                             </subviews>
@@ -1540,12 +1544,15 @@ CA
                         <outlet property="currentlabel" destination="ang-ho-9A3" id="6te-I5-TEb"/>
                         <outlet property="deleteFilesMenuItem" destination="C9v-Ca-MY1" id="gYT-1F-1Ab"/>
                         <outlet property="downloadProgressView" destination="eQd-ix-KJW" id="PoK-x9-or9"/>
+                        <outlet property="fileMenu" destination="Mm9-WC-PK1" id="g1f-rP-HXo"/>
                         <outlet property="hideDescriptionsCheckBox" destination="o2q-VB-fLx" id="aPI-Hb-O9Z"/>
                         <outlet property="includeTranscriptsInSearchCheckBox" destination="3IL-nb-Fsz" id="NWK-0S-0ep"/>
                         <outlet property="loggingLabel" destination="DNA-hc-glG" id="CjE-ot-9G5"/>
                         <outlet property="myTableView" destination="SSh-0R-MKF" id="liZ-v1-msq"/>
                         <outlet property="oflabel" destination="C8t-xS-mu2" id="IvW-Va-OWf"/>
                         <outlet property="removeFromFavoritesMenuItem" destination="25x-gX-lP8" id="m69-8B-6Zn"/>
+                        <outlet property="sessionMenu" destination="Cbq-0C-XEh" id="ROf-Yq-IxO"/>
+                        <outlet property="showInFinderMenuItem" destination="YRG-rf-hoF" id="wWX-V1-g6K"/>
                         <outlet property="startDownload" destination="2Uk-zV-FYf" id="wan-PT-H8F"/>
                         <outlet property="toolbarVisualEffectView" destination="BmC-e0-Fwn" id="0lp-83-Tso"/>
                         <outlet property="totalDescriptionlabel" destination="OeA-4Q-HGv" id="15I-ga-6Yu"/>
@@ -1557,6 +1564,19 @@ CA
                     </connections>
                 </viewController>
                 <customObject id="rPt-NT-nkU" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>
+                <menu autoenablesItems="NO" id="Mm9-WC-PK1" userLabel="File Menu" customClass="ReferencedMenu" customModule="WWDCapp" customModuleProvider="target">
+                    <items>
+                        <menuItem title="Show in Finder" id="YRG-rf-hoF">
+                            <modifierMask key="keyEquivalentModifierMask"/>
+                            <connections>
+                                <action selector="showFileInFinder:" target="rPt-NT-nkU" id="5L3-R8-GXf"/>
+                            </connections>
+                        </menuItem>
+                    </items>
+                    <connections>
+                        <outlet property="delegate" destination="XfG-lQ-9wD" id="Kyp-Nx-C8z"/>
+                    </connections>
+                </menu>
                 <menu autoenablesItems="NO" id="Cbq-0C-XEh">
                     <items>
                         <menuItem title="Mark as Watched" id="md0-PL-oPJ">
