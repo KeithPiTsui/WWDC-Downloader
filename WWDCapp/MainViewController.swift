@@ -8,7 +8,7 @@
 
 import Cocoa
 
-class ViewController: NSViewController, NSURLSessionDelegate, NSURLSessionDataDelegate, NSTableViewDataSource, NSTableViewDelegate {
+class ViewController: NSViewController, NSURLSessionDelegate, NSURLSessionDataDelegate, NSTableViewDataSource, NSTableViewDelegate, NSMenuDelegate {
 
 	// MARK: Hooks for Proxying to ToolbarItems in WindowControllerSubclass
 	var yearSeletor: NSPopUpButton! {
@@ -115,7 +115,12 @@ class ViewController: NSViewController, NSURLSessionDelegate, NSURLSessionDataDe
     @IBOutlet weak var downloadProgressView: NSProgressIndicator!
 
 	@IBOutlet weak var startDownload: NSButton!
-	
+    
+    @IBOutlet weak var watchedMenuItem: NSMenuItem!
+    @IBOutlet weak var unwatchedMenuItem: NSMenuItem!
+    @IBOutlet weak var addToFavoritesMenuItem: NSMenuItem!
+    @IBOutlet weak var removeFromFavoritesMenuItem: NSMenuItem!
+    @IBOutlet weak var deleteFilesMenuItem: NSMenuItem!
 
 	// MARK: Variables
 	var allWWDCSessionsArray : [WWDCSession] = []
@@ -125,8 +130,6 @@ class ViewController: NSViewController, NSURLSessionDelegate, NSURLSessionDataDe
 	
 	private var isYearInfoFetchComplete = false
 	
-    private var isTranscriptDrawerOpen = false
-
 	private var isDownloading = false
     private var filesToDownload : [FileInfo] = []
     private var totalBytesToDownload : Int64 = 0
@@ -611,10 +614,6 @@ class ViewController: NSViewController, NSURLSessionDelegate, NSURLSessionDataDe
 		allHDCheckBox.attributedTitle = NSAttributedString(string: "All HD", attributes: attributesForCheckboxLabelLeft)
 		allSDCheckBox.attributedTitle = NSAttributedString(string: "All SD", attributes: attributesForCheckboxLabelLeft)
 		allCodeCheckbox.attributedTitle = NSAttributedString(string: "All Code", attributes: attributesForCheckboxLabelLeft)
-
-		myTableView.allowsMultipleSelection = false
-		myTableView.allowsMultipleSelection = false
-		myTableView.allowsEmptySelection = false
 		
 		if let contentView = myTableView.superview {
 			contentView.postsBoundsChangedNotifications = true
@@ -624,18 +623,6 @@ class ViewController: NSViewController, NSURLSessionDelegate, NSURLSessionDataDe
                 self.lastTableViewInteractionTime = CACurrentMediaTime()
             })
 		}
-        
-        NSNotificationCenter.defaultCenter().addObserverForName(NSDrawerDidOpenNotification, object: nil, queue: NSOperationQueue.mainQueue(), usingBlock: { [unowned self] (notification) -> Void in
-            
-            self.isTranscriptDrawerOpen = true
-            self.myTableView.reloadData()
-        })
-        
-        NSNotificationCenter.defaultCenter().addObserverForName(NSDrawerDidCloseNotification, object: nil, queue: NSOperationQueue.mainQueue(), usingBlock: { [unowned self] (notification) -> Void in
-            
-            self.isTranscriptDrawerOpen = false
-            self.myTableView.reloadData()
-        })
 		
 		if #available(OSX 10.11, *) {
 		    totallabel.font = NSFont.monospacedDigitSystemFontOfSize(NSFont.systemFontSizeForControlSize(NSControlSize.SmallControlSize), weight: NSFontWeightRegular)
@@ -886,7 +873,7 @@ class ViewController: NSViewController, NSURLSessionDelegate, NSURLSessionDataDe
 	}
 	
 	func selectionShouldChangeInTableView(tableView: NSTableView) -> Bool {
-		return isTranscriptDrawerOpen
+		return true
 	}
     
 //    func tableViewSelectionDidChange(notification: NSNotification) {
@@ -1067,7 +1054,7 @@ class ViewController: NSViewController, NSURLSessionDelegate, NSURLSessionDataDe
                 let watchedAction : NSTableViewRowAction
                 
                 if userInfoForSession.currentProgress == 1 {
-                    watchedAction = NSTableViewRowAction(style: .Regular, title: "Unmark as watched", handler: { (action, int) -> Void in
+                    watchedAction = NSTableViewRowAction(style: .Regular, title: "Mark as Unwatched", handler: { (action, int) -> Void in
                         userInfoForSession.currentProgress = 0
                     })
                 }
@@ -1078,12 +1065,12 @@ class ViewController: NSViewController, NSURLSessionDelegate, NSURLSessionDataDe
                 }
                 
                 if userInfoForSession.markAsFavorite == true {
-                    favoriteAction = NSTableViewRowAction(style: .Regular, title: "Unmark as Favorite", handler: { (action, int) -> Void in
+                    favoriteAction = NSTableViewRowAction(style: .Regular, title: "Remove from Favorites", handler: { (action, int) -> Void in
                         userInfoForSession.markAsFavorite = false
                     })
                 }
                 else {
-                    favoriteAction = NSTableViewRowAction(style: .Regular, title: "Mark as Favorite", handler: { (action, int) -> Void in
+                    favoriteAction = NSTableViewRowAction(style: .Regular, title: "Add to Favorites", handler: { (action, int) -> Void in
                         userInfoForSession.markAsFavorite = true
                     })
                 }
@@ -1410,6 +1397,74 @@ class ViewController: NSViewController, NSURLSessionDelegate, NSURLSessionDataDe
 
 		downloadProgressView.doubleValue = 0
 	}
+    
+    // MARK: Right Click Menu
+    @IBAction func markAsWatchedMenuAction(sender: NSMenuItem) {
+        
+        if myTableView.clickedRow >= 0 {
+            if myTableView.selectedRowIndexes.count < 2 {
+                
+                let wwdcSession = (isFiltered ? visibleWWDCSessionsArray[myTableView.clickedRow] : allWWDCSessionsArray[myTableView.clickedRow])
+                
+                updateWatched([wwdcSession], progress: 1.0)
+                
+            } else {
+
+                myTableView.selectedRowIndexes.enumerateIndexesUsingBlock { [unowned self] index, _ in
+                    
+                     let wwdcSession = (self.isFiltered ? self.visibleWWDCSessionsArray[index] : self.allWWDCSessionsArray[index])
+                    
+                    
+                }
+
+            }
+        }
+    }
+    
+    @IBAction func markAsUnwatchedMenuAction(sender: NSMenuItem) {
+       
+    }
+    
+    @IBAction func addToFavoritesMenuAction(sender: NSMenuItem) {
+        
+    }
+    
+    @IBAction func removeFromFavoritesMenuAction(sender: NSMenuItem) {
+       
+    }
+    
+    @IBAction func deleteFilesForSessionMenuAction(sender: NSMenuItem) {
+        
+    }
+    
+    private func updateWatched(sessions:[WWDCSession], progress: Float) {
+    
+        for wwdcSession in sessions {
+            if let userInfoForSession = UserInfo.sharedManager.userInfo(wwdcSession) {
+                userInfoForSession.currentProgress = progress
+            }
+        }
+    }
+    
+    // MARK: Menu Delegates
+    func menuNeedsUpdate(menu: NSMenu) {
+        
+        let row = myTableView.clickedRow
+        let column = myTableView.clickedColumn
+        
+        if row >= 0 {
+            
+            
+        }
+        else {
+            addToFavoritesMenuItem.enabled = false
+            removeFromFavoritesMenuItem.enabled = false
+            watchedMenuItem.enabled = false
+            unwatchedMenuItem.enabled = false
+            deleteFilesMenuItem.enabled = false
+        }
+    }
+
 
     // MARK: Checkboxes
     func disableUIForDownloading () {

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.Storyboard.XIB" version="3.0" toolsVersion="8164.2" systemVersion="15A216g" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" initialViewController="B8D-0N-5wS">
+<document type="com.apple.InterfaceBuilder3.Cocoa.Storyboard.XIB" version="3.0" toolsVersion="8164.2" systemVersion="15A226f" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" initialViewController="B8D-0N-5wS">
     <dependencies>
         <plugIn identifier="com.apple.AVKitIBPlugin" version="8164.2"/>
         <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="8164.2"/>
@@ -191,7 +191,7 @@ CA
                                     <nil key="toolTip"/>
                                     <size key="minSize" width="127" height="25"/>
                                     <size key="maxSize" width="127" height="28"/>
-                                    <button key="view" toolTip="This will combine the PDFs that are already downloaded into 1 PDF." verticalHuggingPriority="750" id="bDF-jX-IoP">
+                                    <button key="view" toolTip="Combine PDFs that are already downloaded into 1 PDF." verticalHuggingPriority="750" id="bDF-jX-IoP">
                                         <rect key="frame" x="0.0" y="14" width="127" height="28"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                         <animations/>
@@ -857,7 +857,7 @@ CA
                                             <rect key="frame" x="1" y="0.0" width="888" height="479"/>
                                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                             <subviews>
-                                                <tableView verticalHuggingPriority="750" allowsExpansionToolTips="YES" alternatingRowBackgroundColors="YES" columnReordering="NO" columnResizing="NO" multipleSelection="NO" emptySelection="NO" autosaveColumns="NO" typeSelect="NO" rowHeight="50" headerView="GLv-Gv-fqk" viewBased="YES" id="SSh-0R-MKF" customClass="ResizeAwareTableView" customModule="WWDCapp" customModuleProvider="target">
+                                                <tableView verticalHuggingPriority="750" allowsExpansionToolTips="YES" alternatingRowBackgroundColors="YES" columnReordering="NO" columnResizing="NO" autosaveColumns="NO" typeSelect="NO" rowHeight="50" headerView="GLv-Gv-fqk" viewBased="YES" id="SSh-0R-MKF" customClass="ResizeAwareTableView" customModule="WWDCapp" customModuleProvider="target">
                                                     <rect key="frame" x="0.0" y="0.0" width="888" height="0.0"/>
                                                     <autoresizingMask key="autoresizingMask"/>
                                                     <animations/>
@@ -938,7 +938,7 @@ CA
                                                                                 <rect key="frame" x="0.0" y="0.0" width="400" height="15"/>
                                                                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                                                 <subviews>
-                                                                                    <textView horizontalHuggingPriority="251" verticalHuggingPriority="251" editable="NO" drawsBackground="NO" importsGraphics="NO" verticallyResizable="YES" allowsNonContiguousLayout="YES" id="SY7-hN-yFX" customClass="IntrinsicContentNSTextView" customModule="WWDCapp" customModuleProvider="target">
+                                                                                    <textView horizontalHuggingPriority="251" verticalHuggingPriority="251" editable="NO" selectable="NO" drawsBackground="NO" importsGraphics="NO" verticallyResizable="YES" allowsNonContiguousLayout="YES" id="SY7-hN-yFX" customClass="IntrinsicContentNSTextView" customModule="WWDCapp" customModuleProvider="target">
                                                                                         <rect key="frame" x="0.0" y="0.0" width="400" height="15"/>
                                                                                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                                                         <animations/>
@@ -949,6 +949,9 @@ CA
                                                                                         <color key="insertionPointColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
                                                                                         <size key="minSize" width="400" height="15"/>
                                                                                         <size key="maxSize" width="2000" height="10000000"/>
+                                                                                        <connections>
+                                                                                            <outlet property="menu" destination="Cbq-0C-XEh" id="Gt7-dW-On6"/>
+                                                                                        </connections>
                                                                                     </textView>
                                                                                 </subviews>
                                                                                 <animations/>
@@ -975,7 +978,7 @@ CA
                                                                                 <rect key="frame" x="0.0" y="0.0" width="400" height="15"/>
                                                                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                                                 <subviews>
-                                                                                    <textView horizontalHuggingPriority="251" editable="NO" drawsBackground="NO" importsGraphics="NO" verticallyResizable="YES" allowsNonContiguousLayout="YES" id="4AP-Fn-m4a" customClass="IntrinsicContentNSTextView" customModule="WWDCapp" customModuleProvider="target">
+                                                                                    <textView horizontalHuggingPriority="251" editable="NO" selectable="NO" drawsBackground="NO" importsGraphics="NO" verticallyResizable="YES" allowsNonContiguousLayout="YES" id="4AP-Fn-m4a" customClass="IntrinsicContentNSTextView" customModule="WWDCapp" customModuleProvider="target">
                                                                                         <rect key="frame" x="0.0" y="0.0" width="400" height="15"/>
                                                                                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                                                         <animations/>
@@ -985,6 +988,9 @@ CA
                                                                                         <color key="insertionPointColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
                                                                                         <size key="minSize" width="400" height="15"/>
                                                                                         <size key="maxSize" width="2000" height="10000000"/>
+                                                                                        <connections>
+                                                                                            <outlet property="menu" destination="Cbq-0C-XEh" id="c94-zw-sl5"/>
+                                                                                        </connections>
                                                                                     </textView>
                                                                                 </subviews>
                                                                                 <animations/>
@@ -1435,6 +1441,7 @@ CA
                                                         <action trigger="doubleAction" selector="doubleClick:" target="XfG-lQ-9wD" id="aRr-3y-Geo"/>
                                                         <outlet property="dataSource" destination="XfG-lQ-9wD" id="LrG-ZG-wLT"/>
                                                         <outlet property="delegate" destination="XfG-lQ-9wD" id="Mhc-oJ-Q50"/>
+                                                        <outlet property="menu" destination="Cbq-0C-XEh" id="ev9-pk-ky8"/>
                                                     </connections>
                                                 </tableView>
                                             </subviews>
@@ -1522,28 +1529,72 @@ CA
                         <animations/>
                     </view>
                     <connections>
+                        <outlet property="addToFavoritesMenuItem" destination="pSU-L3-rcW" id="7OG-CM-nAS"/>
                         <outlet property="allCodeCheckbox" destination="l4s-07-jYV" id="qO2-o8-qqP"/>
                         <outlet property="allHDCheckBox" destination="zmt-g5-prI" id="2bs-9y-oPM"/>
                         <outlet property="allPDFCheckBox" destination="93J-Av-NLB" id="Igh-PM-Jug"/>
                         <outlet property="allSDCheckBox" destination="hdC-U3-wYR" id="Y83-Xh-DMa"/>
                         <outlet property="currentlabel" destination="ang-ho-9A3" id="6te-I5-TEb"/>
+                        <outlet property="deleteFilesMenuItem" destination="C9v-Ca-MY1" id="gYT-1F-1Ab"/>
                         <outlet property="downloadProgressView" destination="eQd-ix-KJW" id="PoK-x9-or9"/>
                         <outlet property="hideDescriptionsCheckBox" destination="o2q-VB-fLx" id="aPI-Hb-O9Z"/>
                         <outlet property="includeTranscriptsInSearchCheckBox" destination="3IL-nb-Fsz" id="NWK-0S-0ep"/>
                         <outlet property="loggingLabel" destination="DNA-hc-glG" id="CjE-ot-9G5"/>
                         <outlet property="myTableView" destination="SSh-0R-MKF" id="liZ-v1-msq"/>
                         <outlet property="oflabel" destination="C8t-xS-mu2" id="IvW-Va-OWf"/>
+                        <outlet property="removeFromFavoritesMenuItem" destination="25x-gX-lP8" id="m69-8B-6Zn"/>
                         <outlet property="startDownload" destination="2Uk-zV-FYf" id="wan-PT-H8F"/>
                         <outlet property="toolbarVisualEffectView" destination="BmC-e0-Fwn" id="0lp-83-Tso"/>
                         <outlet property="totalDescriptionlabel" destination="OeA-4Q-HGv" id="15I-ga-6Yu"/>
                         <outlet property="totallabel" destination="LdI-VT-wO4" id="NHk-ad-W5R"/>
+                        <outlet property="unwatchedMenuItem" destination="ijr-tn-Z1d" id="WPn-WB-WGi"/>
                         <outlet property="visualEffectView" destination="ZwT-7T-fue" id="GF7-Xc-3Qf"/>
+                        <outlet property="watchedMenuItem" destination="md0-PL-oPJ" id="YaU-tW-gFv"/>
                         <segue destination="QWk-MP-YM6" kind="show" identifier="showViewer" id="kkZ-LZ-0mS"/>
                     </connections>
                 </viewController>
                 <customObject id="rPt-NT-nkU" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>
+                <menu autoenablesItems="NO" id="Cbq-0C-XEh">
+                    <items>
+                        <menuItem title="Mark as Watched" id="md0-PL-oPJ">
+                            <modifierMask key="keyEquivalentModifierMask"/>
+                            <connections>
+                                <action selector="markAsWatchedMenuAction:" target="XfG-lQ-9wD" id="TKQ-2v-AvD"/>
+                            </connections>
+                        </menuItem>
+                        <menuItem title="Mark as Unwatched" id="ijr-tn-Z1d">
+                            <modifierMask key="keyEquivalentModifierMask"/>
+                            <connections>
+                                <action selector="markAsUnwatchedMenuAction:" target="XfG-lQ-9wD" id="iUy-ol-rUX"/>
+                            </connections>
+                        </menuItem>
+                        <menuItem isSeparatorItem="YES" id="2Rj-5L-fqs"/>
+                        <menuItem title="Add to Favorites" id="pSU-L3-rcW">
+                            <modifierMask key="keyEquivalentModifierMask"/>
+                            <connections>
+                                <action selector="addToFavoritesMenuAction:" target="XfG-lQ-9wD" id="6rA-Id-ti8"/>
+                            </connections>
+                        </menuItem>
+                        <menuItem title="Remove from Favorites" id="25x-gX-lP8">
+                            <modifierMask key="keyEquivalentModifierMask"/>
+                            <connections>
+                                <action selector="removeFromFavoritesMenuAction:" target="XfG-lQ-9wD" id="Zdb-Jq-dns"/>
+                            </connections>
+                        </menuItem>
+                        <menuItem isSeparatorItem="YES" id="oGT-g9-PcD"/>
+                        <menuItem title="Delete Files for Session" id="C9v-Ca-MY1">
+                            <modifierMask key="keyEquivalentModifierMask"/>
+                            <connections>
+                                <action selector="deleteFilesForSessionMenuAction:" target="XfG-lQ-9wD" id="6gh-Pe-ZWu"/>
+                            </connections>
+                        </menuItem>
+                    </items>
+                    <connections>
+                        <outlet property="delegate" destination="XfG-lQ-9wD" id="UHu-UG-SMf"/>
+                    </connections>
+                </menu>
             </objects>
-            <point key="canvasLocation" x="109" y="953"/>
+            <point key="canvasLocation" x="109" y="1047"/>
         </scene>
         <!--Preferences Window Controller-->
         <scene sceneID="aOx-QI-hUM">

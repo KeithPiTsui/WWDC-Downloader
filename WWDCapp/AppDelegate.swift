@@ -17,8 +17,6 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     var mainViewController : ViewController!
 
     var preferencesWindowController : NSWindowController?
-
-    var transcriptDrawer : NSDrawer?
     
     var mainApplicationController: ToolbarHookableWindowSubclass?
 
