@@ -539,27 +539,12 @@ class DownloadYearInfo: NSObject, NSURLSessionTaskDelegate {
         case .Idle:
             break
 		case .FetchingSessionInfo, .FetchingYear:
-            if #available(OSX 10.11, *) {
-                sessionManager?.getAllTasksWithCompletionHandler({ (tasks) -> Void in
-                    for task in tasks {
-                        task.cancel()
-                    }
-                })
-            } else {
-                // Fallback on earlier versions
-				sessionManager?.getTasksWithCompletionHandler({ (data, upload, download) -> Void in
-					for task in data {
-						task.cancel()
-					}
-					for task in upload {
-						task.cancel()
-					}
-					for task in download {
-						task.cancel()
-					}
-				})
-            }
-        case .FetchingFileSizes:
+			sessionManager?.getAllTasksWithCompletionHandler({ (tasks) -> Void in
+				for task in tasks {
+					task.cancel()
+				}
+			})
+		case .FetchingFileSizes:
             FetchFileSizeManager.sharedManager.stopAllFileSizeFetchs()
         case .FetchingASCIIExtendedinfo:
             DownloadTranscriptManager.sharedManager.stopAllTranscriptFetchs()

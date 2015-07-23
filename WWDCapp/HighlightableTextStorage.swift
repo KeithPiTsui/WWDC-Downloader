@@ -37,24 +37,14 @@ class HighlightableTextStorage : NSTextStorage {
 		
 		tmpString.replaceCharactersInRange(range, withString: str)
 		
-		if #available(OSX 10.11, *) {
-		    self.edited(NSTextStorageEditActions.EditedCharacters, range: range, changeInLength: str.characters.count-range.length)
-		} else {
-			self.edited(self.editedMask, range: range, changeInLength: str.characters.count-range.length)
-		}
+		self.edited(NSTextStorageEditActions.EditedCharacters, range: range, changeInLength: str.characters.count-range.length)
 	}
 	
 	override func setAttributes(attrs: [String : AnyObject]?, range: NSRange) {
 		
 		tmpString.setAttributes(attrs, range: range)
 		
-		if #available(OSX 10.11, *) {
-		    self.edited(NSTextStorageEditActions.EditedAttributes, range: range, changeInLength: 0)
-		} else {
-		    // Fallback on earlier versions
-			self.edited(self.editedMask, range: range, changeInLength: 0)
-		}
-		
+		self.edited(NSTextStorageEditActions.EditedAttributes, range: range, changeInLength: 0)
 	}
 	
 	override func processEditing() {

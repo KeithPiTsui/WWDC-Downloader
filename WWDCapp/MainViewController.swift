@@ -8,7 +8,7 @@
 
 import Cocoa
 
-class ViewController: NSViewController, NSURLSessionDelegate, NSURLSessionDataDelegate, NSTableViewDataSource, NSTableViewDelegate, NSMenuDelegate, NSSearchFieldDelegate, SearchSuggestionsDelegate {
+class ViewController: NSViewController, NSURLSessionDelegate, NSURLSessionDataDelegate, NSTableViewDataSource, NSTableViewDelegate, NSMenuDelegate, SearchSuggestionsDelegate {
 
 	// MARK: Hooks for Proxying to ToolbarItems in WindowControllerSubclass
 	var yearSeletor: NSPopUpButton! {
@@ -254,69 +254,26 @@ class ViewController: NSViewController, NSURLSessionDelegate, NSURLSessionDataDe
                         
                         if let transcript = wwdcSession.fullTranscriptPrettyPrint {
                             
-                            if #available(OSX 10.11, *) {
-                                if wwdcSession.title.localizedStandardContainsString(cleanString) || description.localizedStandardContainsString(cleanString) || transcript.localizedStandardContainsString(cleanString) {                                    return true
+                                if wwdcSession.title.localizedStandardContainsString(cleanString) || description.localizedStandardContainsString(cleanString) || transcript.localizedStandardContainsString(cleanString) {
+									return true
                                 }
-                            }
-                            else {
-                                // Fallback on earlier versions
-                                let rangeTitle = wwdcSession.title.rangeOfString(cleanString, options: NSStringCompareOptions.CaseInsensitiveSearch, range: nil, locale: NSLocale.systemLocale())
-                                let rangeDescription = description.rangeOfString(cleanString, options: NSStringCompareOptions.CaseInsensitiveSearch, range: nil, locale: NSLocale.systemLocale())
-                                let rangeTranscript = description.rangeOfString(cleanString, options: NSStringCompareOptions.CaseInsensitiveSearch, range: nil, locale: NSLocale.systemLocale())
-                                
-                                if rangeTitle != nil || rangeDescription != nil || rangeTranscript != nil {
-                                    return true
-                                }
-                            }
-                        }
+						}
                         else {
-                            if #available(OSX 10.11, *) {
-                                if wwdcSession.title.localizedStandardContainsString(cleanString) || description.localizedStandardContainsString(cleanString) {
-                                    return true
-                                }
-                            }
-                            else {
-                                // Fallback on earlier versions
-                                let rangeTitle = wwdcSession.title.rangeOfString(cleanString, options: NSStringCompareOptions.CaseInsensitiveSearch, range: nil, locale: NSLocale.systemLocale())
-                                let rangeDescription = description.rangeOfString(cleanString, options: NSStringCompareOptions.CaseInsensitiveSearch, range: nil, locale: NSLocale.systemLocale())
-                                
-                                if rangeTitle != nil || rangeDescription != nil {
-                                    return true
-                                }
-                            }
+							if wwdcSession.title.localizedStandardContainsString(cleanString) || description.localizedStandardContainsString(cleanString) {
+								return true
+							}
                         }
                     }
                     else {
-                        if #available(OSX 10.11, *) {
-                            if wwdcSession.title.localizedStandardContainsString(cleanString) || description.localizedStandardContainsString(cleanString) {
-                                return true
-                            }
-                        }
-                        else {
-                            // Fallback on earlier versions
-                            let rangeTitle = wwdcSession.title.rangeOfString(cleanString, options: NSStringCompareOptions.CaseInsensitiveSearch, range: nil, locale: NSLocale.systemLocale())
-                            let rangeDescription = description.rangeOfString(cleanString, options: NSStringCompareOptions.CaseInsensitiveSearch, range: nil, locale: NSLocale.systemLocale())
-                            
-                            if rangeTitle != nil || rangeDescription != nil {
-                                return true
-                            }
-                        }
+						if wwdcSession.title.localizedStandardContainsString(cleanString) || description.localizedStandardContainsString(cleanString) {
+							return true
+						}
                     }
-                    
                 }
                 else {
-                    if #available(OSX 10.11, *) {
-                        if wwdcSession.title.localizedStandardContainsString(cleanString) {
-                            return true
-                        }
-                    }
-                    else {
-                        // Fallback on earlier versions
-                        let rangeTitle = wwdcSession.title.rangeOfString(cleanString, options: NSStringCompareOptions.CaseInsensitiveSearch, range: nil, locale: NSLocale.systemLocale())
-                        if rangeTitle != nil {
-                           return true
-                        }
-                    }
+					if wwdcSession.title.localizedStandardContainsString(cleanString) {
+						return true
+					}
                 }
                 return false
             })
@@ -637,11 +594,9 @@ class ViewController: NSViewController, NSURLSessionDelegate, NSURLSessionDataDe
             })
 		}
 		
-		if #available(OSX 10.11, *) {
-		    totallabel.font = NSFont.monospacedDigitSystemFontOfSize(NSFont.systemFontSizeForControlSize(NSControlSize.SmallControlSize), weight: NSFontWeightRegular)
-			oflabel.font = NSFont.monospacedDigitSystemFontOfSize(NSFont.systemFontSizeForControlSize(NSControlSize.SmallControlSize), weight: NSFontWeightRegular)
-			currentlabel.font = NSFont.monospacedDigitSystemFontOfSize(NSFont.systemFontSizeForControlSize(NSControlSize.SmallControlSize), weight: NSFontWeightRegular)
-		}
+		totallabel.font = NSFont.monospacedDigitSystemFontOfSize(NSFont.systemFontSizeForControlSize(NSControlSize.SmallControlSize), weight: NSFontWeightRegular)
+		oflabel.font = NSFont.monospacedDigitSystemFontOfSize(NSFont.systemFontSizeForControlSize(NSControlSize.SmallControlSize), weight: NSFontWeightRegular)
+		currentlabel.font = NSFont.monospacedDigitSystemFontOfSize(NSFont.systemFontSizeForControlSize(NSControlSize.SmallControlSize), weight: NSFontWeightRegular)
 		
 		let searchMenu = NSMenu(title: "Search Menu")
 		
@@ -667,15 +622,11 @@ class ViewController: NSViewController, NSURLSessionDelegate, NSURLSessionDataDe
 
 		searchField.searchMenuTemplate = searchMenu
 		
-		if #available(OSX 10.11, *) {
-			searchField.delegate = self
-		}
-		
 		searchSuggestionView.suggestionsStringArray = ["iOS","OS X","Watch","Xcode","Swift","Framework","Media", "Design", "Tools", "Games", "Core"]
 		searchSuggestionView.delegate = self
 		searchSuggestionsContainer.hidden = true
 		
-		NSNotificationCenter.defaultCenter().addObserverForName(NSControlTextDidChangeNotification, object: searchField, queue: NSOperationQueue.mainQueue(), usingBlock: {  (notification) -> Void in
+		NSNotificationCenter.defaultCenter().addObserverForName(NSControlTextDidBeginEditingNotification, object: searchField, queue: NSOperationQueue.mainQueue(), usingBlock: {  (notification) -> Void in
 			
 			NSAnimationContext.runAnimationGroup({ context in
 				context.duration = 0.3

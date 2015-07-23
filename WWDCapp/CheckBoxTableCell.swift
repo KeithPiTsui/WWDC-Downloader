@@ -33,10 +33,8 @@ class CheckBoxTableViewCell : NSTableCellView {
     
     override func awakeFromNib() {
         
-        if #available(OSX 10.11, *) {
-            label.font = NSFont.monospacedDigitSystemFontOfSize(NSFont.systemFontSizeForControlSize(NSControlSize.SmallControlSize), weight: NSFontWeightRegular)
-        }
-        
+		label.font = NSFont.monospacedDigitSystemFontOfSize(NSFont.systemFontSizeForControlSize(NSControlSize.SmallControlSize), weight: NSFontWeightRegular)
+		
         resetCell()
     }
 	
