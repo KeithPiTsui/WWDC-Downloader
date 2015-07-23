@@ -1118,6 +1118,7 @@ CA
                                                                                     </buttonCell>
                                                                                     <connections>
                                                                                         <action selector="fileClicked:" target="XfG-lQ-9wD" id="gzz-RZ-4jA"/>
+                                                                                        <outlet property="containedInCell" destination="XN5-Bl-Ag6" id="PYY-d7-Hxg"/>
                                                                                         <outlet property="menu" destination="Mm9-WC-PK1" id="dVF-7V-jdQ"/>
                                                                                     </connections>
                                                                                 </button>
@@ -1217,6 +1218,7 @@ CA
                                                                                     </buttonCell>
                                                                                     <connections>
                                                                                         <action selector="fileClicked:" target="XfG-lQ-9wD" id="WLv-gJ-zyB"/>
+                                                                                        <outlet property="containedInCell" destination="lke-Gm-rNp" id="4M1-wn-KZV"/>
                                                                                         <outlet property="menu" destination="Mm9-WC-PK1" id="nKd-lL-sXR"/>
                                                                                     </connections>
                                                                                 </button>
@@ -1316,6 +1318,7 @@ CA
                                                                                     </buttonCell>
                                                                                     <connections>
                                                                                         <action selector="fileClicked:" target="XfG-lQ-9wD" id="UFV-Ww-Ay2"/>
+                                                                                        <outlet property="containedInCell" destination="BRJ-vK-4k4" id="0c2-Dh-dZw"/>
                                                                                         <outlet property="menu" destination="Mm9-WC-PK1" id="mIv-rs-7Pu"/>
                                                                                     </connections>
                                                                                 </button>
@@ -1415,6 +1418,7 @@ CA
                                                                                     </buttonCell>
                                                                                     <connections>
                                                                                         <action selector="fileClicked:" target="XfG-lQ-9wD" id="vEO-WX-YTg"/>
+                                                                                        <outlet property="containedInCell" destination="fVV-S8-xk2" id="nga-la-uTD"/>
                                                                                         <outlet property="menu" destination="Mm9-WC-PK1" id="iFa-tr-psm"/>
                                                                                     </connections>
                                                                                 </button>

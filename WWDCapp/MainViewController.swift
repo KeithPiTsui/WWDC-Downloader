@@ -341,9 +341,6 @@ class ViewController: NSViewController, NSURLSessionDelegate, NSURLSessionDataDe
 		}
 		
 		myTableView.reloadData()
-		
-//		let appDelegate = NSApplication.sharedApplication().delegate as! AppDelegate
-//		appDelegate.highlightTranscript()
 	}
 	
     @IBAction func combinePDF(sender: NSButton) {
@@ -485,26 +482,24 @@ class ViewController: NSViewController, NSURLSessionDelegate, NSURLSessionDataDe
 		coordinateAllCheckBoxUI()
 	}
 	
-	@IBAction func fileClicked(sender: NSButton) {
+	@IBAction func fileClicked(sender: FileButton) {
 		
-		let cell = sender.superview?.superview as! CheckBoxTableViewCell
-		
-		if let fileArray = cell.fileArray {
-			if let fileInfo = fileArray.first {
+        guard let aCell = sender.containedInCell else { return }
+        
+		if let fileInfo = aCell.fileArray?.first {
 				
-				guard let localFileURL = fileInfo.localFileURL else { return }
-				
-				switch fileInfo.fileType {
-				case .PDF:
-					NSWorkspace.sharedWorkspace().openURL(localFileURL)
-				case .SD:
-					NSWorkspace.sharedWorkspace().openURL(localFileURL)
-				case .HD:
-					NSWorkspace.sharedWorkspace().openURL(localFileURL)
-				case .SampleCode:
-					NSWorkspace.sharedWorkspace().selectFile(localFileURL.filePathURL?.path, inFileViewerRootedAtPath: (localFileURL.filePathURL?.absoluteString.stringByDeletingLastPathComponent)!)
-				}
-			}
+            guard let localFileURL = fileInfo.localFileURL else { return }
+            
+            switch fileInfo.fileType {
+            case .PDF:
+                NSWorkspace.sharedWorkspace().openURL(localFileURL)
+            case .SD:
+                NSWorkspace.sharedWorkspace().openURL(localFileURL)
+            case .HD:
+                NSWorkspace.sharedWorkspace().openURL(localFileURL)
+            case .SampleCode:
+                NSWorkspace.sharedWorkspace().selectFile(localFileURL.filePathURL?.path, inFileViewerRootedAtPath: (localFileURL.filePathURL?.absoluteString.stringByDeletingLastPathComponent)!)
+            }
 		}
 	}
     
@@ -598,18 +593,13 @@ class ViewController: NSViewController, NSURLSessionDelegate, NSURLSessionDataDe
 	@IBAction func showFileInFinder(sender: NSMenuItem) {
 		
 		guard let menu = sender.menu as? ReferencedMenu else { return }
-		
-		if let cell = menu.menuCalledFromView?.superview?.superview as? CheckBoxTableViewCell {
-			
-			if let fileArray = cell.fileArray {
-				if let fileInfo = fileArray.first {
 					
-					guard let localFileURL = fileInfo.localFileURL else { return }
-					
-					NSWorkspace.sharedWorkspace().selectFile(localFileURL.filePathURL?.path, inFileViewerRootedAtPath: (localFileURL.filePathURL?.absoluteString.stringByDeletingLastPathComponent)!)					
-				}
-			}
-		}
+        if let fileInfo = menu.menuCalledFromView?.containedInCell?.fileArray?.first {
+                
+            guard let localFileURL = fileInfo.localFileURL else { return }
+            
+            NSWorkspace.sharedWorkspace().selectFile(localFileURL.filePathURL?.path, inFileViewerRootedAtPath: (localFileURL.filePathURL?.absoluteString.stringByDeletingLastPathComponent)!)					
+        }
 	}
 
 	// MARK: - View / UI
@@ -703,6 +693,10 @@ class ViewController: NSViewController, NSURLSessionDelegate, NSURLSessionDataDe
 	
 	func resetUIForYearFetch () {
 		
+        for session in allWWDCSessionsArray {
+            stopObservingUserInfo(UserInfo.sharedManager.userInfo(session))
+        }
+        
 		loggingLabel.stringValue = ""
 		
         combinePDFButton.enabled = false
@@ -747,9 +741,63 @@ class ViewController: NSViewController, NSURLSessionDelegate, NSURLSessionDataDe
 
         myTableView.reloadData()
     }
+    
+    // MARK: Property Observers
+    
+    private var myContext = 0
 
+    func startObservingUserInfo(userInfo: UserSessionInfo) {
+        let options = NSKeyValueObservingOptions([.New, .Old])
+        userInfo.addObserver(self, forKeyPath: "markAsFavorite", options: options, context: &myContext)
+        userInfo.addObserver(self, forKeyPath: "currentProgress", options: options, context: &myContext)
+    }
+    
+    func stopObservingUserInfo(userInfo: UserSessionInfo) {
+        userInfo.removeObserver(self, forKeyPath: "markAsFavorite", context: &myContext)
+        userInfo.removeObserver(self, forKeyPath: "currentProgress", context: &myContext)
+    }
+    
+    override func observeValueForKeyPath(keyPath: String?, ofObject object: AnyObject?, change: [String : AnyObject]?, context: UnsafeMutablePointer<Void>) {
+        
+        guard let aKeyPath = keyPath else {
+            super.observeValueForKeyPath(keyPath, ofObject: object, change: change, context: context)
+            return
+        }
+        
+        if let userSessionInfo = object as? UserSessionInfo where context == &myContext {
+            
+            switch (aKeyPath, context) {
+            case("markAsFavorite", &myContext):
+                userInfoChanged(userSessionInfo)
+                
+            case("currentProgress", &myContext):
+                userInfoChanged(userSessionInfo)
+                
+            default:
+                assert(false, "unknown key path")
+            }
+        }
+        else {
+            super.observeValueForKeyPath(keyPath, ofObject: object, change: change, context: context)
+        }
+    }
+    
+    func userInfoChanged(userInfo : UserSessionInfo) {
+        
+        
+        guard let index = self.isFiltered ? visibleWWDCSessionsArray.indexOf ({ (wwdcSession) -> Bool in
+            return userInfo == UserInfo.sharedManager.userInfo(wwdcSession)
+        }) :  allWWDCSessionsArray.indexOf ({ (wwdcSession) -> Bool in
+            return userInfo == UserInfo.sharedManager.userInfo(wwdcSession)
+        })
+            else { return }
+        
+        myTableView.reloadDataForRowIndexes(NSIndexSet(index: index), columnIndexes:NSIndexSet(indexesInRange: NSMakeRange(0,self.myTableView.numberOfColumns)))
+        
+        UserInfo.sharedManager.save()
+    }
+    
 	// MARK: - Segues
-	
 	override func prepareForSegue(segue: NSStoryboardSegue, sender: AnyObject?) {
 		
 		if segue.identifier == "showViewer" {
@@ -870,6 +918,10 @@ class ViewController: NSViewController, NSURLSessionDelegate, NSURLSessionDataDe
 		checkDownloadButtonState()
         
         myTableView.reloadData()
+        
+        for session in allWWDCSessionsArray {
+            startObservingUserInfo(UserInfo.sharedManager.userInfo(session))
+        }
 	}
 	
 	
@@ -1468,8 +1520,6 @@ class ViewController: NSViewController, NSURLSessionDelegate, NSURLSessionDataDe
         if myTableView.clickedRow >= 0 {
 			let sessions = sessionsCurrentlySelected()
 			updateWatched(sessions, progress: 1.0)
-			myTableView.reloadDataForRowIndexes(myTableView.selectedRowIndexes, columnIndexes: NSIndexSet(indexesInRange: NSMakeRange(0,self.myTableView.numberOfColumns)))
-			UserInfo.sharedManager.save()
         }
     }
     
@@ -1478,8 +1528,6 @@ class ViewController: NSViewController, NSURLSessionDelegate, NSURLSessionDataDe
 		if myTableView.clickedRow >= 0 {
 			let sessions = sessionsCurrentlySelected()
 			updateWatched(sessions, progress:0)
-			myTableView.reloadDataForRowIndexes(myTableView.selectedRowIndexes, columnIndexes: NSIndexSet(indexesInRange: NSMakeRange(0,self.myTableView.numberOfColumns)))
-			UserInfo.sharedManager.save()
 		}
     }
     
@@ -1488,8 +1536,6 @@ class ViewController: NSViewController, NSURLSessionDelegate, NSURLSessionDataDe
 		if myTableView.clickedRow >= 0 {
 			let sessions = sessionsCurrentlySelected()
 			updateFavorite(sessions, favorite: true)
-			myTableView.reloadDataForRowIndexes(myTableView.selectedRowIndexes, columnIndexes: NSIndexSet(indexesInRange: NSMakeRange(0,self.myTableView.numberOfColumns)))
-			UserInfo.sharedManager.save()
 		}
     }
     
@@ -1498,8 +1544,6 @@ class ViewController: NSViewController, NSURLSessionDelegate, NSURLSessionDataDe
 		if myTableView.clickedRow >= 0 {
 			let sessions = sessionsCurrentlySelected()
 			updateFavorite(sessions, favorite: false)
-			myTableView.reloadDataForRowIndexes(myTableView.selectedRowIndexes, columnIndexes: NSIndexSet(indexesInRange: NSMakeRange(0,self.myTableView.numberOfColumns)))
-			UserInfo.sharedManager.save()
 		}
     }
     

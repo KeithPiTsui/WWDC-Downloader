@@ -8,11 +8,15 @@
 
 import Foundation
 
+func ==(lhs: UserSessionInfo, rhs: UserSessionInfo)-> Bool {
+    return lhs.sessionID == rhs.sessionID
+}
+
 class UserSessionInfo : NSObject, NSCoding {
 	
 	let sessionID : String
-	var markAsFavorite: Bool = false
-    var currentProgress: Float = 0
+	dynamic var markAsFavorite: Bool = false
+    dynamic var currentProgress: Float = 0
 	
 	init(sessionID: String) {
 		self.sessionID = sessionID
@@ -40,10 +44,14 @@ class UserSessionInfo : NSObject, NSCoding {
 class UserInfo {
 	
 	static let sharedManager = UserInfo()
+    
+    func userInfoIdentifier(wwdcSession: WWDCSession) -> String {
+        return "\(wwdcSession.sessionYear)-\(wwdcSession.sessionID)"
+    }
 	
     func userInfo(wwdcSession: WWDCSession) -> UserSessionInfo {
 		
-		let identifier = "\(wwdcSession.sessionYear)-\(wwdcSession.sessionID)"
+        let identifier = userInfoIdentifier(wwdcSession)
 		
         if let userInfo = userInfoDictionary[identifier] {
             return userInfo

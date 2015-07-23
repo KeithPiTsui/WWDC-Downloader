@@ -11,6 +11,6 @@ import Cocoa
 
 class ReferencedMenu : NSMenu {
 	
-	@IBOutlet weak var menuCalledFromView : NSButton?
+	@IBOutlet weak var menuCalledFromView : FileButton?
 	
 }

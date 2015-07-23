@@ -11,6 +11,8 @@ import Cocoa
 
 class FileButton : NSButton {
 	
+    @IBOutlet weak var containedInCell : CheckBoxTableViewCell?
+    
 	override func menuForEvent(event: NSEvent) -> NSMenu? {
 		let menu = super.menuForEvent(event) as! ReferencedMenu
 		menu.menuCalledFromView = self
