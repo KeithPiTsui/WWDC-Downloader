@@ -18,6 +18,7 @@
 		44A647911B44634900157487 /* ToolbarHookableWindowSubclass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 44A647901B44634900157487 /* ToolbarHookableWindowSubclass.swift */; };
 		44ADC8351B60026F00C00C4B /* ReferencedMenu.swift in Sources */ = {isa = PBXBuildFile; fileRef = 44ADC8341B60026F00C00C4B /* ReferencedMenu.swift */; };
 		44ADC8371B60038200C00C4B /* FileButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 44ADC8361B60038200C00C4B /* FileButton.swift */; };
+		44ADC83F1B6113E400C00C4B /* SearchSuggestions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 44ADC83E1B6113E400C00C4B /* SearchSuggestions.swift */; };
 		44D546221B4296FB00197B23 /* DownloadYearInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 44D546211B4296FB00197B23 /* DownloadYearInfo.swift */; };
 		44F5EE8E1B457B9800CE683D /* TFHpple.m in Sources */ = {isa = PBXBuildFile; fileRef = 44F5EE891B457B9800CE683D /* TFHpple.m */; };
 		44F5EE8F1B457B9800CE683D /* TFHppleElement.m in Sources */ = {isa = PBXBuildFile; fileRef = 44F5EE8B1B457B9800CE683D /* TFHppleElement.m */; };
@@ -55,6 +56,7 @@
 		44A647901B44634900157487 /* ToolbarHookableWindowSubclass.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ToolbarHookableWindowSubclass.swift; sourceTree = "<group>"; };
 		44ADC8341B60026F00C00C4B /* ReferencedMenu.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ReferencedMenu.swift; sourceTree = "<group>"; };
 		44ADC8361B60038200C00C4B /* FileButton.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FileButton.swift; sourceTree = "<group>"; };
+		44ADC83E1B6113E400C00C4B /* SearchSuggestions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SearchSuggestions.swift; sourceTree = "<group>"; };
 		44D546211B4296FB00197B23 /* DownloadYearInfo.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = DownloadYearInfo.swift; path = Common/DownloadYearInfo.swift; sourceTree = "<group>"; };
 		44DBD9EB1B3AC4C60097E20C /* .gitignore */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = .gitignore; sourceTree = "<group>"; };
 		44F5EE881B457B9800CE683D /* TFHpple.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = TFHpple.h; path = Common/TFHpple.h; sourceTree = SOURCE_ROOT; };
@@ -110,6 +112,7 @@
 		444D79891B456B6600F552C4 /* Subclasses */ = {
 			isa = PBXGroup;
 			children = (
+				44ADC83E1B6113E400C00C4B /* SearchSuggestions.swift */,
 				44A647901B44634900157487 /* ToolbarHookableWindowSubclass.swift */,
 				44F5EE911B45A2CA00CE683D /* DisabledScrollingScrollView.swift */,
 				44F5EE931B45A4BB00CE683D /* HighlightableTextStorage.swift */,
@@ -299,6 +302,7 @@
 				44D546221B4296FB00197B23 /* DownloadYearInfo.swift in Sources */,
 				A9528F291B34C40E002290D3 /* MainViewController.swift in Sources */,
 				44A647911B44634900157487 /* ToolbarHookableWindowSubclass.swift in Sources */,
+				44ADC83F1B6113E400C00C4B /* SearchSuggestions.swift in Sources */,
 				44ADC8351B60026F00C00C4B /* ReferencedMenu.swift in Sources */,
 				44F5EE941B45A4BB00CE683D /* HighlightableTextStorage.swift in Sources */,
 				A90D14ED1B41C5F000A30590 /* DownloadTranscriptManager.swift in Sources */,
