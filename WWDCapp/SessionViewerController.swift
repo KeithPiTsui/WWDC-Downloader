@@ -12,6 +12,9 @@ import AVKit
 import Quartz
 import AVFoundation
 
+let SessionViewerDidLaunchNotification = "SessionViewerDidLaunchNotification"
+let SessionViewerDidCloseNotification = "SessionViewerDidCloseNotification"
+
 class SessionViewerWindowController : NSWindowController, NSWindowDelegate {
 	
 	weak var videoController : VideoViewController!
@@ -57,7 +60,8 @@ class SessionViewerWindowController : NSWindowController, NSWindowDelegate {
 		
 		segmentedPaneControl.setImage(NSImage(imageLiteral: "bottom_button")?.tintImageToBrightBlurColor(), forSegment: 0)
 		segmentedPaneControl.setImage(NSImage(imageLiteral: "pdf_Button")?.tintImageToBrightBlurColor(), forSegment: 1)
-
+        
+        NSNotificationCenter.defaultCenter().postNotificationName(SessionViewerDidLaunchNotification, object: nil)
 	}
 
 
@@ -105,6 +109,8 @@ class SessionViewerWindowController : NSWindowController, NSWindowDelegate {
         videoController.avPlayerView.player?.pause()
         videoController.avPlayerView.player = nil
 		
+        NSNotificationCenter.defaultCenter().postNotificationName(SessionViewerDidCloseNotification, object: nil)
+
         return true
     }
 }

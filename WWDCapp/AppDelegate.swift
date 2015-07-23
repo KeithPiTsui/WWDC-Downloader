@@ -37,6 +37,17 @@ class AppDelegate: NSObject, NSApplicationDelegate {
 			window.titleVisibility = NSWindowTitleVisibility.Hidden
             
             mainApplicationController = window.windowController as? ToolbarHookableWindowSubclass
+            
+            NSNotificationCenter.defaultCenter().addObserverForName(SessionViewerDidLaunchNotification, object: nil, queue: NSOperationQueue.mainQueue(), usingBlock: { (notification) -> Void in
+
+                window.standardWindowButton(NSWindowButton.CloseButton)?.enabled = false
+            })
+            
+            NSNotificationCenter.defaultCenter().addObserverForName(SessionViewerDidCloseNotification, object: nil, queue: NSOperationQueue.mainQueue(), usingBlock: { (notification) -> Void in
+                
+                window.standardWindowButton(NSWindowButton.CloseButton)?.enabled = true
+            })
+            
 		}
         
 
