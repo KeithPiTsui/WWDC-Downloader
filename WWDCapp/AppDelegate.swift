@@ -47,7 +47,6 @@ class AppDelegate: NSObject, NSApplicationDelegate {
                 
                 window.standardWindowButton(NSWindowButton.CloseButton)?.enabled = true
             })
-            
 		}
         
 
