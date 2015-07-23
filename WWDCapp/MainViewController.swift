@@ -8,7 +8,7 @@
 
 import Cocoa
 
-class ViewController: NSViewController, NSURLSessionDelegate, NSURLSessionDataDelegate, NSTableViewDataSource, NSTableViewDelegate, NSMenuDelegate {
+class ViewController: NSViewController, NSURLSessionDelegate, NSURLSessionDataDelegate, NSTableViewDataSource, NSTableViewDelegate, NSMenuDelegate, NSSearchFieldDelegate {
 
 	// MARK: Hooks for Proxying to ToolbarItems in WindowControllerSubclass
 	var yearSeletor: NSPopUpButton! {
@@ -96,6 +96,8 @@ class ViewController: NSViewController, NSURLSessionDelegate, NSURLSessionDataDe
     @IBOutlet weak var toolbarVisualEffectView: NSVisualEffectView!
 	@IBOutlet weak var visualEffectView: NSVisualEffectView!
 
+	//@IBOutlet weak var searchSuggestionView: SearchSuggestions!
+	
 	@IBOutlet weak var loggingLabel: NSTextField!
 	
 	@IBOutlet weak var allCodeCheckbox: NSButton!
@@ -661,30 +663,32 @@ class ViewController: NSViewController, NSURLSessionDelegate, NSURLSessionDataDe
 		let recents = NSMenuItem(title: "Recents", action: nil, keyEquivalent: "")
 		recents.tag = Int(NSSearchFieldRecentsMenuItemTag)
 		searchMenu.insertItem(recents, atIndex: 4)
-		
-		let seperator2 = NSMenuItem.separatorItem()
-		seperator2.tag = Int(NSSearchFieldRecentsTitleMenuItemTag)
-		searchMenu.insertItem(seperator2, atIndex: 5)
-		
-		let focusTitle = NSMenuItem(title: "Session Focus", action: nil, keyEquivalent: "")
-		focusTitle.tag = Int(NSSearchFieldRecentsTitleMenuItemTag)
-		searchMenu.insertItem(focusTitle, atIndex: 6)
-		
-		let iosSearch = NSMenuItem(title: "iOS", action: Selector("searchPreset"), keyEquivalent: "")
-		iosSearch.target = self
-		iosSearch.tag = 4
-		searchMenu.insertItem(iosSearch, atIndex: 7)
-		
-		let osxSearch = NSMenuItem(title: "OS X", action: Selector("searchPreset"), keyEquivalent: "")
-		osxSearch.target = self
-		osxSearch.tag = 5
-		searchMenu.insertItem(osxSearch, atIndex: 8)
-
 
 		searchField.searchMenuTemplate = searchMenu
-
+		
+		if #available(OSX 10.11, *) {
+			searchField.delegate = self
+		}
+		
+//		searchSuggestionView.suggestionsStringArray = ["iOS","OS X","Watch","Xcode"]
+//		searchSuggestionView.delegate = self
 		
 		resetUIForYearFetch()
+	}
+	
+	
+	func searchFieldDidStartSearching(sender: NSSearchField) {
+
+	}
+
+	func searchFieldDidEndSearching(sender: NSSearchField) {
+
+	}
+	
+	// MARK: SearchSuggestions Delegates
+	func didSelectSuggestion(suggestion : String) {
+		searchField.stringValue = suggestion
+		searchEntered(searchField)
 	}
 	
 	func searchPreset(sender: AnyObject?) {
@@ -1168,14 +1172,12 @@ class ViewController: NSViewController, NSURLSessionDelegate, NSURLSessionDataDe
 			if userInfoForSession.currentProgress == 1 {
 				watchedAction = NSTableViewRowAction(style: .Regular, title: "Mark as Unwatched", handler: { (action, int) -> Void in
 					userInfoForSession.currentProgress = 0
-					self.myTableView.reloadDataForRowIndexes(NSIndexSet(index: int), columnIndexes:NSIndexSet(indexesInRange: NSMakeRange(0,self.myTableView.numberOfColumns)))
 					self.myTableView.rowActionsVisible = false
 				})
 			}
 			else {
 				watchedAction = NSTableViewRowAction(style: .Regular, title: "Mark as Watched", handler: { (action, int) -> Void in
 					userInfoForSession.currentProgress = 1
-					self.myTableView.reloadDataForRowIndexes(NSIndexSet(index: int), columnIndexes:NSIndexSet(indexesInRange: NSMakeRange(0,self.myTableView.numberOfColumns)))
 					self.myTableView.rowActionsVisible = false
 				})
 			}
@@ -1183,14 +1185,12 @@ class ViewController: NSViewController, NSURLSessionDelegate, NSURLSessionDataDe
 			if userInfoForSession.markAsFavorite == true {
 				favoriteAction = NSTableViewRowAction(style: .Regular, title: "Remove from Favorites", handler: { (action, int) -> Void in
 					userInfoForSession.markAsFavorite = false
-					self.myTableView.reloadDataForRowIndexes(NSIndexSet(index: int), columnIndexes:NSIndexSet(indexesInRange: NSMakeRange(0,self.myTableView.numberOfColumns)))
 					self.myTableView.rowActionsVisible = false
 				})
 			}
 			else {
 				favoriteAction = NSTableViewRowAction(style: .Regular, title: "Add to Favorites", handler: { (action, int) -> Void in
 					userInfoForSession.markAsFavorite = true
-					self.myTableView.reloadDataForRowIndexes(NSIndexSet(index: int), columnIndexes:NSIndexSet(indexesInRange: NSMakeRange(0,self.myTableView.numberOfColumns)))
 					self.myTableView.rowActionsVisible = false
 				})
 			}
@@ -1271,9 +1271,7 @@ class ViewController: NSViewController, NSURLSessionDelegate, NSURLSessionDataDe
                 if let index = (self.isFiltered ? self.visibleWWDCSessionsArray.indexOf(session) : self.allWWDCSessionsArray.indexOf(session)) {
                     
                     dispatch_async(dispatch_get_main_queue()) { [unowned self] in
-                        self.myTableView.beginUpdates()
                         self.myTableView.reloadDataForRowIndexes(NSIndexSet(index: index), columnIndexes:NSIndexSet(indexesInRange: NSMakeRange(0,self.myTableView.numberOfColumns)))
-                        self.myTableView.endUpdates()
                         self.autoScrollToCurrentDownload()
                         self.updateTotalProgress()
                     }
