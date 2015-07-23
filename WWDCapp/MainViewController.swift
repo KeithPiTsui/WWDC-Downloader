@@ -8,7 +8,7 @@
 
 import Cocoa
 
-class ViewController: NSViewController, NSURLSessionDelegate, NSURLSessionDataDelegate, NSTableViewDataSource, NSTableViewDelegate, NSMenuDelegate, NSSearchFieldDelegate {
+class ViewController: NSViewController, NSURLSessionDelegate, NSURLSessionDataDelegate, NSTableViewDataSource, NSTableViewDelegate, NSMenuDelegate, NSSearchFieldDelegate, SearchSuggestionsDelegate {
 
 	// MARK: Hooks for Proxying to ToolbarItems in WindowControllerSubclass
 	var yearSeletor: NSPopUpButton! {
@@ -96,7 +96,8 @@ class ViewController: NSViewController, NSURLSessionDelegate, NSURLSessionDataDe
     @IBOutlet weak var toolbarVisualEffectView: NSVisualEffectView!
 	@IBOutlet weak var visualEffectView: NSVisualEffectView!
 
-	//@IBOutlet weak var searchSuggestionView: SearchSuggestions!
+	@IBOutlet weak var searchSuggestionsContainer: NSVisualEffectView!
+	@IBOutlet weak var searchSuggestionView: SearchSuggestions!
 	
 	@IBOutlet weak var loggingLabel: NSTextField!
 	
@@ -670,19 +671,30 @@ class ViewController: NSViewController, NSURLSessionDelegate, NSURLSessionDataDe
 			searchField.delegate = self
 		}
 		
-//		searchSuggestionView.suggestionsStringArray = ["iOS","OS X","Watch","Xcode"]
-//		searchSuggestionView.delegate = self
+		searchSuggestionView.suggestionsStringArray = ["iOS","OS X","Watch","Xcode","Swift","Framework","Media", "Design", "Tools", "Games", "Core"]
+		searchSuggestionView.delegate = self
+		searchSuggestionsContainer.hidden = true
+		
+		NSNotificationCenter.defaultCenter().addObserverForName(NSControlTextDidChangeNotification, object: searchField, queue: NSOperationQueue.mainQueue(), usingBlock: {  (notification) -> Void in
+			
+			NSAnimationContext.runAnimationGroup({ context in
+				context.duration = 0.3
+				self.searchSuggestionsContainer.animator().hidden = false
+				}, completionHandler: nil)
+			
+		})
+
+		NSNotificationCenter.defaultCenter().addObserverForName(NSControlTextDidEndEditingNotification, object: searchField, queue: NSOperationQueue.mainQueue(), usingBlock: { (notification) -> Void in
+			
+				NSAnimationContext.runAnimationGroup({ context in
+					context.duration = 0.3
+					self.searchSuggestionsContainer.animator().hidden = true
+					}, completionHandler: nil)
+		})
+		
+		searchSuggestionView.needsDisplay = true
 		
 		resetUIForYearFetch()
-	}
-	
-	
-	func searchFieldDidStartSearching(sender: NSSearchField) {
-
-	}
-
-	func searchFieldDidEndSearching(sender: NSSearchField) {
-
 	}
 	
 	// MARK: SearchSuggestions Delegates

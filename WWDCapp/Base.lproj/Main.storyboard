@@ -218,7 +218,6 @@ CA
                                         </searchFieldCell>
                                         <connections>
                                             <action selector="searchEntered:" target="Oky-zY-oP4" id="ABU-lT-yjd"/>
-                                            <outlet property="delegate" destination="XfG-lQ-9wD" id="LR7-Y1-3YB"/>
                                         </connections>
                                     </searchField>
                                 </toolbarItem>
@@ -695,14 +694,7 @@ CA
                         <rect key="frame" x="0.0" y="0.0" width="930" height="620"/>
                         <autoresizingMask key="autoresizingMask"/>
                         <subviews>
-                            <visualEffectView appearanceType="vibrantLight" blendingMode="behindWindow" state="followsWindowActiveState" translatesAutoresizingMaskIntoConstraints="NO" id="BmC-e0-Fwn">
-                                <rect key="frame" x="0.0" y="583" width="930" height="37"/>
-                                <constraints>
-                                    <constraint firstAttribute="height" constant="37" id="oor-Yb-X6c"/>
-                                </constraints>
-                                <animations/>
-                            </visualEffectView>
-                            <customView translatesAutoresizingMaskIntoConstraints="NO" id="ZwT-7T-fue" customClass="NSVisualEffectView">
+                            <customView translatesAutoresizingMaskIntoConstraints="NO" id="ZwT-7T-fue" userLabel="Main Visual Effect View" customClass="NSVisualEffectView">
                                 <rect key="frame" x="0.0" y="0.0" width="930" height="583"/>
                                 <subviews>
                                     <button translatesAutoresizingMaskIntoConstraints="NO" id="93J-Av-NLB">
@@ -1527,14 +1519,41 @@ CA
                                 </constraints>
                                 <animations/>
                             </customView>
+                            <visualEffectView appearanceType="vibrantLight" blendingMode="behindWindow" state="followsWindowActiveState" translatesAutoresizingMaskIntoConstraints="NO" id="KJ7-a3-8lD" userLabel="Suggestions View">
+                                <rect key="frame" x="0.0" y="564" width="930" height="19"/>
+                                <subviews>
+                                    <customView placeholderIntrinsicWidth="930" placeholderIntrinsicHeight="19" translatesAutoresizingMaskIntoConstraints="NO" id="yyz-Zl-t92" customClass="SearchSuggestions" customModule="WWDCapp" customModuleProvider="target">
+                                        <rect key="frame" x="0.0" y="0.0" width="930" height="19"/>
+                                        <animations/>
+                                    </customView>
+                                </subviews>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="19" id="G67-dk-DOY"/>
+                                    <constraint firstItem="yyz-Zl-t92" firstAttribute="centerY" secondItem="KJ7-a3-8lD" secondAttribute="centerY" id="Uv2-X5-ZNE"/>
+                                    <constraint firstItem="yyz-Zl-t92" firstAttribute="centerX" secondItem="KJ7-a3-8lD" secondAttribute="centerX" id="YIK-Sl-bmY"/>
+                                    <constraint firstItem="yyz-Zl-t92" firstAttribute="height" secondItem="KJ7-a3-8lD" secondAttribute="height" id="iEs-jt-L3b"/>
+                                </constraints>
+                                <animations/>
+                            </visualEffectView>
+                            <visualEffectView appearanceType="vibrantLight" blendingMode="behindWindow" state="followsWindowActiveState" translatesAutoresizingMaskIntoConstraints="NO" id="BmC-e0-Fwn">
+                                <rect key="frame" x="0.0" y="583" width="930" height="37"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="37" id="oor-Yb-X6c"/>
+                                </constraints>
+                                <animations/>
+                            </visualEffectView>
                         </subviews>
                         <constraints>
+                            <constraint firstItem="KJ7-a3-8lD" firstAttribute="leading" secondItem="m2S-Jp-Qdl" secondAttribute="leading" id="0l5-eN-DKs"/>
                             <constraint firstItem="ZwT-7T-fue" firstAttribute="leading" secondItem="m2S-Jp-Qdl" secondAttribute="leading" id="5ty-Tn-HfR"/>
                             <constraint firstItem="BmC-e0-Fwn" firstAttribute="width" secondItem="m2S-Jp-Qdl" secondAttribute="width" id="Czc-mb-ULp"/>
+                            <constraint firstAttribute="trailing" secondItem="KJ7-a3-8lD" secondAttribute="trailing" id="GMH-4H-LBW"/>
                             <constraint firstItem="BmC-e0-Fwn" firstAttribute="leading" secondItem="m2S-Jp-Qdl" secondAttribute="leading" id="Gkd-pY-ED7"/>
                             <constraint firstItem="ZwT-7T-fue" firstAttribute="top" secondItem="BmC-e0-Fwn" secondAttribute="bottom" id="Zj4-cc-JsS"/>
                             <constraint firstItem="BmC-e0-Fwn" firstAttribute="top" secondItem="m2S-Jp-Qdl" secondAttribute="top" id="ked-qW-dFD"/>
+                            <constraint firstItem="KJ7-a3-8lD" firstAttribute="top" secondItem="BmC-e0-Fwn" secondAttribute="bottom" id="lYA-Vy-tds"/>
                             <constraint firstAttribute="bottom" secondItem="ZwT-7T-fue" secondAttribute="bottom" id="rHA-9j-E78"/>
+                            <constraint firstItem="KJ7-a3-8lD" firstAttribute="width" secondItem="m2S-Jp-Qdl" secondAttribute="width" id="yTe-6L-OVP"/>
                             <constraint firstItem="ZwT-7T-fue" firstAttribute="width" secondItem="m2S-Jp-Qdl" secondAttribute="width" id="yz6-qW-kzP"/>
                         </constraints>
                         <animations/>
@@ -1555,6 +1574,8 @@ CA
                         <outlet property="myTableView" destination="SSh-0R-MKF" id="liZ-v1-msq"/>
                         <outlet property="oflabel" destination="C8t-xS-mu2" id="IvW-Va-OWf"/>
                         <outlet property="removeFromFavoritesMenuItem" destination="25x-gX-lP8" id="m69-8B-6Zn"/>
+                        <outlet property="searchSuggestionView" destination="yyz-Zl-t92" id="r7S-wd-X0R"/>
+                        <outlet property="searchSuggestionsContainer" destination="KJ7-a3-8lD" id="bGa-SC-i6r"/>
                         <outlet property="sessionMenu" destination="Cbq-0C-XEh" id="ROf-Yq-IxO"/>
                         <outlet property="showInFinderMenuItem" destination="YRG-rf-hoF" id="wWX-V1-g6K"/>
                         <outlet property="startDownload" destination="2Uk-zV-FYf" id="wan-PT-H8F"/>
