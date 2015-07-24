@@ -895,12 +895,7 @@ class ViewController: NSViewController, NSURLSessionDelegate, NSURLSessionDataDe
 	// MARK: - TableView
 	func numberOfRowsInTableView(tableView: NSTableView) -> Int {
 		
-		if !isFiltered {
-			return self.allWWDCSessionsArray.count
-		}
-		else {
-			return self.visibleWWDCSessionsArray.count
-		}
+		return isFiltered ? visibleWWDCSessionsArray.count : allWWDCSessionsArray.count
 	}
 	
     func tableView(tableView: NSTableView, heightOfRow row: Int) -> CGFloat {
@@ -935,25 +930,22 @@ class ViewController: NSViewController, NSURLSessionDelegate, NSURLSessionDataDe
 	
 	func tableViewColumnDidResize(notification: NSNotification) {
 		
-		if let userInfo = notification.userInfo {
+		if let column = notification.userInfo?["NSTableColumn"] as? NSTableColumn, let referenceCell = referenceCell {
+			var frame = referenceCell.frame
+			frame.size.width = column.width
+			referenceCell.frame = frame
 			
-			if let column = userInfo["NSTableColumn"] as? NSTableColumn, let referenceCell = referenceCell {
-				var frame = referenceCell.frame
-				frame.size.width = column.width
-				referenceCell.frame = frame
+			referenceCell.layoutSubtreeIfNeeded()
+			
+			if self.myTableView.numberOfRows > 0 {
 				
-				referenceCell.layoutSubtreeIfNeeded()
-				
-				if self.myTableView.numberOfRows > 0 {
+				if let visibleRect = self.myTableView.enclosingScrollView?.contentView.visibleRect {
 					
-					if let visibleRect = self.myTableView.enclosingScrollView?.contentView.visibleRect {
-						
-						let range = self.myTableView.rowsInRect(visibleRect)
+					let range = self.myTableView.rowsInRect(visibleRect)
 
-						myTableView.beginUpdates()
-						myTableView.noteHeightOfRowsWithIndexesChanged(NSIndexSet(indexesInRange: range))
-						myTableView.endUpdates()
-					}
+					myTableView.beginUpdates()
+					myTableView.noteHeightOfRowsWithIndexesChanged(NSIndexSet(indexesInRange: range))
+					myTableView.endUpdates()
 				}
 			}
 		}
@@ -1106,14 +1098,10 @@ class ViewController: NSViewController, NSURLSessionDelegate, NSURLSessionDataDe
 	func tableView(tableView: NSTableView, sortDescriptorsDidChange oldDescriptors: [NSSortDescriptor]) {
 
 		if !isFiltered {
-			let sortedBy = (allWWDCSessionsArray as NSArray).sortedArrayUsingDescriptors(tableView.sortDescriptors)
-			
-			allWWDCSessionsArray = sortedBy as! [WWDCSession]
+			 allWWDCSessionsArray = (allWWDCSessionsArray as NSArray).sortedArrayUsingDescriptors(tableView.sortDescriptors) as! [WWDCSession]
 		}
 		else {
-			let sortedBy = (visibleWWDCSessionsArray as NSArray).sortedArrayUsingDescriptors(tableView.sortDescriptors)
-			
-			visibleWWDCSessionsArray = sortedBy as! [WWDCSession]
+			visibleWWDCSessionsArray = (visibleWWDCSessionsArray as NSArray).sortedArrayUsingDescriptors(tableView.sortDescriptors) as! [WWDCSession]
 		}
 		
 		tableView.reloadData()
@@ -1211,6 +1199,11 @@ class ViewController: NSViewController, NSURLSessionDelegate, NSURLSessionDataDe
 						self.updateTotalProgress()
 					}
 				}
+				else {
+					dispatch_async(dispatch_get_main_queue()) { [unowned self] in
+						self.updateTotalProgress()
+					}
+				}
 
 			})
 			
@@ -1239,6 +1232,11 @@ class ViewController: NSViewController, NSURLSessionDelegate, NSURLSessionDataDe
                         self.updateTotalProgress()
                     }
                 }
+				else {
+					dispatch_async(dispatch_get_main_queue()) { [unowned self] in
+						self.updateTotalProgress()
+					}
+				}
 
                 dispatch_group_leave(downloadGroup)
 			})
@@ -1269,11 +1267,11 @@ class ViewController: NSViewController, NSURLSessionDelegate, NSURLSessionDataDe
 		
 		isDownloading = true
 
-		searchField.enabled = false
-		searchField.stringValue = ""
-		isFiltered = false
-		visibleWWDCSessionsArray.removeAll()
-		myTableView.reloadData()
+//		searchField.enabled = false
+//		searchField.stringValue = ""
+//		isFiltered = false
+//		visibleWWDCSessionsArray.removeAll()
+//		myTableView.reloadData()
 
 		startDownload.title = "Stop Downloading"
 		
