@@ -12,7 +12,7 @@ import Cocoa
 class AppDelegate: NSObject, NSApplicationDelegate {
 
     var dockTile : NSDockTile?
-    var dockProgress : NSProgressIndicator?
+    @IBOutlet var dockProgress : NSProgressIndicator!
 	
     var mainViewController : ViewController!
 
@@ -58,32 +58,36 @@ class AppDelegate: NSObject, NSApplicationDelegate {
 		
 		dockTile = NSApplication.sharedApplication().dockTile
 		
-		if let dockTile = dockTile {
-			dockProgress = NSProgressIndicator(frame: NSRect(x: 0, y: 0, width: dockTile.size.width, height: 20))
-			if let dockProgress = dockProgress {
-				let imageView = NSImageView()
-				imageView.image = NSApplication.sharedApplication().applicationIconImage
-				dockTile.contentView = imageView
-				
-				dockProgress.style = NSProgressIndicatorStyle.BarStyle
-				dockProgress.startAnimation(self)
-				dockProgress.indeterminate = false
-				dockProgress.minValue = 0
-				dockProgress.maxValue = 1
-				dockProgress.hidden = false
-				dockProgress.needsDisplay = true
-				
-				// Not working to color progress indicator
-				//				if let filter = CIFilter(name: "CIHueAdjust") {
-				//					filter.setDefaults()
-				//					filter.setValue(0.8, forKey: "inputAngle")
-				//					dockProgress.backgroundFilters = [filter]
-				//				}
-				
-				imageView.addSubview(dockProgress)
-				
-				dockTile.display()
-			}
+		if let dockTile = dockTile, let dockProgress = dockProgress {
+			
+			let imageView = NSImageView()
+			imageView.image = NSApplication.sharedApplication().applicationIconImage
+			imageView.wantsLayer = true
+			
+			dockTile.contentView = imageView
+			dockProgress.frame = CGRectMake(0, 0, dockTile.size.width, 20)
+			
+//				dockProgress.wantsLayer = true
+//				dockProgress.style = NSProgressIndicatorStyle.BarStyle
+			dockProgress.startAnimation(self)
+//				dockProgress.indeterminate = false
+//				dockProgress.minValue = 0
+//				dockProgress.maxValue = 1
+			dockProgress.hidden = false
+			dockProgress.needsDisplay = true
+			dockProgress.layerUsesCoreImageFilters = true
+
+			// Not working to color progress indicator
+//				if let filter = CIFilter(name: "CIHueAdjust") {
+//					filter.setDefaults()
+//					filter.setValue(0.8, forKey: "inputAngle")
+//					dockProgress.contentFilters = [filter]
+//				}
+			
+			imageView.addSubview(dockProgress)
+			
+			dockTile.display()
+			
 		}
 	}
 	
