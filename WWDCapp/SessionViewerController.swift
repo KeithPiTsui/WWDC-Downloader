@@ -246,13 +246,22 @@ class PDFMainViewController : NSViewController {
 	
     weak var wwdcSession : WWDCSession? {
         didSet {
-            if let localFileURL = wwdcSession?.pdfFile?.localFileURL {
+            if let localFileURL = wwdcSession?.pdfFile?.localFileURL where wwdcSession?.pdfFile?.isFileAlreadyDownloaded == true {
+				
                 let document = PDFDocument(URL: localFileURL)
                 pdfView.setDocument(document)
 				
 				noPDFLabel.animator().alphaValue = 0
             }
 			else {
+				
+				if wwdcSession?.pdfFile?.remoteFileURL == nil {
+					noPDFLabel.stringValue = "No PDF Available"
+				}
+				else {
+					noPDFLabel.stringValue = "PDF not yet Downloaded"
+				}
+				
 				noPDFLabel.animator().alphaValue = 1
 				pdfView.setDocument(nil)
 
