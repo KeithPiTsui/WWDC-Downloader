@@ -41,6 +41,7 @@
 		A97D90A11B34CDF70008CED5 /* libxml2.2.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = A96E4D611B2D44910030F908 /* libxml2.2.dylib */; };
 		A99804331B5DA8A000862B16 /* SessionViewerController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 448E3D471B5D0226006A3988 /* SessionViewerController.swift */; };
 		A9C98DBB1B48678100DB11C8 /* IntrinsicContentNSTextView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9C98DBA1B48678100DB11C8 /* IntrinsicContentNSTextView.swift */; };
+		A9E933791B628D0500F89775 /* DockProgressBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9E933781B628D0500F89775 /* DockProgressBar.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -83,6 +84,7 @@
 		A96E66701B5EEAD4002332BA /* SessionIDCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SessionIDCell.swift; sourceTree = "<group>"; };
 		A96EF1CE1B4D423800494E45 /* Preferences.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Preferences.swift; sourceTree = "<group>"; };
 		A9C98DBA1B48678100DB11C8 /* IntrinsicContentNSTextView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = IntrinsicContentNSTextView.swift; sourceTree = "<group>"; };
+		A9E933781B628D0500F89775 /* DockProgressBar.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DockProgressBar.swift; sourceTree = "<group>"; };
 		A9F9BADA1B34689300BEA874 /* BlockWrappers.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = BlockWrappers.swift; path = Common/BlockWrappers.swift; sourceTree = "<group>"; };
 		A9F9BADB1B34689300BEA874 /* DownloadFileManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = DownloadFileManager.swift; path = Common/DownloadFileManager.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -120,6 +122,7 @@
 				443F87A51B566E7600637F6F /* ResizeAwareTableView.swift */,
 				44ADC8341B60026F00C00C4B /* ReferencedMenu.swift */,
 				44ADC8361B60038200C00C4B /* FileButton.swift */,
+				A9E933781B628D0500F89775 /* DockProgressBar.swift */,
 			);
 			name = Subclasses;
 			sourceTree = "<group>";
@@ -325,6 +328,7 @@
 				A90D14EB1B41A8CF00A30590 /* FetchFileSizeManager.swift in Sources */,
 				A9528F361B34C427002290D3 /* BlockWrappers.swift in Sources */,
 				443168BB1B5E8FCB003842F2 /* ImageExtras.swift in Sources */,
+				A9E933791B628D0500F89775 /* DockProgressBar.swift in Sources */,
 				443F87A61B566E7600637F6F /* ResizeAwareTableView.swift in Sources */,
 				A9528F271B34C40E002290D3 /* AppDelegate.swift in Sources */,
 				443168BD1B5EA94B003842F2 /* UserInfo.swift in Sources */,

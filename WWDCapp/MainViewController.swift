@@ -1471,6 +1471,8 @@ class ViewController: NSViewController, NSURLSessionDelegate, NSURLSessionDataDe
         totallabel.stringValue = byteFormatter.stringFromByteCount(0)
 
 		downloadProgressView.doubleValue = 0
+        
+        DockProgressBar.appProgressBar.removeProgress()
 	}
     
     // MARK: Right Click Menu
@@ -1834,14 +1836,13 @@ class ViewController: NSViewController, NSURLSessionDelegate, NSURLSessionDataDe
 	
     // MARK: Dock Icon
     func startUpdatingDockIcon () {
-		dockIconUpdateTimer = NSTimer.scheduledTimerWithTimeInterval(0.5, target: self, selector: "updateDockIcon", userInfo: nil, repeats: true)
+		dockIconUpdateTimer = NSTimer.scheduledTimerWithTimeInterval(0.25, target: self, selector: Selector("updateDockIcon"), userInfo: nil, repeats: true)
 	}
 	
 	func updateDockIcon () {
 		
 		dispatch_async(dispatch_get_main_queue()) { [unowned self] in
-			let appDelegate = NSApplication.sharedApplication().delegate as! AppDelegate
-			appDelegate.updateDockProgress(self.downloadProgressView.doubleValue)
+			DockProgressBar.appProgressBar.updateProgress(self.downloadProgressView.doubleValue)
 		}
 	}
 	
