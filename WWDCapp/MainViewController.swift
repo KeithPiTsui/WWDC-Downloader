@@ -1516,6 +1516,7 @@ class ViewController: NSViewController, NSURLSessionDelegate, NSURLSessionDataDe
 				wwdcSession.deleteDownloadedFiles()
 			}
 			myTableView.reloadDataForRowIndexes(myTableView.selectedRowIndexes, columnIndexes: NSIndexSet(indexesInRange: NSMakeRange(0,self.myTableView.numberOfColumns)))
+			coordinateAllCheckBoxUI()
 		}
     }
 	
