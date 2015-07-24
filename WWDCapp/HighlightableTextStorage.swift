@@ -13,6 +13,8 @@ class HighlightableTextStorage : NSTextStorage {
 	
 	var textToHighlight : String = ""
 	
+	var isBackgroundHighlighted = false
+	
     private var tmpString = NSMutableAttributedString()
 	
 	override var string : String {
@@ -58,10 +60,13 @@ class HighlightableTextStorage : NSTextStorage {
 			expression.enumerateMatchesInString(self.string, options: NSMatchingOptions.ReportProgress, range: paragraphRange, usingBlock: { (result, _, _) -> Void in
 				
 				if let result = result {
+					if self.isBackgroundHighlighted == true {
+						self.addAttribute(NSForegroundColorAttributeName, value: NSColor.labelColor(), range: result.range)
+					}
 					self.addAttribute(NSBackgroundColorAttributeName, value: NSColor.yellowColor(), range: result.range)
 				}
+				
 			})
-			
 		}
 		catch {
 			

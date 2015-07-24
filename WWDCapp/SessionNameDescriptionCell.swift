@@ -24,8 +24,17 @@ class SessionNameDescriptionCell : NSTableCellView, NSTextViewDelegate {
 	
 	override var backgroundStyle : NSBackgroundStyle {
 		didSet {
-			sessionName.textColor = (backgroundStyle == NSBackgroundStyle.Light ? NSColor.labelColor() : NSColor.whiteColor())
-			sessionDescriptionTextView.textColor = (backgroundStyle == NSBackgroundStyle.Light ? NSColor.labelColor() : NSColor.whiteColor())
+			nameTextStorage.beginEditing()
+			nameTextStorage.isBackgroundHighlighted = (backgroundStyle == NSBackgroundStyle.Dark ? true : false)
+			nameTextStorage.addAttribute(NSForegroundColorAttributeName, value: (backgroundStyle == NSBackgroundStyle.Dark ? NSColor.whiteColor() : NSColor.labelColor()), range: NSMakeRange(0,nameTextStorage.length))
+			nameTextStorage.endEditing()
+			
+			descriptionTextStorage.beginEditing()
+			descriptionTextStorage.isBackgroundHighlighted = (backgroundStyle == NSBackgroundStyle.Dark ? true : false)
+			descriptionTextStorage.addAttribute(NSForegroundColorAttributeName, value: (backgroundStyle == NSBackgroundStyle.Dark ? NSColor.whiteColor() : NSColor.labelColor()), range: NSMakeRange(0,descriptionTextStorage.length))
+			descriptionTextStorage.endEditing()
+
+
 			sessionName.needsDisplay = true
 			sessionDescriptionTextView.needsDisplay = true
 		}
