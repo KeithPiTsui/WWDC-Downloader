@@ -733,11 +733,11 @@ class ViewController: NSViewController, NSURLSessionDelegate, NSURLSessionDataDe
         
         if let userSessionInfo = object as? UserSessionInfo where context == &myContext {
             
-            switch (aKeyPath, context) {
-            case("markAsFavorite", &myContext):
+            switch (aKeyPath) {
+            case("markAsFavorite"):
                 userInfoChanged(userSessionInfo)
                 
-            case("currentProgress", &myContext):
+            case("currentProgress"):
                 userInfoChanged(userSessionInfo)
                 
             default:
@@ -779,13 +779,19 @@ class ViewController: NSViewController, NSURLSessionDelegate, NSURLSessionDataDe
 	
 	func loadSessionIntoViewer(wwdcSession :WWDCSession) {
 		
-		if let sessionViewerController = sessionViewerController {
-			sessionViewerController.pdfController.wwdcSession = wwdcSession
-			sessionViewerController.videoController.wwdcSession = wwdcSession
-			sessionViewerController.transcriptController.wwdcSession = wwdcSession
-			
-			sessionViewerController.titleLabel.stringValue =  "WWDC \(wwdcSession.sessionYear), Session: \(wwdcSession.sessionID) - \(wwdcSession.title)"
+		guard let sessionViewerController = sessionViewerController else { return }
+		
+		if let session = sessionViewerController.videoController.wwdcSession {
+			if session == wwdcSession {
+				return
+			}
 		}
+		
+		sessionViewerController.pdfController.wwdcSession = wwdcSession
+		sessionViewerController.videoController.wwdcSession = wwdcSession
+		sessionViewerController.transcriptController.wwdcSession = wwdcSession
+		
+		sessionViewerController.titleLabel.stringValue =  "WWDC \(wwdcSession.sessionYear), Session: \(wwdcSession.sessionID) - \(wwdcSession.title)"
 	}
 	
 	// MARK: Fetch Year Info

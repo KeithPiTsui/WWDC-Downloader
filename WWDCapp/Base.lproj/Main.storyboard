@@ -591,10 +591,10 @@ CA
                                 <animations/>
                             </avPlayerView>
                             <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" setsMaxLayoutWidthAtFirstLayout="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Sz9-HT-oCW">
-                                <rect key="frame" x="72" y="97" width="208" height="17"/>
+                                <rect key="frame" x="24" y="88" width="304" height="34"/>
                                 <constraints>
-                                    <constraint firstAttribute="height" constant="17" id="SY5-Gh-lhK"/>
-                                    <constraint firstAttribute="width" constant="204" id="bHA-eY-3Sk"/>
+                                    <constraint firstAttribute="height" constant="34" id="SY5-Gh-lhK"/>
+                                    <constraint firstAttribute="width" constant="300" id="bHA-eY-3Sk"/>
                                 </constraints>
                                 <animations/>
                                 <textFieldCell key="cell" controlSize="mini" sendsActionOnEndEditing="YES" alignment="center" title="No Video Downloaded" id="ThO-y2-xwn">

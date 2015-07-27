@@ -104,10 +104,7 @@ class SessionViewerWindowController : NSWindowController, NSWindowDelegate {
     
     func windowShouldClose(sender: AnyObject) -> Bool {
 		
-		videoController.saveVideoProgress()
-		
-        videoController.avPlayerView.player?.pause()
-        videoController.avPlayerView.player = nil
+		videoController.unloadPlayer()
 		
         NSNotificationCenter.defaultCenter().postNotificationName(SessionViewerDidCloseNotification, object: nil)
 
@@ -168,6 +165,8 @@ class VideoViewController : NSViewController {
     
 	@IBOutlet weak var noVideoLabel: NSTextField!
 	
+	private var isStreamingURL : Bool = false
+	
 	weak var wwdcSession : WWDCSession? {
 		didSet {
 			loadVideo()
@@ -180,12 +179,15 @@ class VideoViewController : NSViewController {
 		avPlayerView.videoGravity = "AVLayerVideoGravityResizeAspect"
 		avPlayerView.controlsStyle = AVPlayerViewControlsStyle.Floating
 		avPlayerView.showsFullScreenToggleButton = true
+	
 	}
     
     func loadVideo () {
         
         guard let wwdcSession = wwdcSession else { return }
-        
+		
+		isStreamingURL = false
+		
         self.view.window?.title = wwdcSession.title
         
         var videoURL : NSURL?
@@ -200,14 +202,19 @@ class VideoViewController : NSViewController {
             else {
                 if let streamingURL = wwdcSession.streamingURL {
                     videoURL = streamingURL
+					isStreamingURL = true
+					noVideoLabel.stringValue = "No Downloaded Videos for this Session.\nTap Play to try the streaming version 😊"
                 }
+				else {
+					noVideoLabel.stringValue = "No Video Available for this Session!"
+				}
             }
         }
         
         guard let urlToPlay = videoURL else {
 		
 			// loaded session has no videos so save current and blank
-			saveVideoProgress()
+			unloadPlayer()
 			
             avPlayerView.controlsStyle = AVPlayerViewControlsStyle.None
 			noVideoLabel.animator().alphaValue = 1
@@ -215,30 +222,142 @@ class VideoViewController : NSViewController {
 			return
 		}
 		
-		noVideoLabel.animator().alphaValue = 0
 		
 		avPlayerView.controlsStyle = AVPlayerViewControlsStyle.Floating
 
 		let asset = AVAsset(URL: urlToPlay)
-		let newItem = AVPlayerItem(asset: asset)
-		
+		let newItem = AVPlayerItem(asset: asset, automaticallyLoadedAssetKeys: ["tracks", "duration", "commonMetadata"])
+
 		if let _ = avPlayerView.player?.currentItem {
+			saveVideoProgress()
 			avPlayerView.player?.replaceCurrentItemWithPlayerItem(newItem)
+			
 		}
 		else {
-			avPlayerView.player = AVPlayer(playerItem:newItem)
+			let player = AVPlayer(playerItem:newItem)
+			avPlayerView.player = player
+			startObservingPlayer(player)
+		}
+		
+		if isStreamingURL == false {		// Auto Play downloaded videos
 			avPlayerView.player?.play()
+			noVideoLabel.animator().alphaValue = 0
+		}
+		else {
+			noVideoLabel.animator().alphaValue = 1
 		}
     }
+	
+	func restoreProgressOfVideo() {
+		
+		if let item = avPlayerView.player?.currentItem, let wwdcSession = wwdcSession {
+			
+			let userInfo = UserInfo.sharedManager.userInfo(wwdcSession)
+
+			if userInfo.currentProgress > 0 && userInfo.currentProgress < 1 {
+				let secondsIntoVideo = Float(item.asset.duration.seconds)*userInfo.currentProgress
+				let time = CMTimeMakeWithSeconds(Float64(secondsIntoVideo), 1)
+				if CMTIME_IS_VALID(time) {
+					avPlayerView.player?.seekToTime(time)
+				}
+			}
+		}
+	}
+	
+	private var myContext = 0
+	
+	func startObservingPlayer(player: AVPlayer) {
+		let options = NSKeyValueObservingOptions([.New, .Old])
+		player.addObserver(self, forKeyPath: "status", options: options, context: &myContext)
+		player.addObserver(self, forKeyPath: "rate", options: options, context: &myContext)
+		
+		let timeInterval = CMTimeMakeWithSeconds(0.5, Int32(NSEC_PER_SEC))
+		player.addPeriodicTimeObserverForInterval(timeInterval, queue: dispatch_get_main_queue()) { (time) -> Void in
+			print("Time ticker by - \(time)")
+		}
+	}
+	
+	func stopObservingPlayer(player: AVPlayer) {
+		player.removeObserver(self, forKeyPath: "status", context: &myContext)
+		player.removeObserver(self, forKeyPath: "rate", context: &myContext)
+	}
+	
+	override func observeValueForKeyPath(keyPath: String?, ofObject object: AnyObject?, change: [String : AnyObject]?, context: UnsafeMutablePointer<Void>) {
+		
+		guard let aKeyPath = keyPath else {
+			super.observeValueForKeyPath(keyPath, ofObject: object, change: change, context: context)
+			return
+		}
+		
+		if let player = object as? AVPlayer where context == &myContext {
+			
+			switch (aKeyPath) {
+			case("status"):
+				playerStatusChanged()
+				
+			case("rate"):
+				playerRateChanged()
+				
+			default:
+				assert(false, "unknown key path")
+			}
+		}
+		else {
+			super.observeValueForKeyPath(keyPath, ofObject: object, change: change, context: context)
+		}
+	}
+	
+	func playerStatusChanged() {
+		
+		if let playerStatus = avPlayerView.player?.status {
+			
+			if playerStatus == AVPlayerStatus.ReadyToPlay {
+				print("Player Status READY")
+				restoreProgressOfVideo()
+			}
+			if playerStatus == AVPlayerStatus.Failed {
+				print("Player Status FAILED)")
+			}
+		}
+	}
+	
+	func playerRateChanged() {
+		
+		if let playerRate = avPlayerView.player?.rate {
+			
+			if playerRate == 0 {
+				print("stopped")
+			}
+			else {
+				print("playing")
+				noVideoLabel.animator().alphaValue = 0
+			}
+		}
+	}
+	
+	let percentageConsideredWatched : Float = 0.95
 	
 	func saveVideoProgress() {
 		
 		if let item = avPlayerView.player?.currentItem, let player = avPlayerView.player, let wwdcSession = wwdcSession  {
-			player.pause()
 			let userInfo = UserInfo.sharedManager.userInfo(wwdcSession)
 			if userInfo.currentProgress < 1 {
-				userInfo.currentProgress = Float(player.currentTime().seconds/item.duration.seconds)
+				let currentProgress = Float(player.currentTime().seconds/item.duration.seconds)
+				if currentProgress < 1 && currentProgress > percentageConsideredWatched {
+					userInfo.currentProgress = 1
+				}
+				else {
+					userInfo.currentProgress = currentProgress
+				}
 			}
+		}
+	}
+	
+	func unloadPlayer() {
+		if let player = avPlayerView.player {
+			player.pause()
+			saveVideoProgress()
+			stopObservingPlayer(player)
 			avPlayerView.player = nil
 		}
 	}
