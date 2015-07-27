@@ -229,9 +229,9 @@ class VideoViewController : NSViewController {
 		let newItem = AVPlayerItem(asset: asset, automaticallyLoadedAssetKeys: ["tracks", "duration", "commonMetadata"])
 
 		if let _ = avPlayerView.player?.currentItem {
+			avPlayerView.player?.pause()
 			saveVideoProgress()
 			avPlayerView.player?.replaceCurrentItemWithPlayerItem(newItem)
-			
 		}
 		else {
 			let player = AVPlayer(playerItem:newItem)

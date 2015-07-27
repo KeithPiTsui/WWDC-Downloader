@@ -56,4 +56,34 @@ class PreferencesController : NSViewController {
 		
 		DownloadFileManager.sharedManager.preferenceChanged()
 	}
+	
+//	@IBAction func changeDownloadsFolder(sender: NSButton) {
+//		let panel = NSOpenPanel()
+//		panel.directoryURL = NSURL(fileURLWithPath: Preferences.SharedPreferences().localVideoStoragePath)
+//		panel.canChooseDirectories = true
+//		panel.canChooseFiles = false
+//		panel.canCreateDirectories = true
+//		panel.prompt = "Choose"
+//		panel.beginSheetModalForWindow(window!) { result in
+//			if result > 0 {
+//				if let path = panel.URL?.path {
+//					Preferences.SharedPreferences().localVideoStoragePath = path
+//					self.downloadsFolderLabel.stringValue = path
+//				}
+//			}
+//		}
+//	}
+//	
+//	@IBAction func revealInFinder(sender: NSButton) {
+//		let path = Preferences.SharedPreferences().localVideoStoragePath
+//		let root = path.stringByDeletingLastPathComponent
+//		
+//		let fileManager = NSFileManager.defaultManager()
+//		if !fileManager.fileExistsAtPath(path) {
+//			fileManager.createDirectoryAtPath(path, withIntermediateDirectories: false, attributes: nil, error: nil)
+//		}
+//		
+//		NSWorkspace.sharedWorkspace().selectFile(path, inFileViewerRootedAtPath: root)
+//	}
+
 }

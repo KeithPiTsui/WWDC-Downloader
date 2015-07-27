@@ -330,15 +330,15 @@ class DownloadYearInfo: NSObject, NSURLSessionTaskDelegate {
 //                        let streaming = anItem.searchWithXPathQuery("//*[@class='video-trigger play-now']") as! [TFHppleElement]
 //                        if let streamingLink = streaming.first?.attributes["href"] as? String {
 //                            wwdcSession.streamingURL = NSURL(string: "https://developer.apple.com" + streamingLink) // This link doesn't resolve to stream  - redirect issue??
+//							print(wwdcSession.streamingURL)
 //                        }
-//						
+
 						let links = anItem.searchWithXPathQuery("//a") as! [TFHppleElement]
 						
 						for link in links {
 							if link.content == "HD" {
 								if let hdDownloadLink = link.attributes["href"] as? String {
 									let file = FileInfo(session: wwdcSession, fileType: .HD)
-                                    wwdcSession.streamingURL = NSURL(string: hdDownloadLink)    // use HDLink for streaming link not ideal
 									file.remoteFileURL = NSURL(string: hdDownloadLink)
 									wwdcSession.hdFile = file
 								}
@@ -347,6 +347,7 @@ class DownloadYearInfo: NSObject, NSURLSessionTaskDelegate {
 							if link.content == "SD" {
 								if let sdDownloadLink = link.attributes["href"] as? String {
 									let file = FileInfo(session: wwdcSession, fileType: .SD)
+									wwdcSession.streamingURL = NSURL(string: sdDownloadLink)    // use link for streaming not ideal but scraped wont play
 									file.remoteFileURL = NSURL(string: sdDownloadLink)
 									wwdcSession.sdFile = file
 								}
