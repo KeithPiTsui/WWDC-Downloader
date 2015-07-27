@@ -11,6 +11,7 @@ import Cocoa
 import AVKit
 import Quartz
 import AVFoundation
+import CoreGraphics
 
 let SessionViewerDidLaunchNotification = "SessionViewerDidLaunchNotification"
 let SessionViewerDidCloseNotification = "SessionViewerDidCloseNotification"
@@ -101,7 +102,17 @@ class SessionViewerWindowController : NSWindowController, NSWindowDelegate {
 			}
 		}
 	}
-    
+	
+//	@IBAction func toggleFloatNnTop(menu : NSMenu) {
+//		
+//		if let window = self.window {
+//			
+//			window.level = Int32(CGWindowLevelForKey(FloatingWindowLevelKey))
+//
+//		}
+//		
+//	}
+	
     func windowShouldClose(sender: AnyObject) -> Bool {
 		
 		videoController.unloadPlayer()
