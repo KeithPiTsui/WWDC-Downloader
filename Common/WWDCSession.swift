@@ -42,6 +42,8 @@ func ==(lhs: WWDCSession, rhs: WWDCSession)-> Bool {
 
     var isInfoFetchComplete = false
 	
+    var streamingURL : NSURL?
+
     var hdFile : FileInfo?
     var sdFile : FileInfo?
     var pdfFile : FileInfo?
@@ -159,6 +161,7 @@ func ==(lhs: WWDCSession, rhs: WWDCSession)-> Bool {
 		super.init()
 
 		self.isInfoFetchComplete = aDecoder.decodeBoolForKey("isInfoFetchComplete")
+        self.streamingURL = aDecoder.decodeObjectForKey("streamingURL") as? NSURL
 		self.hdFile = aDecoder.decodeObjectForKey("hdFile") as? FileInfo
 		self.sdFile = aDecoder.decodeObjectForKey("sdFile") as? FileInfo
 		self.pdfFile = aDecoder.decodeObjectForKey("pdfFile") as? FileInfo
@@ -178,6 +181,9 @@ func ==(lhs: WWDCSession, rhs: WWDCSession)-> Bool {
 		aCoder.encodeObject(sessionYear.description, forKey: "sessionYear")
 		aCoder.encodeObject(sampleCodeArray, forKey: "sampleCodeArray")
 		aCoder.encodeBool(isInfoFetchComplete, forKey: "isInfoFetchComplete")
+        if let streamingFile = self.streamingURL {
+            aCoder.encodeObject(streamingFile, forKey: "streamingURL")
+        }
 		if let hdFile = self.hdFile {
 			aCoder.encodeObject(hdFile, forKey: "hdFile")
 		}

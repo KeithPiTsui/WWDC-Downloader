@@ -204,6 +204,12 @@ class DownloadYearInfo: NSObject, NSURLSessionTaskDelegate {
 				
 				let sessionDoc = TFHpple(HTMLData: pageData)
 				
+                let streaming : [TFHppleElement] = sessionDoc.searchWithXPathQuery("//*[@class='video center']") as! [TFHppleElement]
+
+                if let streamingLink = streaming.first?.firstChildWithTagName("source").attributes["src"] as? String {
+                    wwdcSession.streamingURL = NSURL(string: streamingLink)
+                }
+                
 				let hd : [TFHppleElement] = sessionDoc.searchWithXPathQuery("//*[text()='HD']") as! [TFHppleElement]
 				
 				if let hdDownloadLink = hd.first?.attributes["href"] as? String {
@@ -311,7 +317,7 @@ class DownloadYearInfo: NSObject, NSURLSessionTaskDelegate {
 				if let sessionID = section.attributes["id"] as? String {
 					
 					let cleanSessionID = sessionID.stringByReplacingOccurrencesOfString("-video", withString: "")
-					
+                    
 					let sectionItems = section.searchWithXPathQuery("//*[@class='title']") as! [TFHppleElement]
 					let title = sectionItems[0].content
 					
@@ -320,13 +326,19 @@ class DownloadYearInfo: NSObject, NSURLSessionTaskDelegate {
 					let aItems = section.searchWithXPathQuery("//*[@class='description active']") as! [TFHppleElement]
 					
 					for anItem in aItems {
-						
+                        
+//                        let streaming = anItem.searchWithXPathQuery("//*[@class='video-trigger play-now']") as! [TFHppleElement]
+//                        if let streamingLink = streaming.first?.attributes["href"] as? String {
+//                            wwdcSession.streamingURL = NSURL(string: "https://developer.apple.com" + streamingLink) // This link doesn't resolve to stream  - redirect issue??
+//                        }
+//						
 						let links = anItem.searchWithXPathQuery("//a") as! [TFHppleElement]
 						
 						for link in links {
 							if link.content == "HD" {
 								if let hdDownloadLink = link.attributes["href"] as? String {
 									let file = FileInfo(session: wwdcSession, fileType: .HD)
+                                    wwdcSession.streamingURL = NSURL(string: hdDownloadLink)    // use HDLink for streaming link not ideal
 									file.remoteFileURL = NSURL(string: hdDownloadLink)
 									wwdcSession.hdFile = file
 								}

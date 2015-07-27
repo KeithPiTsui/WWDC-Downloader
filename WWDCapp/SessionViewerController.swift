@@ -197,6 +197,11 @@ class VideoViewController : NSViewController {
             if let localFileURL = wwdcSession.sdFile?.localFileURL where wwdcSession.sdFile?.isFileAlreadyDownloaded == true {
                 videoURL = localFileURL
             }
+            else {
+                if let streamingURL = wwdcSession.streamingURL {
+                    videoURL = streamingURL
+                }
+            }
         }
         
         guard let urlToPlay = videoURL else {
