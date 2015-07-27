@@ -256,27 +256,11 @@ enum FileType: CustomStringConvertible {
 	// MARK: - Directory Helpers
 	class func wwdcDirectory () -> String? {
         
-        let folderIndex = NSUserDefaults.standardUserDefaults().integerForKey(downloadFolderPreferencesKey)
-
-        let paths : [String]
-        
-        switch folderIndex {
-        case 0:
-            paths = NSSearchPathForDirectoriesInDomains(.DownloadsDirectory, .UserDomainMask, true)
-        case 1:
-            paths = NSSearchPathForDirectoriesInDomains(.DocumentDirectory, .UserDomainMask, true)
-        case 2:
-            paths = NSSearchPathForDirectoriesInDomains(.DesktopDirectory, .UserDomainMask, true)
-        default:
-            paths = NSSearchPathForDirectoriesInDomains(.DownloadsDirectory, .UserDomainMask, true)
-            break
-        }
-        
-		guard let documentsDirectory = paths.first else { return nil }
+        let folder = Preferences.sharedPreferences.downloadFolder
 		
 		let path = "/WWDC"
 		
-		return createDirectoryIfNeeded(path, inDirectory: documentsDirectory)
+		return createDirectoryIfNeeded(path, inDirectory: folder)
 	}
 	
 	class func yearDirectory(year : WWDCYear) -> String? {

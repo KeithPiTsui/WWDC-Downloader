@@ -336,18 +336,25 @@ class VideoViewController : NSViewController {
 	}
 	
 	let percentageConsideredWatched : Float = 0.95
+	let secondsConsideredStartedWatching : Float64 = 10
 	
 	func saveVideoProgress() {
 		
 		if let item = avPlayerView.player?.currentItem, let player = avPlayerView.player, let wwdcSession = wwdcSession  {
 			let userInfo = UserInfo.sharedManager.userInfo(wwdcSession)
 			if userInfo.currentProgress < 1 {
-				let currentProgress = Float(player.currentTime().seconds/item.duration.seconds)
+				let currentProgress = Float(player.currentTime().seconds/item.asset.duration.seconds)
 				if currentProgress < 1 && currentProgress > percentageConsideredWatched {
 					userInfo.currentProgress = 1
 				}
 				else {
-					userInfo.currentProgress = currentProgress
+					
+					if player.currentTime().seconds > CMTimeMakeWithSeconds(secondsConsideredStartedWatching, Int32(NSEC_PER_SEC)).seconds {
+						userInfo.currentProgress = currentProgress
+					}
+					else {
+						userInfo.currentProgress = 0
+					}
 				}
 			}
 		}

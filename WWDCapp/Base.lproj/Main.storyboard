@@ -5,6 +5,8 @@
         <plugIn identifier="com.apple.AVKitIBPlugin" version="8164.2"/>
         <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="8164.2"/>
         <plugIn identifier="com.apple.pdfkit.ibplugin" version="8164.2"/>
+        <capability name="Alignment constraints to the first baseline" minToolsVersion="6.0"/>
+        <capability name="Alignment constraints with different attributes" minToolsVersion="5.1"/>
     </dependencies>
     <scenes>
         <!--Application-->
@@ -1689,28 +1691,39 @@ CA
             <objects>
                 <viewController id="qXZ-A2-IF8" customClass="PreferencesController" customModule="WWDCapp" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" id="wFC-AX-EVm">
-                        <rect key="frame" x="0.0" y="0.0" width="306" height="160"/>
+                        <rect key="frame" x="0.0" y="0.0" width="309" height="143"/>
                         <autoresizingMask key="autoresizingMask"/>
                         <subviews>
-                            <stepper horizontalHuggingPriority="750" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="iZN-lW-FPv">
-                                <rect key="frame" x="277" y="115" width="19" height="27"/>
+                            <stepper horizontalHuggingPriority="750" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="iZN-lW-FPv">
+                                <rect key="frame" x="280" y="98" width="19" height="27"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="13" id="BAr-RG-znW"/>
+                                    <constraint firstAttribute="height" constant="22" id="eg8-QY-WIW"/>
+                                </constraints>
                                 <animations/>
                                 <stepperCell key="cell" continuous="YES" alignment="left" minValue="1" maxValue="10" doubleValue="1" id="tgd-PT-rdH"/>
                                 <connections>
                                     <action selector="stepperChanged:" target="qXZ-A2-IF8" id="3Au-Ai-BDG"/>
                                 </connections>
                             </stepper>
-                            <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Gzl-0E-hBY">
-                                <rect key="frame" x="11" y="120" width="225" height="17"/>
+                            <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="Gzl-0E-hBY">
+                                <rect key="frame" x="11" y="101" width="228" height="21"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="21" id="Lsh-Jl-sOk"/>
+                                </constraints>
                                 <animations/>
-                                <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="Number of Simultaneous Downloads" id="cTS-Sb-PRa">
+                                <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="Number of Simultaneous Downloads:" id="cTS-Sb-PRa">
                                     <font key="font" metaFont="system"/>
                                     <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
                                     <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                                 </textFieldCell>
                             </textField>
-                            <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Hun-dr-LMw">
-                                <rect key="frame" x="242" y="118" width="37" height="22"/>
+                            <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="Hun-dr-LMw">
+                                <rect key="frame" x="245" y="101" width="37" height="22"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="22" id="QMt-gB-CRk"/>
+                                    <constraint firstAttribute="width" constant="37" id="sqM-Gc-NGn"/>
+                                </constraints>
                                 <animations/>
                                 <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" borderStyle="bezel" alignment="center" title="3" id="fNs-Hb-Q07">
                                     <font key="font" metaFont="system"/>
@@ -1718,57 +1731,71 @@ CA
                                     <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                                 </textFieldCell>
                             </textField>
-                            <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Zfh-kR-DFe">
-                                <rect key="frame" x="167" y="5" width="132" height="32"/>
+                            <textField hidden="YES" horizontalHuggingPriority="251" verticalHuggingPriority="749" translatesAutoresizingMaskIntoConstraints="NO" id="guo-ex-wk1">
+                                <rect key="frame" x="11" y="63" width="202" height="20"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="198" id="KE3-VZ-e7h"/>
+                                    <constraint firstAttribute="height" constant="20" id="VXQ-mh-Whd"/>
+                                </constraints>
                                 <animations/>
-                                <buttonCell key="cell" type="push" title="Apply Changes" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="zt0-WV-dGv">
-                                    <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
-                                    <font key="font" metaFont="system"/>
-                                </buttonCell>
-                                <connections>
-                                    <action selector="applyChanges:" target="qXZ-A2-IF8" id="OEY-ON-A1a"/>
-                                </connections>
-                            </button>
-                            <popUpButton verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="amL-V1-rde">
-                                <rect key="frame" x="11" y="57" width="285" height="26"/>
-                                <animations/>
-                                <popUpButtonCell key="cell" type="push" bezelStyle="rounded" alignment="left" lineBreakMode="truncatingTail" borderStyle="borderAndBezel" imageScaling="proportionallyDown" inset="2" id="1u4-ak-Q8V">
-                                    <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
-                                    <font key="font" metaFont="menu"/>
-                                    <menu key="menu" id="KdX-L2-PyF">
-                                        <items>
-                                            <menuItem title="Downloads Folder" id="ptH-l6-aIN"/>
-                                            <menuItem title="Documents Folder" id="dMh-ad-yZN"/>
-                                            <menuItem title="Desktop" id="Bhg-E6-Skp"/>
-                                        </items>
-                                    </menu>
-                                </popUpButtonCell>
-                                <connections>
-                                    <action selector="folderSelected:" target="qXZ-A2-IF8" id="A3j-vD-rXZ"/>
-                                </connections>
-                            </popUpButton>
-                            <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="guo-ex-wk1">
-                                <rect key="frame" x="15" y="83" width="166" height="17"/>
-                                <animations/>
-                                <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="Location for WWDC Folder" id="rl8-Cz-1dn">
+                                <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="Download Folder Location" id="rl8-Cz-1dn">
                                     <font key="font" metaFont="system"/>
                                     <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
                                     <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                                 </textFieldCell>
                             </textField>
+                            <textField hidden="YES" horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="1Xq-JU-L5r">
+                                <rect key="frame" x="11" y="20" width="287" height="35"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="35" id="zev-RI-Z0d"/>
+                                </constraints>
+                                <animations/>
+                                <textFieldCell key="cell" controlSize="small" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="Label" id="zwg-mS-B6s">
+                                    <font key="font" metaFont="smallSystem"/>
+                                    <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                                    <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
+                                </textFieldCell>
+                            </textField>
+                            <button hidden="YES" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="Zfh-kR-DFe">
+                                <rect key="frame" x="226" y="53" width="76" height="32"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="21" id="DfU-At-A7X"/>
+                                    <constraint firstAttribute="width" constant="64" id="ZRz-De-0Fd"/>
+                                </constraints>
+                                <animations/>
+                                <buttonCell key="cell" type="push" title="Change" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="zt0-WV-dGv">
+                                    <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                                    <font key="font" metaFont="system"/>
+                                </buttonCell>
+                            </button>
                         </subviews>
+                        <constraints>
+                            <constraint firstItem="Hun-dr-LMw" firstAttribute="centerX" secondItem="Zfh-kR-DFe" secondAttribute="centerX" id="1iZ-s8-h4y"/>
+                            <constraint firstItem="Zfh-kR-DFe" firstAttribute="trailing" secondItem="1Xq-JU-L5r" secondAttribute="trailing" id="7Kv-G0-msG"/>
+                            <constraint firstItem="Gzl-0E-hBY" firstAttribute="bottom" secondItem="Hun-dr-LMw" secondAttribute="bottom" id="A35-mH-aFr"/>
+                            <constraint firstItem="Zfh-kR-DFe" firstAttribute="baseline" secondItem="guo-ex-wk1" secondAttribute="firstBaseline" id="B4i-5R-6IP"/>
+                            <constraint firstItem="1Xq-JU-L5r" firstAttribute="top" secondItem="guo-ex-wk1" secondAttribute="bottom" constant="8" symbolic="YES" id="H4i-6p-G4N"/>
+                            <constraint firstItem="1Xq-JU-L5r" firstAttribute="leading" secondItem="guo-ex-wk1" secondAttribute="leading" id="IhT-H6-oFW"/>
+                            <constraint firstItem="1Xq-JU-L5r" firstAttribute="centerX" secondItem="wFC-AX-EVm" secondAttribute="centerX" id="PCI-Ra-R4H"/>
+                            <constraint firstItem="Hun-dr-LMw" firstAttribute="top" secondItem="wFC-AX-EVm" secondAttribute="top" constant="20" symbolic="YES" id="PXD-Ed-B86"/>
+                            <constraint firstItem="Zfh-kR-DFe" firstAttribute="trailing" secondItem="iZN-lW-FPv" secondAttribute="trailing" id="VVP-xe-r7X"/>
+                            <constraint firstItem="Hun-dr-LMw" firstAttribute="leading" secondItem="Gzl-0E-hBY" secondAttribute="trailing" constant="8" symbolic="YES" id="jVT-No-6NJ"/>
+                            <constraint firstAttribute="bottom" secondItem="1Xq-JU-L5r" secondAttribute="bottom" constant="20" symbolic="YES" id="qwY-90-XNT"/>
+                            <constraint firstItem="guo-ex-wk1" firstAttribute="leading" secondItem="Gzl-0E-hBY" secondAttribute="leading" id="v29-ex-MnM"/>
+                            <constraint firstItem="Hun-dr-LMw" firstAttribute="top" secondItem="iZN-lW-FPv" secondAttribute="top" id="wT4-IZ-Ts4"/>
+                        </constraints>
                         <animations/>
                     </view>
                     <connections>
-                        <outlet property="applyChangesButton" destination="Zfh-kR-DFe" id="Mc8-W8-g1k"/>
+                        <outlet property="changeFolder" destination="Zfh-kR-DFe" id="1uB-vW-tzq"/>
                         <outlet property="connectionsLabel" destination="Hun-dr-LMw" id="muS-n4-IyN"/>
-                        <outlet property="downloadLocationMenu" destination="amL-V1-rde" id="Opd-iI-6fY"/>
+                        <outlet property="downloadFolderLabel" destination="1Xq-JU-L5r" id="7nl-SZ-QmW"/>
                         <outlet property="stepper" destination="iZN-lW-FPv" id="KNZ-Ns-qRE"/>
                     </connections>
                 </viewController>
                 <customObject id="Wfa-10-3jS" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="529" y="-424"/>
+            <point key="canvasLocation" x="516.5" y="-443"/>
         </scene>
     </scenes>
     <resources>

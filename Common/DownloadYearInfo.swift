@@ -347,7 +347,7 @@ class DownloadYearInfo: NSObject, NSURLSessionTaskDelegate {
 							if link.content == "SD" {
 								if let sdDownloadLink = link.attributes["href"] as? String {
 									let file = FileInfo(session: wwdcSession, fileType: .SD)
-									wwdcSession.streamingURL = NSURL(string: sdDownloadLink)    // use link for streaming not ideal but scraped wont play
+									wwdcSession.streamingURL = NSURL(string: sdDownloadLink)    // use link for streaming not ideal but scraped wont play see above commented out
 									file.remoteFileURL = NSURL(string: sdDownloadLink)
 									wwdcSession.sdFile = file
 								}

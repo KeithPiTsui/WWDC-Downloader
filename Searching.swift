@@ -124,18 +124,19 @@ class Searching {
         
         let fileManager = NSFileManager.defaultManager()
         
-        let folder = "~/Library/Application Support/WWDC Downloader/"
-        let expanded = folder.stringByExpandingTildeInPath
-        
-        if fileManager.fileExistsAtPath(expanded) == false {
-            do {
-                try fileManager.createDirectoryAtPath(expanded, withIntermediateDirectories: true, attributes: nil)
-            }
-            catch {
-                print(error)
-            }
-        }
-        
-        return expanded.stringByAppendingPathComponent("SearchArchive")
+		let folders = NSSearchPathForDirectoriesInDomains(NSSearchPathDirectory.ApplicationSupportDirectory, NSSearchPathDomainMask.UserDomainMask, true)
+		
+		guard let folder = folders.first else { assertionFailure("No Application Support Directory!"); return "" }
+		
+		if fileManager.fileExistsAtPath(folder) == false {
+			do {
+				try fileManager.createDirectoryAtPath(folder, withIntermediateDirectories: true, attributes: nil)
+			}
+			catch {
+				print(error)
+			}
+		}
+		
+        return folder.stringByAppendingPathComponent("SearchArchive")
     }
 }

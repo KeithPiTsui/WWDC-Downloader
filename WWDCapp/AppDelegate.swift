@@ -22,12 +22,8 @@ class AppDelegate: NSObject, NSApplicationDelegate {
 
     func applicationDidFinishLaunching(aNotification: NSNotification) {
 		
-        let simultaneousDownloads = NSUserDefaults.standardUserDefaults().integerForKey(simultaneousDownloadsKey)
-
-        if simultaneousDownloads < 1 || simultaneousDownloads > 10 {
-            NSUserDefaults.standardUserDefaults().setInteger(3, forKey: simultaneousDownloadsKey)
-        }
-        
+		//	Preferences.sharedPreferences.downloadFolder = ""
+		
 		if let window = NSApplication.sharedApplication().windows.first {
 			
 			window.styleMask |= NSFullSizeContentViewWindowMask
