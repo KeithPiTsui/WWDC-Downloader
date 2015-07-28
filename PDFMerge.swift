@@ -17,10 +17,8 @@ class PDFMerge : NSObject {
 	
         guard let directory = FileInfo.yearDirectory(year) else { completionHandler(url: nil); return }
 		
-		let outputPath = directory.stringByAppendingPathComponent("/\(year.description)-Combined-PDF.pdf")
-		
-		let outputURL = NSURL.fileURLWithPath(outputPath)
-		
+		let outputURL = directory.URLByAppendingPathComponent("/\(year.description)-Combined-PDF.pdf")
+				
         guard let writeContext = CGPDFContextCreateWithURL(outputURL, nil, nil) else { completionHandler(url: nil); return }
 
 		print("Creating Enormous Combined PDF document...")

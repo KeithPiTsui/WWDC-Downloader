@@ -141,6 +141,58 @@ func ==(lhs: WWDCSession, rhs: WWDCSession)-> Bool {
             }
         }
     }
+    
+    func startSecurityScopeForSession() {
+        
+        if let sdFile = sdFile?.localFileURL {
+            sdFile.startAccessingSecurityScopedResource()
+        }
+        if let hdFile = hdFile?.localFileURL {
+            hdFile.startAccessingSecurityScopedResource()
+        }
+        if let pdfFile = pdfFile?.localFileURL {
+            pdfFile.startAccessingSecurityScopedResource()
+        }
+        for sample in sampleCodeArray {
+            if let sample = sample.localFileURL {
+                sample.startAccessingSecurityScopedResource()
+            }
+        }
+    }
+    
+    func stopSecurityScopeForSession() {
+        
+        if let sdFile = sdFile?.localFileURL {
+            sdFile.stopAccessingSecurityScopedResource()
+        }
+        if let hdFile = hdFile?.localFileURL {
+            hdFile.stopAccessingSecurityScopedResource()
+        }
+        if let pdfFile = pdfFile?.localFileURL {
+            pdfFile.stopAccessingSecurityScopedResource()
+        }
+        for sample in sampleCodeArray {
+            if let sample = sample.localFileURL {
+                sample.stopAccessingSecurityScopedResource()
+            }
+        }
+    }
+    
+    func forceCheckIfFilesExistLocally() {
+        if let sdFile = sdFile {
+            sdFile.forceCheckIfFileExists()
+        }
+        if let hdFile = hdFile {
+            hdFile.forceCheckIfFileExists()
+        }
+        if let pdfFile = pdfFile {
+            pdfFile.forceCheckIfFileExists()
+        }
+        for sample in sampleCodeArray {
+            sample.forceCheckIfFileExists()
+        }
+    }
+
 	
 	required init(coder aDecoder: NSCoder) {
 		self.title  = aDecoder.decodeObjectForKey("title") as! String

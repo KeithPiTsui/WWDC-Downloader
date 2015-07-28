@@ -54,6 +54,8 @@ class AppDelegate: NSObject, NSApplicationDelegate {
 	
     func applicationWillTerminate(aNotification: NSNotification) {
         
+        mainViewController.resetUIForYearFetch()
+        
         UserInfo.sharedManager.save()
 		
         Searching.sharedManager.save()

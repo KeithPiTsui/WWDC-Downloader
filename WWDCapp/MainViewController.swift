@@ -99,6 +99,7 @@ class ViewController: NSViewController, NSURLSessionDelegate, NSURLSessionDataDe
 	@IBOutlet weak var searchSuggestionsContainer: NSVisualEffectView!
 	@IBOutlet weak var searchSuggestionView: SearchSuggestions!
 	
+    @IBOutlet weak var showFavoritesCheckbox: NSButton!
 	@IBOutlet weak var loggingLabel: NSTextField!
 	
 	@IBOutlet weak var allCodeCheckbox: NSButton!
@@ -562,6 +563,10 @@ class ViewController: NSViewController, NSURLSessionDelegate, NSURLSessionDataDe
         }
 	}
 
+    @IBAction func showOnlyFavorites(sender: AnyObject) {
+        
+    }
+    
 	// MARK: - View / UI
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -584,7 +589,8 @@ class ViewController: NSViewController, NSURLSessionDelegate, NSURLSessionDataDe
 		allHDCheckBox.attributedTitle = NSAttributedString(string: "All HD", attributes: attributesForCheckboxLabelLeft)
 		allSDCheckBox.attributedTitle = NSAttributedString(string: "All SD", attributes: attributesForCheckboxLabelLeft)
 		allCodeCheckbox.attributedTitle = NSAttributedString(string: "All Code", attributes: attributesForCheckboxLabelLeft)
-		
+		showFavoritesCheckbox.attributedTitle = NSAttributedString(string: "Show Only Favorites", attributes: attributesForCheckboxLabelLeft)
+        
 		if let contentView = myTableView.superview {
 			contentView.postsBoundsChangedNotifications = true
             
@@ -662,6 +668,7 @@ class ViewController: NSViewController, NSURLSessionDelegate, NSURLSessionDataDe
 		
         for session in allWWDCSessionsArray {
             stopObservingUserInfo(UserInfo.sharedManager.userInfo(session))
+            session.stopSecurityScopeForSession()
         }
         
 		loggingLabel.stringValue = ""
@@ -695,11 +702,12 @@ class ViewController: NSViewController, NSURLSessionDelegate, NSURLSessionDataDe
 		startDownload.enabled = false
 		
 		hideDescriptionsCheckBox.enabled = false
-		
 		hideDescriptionsCheckBox.state = 0
+        
+        showFavoritesCheckbox.enabled = false
+        showFavoritesCheckbox.state = 0
 		
 		includeTranscriptsInSearchCheckBox.enabled = false
-		
 		includeTranscriptsInSearchCheckBox.state = 0
 		
 		updateCombinePDFButtonState()
@@ -880,6 +888,9 @@ class ViewController: NSViewController, NSURLSessionDelegate, NSURLSessionDataDe
 		
 		hideDescriptionsCheckBox.enabled = true
 		hideDescriptionsCheckBox.state = 0
+        
+        showFavoritesCheckbox.enabled = true
+        showFavoritesCheckbox.state = 0
 		
 		includeTranscriptsInSearchCheckBox.enabled = true
 		includeTranscriptsInSearchCheckBox.state = 0
@@ -890,11 +901,13 @@ class ViewController: NSViewController, NSURLSessionDelegate, NSURLSessionDataDe
 		
 		checkDownloadButtonState()
         
-        myTableView.reloadData()
-        
         for session in allWWDCSessionsArray {
             startObservingUserInfo(UserInfo.sharedManager.userInfo(session))
+            session.startSecurityScopeForSession()
+            session.forceCheckIfFilesExistLocally()
         }
+        
+        myTableView.reloadData()
 	}
 	
 	
