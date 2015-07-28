@@ -283,8 +283,12 @@ class VideoViewController : NSViewController {
 		player.addObserver(self, forKeyPath: "rate", options: options, context: &myContext)
 		
 		let timeInterval = CMTimeMakeWithSeconds(0.5, Int32(NSEC_PER_SEC))
-		player.addPeriodicTimeObserverForInterval(timeInterval, queue: dispatch_get_main_queue()) { (time) -> Void in
+		player.addPeriodicTimeObserverForInterval(timeInterval, queue: dispatch_get_main_queue()) { [unowned self] (time) -> Void in
 			print("Time ticker by - \(time)")
+            
+            if self.noVideoLabel.alphaValue == 1 {
+                self.noVideoLabel.animator().alphaValue = 0
+            }
 		}
 	}
 	
