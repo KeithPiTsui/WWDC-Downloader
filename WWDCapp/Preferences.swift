@@ -10,10 +10,10 @@ import Foundation
 import Cocoa
 
 let simultaneousDownloadsKey = "simultaneousDownloads"
-let downloadFolderPreferencesKey = "downloadFolderPreferencesKey"
-
 let downloadFolderURLBookmarkDataKey = "downloadFolderURLBookmarkDataKey"
 
+let PreferencesDownloadNumberChangedNotification = "PreferencesDownloadNumberChangedNotification"
+let PreferencesDownloadLocationChangedNotification = "PreferencesDownloadLocationChangedNotification"
 
 let defaultSimultaneousDownloads = 3
 
@@ -32,6 +32,10 @@ class PreferencesController : NSViewController, NSPathControlDelegate {
         stepper.integerValue = numberOfDownloads
         connectionsLabel.stringValue = String(numberOfDownloads)
         
+        if Preferences.sharedPreferences.downloadFolderURL == nil {
+            Preferences.sharedPreferences.populateFolderURL()
+        }
+        
         if let url = Preferences.sharedPreferences.downloadFolderURL {
             pathControl.URL = url
         }
@@ -43,7 +47,7 @@ class PreferencesController : NSViewController, NSPathControlDelegate {
     @IBAction func stepperChanged(sender: NSStepper) {
         
 		connectionsLabel.stringValue = String(sender.integerValue)
-		DownloadFileManager.sharedManager.preferenceChanged()
+        NSNotificationCenter.defaultCenter().postNotificationName(PreferencesDownloadNumberChangedNotification, object: nil)
     }
     
     func pathControl(pathControl: NSPathControl, willDisplayOpenPanel openPanel: NSOpenPanel) {
@@ -81,11 +85,11 @@ class PreferencesController : NSViewController, NSPathControlDelegate {
     @IBAction func folderSelected(sender: NSPathControl) {
 		
         if let url = sender.clickedPathItem?.URL {
-            Preferences.sharedPreferences.downloadFolderURL = url
+            Preferences.sharedPreferences.saveFolderURL(url)
             pathControl.URL = Preferences.sharedPreferences.downloadFolderURL
+            NSNotificationCenter.defaultCenter().postNotificationName(PreferencesDownloadLocationChangedNotification, object: nil)
         }
 	}
-
 }
 
 class Preferences {
@@ -110,82 +114,84 @@ class Preferences {
 			NSUserDefaults.standardUserDefaults().synchronize()
 		}
 	}
-	
-	var downloadFolder : String {
-		get {
-			if let folder = NSUserDefaults.standardUserDefaults().objectForKey(downloadFolderPreferencesKey) as? String {
-				if folder.characters.count > 0 {
-					return folder
-				}
-			}
-			
-			let folders = NSSearchPathForDirectoriesInDomains(NSSearchPathDirectory.DownloadsDirectory, NSSearchPathDomainMask.UserDomainMask, true)
-			guard let folder = folders.first else { assertionFailure("No Downloads Directory!"); return "" }
-			NSUserDefaults.standardUserDefaults().setObject(folder, forKey: downloadFolderPreferencesKey)
-			NSUserDefaults.standardUserDefaults().synchronize()
-			return folder
-		}
-		set {
-			NSUserDefaults.standardUserDefaults().setObject(newValue, forKey: downloadFolderPreferencesKey)
-			NSUserDefaults.standardUserDefaults().synchronize()
-		}
-	}
     
-    var downloadFolderURL : NSURL? {
-        get {
-            if let folderURLData = NSUserDefaults.standardUserDefaults().objectForKey(downloadFolderURLBookmarkDataKey) as? NSData {
-                
-                var staleData : ObjCBool = false
-                do {
-                    let url = try NSURL(byResolvingBookmarkData: folderURLData, options: [NSURLBookmarkResolutionOptions.WithSecurityScope , NSURLBookmarkResolutionOptions.WithoutUI], relativeToURL: nil, bookmarkDataIsStale: &staleData)
-                    return url
-                }
-                catch {
-                    print("BookmarkURL error - \(error)")
-                }
-                if staleData {
-                    print("### BOOK MARK STALE ###")
-                }
-                return nil
+    
+    private(set) var downloadFolderURL : NSURL? {
+        didSet {
+            if let old = oldValue {
+                old.stopAccessingSecurityScopedResource()
             }
-            else {
+        }
+    }
+    
+    func populateFolderURL() {
+        
+        if let folderURLData = NSUserDefaults.standardUserDefaults().objectForKey(downloadFolderURLBookmarkDataKey) as? NSData {
+            
+            var staleData : ObjCBool = false
+            do {
+                let url = try NSURL(byResolvingBookmarkData: folderURLData, options: [NSURLBookmarkResolutionOptions.WithSecurityScope , NSURLBookmarkResolutionOptions.WithoutUI], relativeToURL: nil, bookmarkDataIsStale: &staleData)
+                url.startAccessingSecurityScopedResource()
+                downloadFolderURL = url
+                return
+            }
+            catch {
+                print("BookmarkURL error - \(error)")
+            }
+            if staleData {
+                print("### BOOK MARK STALE ###")
+            }
+            downloadFolderURL = nil
+        }
+        else {
+            
+            if let url = NSFileManager.defaultManager().URLsForDirectory(NSSearchPathDirectory.DownloadsDirectory, inDomains:  NSSearchPathDomainMask.UserDomainMask).last {
                 
-                if let url = NSFileManager.defaultManager().URLsForDirectory(NSSearchPathDirectory.DownloadsDirectory, inDomains:  NSSearchPathDomainMask.UserDomainMask).last {
-                    
-                    if let path = url.path {
+                if let path = url.path {
+                    do {
+                        let resolvedPath = try NSFileManager.defaultManager().destinationOfSymbolicLinkAtPath(path)
+                        let bookmarkURL = NSURL(fileURLWithPath: resolvedPath, isDirectory: true)
+                        
                         do {
-                            let resolvedPath = try NSFileManager.defaultManager().destinationOfSymbolicLinkAtPath(path)
-                            let bookmarkURL = NSURL(fileURLWithPath: resolvedPath, isDirectory: true)
-                            
-                            do {
-                                let bookmarkData = try bookmarkURL.bookmarkDataWithOptions(NSURLBookmarkCreationOptions.WithSecurityScope, includingResourceValuesForKeys: nil, relativeToURL: nil)
-                                NSUserDefaults.standardUserDefaults().setObject(bookmarkData, forKey: downloadFolderURLBookmarkDataKey)
-                                
-                                return bookmarkURL
-                            }
-                            catch {
-                                print(error)
-                            }
+                            let bookmarkData = try bookmarkURL.bookmarkDataWithOptions(NSURLBookmarkCreationOptions.WithSecurityScope, includingResourceValuesForKeys: nil, relativeToURL: nil)
+                            NSUserDefaults.standardUserDefaults().setObject(bookmarkData, forKey: downloadFolderURLBookmarkDataKey)
+                            url.startAccessingSecurityScopedResource()
+                            downloadFolderURL = bookmarkURL
+                            return
                         }
                         catch {
                             print(error)
                         }
                     }
+                    catch {
+                        print(error)
+                    }
                 }
-                return nil
+            }
+            downloadFolderURL = nil
+        }
+
+    }
+    
+    func saveFolderURL(url : NSURL) {
+    
+        do {
+            let bookmarkData = try url.bookmarkDataWithOptions(NSURLBookmarkCreationOptions.WithSecurityScope, includingResourceValuesForKeys: nil, relativeToURL: nil)
+            NSUserDefaults.standardUserDefaults().setObject(bookmarkData, forKey: downloadFolderURLBookmarkDataKey)
+            
+            populateFolderURL()
+            
+            if let url = downloadFolderURL {
+                url.startAccessingSecurityScopedResource()
             }
         }
-        set {
-            if let url = newValue {
-                do {
-                    let bookmarkData = try url.bookmarkDataWithOptions(NSURLBookmarkCreationOptions.WithSecurityScope, includingResourceValuesForKeys: nil, relativeToURL: nil)
-                    NSUserDefaults.standardUserDefaults().setObject(bookmarkData, forKey: downloadFolderURLBookmarkDataKey)
-                }
-                catch {
-                    print("Bookmark data attempted for \(url) - \(error)")
-                }
-            }
+        catch {
+            print("Bookmark data attempted for \(url) - \(error)")
         }
     }
-	
+    
+    func stopAccessingURLResource() {
+        downloadFolderURL?.stopAccessingSecurityScopedResource()
+    }
+    
 }

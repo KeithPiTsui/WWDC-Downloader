@@ -21,9 +21,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     var mainApplicationController: ToolbarHookableWindowSubclass?
 
     func applicationDidFinishLaunching(aNotification: NSNotification) {
-		
-		//	Preferences.sharedPreferences.downloadFolder = ""
-		
+				
 		if let window = NSApplication.sharedApplication().windows.first {
 			
 			window.styleMask |= NSFullSizeContentViewWindowMask
@@ -54,7 +52,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
 	
     func applicationWillTerminate(aNotification: NSNotification) {
         
-        mainViewController.resetUIForYearFetch()
+        Preferences.sharedPreferences.stopAccessingURLResource()
         
         UserInfo.sharedManager.save()
 		

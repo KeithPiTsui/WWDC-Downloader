@@ -668,7 +668,6 @@ class ViewController: NSViewController, NSURLSessionDelegate, NSURLSessionDataDe
 		
         for session in allWWDCSessionsArray {
             stopObservingUserInfo(UserInfo.sharedManager.userInfo(session))
-            session.stopSecurityScopeForSession()
         }
         
 		loggingLabel.stringValue = ""
@@ -903,7 +902,6 @@ class ViewController: NSViewController, NSURLSessionDelegate, NSURLSessionDataDe
         
         for session in allWWDCSessionsArray {
             startObservingUserInfo(UserInfo.sharedManager.userInfo(session))
-            session.startSecurityScopeForSession()
             session.forceCheckIfFilesExistLocally()
         }
         

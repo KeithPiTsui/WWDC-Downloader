@@ -270,6 +270,10 @@ enum FileType: CustomStringConvertible {
 	// MARK: - Directory Helpers
 	class func wwdcDirectory () -> NSURL? {
         
+        if Preferences.sharedPreferences.downloadFolderURL == nil {
+            Preferences.sharedPreferences.populateFolderURL()
+        }
+        
         if let folderURL = Preferences.sharedPreferences.downloadFolderURL {
 		
             let path = "WWDC"

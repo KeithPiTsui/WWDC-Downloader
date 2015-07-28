@@ -35,6 +35,14 @@ typealias SimpleCompletionHandler = ((success: Bool) -> Void)
         config.HTTPMaximumConnectionsPerHost = NSUserDefaults.standardUserDefaults().integerForKey(simultaneousDownloadsKey)
 		config.timeoutIntervalForResource = NSTimeInterval(300)
         sessionManager = NSURLSession(configuration: config, delegate: self, delegateQueue: NSOperationQueue.mainQueue())
+        
+        NSNotificationCenter.defaultCenter().addObserverForName(PreferencesDownloadNumberChangedNotification, object: nil, queue: NSOperationQueue.mainQueue()) { [unowned self] (notification) -> Void in
+            self.preferenceChanged()
+        }
+        
+        NSNotificationCenter.defaultCenter().addObserverForName(PreferencesDownloadLocationChangedNotification, object: nil, queue: NSOperationQueue.mainQueue()) { [unowned self] (notification) -> Void in
+            self.preferenceChanged()
+        }
     }
     
     func preferenceChanged() {
