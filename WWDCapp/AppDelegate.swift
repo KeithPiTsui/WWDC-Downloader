@@ -51,7 +51,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
 	
 	
     func applicationWillTerminate(aNotification: NSNotification) {
-        
+				
         Preferences.sharedPreferences.stopAccessingURLResource()
         
         UserInfo.sharedManager.save()

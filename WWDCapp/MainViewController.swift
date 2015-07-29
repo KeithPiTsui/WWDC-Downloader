@@ -157,6 +157,8 @@ class ViewController: NSViewController, NSURLSessionDelegate, NSURLSessionDataDe
     
     weak var sessionViewerController : SessionViewerWindowController?
 	
+	var folderChangeNotifier : FolderChangeNotifier?
+	
 	// MARK: - Init?
 	required init?(coder: NSCoder) {
 	
@@ -606,6 +608,8 @@ class ViewController: NSViewController, NSURLSessionDelegate, NSURLSessionDataDe
                 session.forceCheckIfFilesExistLocally()
             }
             self.myTableView.reloadData()
+			
+			self.registerForDownloadFolderNotifications()
         }
 
 		
@@ -915,6 +919,8 @@ class ViewController: NSViewController, NSURLSessionDelegate, NSURLSessionDataDe
         }
         
         myTableView.reloadData()
+		
+		registerForDownloadFolderNotifications()
 	}
 	
 	
@@ -1298,6 +1304,8 @@ class ViewController: NSViewController, NSURLSessionDelegate, NSURLSessionDataDe
 //		isFiltered = false
 //		visibleWWDCSessionsArray.removeAll()
 //		myTableView.reloadData()
+		
+		deregisterForDownloadFolderNotifications()
 
 		startDownload.title = "Stop Downloading"
 		
@@ -1363,6 +1371,8 @@ class ViewController: NSViewController, NSURLSessionDelegate, NSURLSessionDataDe
 			}
 			scrollToCurrentDownloadTimer = nil
 		}
+		
+		registerForDownloadFolderNotifications()
         
         print("Completed File Downloads")
 	}
@@ -1879,6 +1889,78 @@ class ViewController: NSViewController, NSURLSessionDelegate, NSURLSessionDataDe
 			}
 		}
 		dockIconUpdateTimer = nil
+	}
+	
+	// MARK: Folder Watch 
+	func registerForDownloadFolderNotifications() {
+		
+		deregisterForDownloadFolderNotifications()
+		
+		let callback : FolderMonitorBlock = { [unowned self] in
+			print("Folder Changed")
+			dispatch_async(dispatch_get_main_queue()) { [unowned self] in
+				for session in self.allWWDCSessionsArray {
+					session.forceCheckIfFilesExistLocally()
+				}
+				self.myTableView.reloadData()
+			}
+		}
+		
+		if Preferences.sharedPreferences.downloadFolderURL == nil {
+			Preferences.sharedPreferences.populateFolderURL()
+		}
+		
+		var allFolderURLS = [NSURL]()
+		
+		
+		func addURLIfExists(url :NSURL) {
+			if let path = url.path {
+				if NSFileManager.defaultManager().fileExistsAtPath(path) {
+					allFolderURLS.append(url)
+				}
+			}
+		}
+		
+		if let url = Preferences.sharedPreferences.downloadFolderURL {
+			addURLIfExists(url)
+		}
+		if let url = FileInfo.wwdcDirectory() {
+			addURLIfExists(url)
+		}
+		
+		for year in WWDCYear.allValues {
+			
+			if let url = FileInfo.yearDirectory(year) {
+				addURLIfExists(url)
+			}
+			if let url = FileInfo.pdfDirectory(year) {
+				addURLIfExists(url)
+			}
+			if let url = FileInfo.sdVideoDirectory(year) {
+				addURLIfExists(url)
+			}
+			if let url = FileInfo.hdVideoDirectory(year) {
+				addURLIfExists(url)
+			}
+			if let url = FileInfo.codeDirectory(year) {
+				addURLIfExists(url)
+			}
+		}
+		
+		print("URLS to Register - \(allFolderURLS.count)")
+	
+		folderChangeNotifier = FolderChangeNotifier(urls: allFolderURLS, callback: callback)
+	}
+	
+	func deregisterForDownloadFolderNotifications() {
+		if let folderNotifier = folderChangeNotifier {
+			folderNotifier.stopNotifying()
+			self.folderChangeNotifier = nil
+		}
+	}
+	
+	deinit {
+		deregisterForDownloadFolderNotifications()
 	}
 
 }

@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		4408A7F91B43F20A00AB4A10 /* PDFMerge.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4408A7F81B43F20A00AB4A10 /* PDFMerge.swift */; };
+		440BB8EE1B68E52D006D0C4C /* FolderChangeNotifier.swift in Sources */ = {isa = PBXBuildFile; fileRef = 440BB8ED1B68E52D006D0C4C /* FolderChangeNotifier.swift */; };
 		442D010B1B399A9D0081C56C /* FileInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 44776DA81B399950004B9178 /* FileInfo.swift */; };
 		443168BB1B5E8FCB003842F2 /* ImageExtras.swift in Sources */ = {isa = PBXBuildFile; fileRef = 443168BA1B5E8FCB003842F2 /* ImageExtras.swift */; };
 		443168BD1B5EA94B003842F2 /* UserInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 443168BC1B5EA94B003842F2 /* UserInfo.swift */; };
@@ -46,6 +47,7 @@
 
 /* Begin PBXFileReference section */
 		4408A7F81B43F20A00AB4A10 /* PDFMerge.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PDFMerge.swift; sourceTree = "<group>"; };
+		440BB8ED1B68E52D006D0C4C /* FolderChangeNotifier.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FolderChangeNotifier.swift; sourceTree = "<group>"; };
 		443168BA1B5E8FCB003842F2 /* ImageExtras.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ImageExtras.swift; sourceTree = "<group>"; };
 		443168BC1B5EA94B003842F2 /* UserInfo.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UserInfo.swift; sourceTree = "<group>"; };
 		443F87A51B566E7600637F6F /* ResizeAwareTableView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ResizeAwareTableView.swift; sourceTree = "<group>"; };
@@ -124,6 +126,7 @@
 				44ADC8341B60026F00C00C4B /* ReferencedMenu.swift */,
 				44ADC8361B60038200C00C4B /* FileButton.swift */,
 				A9E933781B628D0500F89775 /* DockProgressBar.swift */,
+				440BB8ED1B68E52D006D0C4C /* FolderChangeNotifier.swift */,
 			);
 			name = Subclasses;
 			sourceTree = "<group>";
@@ -334,6 +337,7 @@
 				A9528F351B34C427002290D3 /* WWDCSession.swift in Sources */,
 				A90D14EB1B41A8CF00A30590 /* FetchFileSizeManager.swift in Sources */,
 				A9528F361B34C427002290D3 /* BlockWrappers.swift in Sources */,
+				440BB8EE1B68E52D006D0C4C /* FolderChangeNotifier.swift in Sources */,
 				443168BB1B5E8FCB003842F2 /* ImageExtras.swift in Sources */,
 				A9E933791B628D0500F89775 /* DockProgressBar.swift in Sources */,
 				443F87A61B566E7600637F6F /* ResizeAwareTableView.swift in Sources */,

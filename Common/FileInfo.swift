@@ -23,6 +23,8 @@ enum WWDCYear: CustomStringConvertible {
             return "2013"
         }
     }
+	
+	static let allValues = [WWDC2015, WWDC2014, WWDC2013]
 }
 
 enum FileType: CustomStringConvertible {
@@ -43,6 +45,8 @@ enum FileType: CustomStringConvertible {
             return "Sample Code"
         }
     }
+	
+	static let allValues = [PDF, SD, HD, SampleCode]
 }
 
 @objc class FileInfo : NSObject, NSCoding {
@@ -120,10 +124,10 @@ enum FileType: CustomStringConvertible {
 				guard let directory = FileInfo.pdfDirectory(year), let filename = self.fileName  else { return nil }
 				return directory.URLByAppendingPathComponent(filename.sanitizeFileNameString())
 			case .SD:
-				guard let directory = FileInfo.videoDirectory(year), let filename = self.fileName  else { return nil }
+				guard let directory = FileInfo.sdVideoDirectory(year), let filename = self.fileName  else { return nil }
                 return directory.URLByAppendingPathComponent(filename.sanitizeFileNameString())
 			case .HD:
-				guard let directory = FileInfo.videoDirectory(year), let filename = self.fileName  else { return nil }
+				guard let directory = FileInfo.hdVideoDirectory(year), let filename = self.fileName  else { return nil }
                 return directory.URLByAppendingPathComponent(filename.sanitizeFileNameString())
 			case .SampleCode:
 				guard let directory = FileInfo.codeDirectory(year), let filename = self.fileName  else { return nil }
@@ -256,9 +260,9 @@ enum FileType: CustomStringConvertible {
                 case .PDF:
                     directory = FileInfo.pdfDirectory(year)
                 case .SD:
-                    directory = FileInfo.videoDirectory(year)
+                    directory = FileInfo.sdVideoDirectory(year)
                 case .HD:
-                   directory = FileInfo.videoDirectory(year)
+                   directory = FileInfo.hdVideoDirectory(year)
                 case .SampleCode:
                     directory = FileInfo.codeDirectory(year)
                 }
@@ -310,14 +314,27 @@ enum FileType: CustomStringConvertible {
 	}
 	
 	
-	class func videoDirectory (year : WWDCYear) -> NSURL? {
+	class func sdVideoDirectory (year : WWDCYear) -> NSURL? {
 		
 		guard let directory = yearDirectory(year)  else { return nil }
 		
 		let path = "Videos"
 		
-        return directory.URLByAppendingPathComponent(path, isDirectory: true)
+		let videos = directory.URLByAppendingPathComponent(path, isDirectory: true)
+		
+        return videos.URLByAppendingPathComponent("SD", isDirectory: true)
 	}
+	
+	class func hdVideoDirectory (year : WWDCYear) -> NSURL? {
+		
+		guard let directory = yearDirectory(year)  else { return nil }
+		
+		let path = "Videos"
+		
+		let videos = directory.URLByAppendingPathComponent(path, isDirectory: true)
+		
+		return videos.URLByAppendingPathComponent("HD", isDirectory: true)	}
+	
 	
 	class func codeDirectory (year : WWDCYear) -> NSURL? {
 		

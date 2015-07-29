@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.Storyboard.XIB" version="3.0" toolsVersion="8164.2" systemVersion="15A235d" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" initialViewController="B8D-0N-5wS">
+<document type="com.apple.InterfaceBuilder3.Cocoa.Storyboard.XIB" version="3.0" toolsVersion="8164.2" systemVersion="15A226f" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" initialViewController="B8D-0N-5wS">
     <dependencies>
         <deployment identifier="macosx"/>
         <plugIn identifier="com.apple.AVKitIBPlugin" version="8164.2"/>
@@ -725,6 +725,7 @@ CA
                                             <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                                             <font key="font" metaFont="system"/>
                                         </buttonCell>
+                                        <accessibility description="Toggle selecting All PDFs to download"/>
                                         <connections>
                                             <action selector="allPDFChecked:" target="XfG-lQ-9wD" id="cDa-eD-91G"/>
                                         </connections>
@@ -739,6 +740,7 @@ CA
                                             <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                                             <font key="font" metaFont="system"/>
                                         </buttonCell>
+                                        <accessibility description="Toggle selecting All Standard Definition Videos to download"/>
                                         <connections>
                                             <action selector="allSDChecked:" target="XfG-lQ-9wD" id="AUu-WG-ThP"/>
                                         </connections>
@@ -753,6 +755,7 @@ CA
                                             <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                                             <font key="font" metaFont="system"/>
                                         </buttonCell>
+                                        <accessibility description="Toggle selecting All High Definition Videos to download"/>
                                         <connections>
                                             <action selector="allHDChecked:" target="XfG-lQ-9wD" id="xtg-CH-MOM"/>
                                         </connections>
@@ -767,13 +770,15 @@ CA
                                             <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                                             <font key="font" metaFont="system"/>
                                         </buttonCell>
+                                        <accessibility description="Toggle selecting All Code Samples to download"/>
                                         <connections>
                                             <action selector="allCodeChecked:" target="XfG-lQ-9wD" id="nOo-xe-03M"/>
                                         </connections>
                                     </button>
-                                    <progressIndicator wantsLayer="YES" maxValue="1" style="bar" translatesAutoresizingMaskIntoConstraints="NO" id="eQd-ix-KJW">
+                                    <progressIndicator toolTip="Total file download progress" wantsLayer="YES" maxValue="1" style="bar" translatesAutoresizingMaskIntoConstraints="NO" id="eQd-ix-KJW">
                                         <rect key="frame" x="20" y="9" width="722" height="20"/>
                                         <animations/>
+                                        <accessibility description="Total file download progress indicator"/>
                                     </progressIndicator>
                                     <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="LdI-VT-wO4">
                                         <rect key="frame" x="684" y="28" width="60" height="14"/>
@@ -786,6 +791,7 @@ CA
                                             <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
                                             <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                                         </textFieldCell>
+                                        <accessibility description="Total file download size queued up"/>
                                     </textField>
                                     <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="C8t-xS-mu2">
                                         <rect key="frame" x="663" y="28" width="17" height="14"/>
@@ -798,6 +804,7 @@ CA
                                             <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
                                             <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                                         </textFieldCell>
+                                        <accessibility description="of Label"/>
                                     </textField>
                                     <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="ang-ho-9A3">
                                         <rect key="frame" x="609" y="28" width="57" height="14"/>
@@ -810,6 +817,7 @@ CA
                                             <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
                                             <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                                         </textFieldCell>
+                                        <accessibility description="Current file download size"/>
                                     </textField>
                                     <button toolTip="Start / Stop Downloading Selected Files" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="2Uk-zV-FYf">
                                         <rect key="frame" x="750" y="14" width="160" height="25"/>
@@ -822,6 +830,7 @@ CA
                                             <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                                             <font key="font" metaFont="system"/>
                                         </buttonCell>
+                                        <accessibility description="Start or Stop Download Button"/>
                                         <connections>
                                             <action selector="startDownloadButton:" target="XfG-lQ-9wD" id="q7T-gH-FQB"/>
                                         </connections>
@@ -836,6 +845,7 @@ CA
                                             <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                                             <font key="font" metaFont="system"/>
                                         </buttonCell>
+                                        <accessibility description="Toggle display of session descriptions"/>
                                         <connections>
                                             <action selector="hideSessionsChecked:" target="XfG-lQ-9wD" id="aP2-5d-q8y"/>
                                         </connections>
@@ -851,6 +861,7 @@ CA
                                             <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
                                             <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                                         </textFieldCell>
+                                        <accessibility description="Total desctiption label"/>
                                     </textField>
                                     <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="DNA-hc-glG">
                                         <rect key="frame" x="18" y="567" width="480" height="14"/>
@@ -861,7 +872,7 @@ CA
                                             <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                                         </textFieldCell>
                                     </textField>
-                                    <button toolTip="Show / Hide Session Descriptions" translatesAutoresizingMaskIntoConstraints="NO" id="3IL-nb-Fsz">
+                                    <button toolTip="Include Transcript text when searching" translatesAutoresizingMaskIntoConstraints="NO" id="3IL-nb-Fsz">
                                         <rect key="frame" x="218" y="36" width="244" height="18"/>
                                         <constraints>
                                             <constraint firstAttribute="width" constant="240" id="ZRo-pA-LKI"/>
@@ -871,11 +882,12 @@ CA
                                             <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                                             <font key="font" metaFont="system"/>
                                         </buttonCell>
+                                        <accessibility description="Toggle including session transcripts in text search"/>
                                         <connections>
                                             <action selector="includeTranscriptsInSearchChecked:" target="XfG-lQ-9wD" id="jTX-Pt-WCC"/>
                                         </connections>
                                     </button>
-                                    <scrollView autohidesScrollers="YES" horizontalLineScroll="52" horizontalPageScroll="10" verticalLineScroll="52" verticalPageScroll="10" usesPredominantAxisScrolling="NO" translatesAutoresizingMaskIntoConstraints="NO" id="DUe-MO-CLA">
+                                    <scrollView toolTip="Swipe along row or right click on row for actions" autohidesScrollers="YES" horizontalLineScroll="52" horizontalPageScroll="10" verticalLineScroll="52" verticalPageScroll="10" usesPredominantAxisScrolling="NO" translatesAutoresizingMaskIntoConstraints="NO" id="DUe-MO-CLA">
                                         <rect key="frame" x="20" y="60" width="890" height="480"/>
                                         <clipView key="contentView" drawsBackground="NO" copiesOnScroll="NO" id="Hod-g6-9bx">
                                             <rect key="frame" x="1" y="0.0" width="888" height="479"/>
@@ -915,6 +927,7 @@ CA
                                                                                 <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
                                                                                 <color key="backgroundColor" white="1" alpha="0.0" colorSpace="calibratedWhite"/>
                                                                             </textFieldCell>
+                                                                            <accessibility description="Session ID"/>
                                                                         </textField>
                                                                         <imageView horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="Pak-H0-M21">
                                                                             <rect key="frame" x="5" y="20" width="10" height="10"/>
@@ -924,6 +937,7 @@ CA
                                                                             </constraints>
                                                                             <animations/>
                                                                             <imageCell key="cell" refusesFirstResponder="YES" alignment="left" imageScaling="proportionallyDown" id="NAp-z4-9rr"/>
+                                                                            <accessibility description="Watched / Favorite Indicator Image"/>
                                                                         </imageView>
                                                                     </subviews>
                                                                     <constraints>
@@ -1499,14 +1513,16 @@ CA
                                             <autoresizingMask key="autoresizingMask"/>
                                             <animations/>
                                         </tableHeaderView>
+                                        <accessibility description="WWDC Session Table"/>
                                     </scrollView>
-                                    <button translatesAutoresizingMaskIntoConstraints="NO" id="bLu-R9-cOS">
+                                    <button hidden="YES" toolTip="Filter by only showing Favorites" translatesAutoresizingMaskIntoConstraints="NO" id="bLu-R9-cOS">
                                         <rect key="frame" x="18" y="546" width="200" height="18"/>
                                         <animations/>
                                         <buttonCell key="cell" type="check" title="Show Only Favorites" bezelStyle="regularSquare" imagePosition="left" state="on" inset="2" id="Tuk-EE-led">
                                             <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                                             <font key="font" metaFont="system"/>
                                         </buttonCell>
+                                        <accessibility description="Toggle Filter Table by Favorites"/>
                                         <connections>
                                             <action selector="showOnlyFavorites:" target="XfG-lQ-9wD" id="xRG-Ym-LLR"/>
                                         </connections>
