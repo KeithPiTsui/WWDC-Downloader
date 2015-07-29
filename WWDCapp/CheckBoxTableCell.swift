@@ -76,7 +76,7 @@ class CheckBoxTableViewCell : NSTableCellView {
                             isAllFilesAlreadyDownloaded = false
                         }
                         
-                        if file.downloadProgress > 0 {
+                        if file.downloadProgress > 0 && file.downloadProgress < 1 {
                             if isAllFilesDownloading == false {
                                 isAllFilesDownloading = true
                             }

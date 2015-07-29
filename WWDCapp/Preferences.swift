@@ -52,10 +52,11 @@ class PreferencesController : NSViewController, NSPathControlDelegate {
     
     func pathControl(pathControl: NSPathControl, willDisplayOpenPanel openPanel: NSOpenPanel) {
         
-        let folders = NSSearchPathForDirectoriesInDomains(NSSearchPathDirectory.DownloadsDirectory, NSSearchPathDomainMask.UserDomainMask, true)
-        guard let folder = folders.first else { assertionFailure("No Downloads Directory!"); return }
-        openPanel.directoryURL = NSURL(fileURLWithPath: folder)
-        
+        if Preferences.sharedPreferences.downloadFolderURL == nil {
+            Preferences.sharedPreferences.populateFolderURL()
+        }
+        guard let url = Preferences.sharedPreferences.downloadFolderURL else { assertionFailure("No Preferences Directory!"); return }
+        openPanel.directoryURL = url
         
         openPanel.allowsMultipleSelection = false
         openPanel.message = "Choose a download location for Videos, PDFs and Sample Code:"

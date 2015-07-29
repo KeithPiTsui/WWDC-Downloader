@@ -237,15 +237,9 @@ enum FileType: CustomStringConvertible {
     
     func forceCheckIfFileExists() {
         
-        if let localFileURL = self.localFileURL {
-            do {
-                try localFileURL.checkResourceIsReachable()
-                isFileMarkedAsDownloaded = true
-                return
-            }
-            catch {
-                //print(error)
-            }
+        if let localFileURLString = self.localFileURL?.path {
+            isFileMarkedAsDownloaded = NSFileManager.defaultManager().fileExistsAtPath(localFileURLString)
+            return
         }
         isFileMarkedAsDownloaded = false
     }
@@ -255,14 +249,37 @@ enum FileType: CustomStringConvertible {
 		if isFileAlreadyDownloaded == false {
 			// Copy the file over to the correct location
 			if let localFileURL = self.localFileURL {
-				do {
-					try NSFileManager.defaultManager().moveItemAtURL(url, toURL: localFileURL)
-                    isFileMarkedAsDownloaded = true
-				}
-				catch {
-					print("File move/save error - \(error)")
-				}
-			}
+                
+                let directory : NSURL?
+                
+                switch (fileType) {
+                case .PDF:
+                    directory = FileInfo.pdfDirectory(year)
+                case .SD:
+                    directory = FileInfo.videoDirectory(year)
+                case .HD:
+                   directory = FileInfo.videoDirectory(year)
+                case .SampleCode:
+                    directory = FileInfo.codeDirectory(year)
+                }
+                
+                guard let fileDirectory = directory else { return }
+                
+                do {
+                    try NSFileManager.defaultManager().createDirectoryAtURL(fileDirectory, withIntermediateDirectories: true, attributes: nil)
+                    
+                    do {
+                        try NSFileManager.defaultManager().moveItemAtURL(url, toURL: localFileURL)
+                        isFileMarkedAsDownloaded = true
+                    }
+                    catch let moveError as NSError {
+                        print("File move/save error - \(moveError)")
+                    }
+                }
+                catch let createError as NSError {
+                    print("Create Directory Error -  \(createError)")
+                }
+            }
 		}
 	}
 
@@ -274,67 +291,49 @@ enum FileType: CustomStringConvertible {
             Preferences.sharedPreferences.populateFolderURL()
         }
         
-        if let folderURL = Preferences.sharedPreferences.downloadFolderURL {
+        if let directory = Preferences.sharedPreferences.downloadFolderURL {
 		
             let path = "WWDC"
 		
-            return createDirectoryIfNeeded(path, inDirectory: folderURL)
+            return directory.URLByAppendingPathComponent(path, isDirectory: true)
         }
         return nil
 	}
 
 	class func yearDirectory(year : WWDCYear) -> NSURL? {
 		
-		guard let wwdcDirectory = wwdcDirectory()  else { return nil }
+		guard let directory = wwdcDirectory()  else { return nil }
 		
-		let yearpath = "\(year.description)"
+		let path = "\(year.description)"
 		
-		return createDirectoryIfNeeded(yearpath, inDirectory: wwdcDirectory)
+        return directory.URLByAppendingPathComponent(path, isDirectory: true)
 	}
 	
 	
 	class func videoDirectory (year : WWDCYear) -> NSURL? {
 		
-		guard let wwdcDirectory = yearDirectory(year)  else { return nil }
+		guard let directory = yearDirectory(year)  else { return nil }
 		
 		let path = "Videos"
 		
-		return createDirectoryIfNeeded(path, inDirectory: wwdcDirectory)
+        return directory.URLByAppendingPathComponent(path, isDirectory: true)
 	}
 	
 	class func codeDirectory (year : WWDCYear) -> NSURL? {
 		
-		guard let wwdcDirectory = yearDirectory(year)  else { return nil }
+		guard let directory = yearDirectory(year)  else { return nil }
 		
 		let path = "Code Samples"
 		
-		return createDirectoryIfNeeded(path, inDirectory: wwdcDirectory)
+        return directory.URLByAppendingPathComponent(path, isDirectory: true)
 	}
 	
 	class func pdfDirectory (year : WWDCYear) -> NSURL? {
 		
-		guard let wwdcDirectory = yearDirectory(year)  else { return nil }
+		guard let directory = yearDirectory(year)  else { return nil }
 		
 		let path = "PDFs"
 		
-		return createDirectoryIfNeeded(path, inDirectory: wwdcDirectory)
+		return directory.URLByAppendingPathComponent(path, isDirectory: true)
 	}
-	
-	
-	// MARK: Helpers
-
-	private class func createDirectoryIfNeeded(directory : String, inDirectory: NSURL) -> NSURL? {
-		
-		let url = inDirectory.URLByAppendingPathComponent(directory, isDirectory: true)
-				
-        do {
-           try NSFileManager.defaultManager().createDirectoryAtURL(url, withIntermediateDirectories: true, attributes: nil)
-            return url
-        }
-        catch {
-            print(error)
-        }
-        return nil
-	}
-
 }

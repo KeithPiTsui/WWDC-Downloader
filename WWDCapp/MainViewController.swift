@@ -599,6 +599,15 @@ class ViewController: NSViewController, NSURLSessionDelegate, NSURLSessionDataDe
                 self.lastTableViewInteractionTime = CACurrentMediaTime()
             })
 		}
+        
+        NSNotificationCenter.defaultCenter().addObserverForName(PreferencesDownloadLocationChangedNotification, object: nil, queue: NSOperationQueue.mainQueue()) { [unowned self] (notification) -> Void in
+
+            for session in self.allWWDCSessionsArray {
+                session.forceCheckIfFilesExistLocally()
+            }
+            self.myTableView.reloadData()
+        }
+
 		
 		totallabel.font = NSFont.monospacedDigitSystemFontOfSize(NSFont.systemFontSizeForControlSize(NSControlSize.SmallControlSize), weight: NSFontWeightRegular)
 		oflabel.font = NSFont.monospacedDigitSystemFontOfSize(NSFont.systemFontSizeForControlSize(NSControlSize.SmallControlSize), weight: NSFontWeightRegular)
