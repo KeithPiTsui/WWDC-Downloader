@@ -34,9 +34,11 @@ class SessionNameDescriptionCell : NSTableCellView, NSTextViewDelegate {
 			descriptionTextStorage.addAttribute(NSForegroundColorAttributeName, value: (backgroundStyle == NSBackgroundStyle.Dark ? NSColor.whiteColor() : NSColor.labelColor()), range: NSMakeRange(0,descriptionTextStorage.length))
 			descriptionTextStorage.endEditing()
 
+			transcriptSearchCountLabel.textColor = (backgroundStyle == NSBackgroundStyle.Dark ? NSColor.whiteColor() : NSColor.secondaryLabelColor())
 
 			sessionName.needsDisplay = true
 			sessionDescriptionTextView.needsDisplay = true
+			transcriptSearchCountLabel.needsDisplay = true
 		}
 	}
     

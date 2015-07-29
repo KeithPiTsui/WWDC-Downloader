@@ -1515,7 +1515,7 @@ CA
                                         </tableHeaderView>
                                         <accessibility description="WWDC Session Table"/>
                                     </scrollView>
-                                    <button hidden="YES" toolTip="Filter by only showing Favorites" translatesAutoresizingMaskIntoConstraints="NO" id="bLu-R9-cOS">
+                                    <button toolTip="Filter by only showing Favorites" translatesAutoresizingMaskIntoConstraints="NO" id="bLu-R9-cOS">
                                         <rect key="frame" x="18" y="546" width="200" height="18"/>
                                         <animations/>
                                         <buttonCell key="cell" type="check" title="Show Only Favorites" bezelStyle="regularSquare" imagePosition="left" state="on" inset="2" id="Tuk-EE-led">

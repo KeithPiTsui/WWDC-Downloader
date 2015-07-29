@@ -241,7 +241,7 @@ class ViewController: NSViewController, NSURLSessionDelegate, NSURLSessionDataDe
 	
 	@IBAction func searchEntered(sender: NSSearchField) {
 	
-		if sender.stringValue.isEmpty {
+		if sender.stringValue.isEmpty && showFavoritesCheckbox.state == 0 {
 			isFiltered = false
 		}
 		else {
@@ -250,37 +250,95 @@ class ViewController: NSViewController, NSURLSessionDelegate, NSURLSessionDataDe
 			let cleanString = sender.stringValue.stringByTrimmingCharactersInSet(NSCharacterSet.whitespaceCharacterSet())
 			
             visibleWWDCSessionsArray = allWWDCSessionsArray.filter({ (wwdcSession) -> Bool in
-                
+				
+				let favorite = UserInfo.sharedManager.userInfo(wwdcSession).markAsFavorite
+
                 if let description = wwdcSession.sessionDescription {
                     
                     if includeTranscriptsInSearchCheckBox.state == 1 {
                         
                         if let transcript = wwdcSession.fullTranscriptPrettyPrint {
-                            
-                                if wwdcSession.title.localizedStandardContainsString(cleanString) || description.localizedStandardContainsString(cleanString) || transcript.localizedStandardContainsString(cleanString) {
+							if showFavoritesCheckbox.state == 1 {
+								if favorite {
+									if sender.stringValue.isEmpty {
+										return true
+									}
+									else {
+										if wwdcSession.title.localizedStandardContainsString(cleanString) || description.localizedStandardContainsString(cleanString) || transcript.localizedStandardContainsString(cleanString) {
+											return true
+										}
+									}
+								}
+							}
+							else {
+								if wwdcSession.title.localizedStandardContainsString(cleanString) || description.localizedStandardContainsString(cleanString) || transcript.localizedStandardContainsString(cleanString) {
 									return true
-                                }
+								}
+							}
 						}
                         else {
-							if wwdcSession.title.localizedStandardContainsString(cleanString) || description.localizedStandardContainsString(cleanString) {
-								return true
+							if showFavoritesCheckbox.state == 1 {
+								if favorite {
+									if sender.stringValue.isEmpty {
+										return true
+									}
+									else {
+										if wwdcSession.title.localizedStandardContainsString(cleanString) || description.localizedStandardContainsString(cleanString) {
+											return true
+										}
+									}
+								}
 							}
+							else {
+								if wwdcSession.title.localizedStandardContainsString(cleanString) || description.localizedStandardContainsString(cleanString) {
+									return true
+								}
+							}
+							
                         }
                     }
                     else {
-						if wwdcSession.title.localizedStandardContainsString(cleanString) || description.localizedStandardContainsString(cleanString) {
-							return true
+						if showFavoritesCheckbox.state == 1 {
+							if favorite {
+								if sender.stringValue.isEmpty {
+									return true
+								}
+								else {
+									if wwdcSession.title.localizedStandardContainsString(cleanString) || description.localizedStandardContainsString(cleanString) {
+										return true
+									}
+								}
+							}
+						}
+						else{
+							if wwdcSession.title.localizedStandardContainsString(cleanString) || description.localizedStandardContainsString(cleanString) {
+								return true
+							}
 						}
                     }
                 }
                 else {
-					if wwdcSession.title.localizedStandardContainsString(cleanString) {
-						return true
+					
+					if showFavoritesCheckbox.state == 1 {
+						if favorite {
+							if sender.stringValue.isEmpty {
+								return true
+							}
+							else {
+								if wwdcSession.title.localizedStandardContainsString(cleanString) {
+									return true
+								}
+							}
+						}
+					}
+					else {
+						if wwdcSession.title.localizedStandardContainsString(cleanString) {
+							return true
+						}
 					}
                 }
                 return false
             })
-            
             
             if includeTranscriptsInSearchCheckBox.state == 1 {
                 for wwdcSession in visibleWWDCSessionsArray {
@@ -566,7 +624,8 @@ class ViewController: NSViewController, NSURLSessionDelegate, NSURLSessionDataDe
 	}
 
     @IBAction func showOnlyFavorites(sender: AnyObject) {
-        
+		
+		searchEntered(searchField)
     }
     
 	// MARK: - View / UI
@@ -932,33 +991,31 @@ class ViewController: NSViewController, NSURLSessionDelegate, NSURLSessionDataDe
 	
     func tableView(tableView: NSTableView, heightOfRow row: Int) -> CGFloat {
 		
-        if hideDescriptionsCheckBox.state == 1 {
-            return 50
-        }
-        else {
+		if hideDescriptionsCheckBox.state == 1 {
+			return 50
+		}
+		else {
 			
-            let wwdcSession = (isFiltered ? visibleWWDCSessionsArray[row] : allWWDCSessionsArray[row])
-            
-            if let referenceCell = referenceCell {
-                
-                referenceCell.updateCell(wwdcSession.title, description: wwdcSession.sessionDescription, descriptionVisible: true, searchActive:false, searchCount:0)
-                
-                let rowHeight = 10 + referenceCell.sessionName.intrinsicContentSize.height + referenceCell.sessionDescriptionTextView.intrinsicContentSize.height + 10
+			if let referenceCell = referenceCell {
 				
-				//NSLog("\(wwdcSession.sessionID) - \(rowHeight)")
+				let wwdcSession = (isFiltered ? visibleWWDCSessionsArray[row] : allWWDCSessionsArray[row])
 
-                if rowHeight < 50 {
-                    return 50
-                }
-                else {
-                    return rowHeight
-                }
-            }
-            else {
-                return 50
-            }
-        }
-    }
+				referenceCell.updateCell(wwdcSession.title, description: wwdcSession.sessionDescription, descriptionVisible: true, searchActive:false, searchCount:0)
+				
+				let rowHeight = 10 + referenceCell.sessionName.intrinsicContentSize.height + referenceCell.sessionDescriptionTextView.intrinsicContentSize.height + 10
+				
+				if rowHeight < 50 {
+					return 50
+				}
+				else {
+					return rowHeight
+				}
+			}
+			else {
+				return 50
+			}
+		}
+	}
 	
 	func tableViewColumnDidResize(notification: NSNotification) {
 		

@@ -45,8 +45,6 @@ enum FileType: CustomStringConvertible {
             return "Sample Code"
         }
     }
-	
-	static let allValues = [PDF, SD, HD, SampleCode]
 }
 
 @objc class FileInfo : NSObject, NSCoding {
