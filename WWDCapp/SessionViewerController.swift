@@ -166,14 +166,12 @@ class TranscriptViewController : NSViewController, NSTextFinderClient, WebFrameL
 	func searchFor(term : String) {
 		
 		let script = NSString(format: "filterLinesByTerm('%@')", term)
-		let result = webview.windowScriptObject.evaluateWebScript(script as String)
-		print(webview.windowScriptObject.stringRepresentation())
+		webview.windowScriptObject.evaluateWebScript(script as String)
 	}
 	
 	func webView(sender: WebView!, didFinishLoadForFrame frame: WebFrame!) {
 		
 		webview.windowScriptObject.setValue(self, forKey: "controller")
-
 	}
 
 	override class func isSelectorExcludedFromWebScript(selector: Selector) -> Bool {
@@ -182,17 +180,17 @@ class TranscriptViewController : NSViewController, NSTextFinderClient, WebFrameL
 	
 	override class func webScriptNameForSelector(selector: Selector) -> String! {
 	
-		if (selector == Selector("jumpToTimecode")) {
+		if (selector == Selector("jumpToTimecode:")) {
 			return "jumpToTimecode"
 		}
-		if (selector == Selector("jsLog")) {
+		if (selector == Selector("jsLog:")) {
 			return "jsLog"
 		}
 		return ""
 	}
 
 	func jsLog(log : String) {
-		print(log)
+		print("Log \(log)")
 	}
 	
 	func jumpToTimecode(timecode:String) {
@@ -221,26 +219,36 @@ class TranscriptViewController : NSViewController, NSTextFinderClient, WebFrameL
 		}
 		else {
 			autoScrollingCheckbox.state = 1
-			searchFor(sender.stringValue)
 		}
 		enableAutoScroll(autoScrollingCheckbox)
+        
+        searchFor(sender.stringValue)
 	}
 	
 	override func viewDidLoad() {
 		super.viewDidLoad()
-		
-		webview.frameLoadDelegate = self
-		
+				
+        webview.frameLoadDelegate = self
+        
 //		textView.usesFindBar = true
 //		textView.incrementalSearchingEnabled = true
 //		scrollView.findBarPosition = NSScrollViewFindBarPosition.AboveContent
 //		textFinder.performAction(NSTextFinderAction.ShowFindInterface)
 	}
 	
+    
+    var transcriptURL : NSURL? {
+        get {
+            let resource = NSBundle.mainBundle().URLForResource("transcript", withExtension: "html")
+            if let resource = resource {
+                return resource
+            }
+            return nil
+        }
+    }
 	var baseURL : NSURL? {
 		get {
-			let resource = NSBundle.mainBundle().URLForResource("transcript", withExtension: "html")
-			if let path = resource?.path?.stringByDeletingLastPathComponent {
+			if let path = transcriptURL?.path?.stringByDeletingLastPathComponent {
 				return NSURL.fileURLWithPath(path)
 			}
 			return nil
@@ -257,8 +265,16 @@ class TranscriptViewController : NSViewController, NSTextFinderClient, WebFrameL
 //					self.textView.string = ""
 //				}
 				
-				if let html = wwdcSession.transcriptHTMLFormatted {
-					webview.mainFrame.loadHTMLString(html, baseURL: baseURL)
+				if let html = wwdcSession.transcriptHTMLFormatted, let base = baseURL, let transcript = transcriptURL  {
+                    
+                    do {
+                        let baseString = try NSString(contentsOfURL: transcript, encoding: NSUTF8StringEncoding)
+                        let fullPage = NSString(format: baseString, html)
+                        webview.mainFrame.loadHTMLString(fullPage as String, baseURL: base)
+                    }
+                    catch {
+                        
+                    }
 				}
 			}
 		}
