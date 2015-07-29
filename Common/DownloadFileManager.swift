@@ -194,6 +194,7 @@ typealias SimpleCompletionHandler = ((success: Bool) -> Void)
                             }
 						}
 						else {
+							fileInfo.downloadProgress = 0
 							callback.notifyCompletion(true)
 							self.backgroundHandlersForFiles[fileInfo] = nil
 							self.backgroundRequestsForFiles[downloadTask.taskIdentifier] = nil

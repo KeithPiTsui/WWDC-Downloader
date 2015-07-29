@@ -1185,9 +1185,11 @@ class ViewController: NSViewController, NSURLSessionDelegate, NSURLSessionDataDe
         case .Trailing:
             if wwdcSession.hasAnyDownloadedFiles == true {
                 return [NSTableViewRowAction(style: .Destructive, title: "Delete Files for Session", handler: { [unowned self] (action, int) -> Void in
-                        wwdcSession.deleteDownloadedFiles()
-                        self.myTableView.reloadDataForRowIndexes(NSIndexSet(index: int), columnIndexes:NSIndexSet(indexesInRange: NSMakeRange(0,self.myTableView.numberOfColumns)))
 						self.myTableView.rowActionsVisible = false
+						let delayTime = dispatch_time(DISPATCH_TIME_NOW, Int64(0.5 * Double(NSEC_PER_SEC)))
+						dispatch_after(delayTime, dispatch_get_main_queue()) {
+							wwdcSession.deleteDownloadedFiles()
+						}
                     })]
             }
             else {
@@ -1243,7 +1245,6 @@ class ViewController: NSViewController, NSURLSessionDelegate, NSURLSessionDataDe
 				
 				if success {
 					
-					file.downloadProgress = 1
                     file.shouldDownloadFile = false
 					
 					print("Download SUCCESS - \(file.displayName!)")
@@ -1373,6 +1374,8 @@ class ViewController: NSViewController, NSURLSessionDelegate, NSURLSessionDataDe
 		}
 		
 		registerForDownloadFolderNotifications()
+		
+		removeDockProgress()
         
         print("Completed File Downloads")
 	}
@@ -1551,7 +1554,6 @@ class ViewController: NSViewController, NSURLSessionDelegate, NSURLSessionDataDe
 			for wwdcSession in sessions {
 				wwdcSession.deleteDownloadedFiles()
 			}
-			myTableView.reloadDataForRowIndexes(myTableView.selectedRowIndexes, columnIndexes: NSIndexSet(indexesInRange: NSMakeRange(0,self.myTableView.numberOfColumns)))
 			coordinateAllCheckBoxUI()
 		}
     }
@@ -1825,7 +1827,7 @@ class ViewController: NSViewController, NSURLSessionDelegate, NSURLSessionDataDe
 			if diff > autoScrollTimeout {
 				
 				for file in filesToDownload {
-					if file.downloadProgress < 1 {
+					if file.downloadProgress > 0 && file.downloadProgress < 1 {
 						
 						guard let session = file.session else { return }
 						
@@ -1891,8 +1893,14 @@ class ViewController: NSViewController, NSURLSessionDelegate, NSURLSessionDataDe
 		dockIconUpdateTimer = nil
 	}
 	
+	func removeDockProgress() {
+		DockProgressBar.appProgressBar.removeProgress()
+	}
+	
 	// MARK: Folder Watch 
 	func registerForDownloadFolderNotifications() {
+		
+//		return
 		
 		deregisterForDownloadFolderNotifications()
 		
@@ -1947,7 +1955,7 @@ class ViewController: NSViewController, NSURLSessionDelegate, NSURLSessionDataDe
 			}
 		}
 		
-		print("URLS to Register - \(allFolderURLS.count)")
+		print("Folder URLS to Register for monitoring- \(allFolderURLS.count)")
 	
 		folderChangeNotifier = FolderChangeNotifier(urls: allFolderURLS, callback: callback)
 	}

@@ -163,10 +163,8 @@ enum FileType: CustomStringConvertible {
 							let fileAttributes = try NSFileManager.defaultManager().attributesOfItemAtPath(path)
 							if let size = fileAttributes["NSFileSize"] as? Int, let fileSize = fileSize {
 								if size == fileSize {
-									downloadProgress = 1
 									return true
 								}
-								downloadProgress = 0
 							}
 						}
 					}
@@ -174,6 +172,7 @@ enum FileType: CustomStringConvertible {
 						print("File Size Compare error - \(error)")
 					}
 				}
+				forceCheckIfFileExists()
 				return false
 			}
 			else {

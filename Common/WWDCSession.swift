@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import Cocoa
 
 class TranscriptInfo : NSObject, NSCoding {
 	
@@ -90,58 +91,53 @@ func ==(lhs: WWDCSession, rhs: WWDCSession)-> Bool {
 	}
     
     func deleteDownloadedFiles() {
-        
+		
+		var urlsToDelete = [NSURL]()
+		
         if hdFile?.isFileAlreadyDownloaded == true {
             if let url = hdFile?.localFileURL {
-                do {
-                    try NSFileManager.defaultManager().removeItemAtURL(url)
-                    hdFile?.downloadProgress = 0
-                }
-                catch {
-                    print(error)
-                }
+				urlsToDelete.append(url)
             }
         }
         
         if sdFile?.isFileAlreadyDownloaded == true {
             if let url = sdFile?.localFileURL {
-                do {
-                    try NSFileManager.defaultManager().removeItemAtURL(url)
-                    sdFile?.downloadProgress = 0
-                }
-                catch {
-                    print(error)
-                }
+				urlsToDelete.append(url)
             }
         }
         
         if pdfFile?.isFileAlreadyDownloaded == true {
             if let url = pdfFile?.localFileURL {
-                do {
-                    try NSFileManager.defaultManager().removeItemAtURL(url)
-                    pdfFile?.downloadProgress = 0
-                }
-                catch {
-                    print(error)
-                }
+				urlsToDelete.append(url)
             }
         }
         
         for sample in sampleCodeArray {
             if sample.isFileAlreadyDownloaded == true {
                 if let url = sample.localFileURL {
-                    do {
-                        try NSFileManager.defaultManager().removeItemAtURL(url)
-                        sample.downloadProgress = 0
-                    }
-                    catch {
-                        print(error)
-                    }
+					urlsToDelete.append(url)
                 }
             }
         }
-    }
-    
+		
+		for url in urlsToDelete {
+			do {
+				try NSFileManager.defaultManager().removeItemAtURL(url)
+			}
+			catch {
+				print(error)
+			}
+		}
+		
+//		dispatch_async(dispatch_get_main_queue()) {		
+//			NSWorkspace.sharedWorkspace().recycleURLs(urlsToDelete) { (dictionary, error) -> Void in
+//				print(dictionary)
+//				print(error)
+//				print("Moved to trash")
+//			}
+//		}
+	}
+	
 //    func startSecurityScopeForSession() {
 //        
 //        if let sdFile = sdFile?.localFileURL {

@@ -304,7 +304,7 @@ class VideoViewController : NSViewController {
 			return
 		}
 		
-		if let player = object as? AVPlayer where context == &myContext {
+		if let _ = object as? AVPlayer where context == &myContext {
 			
 			switch (aKeyPath) {
 			case("status"):
