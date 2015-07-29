@@ -216,7 +216,6 @@ enum FileType: CustomStringConvertible {
 		if fileSize > 0 {
 			self.fileSize = fileSize
 		}
-		self.shouldDownloadFile = aDecoder.decodeBoolForKey("shouldDownloadFile")
 	}
 	
 	func encodeWithCoder(aCoder: NSCoder) {
@@ -228,7 +227,6 @@ enum FileType: CustomStringConvertible {
 		if let fileSize = self.fileSize {
 			aCoder.encodeInt64(Int64(fileSize), forKey: "fileSize")
 		}
-		aCoder.encodeBool(shouldDownloadFile, forKey: "shouldDownloadFile")
 	}
 
 	// MARK:  File Helpers

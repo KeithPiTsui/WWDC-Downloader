@@ -12,6 +12,7 @@ import AVKit
 import Quartz
 import AVFoundation
 import CoreGraphics
+import WebKit
 
 let SessionViewerDidLaunchNotification = "SessionViewerDidLaunchNotification"
 let SessionViewerDidCloseNotification = "SessionViewerDidCloseNotification"
@@ -135,7 +136,7 @@ class ViewerPDFSplitViewController : NSSplitViewController {
 	
 }
 
-class TranscriptViewController : NSViewController, NSTextFinderClient {
+class TranscriptViewController : NSViewController, NSTextFinderClient, WebFrameLoadDelegate {
 	
 	@IBOutlet var textView: NSTextView!
 	
@@ -145,24 +146,119 @@ class TranscriptViewController : NSViewController, NSTextFinderClient {
 	
 	private var transcriptTextStorage : AnyObject!
 	
+	
+	@IBOutlet weak var webview : WebView!
+	@IBOutlet weak var autoScrollingCheckbox: NSButton!
+	@IBOutlet weak var searchField : NSSearchField!
+	
+	var jumpToTimecodeCallback : ((timeCode: Double) -> Void)?
+	
+	required init?(coder: NSCoder) {
+		super.init(coder: coder)
+	}
+	
+	func highlightLineat(roundedTimeCode: String) {
+		
+		let script = NSString(format: "highlightLineWithTimecode('%@')", roundedTimeCode)
+		webview.windowScriptObject.evaluateWebScript(script as String)
+	}
+	
+	func searchFor(term : String) {
+		
+		let script = NSString(format: "filterLinesByTerm('%@')", term)
+		let result = webview.windowScriptObject.evaluateWebScript(script as String)
+		print(webview.windowScriptObject.stringRepresentation())
+	}
+	
+	func webView(sender: WebView!, didFinishLoadForFrame frame: WebFrame!) {
+		
+		webview.windowScriptObject.setValue(self, forKey: "controller")
+
+	}
+
+	override class func isSelectorExcludedFromWebScript(selector: Selector) -> Bool {
+		return false
+	}
+	
+	override class func webScriptNameForSelector(selector: Selector) -> String! {
+	
+		if (selector == Selector("jumpToTimecode")) {
+			return "jumpToTimecode"
+		}
+		if (selector == Selector("jsLog")) {
+			return "jsLog"
+		}
+		return ""
+	}
+
+	func jsLog(log : String) {
+		print(log)
+	}
+	
+	func jumpToTimecode(timecode:String) {
+		
+		if let callback = jumpToTimecodeCallback {
+			callback(timeCode: Double(timecode)!)
+		}
+		
+		highlightLineat(timecode)
+	}
+	
+	@IBAction func enableAutoScroll(sender : NSButton) {
+		
+		if sender.state == 1 {
+			webview.windowScriptObject.evaluateWebScript("setAutoScrollEnabled(true)")
+		}
+		else {
+			webview.windowScriptObject.evaluateWebScript("setAutoScrollEnabled(false)")
+		}
+	}
+	
+	@IBAction func searchEntered(sender: NSSearchField) {
+		
+		if sender.stringValue.isEmpty {
+			autoScrollingCheckbox.state = 0
+		}
+		else {
+			autoScrollingCheckbox.state = 1
+			searchFor(sender.stringValue)
+		}
+		enableAutoScroll(autoScrollingCheckbox)
+	}
+	
 	override func viewDidLoad() {
 		super.viewDidLoad()
 		
-		textView.usesFindBar = true
-		textView.incrementalSearchingEnabled = true
-		scrollView.findBarPosition = NSScrollViewFindBarPosition.AboveContent
-		textFinder.performAction(NSTextFinderAction.ShowFindInterface)
+		webview.frameLoadDelegate = self
+		
+//		textView.usesFindBar = true
+//		textView.incrementalSearchingEnabled = true
+//		scrollView.findBarPosition = NSScrollViewFindBarPosition.AboveContent
+//		textFinder.performAction(NSTextFinderAction.ShowFindInterface)
 	}
 	
+	var baseURL : NSURL? {
+		get {
+			let resource = NSBundle.mainBundle().URLForResource("transcript", withExtension: "html")
+			if let path = resource?.path?.stringByDeletingLastPathComponent {
+				return NSURL.fileURLWithPath(path)
+			}
+			return nil
+		}
+	}
 	
 	weak var wwdcSession : WWDCSession? {
 		didSet {
 			if let wwdcSession = wwdcSession {
-				if let fullTranscriptPrettyPrint = wwdcSession.fullTranscriptPrettyPrint {
-					self.textView.string = fullTranscriptPrettyPrint
-				}
-				else {
-					self.textView.string = ""
+//				if let fullTranscriptPrettyPrint = wwdcSession.fullTranscriptPrettyPrint {
+//					self.textView.string = fullTranscriptPrettyPrint
+//				}
+//				else {
+//					self.textView.string = ""
+//				}
+				
+				if let html = wwdcSession.transcriptHTMLFormatted {
+					webview.mainFrame.loadHTMLString(html, baseURL: baseURL)
 				}
 			}
 		}
