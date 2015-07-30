@@ -4,7 +4,6 @@
         <deployment identifier="macosx"/>
         <plugIn identifier="com.apple.AVKitIBPlugin" version="8164.2"/>
         <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="8164.2"/>
-        <plugIn identifier="com.apple.WebKitIBPlugin" version="8164.2"/>
         <plugIn identifier="com.apple.pdfkit.ibplugin" version="8164.2"/>
     </dependencies>
     <scenes>
@@ -588,11 +587,11 @@ CA
                         <autoresizingMask key="autoresizingMask"/>
                         <subviews>
                             <avPlayerView horizontalHuggingPriority="249" verticalHuggingPriority="249" horizontalCompressionResistancePriority="749" verticalCompressionResistancePriority="749" controlsStyle="inline" translatesAutoresizingMaskIntoConstraints="NO" id="0al-5m-NZd">
-                                <rect key="frame" x="0.0" y="0.0" width="352" height="210"/>
+                                <rect key="frame" x="0.0" y="0.0" width="352" height="247"/>
                                 <animations/>
                             </avPlayerView>
                             <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" setsMaxLayoutWidthAtFirstLayout="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Sz9-HT-oCW">
-                                <rect key="frame" x="24" y="88" width="304" height="34"/>
+                                <rect key="frame" x="24" y="107" width="304" height="34"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="34" id="SY5-Gh-lhK"/>
                                     <constraint firstAttribute="width" constant="300" id="bHA-eY-3Sk"/>
@@ -608,7 +607,7 @@ CA
                             <constraint firstItem="Sz9-HT-oCW" firstAttribute="centerY" secondItem="0al-5m-NZd" secondAttribute="centerY" id="LoC-bD-Zyu"/>
                             <constraint firstAttribute="bottom" secondItem="0al-5m-NZd" secondAttribute="bottom" id="YcE-55-Q63"/>
                             <constraint firstAttribute="trailing" secondItem="0al-5m-NZd" secondAttribute="trailing" id="gUP-Cy-QCR"/>
-                            <constraint firstItem="0al-5m-NZd" firstAttribute="top" secondItem="fQH-DM-KPo" secondAttribute="top" constant="37" id="kNz-g2-FTd"/>
+                            <constraint firstItem="0al-5m-NZd" firstAttribute="top" secondItem="fQH-DM-KPo" secondAttribute="top" id="kNz-g2-FTd"/>
                             <constraint firstItem="Sz9-HT-oCW" firstAttribute="centerX" secondItem="0al-5m-NZd" secondAttribute="centerX" id="o79-BQ-6vz"/>
                             <constraint firstItem="0al-5m-NZd" firstAttribute="leading" secondItem="fQH-DM-KPo" secondAttribute="leading" id="xfM-Ew-OPb"/>
                         </constraints>
@@ -627,131 +626,112 @@ CA
         <scene sceneID="V5B-WU-VHm">
             <objects>
                 <viewController id="YJS-3Z-qZ0" customClass="TranscriptViewController" customModule="WWDCapp" customModuleProvider="target" sceneMemberID="viewController">
-                    <view key="view" id="vtw-Xt-7ls">
+                    <view key="view" wantsLayer="YES" id="vtw-Xt-7ls">
                         <rect key="frame" x="0.0" y="0.0" width="886" height="302"/>
                         <autoresizingMask key="autoresizingMask"/>
                         <subviews>
-                            <visualEffectView appearanceType="vibrantLight" blendingMode="behindWindow" state="followsWindowActiveState" translatesAutoresizingMaskIntoConstraints="NO" id="JjP-kD-YoB">
+                            <customView wantsLayer="YES" translatesAutoresizingMaskIntoConstraints="NO" id="pTc-pS-jr8">
                                 <rect key="frame" x="0.0" y="0.0" width="886" height="302"/>
                                 <animations/>
+                            </customView>
+                            <visualEffectView appearanceType="vibrantLight" blendingMode="withinWindow" state="followsWindowActiveState" translatesAutoresizingMaskIntoConstraints="NO" id="e4q-vH-Pk4">
+                                <rect key="frame" x="0.0" y="262" width="886" height="40"/>
+                                <subviews>
+                                    <searchField wantsLayer="YES" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="S1h-5N-h4V">
+                                        <rect key="frame" x="10" y="9" width="250" height="22"/>
+                                        <constraints>
+                                            <constraint firstAttribute="width" constant="250" id="LSH-ya-J76"/>
+                                            <constraint firstAttribute="height" constant="22" id="geQ-3y-Rt0"/>
+                                        </constraints>
+                                        <animations/>
+                                        <searchFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" borderStyle="bezel" usesSingleLineMode="YES" bezelStyle="round" id="91I-9L-j2L">
+                                            <font key="font" metaFont="system"/>
+                                            <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
+                                            <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                        </searchFieldCell>
+                                        <connections>
+                                            <action selector="searchEntered:" target="YJS-3Z-qZ0" id="bqW-L8-8G7"/>
+                                            <outlet property="delegate" destination="YJS-3Z-qZ0" id="qTZ-78-5Z5"/>
+                                        </connections>
+                                    </searchField>
+                                    <segmentedControl verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="SoY-Cx-5tD">
+                                        <rect key="frame" x="266" y="7" width="57" height="25"/>
+                                        <constraints>
+                                            <constraint firstAttribute="height" constant="22" id="H94-EB-xkB"/>
+                                            <constraint firstAttribute="width" constant="57" id="NwK-Mj-Mgn"/>
+                                        </constraints>
+                                        <animations/>
+                                        <segmentedCell key="cell" borderStyle="border" alignment="left" style="separated" trackingMode="momentary" id="oVk-V2-Qnh">
+                                            <font key="font" metaFont="smallSystem"/>
+                                            <segments>
+                                                <segment label="&lt;" width="25"/>
+                                                <segment label="&gt;" width="25" tag="1"/>
+                                            </segments>
+                                        </segmentedCell>
+                                        <connections>
+                                            <action selector="scrollItem:" target="YJS-3Z-qZ0" id="5bl-Qk-xmw"/>
+                                        </connections>
+                                    </segmentedControl>
+                                    <button translatesAutoresizingMaskIntoConstraints="NO" id="18k-TX-IAW">
+                                        <rect key="frame" x="415" y="11" width="85" height="18"/>
+                                        <constraints>
+                                            <constraint firstAttribute="width" constant="81" id="aqD-86-cUo"/>
+                                            <constraint firstAttribute="height" constant="14" id="uog-7A-dgy"/>
+                                        </constraints>
+                                        <animations/>
+                                        <buttonCell key="cell" type="check" title="AutoScroll" bezelStyle="regularSquare" imagePosition="right" state="on" inset="2" id="hwA-ku-JdG">
+                                            <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
+                                            <font key="font" metaFont="system"/>
+                                        </buttonCell>
+                                    </button>
+                                    <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="DXY-Tv-wS3">
+                                        <rect key="frame" x="329" y="12" width="80" height="14"/>
+                                        <constraints>
+                                            <constraint firstAttribute="height" constant="14" id="Udq-CH-DK2"/>
+                                            <constraint firstAttribute="width" constant="76" id="yxT-Jc-ULw"/>
+                                        </constraints>
+                                        <animations/>
+                                        <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" alignment="left" title="1000 matches" id="LOg-FH-K9e">
+                                            <font key="font" metaFont="smallSystem"/>
+                                            <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                                            <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
+                                        </textFieldCell>
+                                    </textField>
+                                </subviews>
+                                <constraints>
+                                    <constraint firstItem="SoY-Cx-5tD" firstAttribute="top" secondItem="e4q-vH-Pk4" secondAttribute="top" constant="9" id="8Eg-kw-fc5"/>
+                                    <constraint firstItem="18k-TX-IAW" firstAttribute="top" secondItem="e4q-vH-Pk4" secondAttribute="top" constant="13" id="DID-i1-9aP"/>
+                                    <constraint firstItem="DXY-Tv-wS3" firstAttribute="leading" secondItem="SoY-Cx-5tD" secondAttribute="trailing" constant="8" id="Kb6-US-IEW"/>
+                                    <constraint firstItem="DXY-Tv-wS3" firstAttribute="top" secondItem="e4q-vH-Pk4" secondAttribute="top" constant="14" id="RhW-61-9Mh"/>
+                                    <constraint firstItem="S1h-5N-h4V" firstAttribute="leading" secondItem="e4q-vH-Pk4" secondAttribute="leading" constant="10" id="aJH-x4-eFQ"/>
+                                    <constraint firstItem="SoY-Cx-5tD" firstAttribute="leading" secondItem="S1h-5N-h4V" secondAttribute="trailing" constant="6" id="eG3-no-1DR"/>
+                                    <constraint firstItem="18k-TX-IAW" firstAttribute="leading" secondItem="DXY-Tv-wS3" secondAttribute="trailing" constant="10" id="nth-8b-J0A"/>
+                                    <constraint firstItem="S1h-5N-h4V" firstAttribute="top" secondItem="e4q-vH-Pk4" secondAttribute="top" constant="9" id="tcZ-z8-abW"/>
+                                    <constraint firstAttribute="height" constant="40" id="xmv-Y6-Oc7"/>
+                                </constraints>
+                                <animations/>
                             </visualEffectView>
-                            <scrollView borderType="none" autohidesScrollers="YES" horizontalLineScroll="10" horizontalPageScroll="10" verticalLineScroll="10" verticalPageScroll="10" hasHorizontalScroller="NO" usesPredominantAxisScrolling="NO" translatesAutoresizingMaskIntoConstraints="NO" id="lB2-Ns-d8k">
-                                <rect key="frame" x="0.0" y="0.0" width="500" height="302"/>
-                                <clipView key="contentView" id="NCp-KY-iSf">
-                                    <rect key="frame" x="0.0" y="0.0" width="500" height="302"/>
-                                    <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                                    <subviews>
-                                        <textView editable="NO" importsGraphics="NO" horizontallyResizable="YES" findStyle="bar" incrementalSearchingEnabled="YES" usesFontPanel="YES" verticallyResizable="YES" allowsNonContiguousLayout="YES" linkDetection="YES" dataDetection="YES" id="dM5-vI-Ov8">
-                                            <rect key="frame" x="0.0" y="0.0" width="500" height="302"/>
-                                            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                                            <animations/>
-                                            <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                                            <size key="minSize" width="500" height="302"/>
-                                            <size key="maxSize" width="5000" height="10000000"/>
-                                            <color key="insertionPointColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
-                                            <size key="minSize" width="500" height="302"/>
-                                            <size key="maxSize" width="5000" height="10000000"/>
-                                            <connections>
-                                                <outlet property="delegate" destination="YJS-3Z-qZ0" id="bJd-oN-fGI"/>
-                                            </connections>
-                                        </textView>
-                                    </subviews>
-                                    <animations/>
-                                    <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                                </clipView>
-                                <constraints>
-                                    <constraint firstAttribute="width" relation="lessThanOrEqual" priority="750" constant="500" id="4Mb-4H-zop"/>
-                                    <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="120" id="xHp-F1-Fdo"/>
-                                </constraints>
-                                <animations/>
-                                <edgeInsets key="contentInsets" left="0.0" right="0.0" top="0.0" bottom="0.0"/>
-                                <scroller key="horizontalScroller" hidden="YES" wantsLayer="YES" verticalHuggingPriority="750" doubleValue="1" horizontal="YES" id="mUi-wW-ldw">
-                                    <rect key="frame" x="-100" y="-100" width="87" height="18"/>
-                                    <autoresizingMask key="autoresizingMask"/>
-                                    <animations/>
-                                </scroller>
-                                <scroller key="verticalScroller" hidden="YES" wantsLayer="YES" verticalHuggingPriority="750" doubleValue="0.020871181663074712" horizontal="NO" id="kmh-19-Q4K">
-                                    <rect key="frame" x="484" y="0.0" width="16" height="160"/>
-                                    <autoresizingMask key="autoresizingMask"/>
-                                    <animations/>
-                                </scroller>
-                            </scrollView>
-                            <webView maintainsBackForwardList="NO" translatesAutoresizingMaskIntoConstraints="NO" id="tYP-3R-jf1">
-                                <rect key="frame" x="518" y="46" width="368" height="256"/>
-                                <animations/>
-                                <webPreferences key="preferences" defaultFontSize="12" defaultFixedFontSize="12" plugInsEnabled="NO" javaEnabled="NO" javaScriptCanOpenWindowsAutomatically="NO" loadsImagesAutomatically="NO" allowsAnimatedImages="NO" allowsAnimatedImageLooping="NO">
-                                    <nil key="identifier"/>
-                                </webPreferences>
-                                <connections>
-                                    <outlet property="frameLoadDelegate" destination="YJS-3Z-qZ0" id="BEI-uH-A3L"/>
-                                </connections>
-                            </webView>
-                            <button translatesAutoresizingMaskIntoConstraints="NO" id="5Xx-FF-Vpa">
-                                <rect key="frame" x="527" y="18" width="147" height="18"/>
-                                <constraints>
-                                    <constraint firstAttribute="width" constant="143" id="nhe-3F-kYf"/>
-                                </constraints>
-                                <animations/>
-                                <buttonCell key="cell" type="check" title="Enable autoscrolling" bezelStyle="regularSquare" imagePosition="left" state="on" inset="2" id="XEZ-fl-d4S">
-                                    <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
-                                    <font key="font" metaFont="system"/>
-                                </buttonCell>
-                                <connections>
-                                    <action selector="enableAutoScroll:" target="YJS-3Z-qZ0" id="tzJ-Bp-1Cz"/>
-                                </connections>
-                            </button>
-                            <searchField wantsLayer="YES" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="pw2-W4-wd8">
-                                <rect key="frame" x="681" y="16" width="185" height="22"/>
-                                <constraints>
-                                    <constraint firstAttribute="width" constant="185" id="Giq-Jv-tO4"/>
-                                </constraints>
-                                <animations/>
-                                <searchFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" borderStyle="bezel" usesSingleLineMode="YES" bezelStyle="round" id="jGj-BY-Ndh">
-                                    <font key="font" metaFont="system"/>
-                                    <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
-                                    <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
-                                </searchFieldCell>
-                                <connections>
-                                    <action selector="searchEntered:" target="YJS-3Z-qZ0" id="K82-he-xGl"/>
-                                </connections>
-                            </searchField>
                         </subviews>
                         <constraints>
-                            <constraint firstAttribute="bottom" secondItem="lB2-Ns-d8k" secondAttribute="bottom" id="1mW-cZ-8RB"/>
-                            <constraint firstItem="lB2-Ns-d8k" firstAttribute="leading" secondItem="vtw-Xt-7ls" secondAttribute="leading" id="4zn-Vg-pNS"/>
-                            <constraint firstAttribute="bottom" secondItem="pw2-W4-wd8" secondAttribute="bottom" constant="16" id="5F4-sC-uQe"/>
-                            <constraint firstAttribute="bottom" secondItem="JjP-kD-YoB" secondAttribute="bottom" id="6Hj-KI-4To"/>
-                            <constraint firstAttribute="trailing" secondItem="pw2-W4-wd8" secondAttribute="trailing" constant="20" id="7gW-m7-rxE"/>
-                            <constraint firstItem="tYP-3R-jf1" firstAttribute="top" secondItem="vtw-Xt-7ls" secondAttribute="top" id="CQI-ar-xzr"/>
-                            <constraint firstItem="lB2-Ns-d8k" firstAttribute="top" secondItem="vtw-Xt-7ls" secondAttribute="top" id="HBq-GV-BH3"/>
-                            <constraint firstAttribute="trailing" secondItem="JjP-kD-YoB" secondAttribute="trailing" id="HME-nf-lRy"/>
-                            <constraint firstAttribute="bottom" secondItem="tYP-3R-jf1" secondAttribute="bottom" constant="46" id="Uvh-2p-pEn"/>
-                            <constraint firstItem="JjP-kD-YoB" firstAttribute="leading" secondItem="vtw-Xt-7ls" secondAttribute="leading" id="ZqJ-Pu-zIV"/>
-                            <constraint firstItem="JjP-kD-YoB" firstAttribute="top" secondItem="vtw-Xt-7ls" secondAttribute="top" id="adr-bf-ZCn"/>
-                            <constraint firstAttribute="trailing" secondItem="tYP-3R-jf1" secondAttribute="trailing" id="dzY-Kz-ExT"/>
-                            <constraint firstAttribute="trailing" secondItem="lB2-Ns-d8k" secondAttribute="trailing" priority="250" constant="5" id="exW-4G-Ic1"/>
-                            <constraint firstItem="tYP-3R-jf1" firstAttribute="leading" secondItem="lB2-Ns-d8k" secondAttribute="trailing" constant="18" id="iFe-9q-rIX"/>
-                            <constraint firstAttribute="bottom" secondItem="5Xx-FF-Vpa" secondAttribute="bottom" constant="20" id="rlF-SA-kGE"/>
-                            <constraint firstItem="pw2-W4-wd8" firstAttribute="leading" secondItem="5Xx-FF-Vpa" secondAttribute="trailing" constant="9" id="u6E-cX-pAS"/>
+                            <constraint firstItem="pTc-pS-jr8" firstAttribute="leading" secondItem="vtw-Xt-7ls" secondAttribute="leading" id="1Tp-py-0ZJ"/>
+                            <constraint firstAttribute="trailing" secondItem="pTc-pS-jr8" secondAttribute="trailing" id="4Jq-zV-wAc"/>
+                            <constraint firstItem="pTc-pS-jr8" firstAttribute="top" secondItem="vtw-Xt-7ls" secondAttribute="top" id="A5R-JX-PhV"/>
+                            <constraint firstItem="e4q-vH-Pk4" firstAttribute="leading" secondItem="vtw-Xt-7ls" secondAttribute="leading" id="By0-jS-Hc9"/>
+                            <constraint firstItem="e4q-vH-Pk4" firstAttribute="top" secondItem="vtw-Xt-7ls" secondAttribute="top" id="H0A-hJ-f3r"/>
+                            <constraint firstAttribute="bottom" secondItem="pTc-pS-jr8" secondAttribute="bottom" id="Hqn-h9-78w"/>
+                            <constraint firstAttribute="trailing" secondItem="e4q-vH-Pk4" secondAttribute="trailing" id="mym-EC-3pa"/>
                         </constraints>
                         <animations/>
                     </view>
                     <connections>
-                        <outlet property="autoScrollingCheckbox" destination="5Xx-FF-Vpa" id="N7n-d4-4Fh"/>
-                        <outlet property="scrollView" destination="lB2-Ns-d8k" id="jdP-18-jLp"/>
-                        <outlet property="searchField" destination="pw2-W4-wd8" id="fsS-E3-van"/>
-                        <outlet property="textFinder" destination="1ze-h0-uCo" id="NWu-o4-pGP"/>
-                        <outlet property="textView" destination="dM5-vI-Ov8" id="4TJ-8i-yS6"/>
-                        <outlet property="webview" destination="tYP-3R-jf1" id="9lS-w8-me5"/>
+                        <outlet property="autoScrollingCheckbox" destination="18k-TX-IAW" id="dsH-ch-4Bf"/>
+                        <outlet property="findSegmented" destination="SoY-Cx-5tD" id="Ww7-1N-dJB"/>
+                        <outlet property="matchesLabel" destination="DXY-Tv-wS3" id="m11-9L-jJb"/>
+                        <outlet property="searchField" destination="S1h-5N-h4V" id="5Os-A0-fNY"/>
+                        <outlet property="webViewContainerForIBContraintSetting" destination="pTc-pS-jr8" id="5DU-m8-tfT"/>
                     </connections>
                 </viewController>
                 <customObject id="xQr-BK-ikb" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>
-                <textFinder incrementalSearchingEnabled="YES" id="1ze-h0-uCo">
-                    <connections>
-                        <outlet property="client" destination="dM5-vI-Ov8" id="CTP-KH-i50"/>
-                        <outlet property="findBarContainer" destination="lB2-Ns-d8k" id="aqi-WX-nz6"/>
-                    </connections>
-                </textFinder>
             </objects>
             <point key="canvasLocation" x="2614" y="1240"/>
         </scene>
@@ -1869,6 +1849,19 @@ CA
                 <customObject id="Wfa-10-3jS" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="528" y="-424.5"/>
+        </scene>
+        <!--View Controller-->
+        <scene sceneID="80n-cB-g1c">
+            <objects>
+                <viewController id="NVv-Xs-2WO" sceneMemberID="viewController">
+                    <view key="view" id="d2Q-cL-Mlz">
+                        <rect key="frame" x="0.0" y="0.0" width="450" height="300"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                        <animations/>
+                    </view>
+                </viewController>
+                <customObject id="7w5-Qx-CIk" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>
+            </objects>
         </scene>
     </scenes>
     <resources>

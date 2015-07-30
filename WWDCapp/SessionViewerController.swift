@@ -48,16 +48,19 @@ class SessionViewerWindowController : NSWindowController, NSWindowDelegate {
 			
 			let thumbnailMainViewController = pdfSplitItems.last!.viewController as! PDFThumbnailViewController
 			 thumbnailMainViewController.thumbnailView.setPDFView(pdfController.pdfView)
-		}
+            
+            transcriptController.seekToTimeCodeCallBack = { [unowned self] (timeCode:Double) in
+                self.videoController.seekToTimeCode(timeCode)
+            }
+        }
 		
 		if let window = self.window {
 			
-			window.styleMask |= NSFullSizeContentViewWindowMask
+			//window.styleMask |= NSFullSizeContentViewWindowMask
 			window.titlebarAppearsTransparent = false
 			window.appearance = NSAppearance(named: NSAppearanceNameVibrantLight)
 			
 			window.titleVisibility = NSWindowTitleVisibility.Hidden
-			
 		}
 		
 		segmentedPaneControl.setImage(NSImage(imageLiteral: "bottom_button")?.tintImageToBrightBlurColor(), forSegment: 0)
@@ -136,23 +139,45 @@ class ViewerPDFSplitViewController : NSSplitViewController {
 	
 }
 
-class TranscriptViewController : NSViewController, NSTextFinderClient, WebFrameLoadDelegate {
-	
-	@IBOutlet var textView: NSTextView!
-	
-	@IBOutlet weak var scrollView: NSScrollView!
-	
-	@IBOutlet var textFinder: NSTextFinder!
-	
-	private var transcriptTextStorage : AnyObject!
-	
-	
-	@IBOutlet weak var webview : WebView!
+class TranscriptViewController : NSViewController, NSTextFinderClient, WKScriptMessageHandler, NSSearchFieldDelegate {
+    
+    weak var wwdcSession : WWDCSession?
+
+    @IBOutlet weak var webViewContainerForIBContraintSetting : NSView!
+    var webview : WKWebView?
+    
 	@IBOutlet weak var autoScrollingCheckbox: NSButton!
 	@IBOutlet weak var searchField : NSSearchField!
+    @IBOutlet weak var findSegmented : NSSegmentedControl!
+    @IBOutlet weak var matchesLabel : NSTextField!
 	
-	var jumpToTimecodeCallback : ((timeCode: Double) -> Void)?
+	var seekToTimeCodeCallBack : ((timeCode: Double) -> Void)?
 	
+    var transcriptConfiguration : WKWebViewConfiguration {
+        get {
+            
+            let configuration = WKWebViewConfiguration()
+            let contentController = WKUserContentController();
+                        
+            if let resourcePath = NSBundle.mainBundle().pathForResource("transcript", ofType: "js") {
+                do {
+                    let script = try String(contentsOfFile: resourcePath, encoding: NSUTF8StringEncoding)
+                    let userScript =  WKUserScript(source: script, injectionTime: WKUserScriptInjectionTime.AtDocumentEnd, forMainFrameOnly: true)
+                    contentController.addUserScript(userScript)
+                }
+                catch {
+                    print(error)
+                }
+            }
+
+            contentController.addScriptMessageHandler(self, name: "callbackHandler")
+
+            configuration.userContentController = contentController
+            
+            return configuration
+        }
+    }
+    
 	required init?(coder: NSCoder) {
 		super.init(coder: coder)
 	}
@@ -160,83 +185,135 @@ class TranscriptViewController : NSViewController, NSTextFinderClient, WebFrameL
 	func highlightLineat(roundedTimeCode: String) {
 		
 		let script = NSString(format: "highlightLineWithTimecode('%@')", roundedTimeCode)
-		webview.windowScriptObject.evaluateWebScript(script as String)
+		webview?.evaluateJavaScript(script as String) { (object, error) -> Void in
+            print(error)
+        }
 	}
 	
 	func searchFor(term : String) {
 		
-		let script = NSString(format: "filterLinesByTerm('%@')", term)
-		webview.windowScriptObject.evaluateWebScript(script as String)
-	}
-	
-	func webView(sender: WebView!, didFinishLoadForFrame frame: WebFrame!) {
-		
-		webview.windowScriptObject.setValue(self, forKey: "controller")
-	}
+		let script = NSString(format: "findText('%@')", term)
+        webview?.evaluateJavaScript(script as String) { [unowned self] (object, error) -> Void in
+            
+            if let numberOfMatches = object as? Int {
+                if numberOfMatches > 0 {
+                    self.matchesLabel.stringValue = "\(numberOfMatches) matches"
+                }
+                else {
+                    self.matchesLabel.stringValue = ""
+                }
+            }
+        }
+    }
+    
+    @IBAction func scrollItem(sender : NSSegmentedControl) {
+        
+        if sender.selectedSegment == 0 {
+            webview?.evaluateJavaScript("previousItem()") { (object, error) -> Void in
+                //print(error)
+            }
+        }
+        
+        if sender.selectedSegment == 1 {
+            webview?.evaluateJavaScript("nextItem()") { (object, error) -> Void in
+               //print(error)
+            }
+        }
+    }
 
-	override class func isSelectorExcludedFromWebScript(selector: Selector) -> Bool {
-		return false
-	}
 	
-	override class func webScriptNameForSelector(selector: Selector) -> String! {
-	
-		if (selector == Selector("jumpToTimecode:")) {
-			return "jumpToTimecode"
-		}
-		if (selector == Selector("jsLog:")) {
-			return "jsLog"
-		}
-		return ""
-	}
+    func userContentController(userContentController: WKUserContentController, didReceiveScriptMessage message: WKScriptMessage) {
+        
+        if let dictionary = message.body as? NSDictionary where message.name == "callbackHandler" {
 
-	func jsLog(log : String) {
-		print("Log \(log)")
-	}
+            if let type = dictionary["type"] as? String {
+                switch type {
+                case "log":
+                    if let message = dictionary["message"] as? String {
+                        print(" \(message)")
+                    }
+                case "selector":
+                    if let selector = dictionary["selector"] as? String {
+                        if selector == "seekToTimeCode" {
+                            if let timecode = dictionary["data"] as? NSNumber {
+                                seekToTimeCode(timecode.stringValue)
+                            }
+                        }
+                    }
+                default:
+                    break
+                }
+            }
+        }
+    }
+
 	
-	func jumpToTimecode(timecode:String) {
+	func seekToTimeCode(timecode:String) {
 		
-		if let callback = jumpToTimecodeCallback {
+		if let callback = seekToTimeCodeCallBack {
 			callback(timeCode: Double(timecode)!)
 		}
-		
-		highlightLineat(timecode)
 	}
 	
 	@IBAction func enableAutoScroll(sender : NSButton) {
 		
-		if sender.state == 1 {
-			webview.windowScriptObject.evaluateWebScript("setAutoScrollEnabled(true)")
-		}
-		else {
-			webview.windowScriptObject.evaluateWebScript("setAutoScrollEnabled(false)")
-		}
+//		if sender.state == 1 {
+//			webview.windowScriptObject.evaluateWebScript("setAutoScrollEnabled(true)")
+//		}
+//		else {
+//			webview.windowScriptObject.evaluateWebScript("setAutoScrollEnabled(false)")
+//		}
 	}
+    
+    func searchFieldDidEndSearching(sender: NSSearchField) {
+        matchesLabel.stringValue = ""
+    }
 	
 	@IBAction func searchEntered(sender: NSSearchField) {
 		
-		if sender.stringValue.isEmpty {
-			autoScrollingCheckbox.state = 0
-		}
-		else {
-			autoScrollingCheckbox.state = 1
-		}
-		enableAutoScroll(autoScrollingCheckbox)
+//		if sender.stringValue.isEmpty {
+//			autoScrollingCheckbox.state = 0
+//		}
+//		else {
+//			autoScrollingCheckbox.state = 1
+//		}
+//		enableAutoScroll(autoScrollingCheckbox)
         
         searchFor(sender.stringValue)
 	}
 	
 	override func viewDidLoad() {
 		super.viewDidLoad()
-				
-        webview.frameLoadDelegate = self
         
-//		textView.usesFindBar = true
-//		textView.incrementalSearchingEnabled = true
-//		scrollView.findBarPosition = NSScrollViewFindBarPosition.AboveContent
-//		textFinder.performAction(NSTextFinderAction.ShowFindInterface)
+        self.view.layer?.backgroundColor = NSColor.whiteColor().CGColor
+        
+        matchesLabel.stringValue = ""
+        
+        webview = WKWebView(frame: CGRectZero, configuration: transcriptConfiguration)
+        
+        if let webview = webview {
+            webViewContainerForIBContraintSetting.addSubviewWithContentHugging(webview)
+            
+            loadSessionTranscript()
+        }
 	}
-	
     
+    func loadSessionTranscript() {
+        
+        if let wwdcSession = wwdcSession {
+            if let html = wwdcSession.transcriptHTMLFormatted, let base = baseURL, let transcript = transcriptURL  {
+                do {
+                    let baseString = try NSString(contentsOfURL: transcript, encoding: NSUTF8StringEncoding)
+                    let fullPage = NSString(format: baseString, html)
+                    webview?.loadHTMLString(fullPage as String, baseURL: base)                    
+                }
+                catch {
+                    print(error)
+                }
+            }
+        }
+    }
+	
     var transcriptURL : NSURL? {
         get {
             let resource = NSBundle.mainBundle().URLForResource("transcript", withExtension: "html")
@@ -254,32 +331,6 @@ class TranscriptViewController : NSViewController, NSTextFinderClient, WebFrameL
 			return nil
 		}
 	}
-	
-	weak var wwdcSession : WWDCSession? {
-		didSet {
-			if let wwdcSession = wwdcSession {
-//				if let fullTranscriptPrettyPrint = wwdcSession.fullTranscriptPrettyPrint {
-//					self.textView.string = fullTranscriptPrettyPrint
-//				}
-//				else {
-//					self.textView.string = ""
-//				}
-				
-				if let html = wwdcSession.transcriptHTMLFormatted, let base = baseURL, let transcript = transcriptURL  {
-                    
-                    do {
-                        let baseString = try NSString(contentsOfURL: transcript, encoding: NSUTF8StringEncoding)
-                        let fullPage = NSString(format: baseString, html)
-                        webview.mainFrame.loadHTMLString(fullPage as String, baseURL: base)
-                    }
-                    catch {
-                        
-                    }
-				}
-			}
-		}
-	}
-
 }
 
 class VideoViewController : NSViewController {
@@ -289,6 +340,8 @@ class VideoViewController : NSViewController {
 	@IBOutlet weak var noVideoLabel: NSTextField!
 	
 	private var isStreamingURL : Bool = false
+    
+    private var timeObserver : AnyObject?
 	
 	weak var wwdcSession : WWDCSession? {
 		didSet {
@@ -302,7 +355,6 @@ class VideoViewController : NSViewController {
 		avPlayerView.videoGravity = "AVLayerVideoGravityResizeAspect"
 		avPlayerView.controlsStyle = AVPlayerViewControlsStyle.Floating
 		avPlayerView.showsFullScreenToggleButton = true
-	
 	}
     
     func loadVideo () {
@@ -378,25 +430,30 @@ class VideoViewController : NSViewController {
 			let userInfo = UserInfo.sharedManager.userInfo(wwdcSession)
 
 			if userInfo.currentProgress > 0 && userInfo.currentProgress < 1 {
-				let secondsIntoVideo = Float(item.asset.duration.seconds)*userInfo.currentProgress
-				let time = CMTimeMakeWithSeconds(Float64(secondsIntoVideo), 1)
-				if CMTIME_IS_VALID(time) {
-					avPlayerView.player?.seekToTime(time)
-				}
+				let secondsIntoVideo = Double(Float(item.asset.duration.seconds)*userInfo.currentProgress)
+				seekToTimeCode(secondsIntoVideo)
 			}
 		}
 	}
+    
+    func seekToTimeCode(timeCode:Double) {
+        
+        let time = CMTimeMakeWithSeconds(Float64(timeCode), 1)
+        if CMTIME_IS_VALID(time) {
+            avPlayerView.player?.seekToTime(time)
+        }
+    }
 	
 	private var myContext = 0
-	
+    
 	func startObservingPlayer(player: AVPlayer) {
 		let options = NSKeyValueObservingOptions([.New, .Old])
 		player.addObserver(self, forKeyPath: "status", options: options, context: &myContext)
 		player.addObserver(self, forKeyPath: "rate", options: options, context: &myContext)
 		
 		let timeInterval = CMTimeMakeWithSeconds(0.5, Int32(NSEC_PER_SEC))
-		player.addPeriodicTimeObserverForInterval(timeInterval, queue: dispatch_get_main_queue()) { [unowned self] (time) -> Void in
-			print("Time ticker by - \(time)")
+		timeObserver = player.addPeriodicTimeObserverForInterval(timeInterval, queue: dispatch_get_main_queue()) { [unowned self] (time) -> Void in
+			//print("Time ticker by - \(time)")
             
             if self.noVideoLabel.alphaValue == 1 {
                 self.noVideoLabel.animator().alphaValue = 0
@@ -407,6 +464,10 @@ class VideoViewController : NSViewController {
 	func stopObservingPlayer(player: AVPlayer) {
 		player.removeObserver(self, forKeyPath: "status", context: &myContext)
 		player.removeObserver(self, forKeyPath: "rate", context: &myContext)
+        
+        if let _ = timeObserver {
+            player.removeTimeObserver(timeObserver!)
+        }
 	}
 	
 	override func observeValueForKeyPath(keyPath: String?, ofObject object: AnyObject?, change: [String : AnyObject]?, context: UnsafeMutablePointer<Void>) {

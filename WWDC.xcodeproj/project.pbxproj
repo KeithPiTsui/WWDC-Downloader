@@ -30,6 +30,10 @@
 		44F5EE941B45A4BB00CE683D /* HighlightableTextStorage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 44F5EE931B45A4BB00CE683D /* HighlightableTextStorage.swift */; };
 		A90D14EB1B41A8CF00A30590 /* FetchFileSizeManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = A90D14EA1B41A8CF00A30590 /* FetchFileSizeManager.swift */; };
 		A90D14ED1B41C5F000A30590 /* DownloadTranscriptManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = A90D14EC1B41C5F000A30590 /* DownloadTranscriptManager.swift */; };
+		A93FDDEE1B6A34CA00BDAF69 /* ViewExtras.swift in Sources */ = {isa = PBXBuildFile; fileRef = A93FDDED1B6A34CA00BDAF69 /* ViewExtras.swift */; };
+		A93FDDF01B6A515C00BDAF69 /* transcript.js in Resources */ = {isa = PBXBuildFile; fileRef = A93FDDEF1B6A515C00BDAF69 /* transcript.js */; };
+		A93FDDF21B6A76C800BDAF69 /* jquery-2.1.4.min.js in Resources */ = {isa = PBXBuildFile; fileRef = A93FDDF11B6A76C800BDAF69 /* jquery-2.1.4.min.js */; };
+		A93FDDF41B6A77A500BDAF69 /* jquery.highlight.js in Resources */ = {isa = PBXBuildFile; fileRef = A93FDDF31B6A77A500BDAF69 /* jquery.highlight.js */; };
 		A9528F271B34C40E002290D3 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9528F261B34C40E002290D3 /* AppDelegate.swift */; };
 		A9528F291B34C40E002290D3 /* MainViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9528F281B34C40E002290D3 /* MainViewController.swift */; };
 		A9528F2B1B34C40E002290D3 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = A9528F2A1B34C40E002290D3 /* Assets.xcassets */; };
@@ -77,6 +81,10 @@
 		44F5EE931B45A4BB00CE683D /* HighlightableTextStorage.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HighlightableTextStorage.swift; sourceTree = "<group>"; };
 		A90D14EA1B41A8CF00A30590 /* FetchFileSizeManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = FetchFileSizeManager.swift; path = Common/FetchFileSizeManager.swift; sourceTree = "<group>"; };
 		A90D14EC1B41C5F000A30590 /* DownloadTranscriptManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = DownloadTranscriptManager.swift; path = Common/DownloadTranscriptManager.swift; sourceTree = "<group>"; };
+		A93FDDED1B6A34CA00BDAF69 /* ViewExtras.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ViewExtras.swift; sourceTree = "<group>"; };
+		A93FDDEF1B6A515C00BDAF69 /* transcript.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; path = transcript.js; sourceTree = "<group>"; };
+		A93FDDF11B6A76C800BDAF69 /* jquery-2.1.4.min.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; path = "jquery-2.1.4.min.js"; sourceTree = "<group>"; };
+		A93FDDF31B6A77A500BDAF69 /* jquery.highlight.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; path = jquery.highlight.js; sourceTree = "<group>"; };
 		A9528F241B34C40D002290D3 /* WWDCapp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = WWDCapp.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		A9528F261B34C40E002290D3 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		A9528F281B34C40E002290D3 /* MainViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainViewController.swift; sourceTree = "<group>"; };
@@ -171,6 +179,7 @@
 			children = (
 				A96E4D651B2F62340030F908 /* StringExtras.swift */,
 				443168BA1B5E8FCB003842F2 /* ImageExtras.swift */,
+				A93FDDED1B6A34CA00BDAF69 /* ViewExtras.swift */,
 			);
 			name = Extensions;
 			sourceTree = "<group>";
@@ -189,6 +198,9 @@
 				A9528F2A1B34C40E002290D3 /* Assets.xcassets */,
 				443774DF1B692F5300D2099B /* transcript.css */,
 				443774E01B692F5300D2099B /* transcript.html */,
+				A93FDDEF1B6A515C00BDAF69 /* transcript.js */,
+				A93FDDF31B6A77A500BDAF69 /* jquery.highlight.js */,
+				A93FDDF11B6A76C800BDAF69 /* jquery-2.1.4.min.js */,
 				A9528F3E1B34C5D4002290D3 /* WWDCapp-Bridging-Header.h */,
 				A9528F2F1B34C40E002290D3 /* Info.plist */,
 			);
@@ -306,8 +318,11 @@
 			buildActionMask = 2147483647;
 			files = (
 				443774E21B692F5300D2099B /* transcript.html in Resources */,
+				A93FDDF41B6A77A500BDAF69 /* jquery.highlight.js in Resources */,
 				A9528F2B1B34C40E002290D3 /* Assets.xcassets in Resources */,
 				443774E11B692F5300D2099B /* transcript.css in Resources */,
+				A93FDDF01B6A515C00BDAF69 /* transcript.js in Resources */,
+				A93FDDF21B6A76C800BDAF69 /* jquery-2.1.4.min.js in Resources */,
 				A9528F2E1B34C40E002290D3 /* Main.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -340,6 +355,7 @@
 				A96E66711B5EEAD4002332BA /* SessionIDCell.swift in Sources */,
 				A9C98DBB1B48678100DB11C8 /* IntrinsicContentNSTextView.swift in Sources */,
 				442D010B1B399A9D0081C56C /* FileInfo.swift in Sources */,
+				A93FDDEE1B6A34CA00BDAF69 /* ViewExtras.swift in Sources */,
 				44A507021B4EBA7C0033C6BE /* Archiving.swift in Sources */,
 				44F5EE8E1B457B9800CE683D /* TFHpple.m in Sources */,
 				A9528F351B34C427002290D3 /* WWDCSession.swift in Sources */,

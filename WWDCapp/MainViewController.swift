@@ -796,11 +796,15 @@ class ViewController: NSViewController, NSURLSessionDelegate, NSURLSessionDataDe
         let options = NSKeyValueObservingOptions([.New, .Old])
         userInfo.addObserver(self, forKeyPath: "markAsFavorite", options: options, context: &myContext)
         userInfo.addObserver(self, forKeyPath: "currentProgress", options: options, context: &myContext)
+        userInfo.isBeingObserved = true
     }
     
     func stopObservingUserInfo(userInfo: UserSessionInfo) {
-        userInfo.removeObserver(self, forKeyPath: "markAsFavorite", context: &myContext)
-        userInfo.removeObserver(self, forKeyPath: "currentProgress", context: &myContext)
+        if userInfo.isBeingObserved == true {
+            userInfo.removeObserver(self, forKeyPath: "markAsFavorite", context: &myContext)
+            userInfo.removeObserver(self, forKeyPath: "currentProgress", context: &myContext)
+            userInfo.isBeingObserved = false
+        }
     }
     
     override func observeValueForKeyPath(keyPath: String?, ofObject object: AnyObject?, change: [String : AnyObject]?, context: UnsafeMutablePointer<Void>) {
@@ -860,6 +864,9 @@ class ViewController: NSViewController, NSURLSessionDelegate, NSURLSessionDataDe
 		
 		guard let sessionViewerController = sessionViewerController else { return }
 		
+        sessionViewerController.window?.makeKeyAndOrderFront(self)
+        sessionViewerController.window?.orderedIndex = 0
+        
 		if let session = sessionViewerController.videoController.wwdcSession {
 			if session == wwdcSession {
 				return
@@ -869,6 +876,7 @@ class ViewController: NSViewController, NSURLSessionDelegate, NSURLSessionDataDe
 		sessionViewerController.pdfController.wwdcSession = wwdcSession
 		sessionViewerController.videoController.wwdcSession = wwdcSession
 		sessionViewerController.transcriptController.wwdcSession = wwdcSession
+        sessionViewerController.transcriptController.loadSessionTranscript()
 		
 		sessionViewerController.titleLabel.stringValue =  "WWDC \(wwdcSession.sessionYear), Session: \(wwdcSession.sessionID) - \(wwdcSession.title)"
 	}
@@ -941,6 +949,10 @@ class ViewController: NSViewController, NSURLSessionDelegate, NSURLSessionDataDe
 	
 	func setupUIForCompletedInfo () {
 		
+        for session in allWWDCSessionsArray {
+            session.forceCheckIfFilesExistLocally()
+        }
+        
 		forceRefreshButton.enabled = true
 		
 		isYearInfoFetchComplete = true

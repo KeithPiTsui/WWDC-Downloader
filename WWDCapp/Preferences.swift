@@ -47,6 +47,7 @@ class PreferencesController : NSViewController, NSPathControlDelegate {
     @IBAction func stepperChanged(sender: NSStepper) {
         
 		connectionsLabel.stringValue = String(sender.integerValue)
+        Preferences.sharedPreferences.simultaneousDownloads = sender.integerValue
         NSNotificationCenter.defaultCenter().postNotificationName(PreferencesDownloadNumberChangedNotification, object: nil)
     }
     

@@ -55,9 +55,9 @@ class DownloadTranscriptManager : NSObject, NSURLSessionDataDelegate {
 										session.sessionTrack = sessionTrack
 									}
 									
-									if let html = jsonObject["markup"] as? String {
-										session.transcriptHTMLFormatted = html
-									}
+//									if let html = jsonObject["markup"] as? String {
+//										session.transcriptHTMLFormatted = html
+//									}
 									
 									if let timeCodes = jsonObject["timecodes"] as? NSArray, let annotations = jsonObject["annotations"] as? NSArray {
 										
@@ -67,6 +67,7 @@ class DownloadTranscriptManager : NSObject, NSURLSessionDataDelegate {
 												var transcript : [TranscriptInfo] = []
 												
 												var fullTranscript : String = ""
+                                                let markup : NSMutableString = ""
 
 												for var i = 0;  i < timeCodes.count; ++i {
 													let timeCode = timeCodes[i] as? NSNumber
@@ -78,12 +79,17 @@ class DownloadTranscriptManager : NSObject, NSURLSessionDataDelegate {
 														
 														if let timeString = DownloadTranscriptManager.timeFormatter.stringFromTimeInterval(Double(timeCode)) {
 															fullTranscript = fullTranscript+(timeString+"  "+(annotation as String)+"\n\n")
+                                                            
+                                                            // Build HTML
+                                                            let htmlFormat = "<p><a href=\"javascript:seekToTimeCode(%@)\" data-timecode=\"%@\">%@</a>  %@</p>"
+                                                            markup.appendFormat(htmlFormat, timeCode, timeCode, timeString, (annotation as String))
 														}
 													}
 												}
 												
 												session.transcript = transcript
 												session.fullTranscriptPrettyPrint = fullTranscript
+                                                session.transcriptHTMLFormatted = markup as String
 											}
 										}
 									}

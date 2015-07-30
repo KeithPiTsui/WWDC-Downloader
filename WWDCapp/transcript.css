@@ -1,19 +1,39 @@
 body {
-	font:16px 'Avenir Next', 'Helvetica Neue', sans-serif;
+	font:14px -apple-system-body, 'Helvetica Neue', sans-serif;
+    padding-top:50px;
     padding-bottom:44px;
 }
-a {
-	display:block;
-	text-decoration:none;
-	color:#333;
-	padding:3px;
-	margin:3px;
+
+p {
+    display: block;
+    color:#333;
+    padding:3px;
+    margin:3px;
 }
+
+a {
+    text-decoration:none;
+    color:#333;
+    padding:3px;
+    margin:3px;
+}
+
 a:hover {
-	background-color:#F6F6F6;
+    background-color:#899CA4;
 	color:#222;
 }
 a.active {
 	background-color:#E7E7E7;
 	color:black;
 }
+
+span.highlight {
+    background-color: yellow;
+}
+
+span.current {
+    background-color: yellow;
+    border: 1px solid #006600;
+    border-radius:3px;
+}
+

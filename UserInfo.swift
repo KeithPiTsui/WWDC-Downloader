@@ -17,6 +17,8 @@ class UserSessionInfo : NSObject, NSCoding {
 	let sessionID : String
 	dynamic var markAsFavorite: Bool = false
     dynamic var currentProgress: Float = 0
+    
+    var isBeingObserved : Bool = false
 	
 	init(sessionID: String) {
 		self.sessionID = sessionID
