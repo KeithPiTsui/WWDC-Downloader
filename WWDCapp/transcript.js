@@ -8,6 +8,36 @@ function seekToTimeCode(timecode) {
     window.webkit.messageHandlers.callbackHandler.postMessage(dict);
 }
 
+function highlightLineWithTimecode(timecode) {
+    
+    var paragraphs = $('body').find('p');
+    for	(index = 0; index < paragraphs.length; index++) {
+        var elm = paragraphs[index];
+        $(elm).removeClass('paragraphHighlight');
+    }
+    
+    var target = document.querySelector('a[data-timecode="'+timecode+'"]')
+
+    var parent = target.parentElement;
+    $(parent).addClass('paragraphHighlight');
+    
+    if (autoScrollEnabled) {
+        $(target).goTo();
+    }
+}
+
+var autoScrollEnabled = false
+function setAutoScrollEnabled(enabled) {
+    
+    autoScrollEnabled = enabled
+    
+    var dict = {};
+    dict["type"] = "log";
+    dict["message"] = "setAutoScrollEnabled: "+enabled;
+
+    window.webkit.messageHandlers.callbackHandler.postMessage(dict);
+}
+
 var lstEl = null;
 var cntr = -1;
 

@@ -22,6 +22,12 @@ class DownloadTranscriptManager : NSObject, NSURLSessionDataDelegate {
 		return aFormatter
 		}()
     
+    static let numberFormatter : NSNumberFormatter = {
+        let aFormatter = NSNumberFormatter()
+        aFormatter.positiveFormat = "0"
+        return aFormatter
+    }()
+    
     private override init() {
         
         super.init()
@@ -80,9 +86,14 @@ class DownloadTranscriptManager : NSObject, NSURLSessionDataDelegate {
 														if let timeString = DownloadTranscriptManager.timeFormatter.stringFromTimeInterval(Double(timeCode)) {
 															fullTranscript = fullTranscript+(timeString+"  "+(annotation as String)+"\n\n")
                                                             
+                                                            let stringTimeCode = DownloadTranscriptManager.numberFormatter.stringFromNumber(timeCode)
+                                                            
                                                             // Build HTML
                                                             let htmlFormat = "<p><a href=\"javascript:seekToTimeCode(%@)\" data-timecode=\"%@\">%@</a>  %@</p>"
-                                                            markup.appendFormat(htmlFormat, timeCode, timeCode, timeString, (annotation as String))
+                                                            
+                                                            if let stringTimeCode = stringTimeCode {
+                                                                markup.appendFormat(htmlFormat, timeCode, stringTimeCode, timeString, (annotation as String))
+                                                            }
 														}
 													}
 												}

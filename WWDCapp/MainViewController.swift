@@ -7,6 +7,7 @@
 //
 
 import Cocoa
+import AVFoundation
 
 class ViewController: NSViewController, NSURLSessionDelegate, NSURLSessionDataDelegate, NSTableViewDataSource, NSTableViewDelegate, NSMenuDelegate, SearchSuggestionsDelegate {
 
@@ -872,6 +873,16 @@ class ViewController: NSViewController, NSURLSessionDelegate, NSURLSessionDataDe
 				return
 			}
 		}
+        
+        var timeCodeValues = [NSValue]()
+        
+        if let transcriptArray = wwdcSession.transcript {
+            for transcriptInfo in transcriptArray {
+                timeCodeValues.append(NSValue(CMTime: CMTimeMakeWithSeconds(Float64(transcriptInfo.timeStamp), 60)))
+            }
+            
+            sessionViewerController.videoController.timeCodesCMTimes = timeCodeValues
+        }
 		
 		sessionViewerController.pdfController.wwdcSession = wwdcSession
 		sessionViewerController.videoController.wwdcSession = wwdcSession

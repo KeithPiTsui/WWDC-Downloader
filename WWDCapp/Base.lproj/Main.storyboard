@@ -683,6 +683,9 @@ CA
                                             <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                                             <font key="font" metaFont="system"/>
                                         </buttonCell>
+                                        <connections>
+                                            <action selector="enableAutoScroll:" target="YJS-3Z-qZ0" id="Yna-MZ-YOI"/>
+                                        </connections>
                                     </button>
                                     <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="DXY-Tv-wS3">
                                         <rect key="frame" x="329" y="12" width="80" height="14"/>
@@ -1001,7 +1004,7 @@ CA
                                                             <tableColumnResizingMask key="resizingMask" resizeWithTable="YES" userResizable="YES"/>
                                                             <prototypeCellViews>
                                                                 <tableCellView id="RoC-Vv-kEq" customClass="SessionNameDescriptionCell" customModule="WWDCapp" customModuleProvider="target">
-                                                                    <rect key="frame" x="74" y="1" width="400" height="50"/>
+                                                                    <rect key="frame" x="74.096656565915964" y="1" width="400" height="50"/>
                                                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                                     <subviews>
                                                                         <scrollView horizontalHuggingPriority="251" verticalHuggingPriority="260" verticalCompressionResistancePriority="760" placeholderIntrinsicWidth="400" placeholderIntrinsicHeight="15" borderType="none" horizontalLineScroll="10" horizontalPageScroll="10" verticalLineScroll="10" verticalPageScroll="10" hasHorizontalScroller="NO" hasVerticalScroller="NO" usesPredominantAxisScrolling="NO" horizontalScrollElasticity="none" verticalScrollElasticity="none" translatesAutoresizingMaskIntoConstraints="NO" id="Ax9-07-ryC" customClass="DisabledScrollingScrollView" customModule="WWDCapp" customModuleProvider="target">
@@ -1130,7 +1133,7 @@ CA
                                                             <tableColumnResizingMask key="resizingMask" resizeWithTable="YES" userResizable="YES"/>
                                                             <prototypeCellViews>
                                                                 <tableCellView identifier="PDF" id="XN5-Bl-Ag6" customClass="CheckBoxTableViewCell" customModule="WWDCapp" customModuleProvider="target">
-                                                                    <rect key="frame" x="477" y="1" width="100" height="50"/>
+                                                                    <rect key="frame" x="477.19331313183193" y="1" width="100" height="50"/>
                                                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                                     <subviews>
                                                                         <customView translatesAutoresizingMaskIntoConstraints="NO" id="tXJ-sr-iuI">
@@ -1230,7 +1233,7 @@ CA
                                                             <tableColumnResizingMask key="resizingMask" resizeWithTable="YES" userResizable="YES"/>
                                                             <prototypeCellViews>
                                                                 <tableCellView identifier="SD" id="lke-Gm-rNp" customClass="CheckBoxTableViewCell" customModule="WWDCapp" customModuleProvider="target">
-                                                                    <rect key="frame" x="580" y="1" width="100" height="50"/>
+                                                                    <rect key="frame" x="580.28996969774789" y="1" width="100" height="50"/>
                                                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                                     <subviews>
                                                                         <customView translatesAutoresizingMaskIntoConstraints="NO" id="zFI-ua-BZb">
@@ -1330,7 +1333,7 @@ CA
                                                             <tableColumnResizingMask key="resizingMask" resizeWithTable="YES" userResizable="YES"/>
                                                             <prototypeCellViews>
                                                                 <tableCellView identifier="HD" id="BRJ-vK-4k4" customClass="CheckBoxTableViewCell" customModule="WWDCapp" customModuleProvider="target">
-                                                                    <rect key="frame" x="683" y="1" width="100" height="50"/>
+                                                                    <rect key="frame" x="683.38662626366386" y="1" width="100" height="50"/>
                                                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                                     <subviews>
                                                                         <customView translatesAutoresizingMaskIntoConstraints="NO" id="gfW-cf-WbL">
@@ -1430,7 +1433,7 @@ CA
                                                             <tableColumnResizingMask key="resizingMask" resizeWithTable="YES" userResizable="YES"/>
                                                             <prototypeCellViews>
                                                                 <tableCellView identifier="Code" id="fVV-S8-xk2" customClass="CheckBoxTableViewCell" customModule="WWDCapp" customModuleProvider="target">
-                                                                    <rect key="frame" x="786" y="1" width="100" height="50"/>
+                                                                    <rect key="frame" x="786.48328282957982" y="1" width="100" height="50"/>
                                                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                                     <subviews>
                                                                         <customView translatesAutoresizingMaskIntoConstraints="NO" id="V9Q-4y-WHw">
@@ -1529,7 +1532,7 @@ CA
                                             <nil key="backgroundColor"/>
                                         </clipView>
                                         <animations/>
-                                        <scroller key="horizontalScroller" hidden="YES" wantsLayer="YES" verticalHuggingPriority="750" horizontal="YES" id="EQ4-3v-gQf">
+                                        <scroller key="horizontalScroller" wantsLayer="YES" verticalHuggingPriority="750" horizontal="YES" id="EQ4-3v-gQf">
                                             <rect key="frame" x="1" y="463" width="888" height="16"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <animations/>
@@ -1849,19 +1852,6 @@ CA
                 <customObject id="Wfa-10-3jS" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="528" y="-424.5"/>
-        </scene>
-        <!--View Controller-->
-        <scene sceneID="80n-cB-g1c">
-            <objects>
-                <viewController id="NVv-Xs-2WO" sceneMemberID="viewController">
-                    <view key="view" id="d2Q-cL-Mlz">
-                        <rect key="frame" x="0.0" y="0.0" width="450" height="300"/>
-                        <autoresizingMask key="autoresizingMask"/>
-                        <animations/>
-                    </view>
-                </viewController>
-                <customObject id="7w5-Qx-CIk" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>
-            </objects>
         </scene>
     </scenes>
     <resources>
