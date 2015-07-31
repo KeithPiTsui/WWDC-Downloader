@@ -133,8 +133,10 @@ class ViewController: NSViewController, NSURLSessionDelegate, NSURLSessionDataDe
     @IBOutlet weak var deleteFilesMenuItem: NSMenuItem!
 
 	// MARK: Variables
-	var allWWDCSessionsArray : [WWDCSession] = []
-	var visibleWWDCSessionsArray : [WWDCSession] = []
+    weak var sessionViewerController : SessionViewerWindowController?
+
+	private var allWWDCSessionsArray : [WWDCSession] = []
+	private var visibleWWDCSessionsArray : [WWDCSession] = []
 	
 	private var downloadYearInfo : DownloadYearInfo?
 	
@@ -157,10 +159,10 @@ class ViewController: NSViewController, NSURLSessionDelegate, NSURLSessionDataDe
 	private var scrollToCurrentDownloadTimer : NSTimer?
 	private var lastTableViewInteractionTime : CFTimeInterval?
     
-    weak var sessionViewerController : SessionViewerWindowController?
-	
-	var folderChangeNotifier : FolderChangeNotifier?
-	
+	private var folderChangeNotifier : FolderChangeNotifier?
+    private var keyboardEventMonitor : AnyObject?
+
+    
 	// MARK: - Init?
 	required init?(coder: NSCoder) {
 	
@@ -173,6 +175,11 @@ class ViewController: NSViewController, NSURLSessionDelegate, NSURLSessionDataDe
 		
 		super.init(coder: coder)
 	}
+    
+    // MARK: - deinit
+    deinit {
+        deregisterForDownloadFolderNotifications()
+    }
 	
 	// MARK: - ACTIONS
     // MARK: TitleBar
@@ -728,17 +735,7 @@ class ViewController: NSViewController, NSURLSessionDelegate, NSURLSessionDataDe
 		resetUIForYearFetch()
 	}
 	
-	// MARK: SearchSuggestions Delegates
-	func didSelectSuggestion(suggestion : String) {
-		searchField.stringValue = suggestion
-		searchEntered(searchField)
-	}
-	
-	func searchPreset(sender: AnyObject?) {
-		
-	}
-	
-	func resetUIForYearFetch () {
+	private func resetUIForYearFetch () {
 		
         for session in allWWDCSessionsArray {
             stopObservingUserInfo(UserInfo.sharedManager.userInfo(session))
@@ -790,18 +787,25 @@ class ViewController: NSViewController, NSURLSessionDelegate, NSURLSessionDataDe
         myTableView.reloadData()
     }
     
-    // MARK: Property Observers
+    // MARK: - SearchSuggestions Delegates
+    func didSelectSuggestion(suggestion : String) {
+        searchField.stringValue = suggestion
+        searchEntered(searchField)
+    }
+    
+    
+    // MARK: - Property Observers
     
     private var myContext = 0
 
-    func startObservingUserInfo(userInfo: UserSessionInfo) {
+    private func startObservingUserInfo(userInfo: UserSessionInfo) {
         let options = NSKeyValueObservingOptions([.New, .Old])
         userInfo.addObserver(self, forKeyPath: "markAsFavorite", options: options, context: &myContext)
         userInfo.addObserver(self, forKeyPath: "currentProgress", options: options, context: &myContext)
         userInfo.isBeingObserved = true
     }
     
-    func stopObservingUserInfo(userInfo: UserSessionInfo) {
+    private func stopObservingUserInfo(userInfo: UserSessionInfo) {
         if userInfo.isBeingObserved == true {
             userInfo.removeObserver(self, forKeyPath: "markAsFavorite", context: &myContext)
             userInfo.removeObserver(self, forKeyPath: "currentProgress", context: &myContext)
@@ -834,7 +838,7 @@ class ViewController: NSViewController, NSURLSessionDelegate, NSURLSessionDataDe
         }
     }
     
-    func userInfoChanged(userInfo : UserSessionInfo) {
+    private func userInfoChanged(userInfo : UserSessionInfo) {
         
         
         guard let index = self.isFiltered ? visibleWWDCSessionsArray.indexOf ({ (wwdcSession) -> Bool in
@@ -862,7 +866,7 @@ class ViewController: NSViewController, NSURLSessionDelegate, NSURLSessionDataDe
 		}
 	}
 	
-	func loadSessionIntoViewer(wwdcSession :WWDCSession) {
+	private func loadSessionIntoViewer(wwdcSession :WWDCSession) {
 		
 		guard let sessionViewerController = sessionViewerController else { return }
 		
@@ -893,8 +897,8 @@ class ViewController: NSViewController, NSURLSessionDelegate, NSURLSessionDataDe
 		sessionViewerController.titleLabel.stringValue =  "WWDC \(wwdcSession.sessionYear), Session: \(wwdcSession.sessionID) - \(wwdcSession.title)"
 	}
 	
-	// MARK: Fetch Year Info
-	func fetchSessionInfoForYear(year : WWDCYear) {
+	// MARK: - Fetch Year Info
+	private func fetchSessionInfoForYear(year : WWDCYear) {
 		
 		yearSeletor.enabled = false
 		
@@ -959,7 +963,7 @@ class ViewController: NSViewController, NSURLSessionDelegate, NSURLSessionDataDe
 			})
 	}
 	
-	func setupUIForCompletedInfo () {
+	private func setupUIForCompletedInfo () {
 		
         for session in allWWDCSessionsArray {
             session.forceCheckIfFilesExistLocally()
@@ -1281,7 +1285,7 @@ class ViewController: NSViewController, NSURLSessionDelegate, NSURLSessionDataDe
 
 	
 	// MARK: - Download
-	func  downloadFiles(files : [FileInfo] ) {
+	private func  downloadFiles(files : [FileInfo] ) {
 		
 		print("Total Files to download - \(files.count)")
 		
@@ -1377,7 +1381,7 @@ class ViewController: NSViewController, NSURLSessionDelegate, NSURLSessionDataDe
 		})
 	}
 	
-	func startDownloading () {
+	private func startDownloading () {
 		
 		isDownloading = true
 
@@ -1423,7 +1427,7 @@ class ViewController: NSViewController, NSURLSessionDelegate, NSURLSessionDataDe
 		downloadFiles(filesToDownload)
 	}
 	
-	func stopDownloading () {
+	private func stopDownloading () {
 		
 		forceRefreshButton.enabled = true
 		
@@ -1461,7 +1465,7 @@ class ViewController: NSViewController, NSURLSessionDelegate, NSURLSessionDataDe
         print("Completed File Downloads")
 	}
 	
-	func hasReasonableFreeDiskSpace(projectedSpaceNeeded : Int64) -> (Bool, Int64) {
+	private func hasReasonableFreeDiskSpace(projectedSpaceNeeded : Int64) -> (Bool, Int64) {
 		
 		let fileManager = NSFileManager.defaultManager()
 		
@@ -1488,9 +1492,8 @@ class ViewController: NSViewController, NSURLSessionDelegate, NSURLSessionDataDe
 	}
 	
     // MARK: - UI State changes / checks
-
 	
-    func updateTotalProgress() {
+    private func updateTotalProgress() {
         
         dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), { [unowned self] in
             
@@ -1513,7 +1516,7 @@ class ViewController: NSViewController, NSURLSessionDelegate, NSURLSessionDataDe
             })
     }
     
-	func selectedDownloadInformation() -> (totalSize: Int64, numberOfFiles: Int) {
+	private func selectedDownloadInformation() -> (totalSize: Int64, numberOfFiles: Int) {
         
         totalBytesToDownload = 0
 		
@@ -1553,7 +1556,7 @@ class ViewController: NSViewController, NSURLSessionDelegate, NSURLSessionDataDe
         return (totalBytes, numberOfFiles)
     }
 	
-	func updateTotalToDownloadLabel() {
+	private func updateTotalToDownloadLabel() {
 		
 		let (totalSize, _) = selectedDownloadInformation()
 		
@@ -1569,7 +1572,7 @@ class ViewController: NSViewController, NSURLSessionDelegate, NSURLSessionDataDe
 		totallabel.stringValue = byteFormatter.stringFromByteCount(totalSize)
 	}
 	
-	func checkDownloadButtonState () {
+	private func checkDownloadButtonState () {
 		
 		let (_, totalToFetch) = selectedDownloadInformation()
 		
@@ -1583,7 +1586,7 @@ class ViewController: NSViewController, NSURLSessionDelegate, NSURLSessionDataDe
 		}
 	}
 	
-   	func resetDownloadUI() {
+   	private func resetDownloadUI() {
 		
 		currentlabel.stringValue = ""
 		oflabel.hidden = true
@@ -1595,7 +1598,7 @@ class ViewController: NSViewController, NSURLSessionDelegate, NSURLSessionDataDe
         DockProgressBar.appProgressBar.removeProgress()
 	}
     
-    // MARK: Right Click Menu
+    // MARK: - Right Click Menu
     @IBAction func openInSessionViewerMenuAction(sender: NSMenuItem) {
 
         doubleClick(sender)
@@ -1738,7 +1741,6 @@ class ViewController: NSViewController, NSURLSessionDelegate, NSURLSessionDataDe
 			else {
                 
                 openInSessionViewerMenuItem.title = "Open in Session Viewer"
-
                 openInSessionViewerMenuItem.enabled = false
 				addToFavoritesMenuItem.enabled = false
 				removeFromFavoritesMenuItem.enabled = false
@@ -1755,8 +1757,8 @@ class ViewController: NSViewController, NSURLSessionDelegate, NSURLSessionDataDe
 	}
 
 
-    // MARK: Checkboxes
-    func disableUIForDownloading () {
+    // MARK: - Checkboxes
+    private func disableUIForDownloading () {
         
         yearSeletor.enabled = false
 		
@@ -1768,7 +1770,7 @@ class ViewController: NSViewController, NSURLSessionDelegate, NSURLSessionDataDe
         allCodeCheckbox.enabled = false
     }
 	
-	func resetAllCheckboxesAndDisable() {
+	private func resetAllCheckboxesAndDisable() {
 		
 		allPDFCheckBox.state = 1
 		allSDCheckBox.state = 1
@@ -1858,8 +1860,8 @@ class ViewController: NSViewController, NSURLSessionDelegate, NSURLSessionDataDe
         }
     }
 
-    // MARK: CombineButton
-    func updateCombinePDFButtonState() {
+    // MARK: - CombineButton
+    private func updateCombinePDFButtonState() {
         
         if isDownloading {
             combinePDFButton.enabled = false
@@ -1887,12 +1889,12 @@ class ViewController: NSViewController, NSURLSessionDelegate, NSURLSessionDataDe
         }
     }
 	
-	func updateUIAfterEachPDFProcessed(numberProcessed:Int) {
+	private func updateUIAfterEachPDFProcessed(numberProcessed:Int) {
 		
 		combineProgressLabel.stringValue = "Progress: \(numberProcessed)"
 	}
     
-    func updateUIAfterCombiningPDFAndDisplay(url:NSURL?) {
+    private func updateUIAfterCombiningPDFAndDisplay(url:NSURL?) {
         
         if let url = url {
             NSWorkspace.sharedWorkspace().selectFile(url.path, inFileViewerRootedAtPath: url.absoluteString.stringByDeletingLastPathComponent)
@@ -1911,7 +1913,7 @@ class ViewController: NSViewController, NSURLSessionDelegate, NSURLSessionDataDe
 	
 	let autoScrollTimeout : CFTimeInterval = 5
 	
-	func autoScrollToCurrentDownload() {
+	private func autoScrollToCurrentDownload() {
 		
 		let currentTime = CACurrentMediaTime()
 		
@@ -1940,7 +1942,7 @@ class ViewController: NSViewController, NSURLSessionDelegate, NSURLSessionDataDe
 		}
 	}
 	
-	func scrollToFirstRowOfFilesCurrentlyDownloading(index : Int) {
+	private func scrollToFirstRowOfFilesCurrentlyDownloading(index : Int) {
 		
 		let rowRect = myTableView.rectOfRow(index)
 		let viewRect = myTableView.superview?.frame
@@ -1967,19 +1969,19 @@ class ViewController: NSViewController, NSURLSessionDelegate, NSURLSessionDataDe
 	}
 	
 	
-    // MARK: Dock Icon
-    func startUpdatingDockIcon () {
+    // MARK: - Dock Icon
+    private func startUpdatingDockIcon () {
 		dockIconUpdateTimer = NSTimer.scheduledTimerWithTimeInterval(0.25, target: self, selector: Selector("updateDockIcon"), userInfo: nil, repeats: true)
 	}
 	
-	func updateDockIcon () {
+	private func updateDockIcon () {
 		
 		dispatch_async(dispatch_get_main_queue()) { [unowned self] in
 			DockProgressBar.appProgressBar.updateProgress(self.downloadProgressView.doubleValue)
 		}
 	}
 	
-	func stopUpdatingDockIcon () {
+	private func stopUpdatingDockIcon () {
 		if let timer = dockIconUpdateTimer {
 			if timer.valid {
 				timer.invalidate()
@@ -1988,12 +1990,12 @@ class ViewController: NSViewController, NSURLSessionDelegate, NSURLSessionDataDe
 		dockIconUpdateTimer = nil
 	}
 	
-	func removeDockProgress() {
+	private func removeDockProgress() {
 		DockProgressBar.appProgressBar.removeProgress()
 	}
 	
-	// MARK: Folder Watch 
-	func registerForDownloadFolderNotifications() {
+	// MARK: - Folder Watch
+	private func registerForDownloadFolderNotifications() {
 		
 //		return
 		
@@ -2055,16 +2057,17 @@ class ViewController: NSViewController, NSURLSessionDelegate, NSURLSessionDataDe
 		folderChangeNotifier = FolderChangeNotifier(urls: allFolderURLS, callback: callback)
 	}
 	
-	func deregisterForDownloadFolderNotifications() {
+	private func deregisterForDownloadFolderNotifications() {
 		if let folderNotifier = folderChangeNotifier {
 			folderNotifier.stopNotifying()
 			self.folderChangeNotifier = nil
 		}
 	}
-	
-	deinit {
-		deregisterForDownloadFolderNotifications()
-	}
-
+    
+    // MARK: - Keyboard Events
+    
+    private func registerForKeyboard() {
+        
+    }
 }
 

@@ -29,7 +29,7 @@ class SessionViewerWindowController : NSWindowController, NSWindowDelegate {
 	@IBOutlet weak var segmentedPaneControl: NSSegmentedControl!
 	@IBOutlet weak var titleLabel: NSTextField!
     
-    var eventMonitor : AnyObject?
+    private var eventMonitor : AnyObject?
 	
 	override func windowDidLoad() {
 		
@@ -222,7 +222,7 @@ class TranscriptViewController : NSViewController, NSTextFinderClient, WKScriptM
     
 	var seekToTimeCodeCallBack : ((timeCode: Double) -> Void)?
 	
-    var transcriptConfiguration : WKWebViewConfiguration {
+    private var transcriptConfiguration : WKWebViewConfiguration {
         get {
             
             let configuration = WKWebViewConfiguration()
@@ -247,7 +247,7 @@ class TranscriptViewController : NSViewController, NSTextFinderClient, WKScriptM
         }
     }
     
-    var transcriptURL : NSURL? {
+    private var transcriptURL : NSURL? {
         get {
             let resource = NSBundle.mainBundle().URLForResource("transcript", withExtension: "html")
             if let resource = resource {
@@ -257,7 +257,7 @@ class TranscriptViewController : NSViewController, NSTextFinderClient, WKScriptM
         }
     }
     
-    var baseURL : NSURL? {
+    private var baseURL : NSURL? {
         get {
             if let path = transcriptURL?.path?.stringByDeletingLastPathComponent {
                 return NSURL.fileURLWithPath(path)
@@ -361,7 +361,7 @@ class TranscriptViewController : NSViewController, NSTextFinderClient, WKScriptM
         }
 	}
 	
-	func searchFor(term : String) {
+	private func searchFor(term : String) {
 		
 		let script = NSString(format: "findText('%@')", term)
         webview?.evaluateJavaScript(script as String) { [unowned self] (object, error) -> Void in
@@ -448,7 +448,7 @@ class VideoViewController : NSViewController {
 		avPlayerView.showsFullScreenToggleButton = true
 	}
     
-    func loadVideo () {
+    private func loadVideo () {
         
         guard let wwdcSession = wwdcSession else { return }
 		
@@ -513,7 +513,7 @@ class VideoViewController : NSViewController {
 		}
     }
 	
-	func restoreProgressOfVideo() {
+	private func restoreProgressOfVideo() {
 		
 		if let item = avPlayerView.player?.currentItem, let wwdcSession = wwdcSession {
 			
@@ -537,7 +537,7 @@ class VideoViewController : NSViewController {
     // MARK: Observers
 	private var myContext = 0
     
-	func startObservingPlayer(player: AVPlayer) {
+	private func startObservingPlayer(player: AVPlayer) {
 		let options = NSKeyValueObservingOptions([.New, .Old])
 		player.addObserver(self, forKeyPath: "status", options: options, context: &myContext)
 		player.addObserver(self, forKeyPath: "rate", options: options, context: &myContext)
@@ -564,7 +564,7 @@ class VideoViewController : NSViewController {
 
 	}
 	
-	func stopObservingPlayer(player: AVPlayer) {
+	private func stopObservingPlayer(player: AVPlayer) {
 		player.removeObserver(self, forKeyPath: "status", context: &myContext)
 		player.removeObserver(self, forKeyPath: "rate", context: &myContext)
         
@@ -599,7 +599,7 @@ class VideoViewController : NSViewController {
 	}
 	
     // MARK: Player
-	func playerStatusChanged() {
+	private func playerStatusChanged() {
 		
 		if let playerStatus = avPlayerView.player?.status {
 			
@@ -613,7 +613,7 @@ class VideoViewController : NSViewController {
 		}
 	}
 	
-	func playerRateChanged() {
+	private func playerRateChanged() {
 		
 		if let playerRate = avPlayerView.player?.rate {
 			
@@ -627,10 +627,10 @@ class VideoViewController : NSViewController {
 		}
 	}
 	
-	let percentageConsideredWatched : Float = 0.95
-	let secondsConsideredStartedWatching : Float64 = 10
+	private let percentageConsideredWatched : Float = 0.95
+	private let secondsConsideredStartedWatching : Float64 = 10
 	
-	func saveVideoProgress() {
+	private func saveVideoProgress() {
 		
 		if let item = avPlayerView.player?.currentItem, let player = avPlayerView.player, let wwdcSession = wwdcSession  {
 			let userInfo = UserInfo.sharedManager.userInfo(wwdcSession)
@@ -652,7 +652,7 @@ class VideoViewController : NSViewController {
 		}
 	}
 	
-	func unloadPlayer() {
+    func unloadPlayer() {
 		if let player = avPlayerView.player {
 			player.pause()
 			saveVideoProgress()

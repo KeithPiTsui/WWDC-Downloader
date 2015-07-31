@@ -42,7 +42,7 @@ class SessionNameDescriptionCell : NSTableCellView, NSTextViewDelegate {
 		}
 	}
     
-    var nameAttributes : [String : NSObject] {
+    private var nameAttributes : [String : NSObject] {
         get {
             let pstyle = NSMutableParagraphStyle()
             pstyle.alignment = NSTextAlignment.Left
@@ -52,7 +52,7 @@ class SessionNameDescriptionCell : NSTableCellView, NSTextViewDelegate {
 		}
     }
     
-    var descriptionAttributesFull : [String : NSObject] {
+    private var descriptionAttributesFull : [String : NSObject] {
         get {
             let pstyle = NSMutableParagraphStyle()
             pstyle.alignment = NSTextAlignment.Left

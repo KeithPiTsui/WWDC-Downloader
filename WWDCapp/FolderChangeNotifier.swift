@@ -41,7 +41,7 @@ class FolderChangeNotifier : NSObject {
 		}
 	}
 	
-	func createNotification(url : NSURL, callback : FolderMonitorBlock) -> FolderChangeInfo {
+	private func createNotification(url : NSURL, callback : FolderMonitorBlock) -> FolderChangeInfo {
 		
 		var info = FolderChangeInfo()
 

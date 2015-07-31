@@ -45,7 +45,7 @@ typealias SimpleCompletionHandler = ((success: Bool) -> Void)
         }
     }
     
-    func preferenceChanged() {
+    private func preferenceChanged() {
 				
         stopAllFileDownloads()
         
