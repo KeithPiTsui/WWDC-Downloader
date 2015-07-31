@@ -9,7 +9,7 @@
 import Cocoa
 import AVFoundation
 
-class ViewController: NSViewController, NSURLSessionDelegate, NSURLSessionDataDelegate, NSTableViewDataSource, NSTableViewDelegate, NSMenuDelegate, SearchSuggestionsDelegate {
+class ViewController: NSViewController, NSURLSessionDelegate, NSURLSessionDataDelegate, NSTableViewDataSource, NSTableViewDelegate, NSMenuDelegate, SearchSuggestionsDelegate, NSSearchFieldDelegate {
 
 	// MARK: Hooks for Proxying to ToolbarItems in WindowControllerSubclass
 	var yearSeletor: NSPopUpButton! {
@@ -161,6 +161,7 @@ class ViewController: NSViewController, NSURLSessionDelegate, NSURLSessionDataDe
     
 	private var folderChangeNotifier : FolderChangeNotifier?
     private var keyboardEventMonitor : AnyObject?
+    private var searchFieldHasFocus = false
 
     
 	// MARK: - Init?
@@ -178,6 +179,10 @@ class ViewController: NSViewController, NSURLSessionDelegate, NSURLSessionDataDe
     
     // MARK: - deinit
     deinit {
+        if let eventMonitor = keyboardEventMonitor {
+            NSEvent.removeMonitor(eventMonitor)
+        }
+
         deregisterForDownloadFolderNotifications()
     }
 	
@@ -708,30 +713,38 @@ class ViewController: NSViewController, NSURLSessionDelegate, NSURLSessionDataDe
 		searchMenu.insertItem(recents, atIndex: 4)
 
 		searchField.searchMenuTemplate = searchMenu
-		
-		searchSuggestionView.suggestionsStringArray = ["iOS","OS X","Watch","Xcode","Swift","Framework","Media", "Design", "Tools", "Games", "Core"]
+        searchField.delegate = self
+        searchSuggestionView.suggestionsStringArray = ["iOS","OS X","Watch","Xcode","Swift","Framework","Media", "Design", "Tools", "Games", "Core"]
 		searchSuggestionView.delegate = self
 		searchSuggestionsContainer.hidden = true
 		
-		NSNotificationCenter.defaultCenter().addObserverForName(NSControlTextDidBeginEditingNotification, object: searchField, queue: NSOperationQueue.mainQueue(), usingBlock: {  (notification) -> Void in
-			
-			NSAnimationContext.runAnimationGroup({ context in
-				context.duration = 0.3
-				self.searchSuggestionsContainer.animator().hidden = false
-				}, completionHandler: nil)
-			
-		})
-
-		NSNotificationCenter.defaultCenter().addObserverForName(NSControlTextDidEndEditingNotification, object: searchField, queue: NSOperationQueue.mainQueue(), usingBlock: { (notification) -> Void in
-			
-				NSAnimationContext.runAnimationGroup({ context in
-					context.duration = 0.3
-					self.searchSuggestionsContainer.animator().hidden = true
-					}, completionHandler: nil)
-		})
+//		NSNotificationCenter.defaultCenter().addObserverForName(NSControlTextDidBeginEditingNotification, object: searchField, queue: NSOperationQueue.mainQueue(), usingBlock: { [unowned self] (notification) -> Void in
+//			
+//            print("Did Start Search Editing")
+//
+//            self.searchFieldHasFocus = true
+//
+//			NSAnimationContext.runAnimationGroup({ context in
+//				context.duration = 0.3
+//				self.searchSuggestionsContainer.animator().hidden = false
+//				}, completionHandler: nil)
+//			
+//		})
+//
+//		NSNotificationCenter.defaultCenter().addObserverForName(NSControlTextDidEndEditingNotification, object: searchField, queue: NSOperationQueue.mainQueue(), usingBlock: { [unowned self] (notification) -> Void in
+//			
+//            print("Did End Search Editing")
+//            
+//            self.searchFieldHasFocus = false
+//
+//            NSAnimationContext.runAnimationGroup({ context in
+//                context.duration = 0.3
+//                self.searchSuggestionsContainer.animator().hidden = true
+//                }, completionHandler: nil)
+//		})
 		
 		searchSuggestionView.needsDisplay = true
-        		
+        
 		resetUIForYearFetch()
 	}
 	
@@ -740,6 +753,8 @@ class ViewController: NSViewController, NSURLSessionDelegate, NSURLSessionDataDe
         for session in allWWDCSessionsArray {
             stopObservingUserInfo(UserInfo.sharedManager.userInfo(session))
         }
+        
+        deregisterForKeyboard()
         
 		loggingLabel.stringValue = ""
 		
@@ -787,12 +802,35 @@ class ViewController: NSViewController, NSURLSessionDelegate, NSURLSessionDataDe
         myTableView.reloadData()
     }
     
-    // MARK: - SearchSuggestions Delegates
+    // MARK: - Search and Suggestions Delegates
     func didSelectSuggestion(suggestion : String) {
         searchField.stringValue = suggestion
         searchEntered(searchField)
     }
     
+    func searchFieldDidStartSearching(sender: NSSearchField) {
+        
+        print("Did Start Search Editing")
+
+        self.searchFieldHasFocus = true
+        
+        NSAnimationContext.runAnimationGroup({ [unowned self] context in
+            context.duration = 0.3
+            self.searchSuggestionsContainer.animator().hidden = false
+            }, completionHandler: nil)
+    }
+    
+    func searchFieldDidEndSearching(sender: NSSearchField) {
+        
+        print("Did End Search Editing")
+
+        self.searchFieldHasFocus = false
+        
+        NSAnimationContext.runAnimationGroup({ [unowned self] context in
+            context.duration = 0.3
+            self.searchSuggestionsContainer.animator().hidden = true
+            }, completionHandler: nil)
+    }
     
     // MARK: - Property Observers
     
@@ -1008,6 +1046,8 @@ class ViewController: NSViewController, NSURLSessionDelegate, NSURLSessionDataDe
         myTableView.reloadData()
 		
 		registerForDownloadFolderNotifications()
+        
+        registerForKeyboard()
 	}
 	
 	
@@ -2067,6 +2107,46 @@ class ViewController: NSViewController, NSURLSessionDelegate, NSURLSessionDataDe
     // MARK: - Keyboard Events
     
     private func registerForKeyboard() {
+        
+        keyboardEventMonitor = NSEvent.addLocalMonitorForEventsMatchingMask([NSEventMask.KeyDownMask, NSEventMask.FlagsChangedMask] ) { [unowned self] (event) -> NSEvent? in
+            
+            if let thisWindow = self.view.window {
+                if event.window == thisWindow {
+                    if event.type == NSEventType.KeyDown {
+                        let flags = event.modifierFlags.rawValue & NSEventModifierFlags.DeviceIndependentModifierFlagsMask.rawValue
+                        if flags == NSEventModifierFlags.CommandKeyMask.rawValue {
+                            switch event.charactersIgnoringModifiers! {
+                            case "f":
+                                dispatch_async(dispatch_get_main_queue()) { [unowned self] in
+                                    if self.searchFieldHasFocus {
+                                        self.searchField.stringValue = ""
+                                        self.searchEntered(self.searchField)
+                                        self.searchField.window?.makeFirstResponder(nil)
+                                        self.searchFieldHasFocus = false
+                                        
+                                        NSAnimationContext.runAnimationGroup({ [unowned self] context in
+                                            context.duration = 0.3
+                                            self.searchSuggestionsContainer.animator().hidden = true
+                                            }, completionHandler: nil)
+                                    }
+                                    else {
+                                        self.searchField.becomeFirstResponder()
+                                        self.searchFieldHasFocus = true
+                                    }
+                                }
+                                return nil
+                            default:
+                                break
+                            }
+                        }                        
+                    }
+                }
+            }
+            return event
+        }
+    }
+
+    private func deregisterForKeyboard() {
         
     }
 }
