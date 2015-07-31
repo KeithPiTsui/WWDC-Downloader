@@ -120,11 +120,12 @@ class ViewController: NSViewController, NSURLSessionDelegate, NSURLSessionDataDe
     @IBOutlet weak var downloadProgressView: NSProgressIndicator!
 
 	@IBOutlet weak var startDownload: NSButton!
-    
+
 	@IBOutlet var fileMenu: NSMenu!
 	@IBOutlet weak var showInFinderMenuItem: NSMenuItem!
 	
 	@IBOutlet var sessionMenu: NSMenu!
+    @IBOutlet weak var openInSessionViewerMenuItem: NSMenuItem!
     @IBOutlet weak var watchedMenuItem: NSMenuItem!
     @IBOutlet weak var unwatchedMenuItem: NSMenuItem!
     @IBOutlet weak var addToFavoritesMenuItem: NSMenuItem!
@@ -723,7 +724,7 @@ class ViewController: NSViewController, NSURLSessionDelegate, NSURLSessionDataDe
 		})
 		
 		searchSuggestionView.needsDisplay = true
-		
+        		
 		resetUIForYearFetch()
 	}
 	
@@ -1595,6 +1596,11 @@ class ViewController: NSViewController, NSURLSessionDelegate, NSURLSessionDataDe
 	}
     
     // MARK: Right Click Menu
+    @IBAction func openInSessionViewerMenuAction(sender: NSMenuItem) {
+
+        doubleClick(sender)
+    }
+    
     @IBAction func markAsWatchedMenuAction(sender: NSMenuItem) {
         
         if myTableView.clickedRow >= 0 {
@@ -1676,6 +1682,11 @@ class ViewController: NSViewController, NSURLSessionDelegate, NSURLSessionDataDe
 			
 			if row >= 0 {
 				
+                let wwdcSession = (self.isFiltered ? self.visibleWWDCSessionsArray[row] : self.allWWDCSessionsArray[row])
+
+                openInSessionViewerMenuItem.title = "Open \(wwdcSession.sessionID) in Session Viewer"
+                openInSessionViewerMenuItem.enabled = true
+                
 				var activateAddFavorite = false
 				var activateRemoveFavorite = false
 				var activateWatched = false
@@ -1725,6 +1736,10 @@ class ViewController: NSViewController, NSURLSessionDelegate, NSURLSessionDataDe
 				deleteFilesMenuItem.enabled = activateDeleteFiles
 			}
 			else {
+                
+                openInSessionViewerMenuItem.title = "Open in Session Viewer"
+
+                openInSessionViewerMenuItem.enabled = false
 				addToFavoritesMenuItem.enabled = false
 				removeFromFavoritesMenuItem.enabled = false
 				watchedMenuItem.enabled = false
