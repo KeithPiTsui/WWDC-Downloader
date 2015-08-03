@@ -74,7 +74,7 @@ class SessionViewerWindowController : NSWindowController, NSWindowDelegate {
 		segmentedPaneControl.setImage(NSImage(imageLiteral: "pdf_Button")?.tintImageToBrightBlurColor(), forSegment: 1)
         
         NSNotificationCenter.defaultCenter().postNotificationName(SessionViewerDidLaunchNotification, object: nil)
-        
+
         
         eventMonitor = NSEvent.addLocalMonitorForEventsMatchingMask([NSEventMask.KeyDownMask, NSEventMask.FlagsChangedMask] ) { [unowned self] (event) -> NSEvent? in
             
@@ -201,6 +201,22 @@ class ViewerTopSplitViewController : NSSplitViewController {
 
 class ViewerPDFSplitViewController : NSSplitViewController {
 	
+	override func viewDidLoad() {
+		super.viewDidLoad()
+		
+		NSNotificationCenter.defaultCenter().addObserverForName(NSWindowDidEnterFullScreenNotification, object: nil, queue: NSOperationQueue.mainQueue()) { (notification) -> Void in
+			
+			if  let window = self.view.window, let item = self.splitViewItems.last where window == notification.object as? NSWindow {
+				item.collapsed = true
+			}
+		}
+		
+		NSNotificationCenter.defaultCenter().addObserverForName(NSWindowDidExitFullScreenNotification, object: nil, queue: NSOperationQueue.mainQueue()) { (notification) -> Void in
+			if  let window = self.view.window, let item = self.splitViewItems.last where window == notification.object as? NSWindow {
+				item.collapsed = false
+			}
+		}
+	}
 }
 
 // MARK: - Transcript
@@ -446,6 +462,9 @@ class VideoViewController : NSViewController {
 		avPlayerView.videoGravity = "AVLayerVideoGravityResizeAspect"
 		avPlayerView.controlsStyle = AVPlayerViewControlsStyle.Floating
 		avPlayerView.showsFullScreenToggleButton = true
+		
+		noVideoLabel.layer?.zPosition = 10
+		
 	}
     
     private func loadVideo () {
@@ -703,11 +722,7 @@ class PDFMainViewController : NSViewController {
 class PDFThumbnailViewController : NSViewController {
 	
 	@IBOutlet weak var thumbnailView: PDFThumbnailView!
-	
-	override func viewDidLoad() {
-        super.viewDidLoad()
 
-	}
 }
 
 

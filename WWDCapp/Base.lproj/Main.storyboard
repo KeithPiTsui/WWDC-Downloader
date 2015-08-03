@@ -582,33 +582,33 @@ CA
         <scene sceneID="vS2-fl-fw1">
             <objects>
                 <viewController id="GNp-IE-Z6O" customClass="VideoViewController" customModule="WWDCapp" customModuleProvider="target" sceneMemberID="viewController">
-                    <view key="view" id="fQH-DM-KPo">
+                    <view key="view" wantsLayer="YES" id="fQH-DM-KPo">
                         <rect key="frame" x="0.0" y="0.0" width="352" height="247"/>
                         <autoresizingMask key="autoresizingMask"/>
                         <subviews>
-                            <avPlayerView horizontalHuggingPriority="249" verticalHuggingPriority="249" horizontalCompressionResistancePriority="749" verticalCompressionResistancePriority="749" controlsStyle="inline" translatesAutoresizingMaskIntoConstraints="NO" id="0al-5m-NZd">
+                            <avPlayerView wantsLayer="YES" horizontalHuggingPriority="249" verticalHuggingPriority="249" horizontalCompressionResistancePriority="749" verticalCompressionResistancePriority="749" controlsStyle="inline" translatesAutoresizingMaskIntoConstraints="NO" id="0al-5m-NZd">
                                 <rect key="frame" x="0.0" y="0.0" width="352" height="247"/>
                                 <animations/>
                             </avPlayerView>
-                            <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" setsMaxLayoutWidthAtFirstLayout="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Sz9-HT-oCW">
-                                <rect key="frame" x="24" y="107" width="304" height="34"/>
+                            <textField wantsLayer="YES" verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" setsMaxLayoutWidthAtFirstLayout="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Sz9-HT-oCW">
+                                <rect key="frame" x="26" y="107" width="300" height="34"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="34" id="SY5-Gh-lhK"/>
                                     <constraint firstAttribute="width" constant="300" id="bHA-eY-3Sk"/>
                                 </constraints>
                                 <animations/>
-                                <textFieldCell key="cell" controlSize="mini" sendsActionOnEndEditing="YES" alignment="center" title="No Video Downloaded" id="ThO-y2-xwn">
+                                <textFieldCell key="cell" controlSize="mini" sendsActionOnEndEditing="YES" alignment="center" title="No Video Downloaded" drawsBackground="YES" id="ThO-y2-xwn">
                                     <font key="font" metaFont="system"/>
-                                    <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
+                                    <color key="backgroundColor" white="1" alpha="0.0" colorSpace="calibratedWhite"/>
                                 </textFieldCell>
                             </textField>
                         </subviews>
                         <constraints>
-                            <constraint firstItem="Sz9-HT-oCW" firstAttribute="centerY" secondItem="0al-5m-NZd" secondAttribute="centerY" id="LoC-bD-Zyu"/>
+                            <constraint firstItem="Sz9-HT-oCW" firstAttribute="centerY" secondItem="fQH-DM-KPo" secondAttribute="centerY" id="F4O-Eh-ohb"/>
+                            <constraint firstItem="Sz9-HT-oCW" firstAttribute="centerX" secondItem="fQH-DM-KPo" secondAttribute="centerX" id="JvL-bn-NuQ"/>
                             <constraint firstAttribute="bottom" secondItem="0al-5m-NZd" secondAttribute="bottom" id="YcE-55-Q63"/>
                             <constraint firstAttribute="trailing" secondItem="0al-5m-NZd" secondAttribute="trailing" id="gUP-Cy-QCR"/>
                             <constraint firstItem="0al-5m-NZd" firstAttribute="top" secondItem="fQH-DM-KPo" secondAttribute="top" id="kNz-g2-FTd"/>
-                            <constraint firstItem="Sz9-HT-oCW" firstAttribute="centerX" secondItem="0al-5m-NZd" secondAttribute="centerX" id="o79-BQ-6vz"/>
                             <constraint firstItem="0al-5m-NZd" firstAttribute="leading" secondItem="fQH-DM-KPo" secondAttribute="leading" id="xfM-Ew-OPb"/>
                         </constraints>
                         <animations/>
@@ -654,7 +654,7 @@ CA
                                             <outlet property="delegate" destination="YJS-3Z-qZ0" id="qTZ-78-5Z5"/>
                                         </connections>
                                     </searchField>
-                                    <segmentedControl verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="SoY-Cx-5tD">
+                                    <segmentedControl verticalHuggingPriority="750" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="SoY-Cx-5tD">
                                         <rect key="frame" x="266" y="7" width="57" height="25"/>
                                         <constraints>
                                             <constraint firstAttribute="height" constant="22" id="H94-EB-xkB"/>
