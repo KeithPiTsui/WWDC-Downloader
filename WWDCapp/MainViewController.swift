@@ -162,8 +162,10 @@ class ViewController: NSViewController, NSURLSessionDelegate, NSURLSessionDataDe
 	private var folderChangeNotifier : FolderChangeNotifier?
     private var keyboardEventMonitor : AnyObject?
     private var searchFieldHasFocus = false
+	
+	private var refreshTableViewTimer : NSTimer?
 
-    
+	
 	// MARK: - Init?
 	required init?(coder: NSCoder) {
 	
@@ -1017,7 +1019,7 @@ class ViewController: NSViewController, NSURLSessionDelegate, NSURLSessionDataDe
 		
 		startDownload.enabled = true
 		
-		let sessionIDSortDescriptor = NSSortDescriptor(key: "sessionID", ascending: true, selector: "localizedStandardCompare:")
+		let sessionIDSortDescriptor = NSSortDescriptor(key: "sessionID", ascending: true, selector: Selector("localizedStandardCompare:"))
 		
 		myTableView.sortDescriptors = [sessionIDSortDescriptor]
 		
@@ -1040,7 +1042,6 @@ class ViewController: NSViewController, NSURLSessionDelegate, NSURLSessionDataDe
         
         for session in allWWDCSessionsArray {
             startObservingUserInfo(UserInfo.sharedManager.userInfo(session))
-            session.forceCheckIfFilesExistLocally()
         }
         
         myTableView.reloadData()
@@ -1462,7 +1463,7 @@ class ViewController: NSViewController, NSURLSessionDelegate, NSURLSessionDataDe
 		startUpdatingDockIcon()
 		
 		lastTableViewInteractionTime = CACurrentMediaTime()
-		scrollToCurrentDownloadTimer = NSTimer.scheduledTimerWithTimeInterval(5, target: self, selector: "autoScrollToCurrentDownload", userInfo: nil, repeats: true)
+		scrollToCurrentDownloadTimer = NSTimer.scheduledTimerWithTimeInterval(5, target: self, selector: Selector("autoScrollToCurrentDownload"), userInfo: nil, repeats: true)
 
 		downloadFiles(filesToDownload)
 	}
@@ -1679,11 +1680,15 @@ class ViewController: NSViewController, NSURLSessionDelegate, NSURLSessionDataDe
     @IBAction func deleteFilesForSessionMenuAction(sender: NSMenuItem) {
 		
 		if myTableView.clickedRow >= 0 {
-			let sessions = sessionsCurrentlySelected()
-			for wwdcSession in sessions {
-				wwdcSession.deleteDownloadedFiles()
-			}
-			coordinateAllCheckBoxUI()
+			
+			dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), { [unowned self] in
+				
+				let sessions = self.sessionsCurrentlySelected()
+				
+				for wwdcSession in sessions {
+					wwdcSession.deleteDownloadedFiles()
+				}
+			})
 		}
     }
 	
@@ -2034,6 +2039,36 @@ class ViewController: NSViewController, NSURLSessionDelegate, NSURLSessionDataDe
 		DockProgressBar.appProgressBar.removeProgress()
 	}
 	
+	var flagAsChanged = false
+	
+	func refreshTableAfterFolderChange() {
+		
+		dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), { [unowned self] in
+
+			for session in self.allWWDCSessionsArray {
+				session.forceCheckIfFilesExistLocally()
+			}
+			
+			dispatch_async(dispatch_get_main_queue()) { [unowned self] in
+				
+				print("reloading table")
+				self.myTableView.reloadData()
+				
+				self.coordinateAllCheckBoxUI()
+
+				self.flagAsChanged = false
+			}
+		})
+	}
+	
+	func scheduleRefreshTimer() {
+		self.refreshTableViewTimer = NSTimer(timeInterval: 1.0, target: self, selector: Selector("refreshTableAfterFolderChange"), userInfo: nil, repeats: false)
+		if let timer = self.refreshTableViewTimer {
+			let runLoop = NSRunLoop.mainRunLoop();
+			runLoop.addTimer(timer, forMode: NSDefaultRunLoopMode)
+		}
+	}
+	
 	// MARK: - Folder Watch
 	private func registerForDownloadFolderNotifications() {
 		
@@ -2042,12 +2077,20 @@ class ViewController: NSViewController, NSURLSessionDelegate, NSURLSessionDataDe
 		deregisterForDownloadFolderNotifications()
 		
 		let callback : FolderMonitorBlock = { [unowned self] in
-			print("Folder Changed")
-			dispatch_async(dispatch_get_main_queue()) { [unowned self] in
-				for session in self.allWWDCSessionsArray {
-					session.forceCheckIfFilesExistLocally()
+			
+			if self.flagAsChanged {
+				if let timer = self.refreshTableViewTimer {
+					if timer.valid {
+						timer.invalidate()
+					}
+					self.refreshTableViewTimer = nil
 				}
-				self.myTableView.reloadData()
+				self.scheduleRefreshTimer()
+			}
+			else {
+				print("Folder Changed")
+				self.flagAsChanged = true
+				self.scheduleRefreshTimer()
 			}
 		}
 		

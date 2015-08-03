@@ -163,11 +163,14 @@ enum FileType: CustomStringConvertible {
 								if size == fileSize {
 									return true
 								}
+								else {
+									print("File Size Compare error - expected \(fileSize) - actual \(size)")
+								}
 							}
 						}
 					}
 					catch {
-						print("File Size Compare error - \(error)")
+						print("File Size Compare error - FILE NOT PRESENT- \(error)")
 					}
 				}
 				forceCheckIfFileExists()
@@ -238,9 +241,11 @@ enum FileType: CustomStringConvertible {
         
         if let localFileURLString = self.localFileURL?.path {
             isFileMarkedAsDownloaded = NSFileManager.defaultManager().fileExistsAtPath(localFileURLString)
+			self.downloadProgress = isFileMarkedAsDownloaded ? 1.0 : 0.0
             return
         }
         isFileMarkedAsDownloaded = false
+		self.downloadProgress = 0.0
     }
 	
 	func saveFileLocallyFrom(url: NSURL) {
