@@ -1953,7 +1953,7 @@ class ViewController: NSViewController, NSURLSessionDelegate, NSURLSessionDataDe
 	
 	let autoScrollTimeout : CFTimeInterval = 5
 	
-	private func autoScrollToCurrentDownload() {
+    func autoScrollToCurrentDownload() {
 		
 		let currentTime = CACurrentMediaTime()
 		
@@ -2014,7 +2014,7 @@ class ViewController: NSViewController, NSURLSessionDelegate, NSURLSessionDataDe
 		dockIconUpdateTimer = NSTimer.scheduledTimerWithTimeInterval(0.25, target: self, selector: Selector("updateDockIcon"), userInfo: nil, repeats: true)
 	}
 	
-	private func updateDockIcon () {
+    func updateDockIcon () {
 		
 		dispatch_async(dispatch_get_main_queue()) { [unowned self] in
 			DockProgressBar.appProgressBar.updateProgress(self.downloadProgressView.doubleValue)
