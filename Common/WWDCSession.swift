@@ -40,6 +40,12 @@ func ==(lhs: WWDCSession, rhs: WWDCSession)-> Bool {
     let title : String
     let sessionID : String
     let sessionYear : WWDCYear
+	
+	var displayName : String {
+		get {
+			return sessionYear.description+" - "+sessionID+" - "+title
+		}
+	}
 
     var isInfoFetchComplete = false
 	

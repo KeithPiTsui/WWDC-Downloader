@@ -898,7 +898,7 @@ CA
                                         <accessibility description="Total desctiption label"/>
                                     </textField>
                                     <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="DNA-hc-glG">
-                                        <rect key="frame" x="18" y="567" width="480" height="14"/>
+                                        <rect key="frame" x="18" y="565" width="480" height="14"/>
                                         <animations/>
                                         <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" alignment="left" title="Label" id="tem-H8-adv">
                                             <font key="font" metaFont="smallSystem"/>
@@ -1590,7 +1590,7 @@ CA
                                     <constraint firstItem="2Uk-zV-FYf" firstAttribute="leading" secondItem="eQd-ix-KJW" secondAttribute="trailing" constant="8" id="h8k-Ov-OVE"/>
                                     <constraint firstItem="DUe-MO-CLA" firstAttribute="top" secondItem="ZwT-7T-fue" secondAttribute="top" constant="43" id="hKf-nd-Lve"/>
                                     <constraint firstItem="2Uk-zV-FYf" firstAttribute="trailing" secondItem="DUe-MO-CLA" secondAttribute="trailing" id="hMC-Sf-91B"/>
-                                    <constraint firstItem="DNA-hc-glG" firstAttribute="top" secondItem="ZwT-7T-fue" secondAttribute="top" constant="2" id="kPu-xf-kwq"/>
+                                    <constraint firstItem="DNA-hc-glG" firstAttribute="top" secondItem="ZwT-7T-fue" secondAttribute="top" constant="4" id="kPu-xf-kwq"/>
                                     <constraint firstItem="LdI-VT-wO4" firstAttribute="leading" secondItem="C8t-xS-mu2" secondAttribute="trailing" constant="8" id="lBf-Q8-PqA"/>
                                     <constraint firstItem="93J-Av-NLB" firstAttribute="leading" secondItem="DNA-hc-glG" secondAttribute="trailing" constant="19" id="lOZ-f4-yZk"/>
                                     <constraint firstItem="o2q-VB-fLx" firstAttribute="leading" secondItem="DUe-MO-CLA" secondAttribute="leading" id="mc1-rc-i3u"/>

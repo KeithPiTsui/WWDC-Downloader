@@ -251,10 +251,6 @@ class ViewController: NSViewController, NSURLSessionDelegate, NSURLSessionDataDe
         }
     }
 	
-	@IBAction func transcriptToggled(sender: NSButton) {
-		
-	}
-	
 	@IBAction func searchEntered(sender: NSSearchField) {
 	
 		if sender.stringValue.isEmpty && showFavoritesCheckbox.state == 0 {
@@ -614,7 +610,7 @@ class ViewController: NSViewController, NSURLSessionDelegate, NSURLSessionDataDe
 	
 	@IBAction func  doubleClick(sender:AnyObject?) {
 		
-		if myTableView.clickedRow >= 0 {
+		if myTableView.clickedRow >= 0 && isYearInfoFetchComplete {
 
 			let wwdcSession = (isFiltered ? visibleWWDCSessionsArray[myTableView.clickedRow] : allWWDCSessionsArray[myTableView.clickedRow])
 
@@ -719,31 +715,6 @@ class ViewController: NSViewController, NSURLSessionDelegate, NSURLSessionDataDe
         searchSuggestionView.suggestionsStringArray = ["iOS","OS X","Watch","Xcode","Swift","Framework","Media", "Design", "Tools", "Games", "Core"]
 		searchSuggestionView.delegate = self
 		searchSuggestionsContainer.hidden = true
-		
-//		NSNotificationCenter.defaultCenter().addObserverForName(NSControlTextDidBeginEditingNotification, object: searchField, queue: NSOperationQueue.mainQueue(), usingBlock: { [unowned self] (notification) -> Void in
-//			
-//            print("Did Start Search Editing")
-//
-//            self.searchFieldHasFocus = true
-//
-//			NSAnimationContext.runAnimationGroup({ context in
-//				context.duration = 0.3
-//				self.searchSuggestionsContainer.animator().hidden = false
-//				}, completionHandler: nil)
-//			
-//		})
-//
-//		NSNotificationCenter.defaultCenter().addObserverForName(NSControlTextDidEndEditingNotification, object: searchField, queue: NSOperationQueue.mainQueue(), usingBlock: { [unowned self] (notification) -> Void in
-//			
-//            print("Did End Search Editing")
-//            
-//            self.searchFieldHasFocus = false
-//
-//            NSAnimationContext.runAnimationGroup({ context in
-//                context.duration = 0.3
-//                self.searchSuggestionsContainer.animator().hidden = true
-//                }, completionHandler: nil)
-//		})
 		
 		searchSuggestionView.needsDisplay = true
         
@@ -1110,12 +1081,11 @@ class ViewController: NSViewController, NSURLSessionDelegate, NSURLSessionDataDe
 	}
 	
 	func selectionShouldChangeInTableView(tableView: NSTableView) -> Bool {
-		return true
-	}
-	
-	func tableViewSelectionDidChange(notification: NSNotification) {
-		
-		
+		if isYearInfoFetchComplete {
+			return true
+		} else {
+			return false
+		}
 	}
 	
 	func tableView(tableView: NSTableView, viewForTableColumn tableColumn: NSTableColumn?, row: Int) -> NSView? {
@@ -1425,12 +1395,6 @@ class ViewController: NSViewController, NSURLSessionDelegate, NSURLSessionDataDe
 	private func startDownloading () {
 		
 		isDownloading = true
-
-//		searchField.enabled = false
-//		searchField.stringValue = ""
-//		isFiltered = false
-//		visibleWWDCSessionsArray.removeAll()
-//		myTableView.reloadData()
 		
 		deregisterForDownloadFolderNotifications()
 
@@ -1728,13 +1692,10 @@ class ViewController: NSViewController, NSURLSessionDelegate, NSURLSessionDataDe
 			let row = myTableView.clickedRow
 			//let column = myTableView.clickedColumn
 			
-			if row >= 0 {
+			if row >= 0 && isYearInfoFetchComplete {
 				
                 let wwdcSession = (self.isFiltered ? self.visibleWWDCSessionsArray[row] : self.allWWDCSessionsArray[row])
 
-                openInSessionViewerMenuItem.title = "Open \(wwdcSession.sessionID) in Session Viewer"
-                openInSessionViewerMenuItem.enabled = true
-                
 				var activateAddFavorite = false
 				var activateRemoveFavorite = false
 				var activateWatched = false
@@ -1775,6 +1736,31 @@ class ViewController: NSViewController, NSURLSessionDelegate, NSURLSessionDataDe
 					if activateAddFavorite && activateRemoveFavorite && activateWatched && activateUnwatched && activateDeleteFiles {
 						break
 					}
+				}
+				
+				if sessions.count > 1  {
+					openInSessionViewerMenuItem.title = "Open in Session Viewer"
+					openInSessionViewerMenuItem.enabled = false
+
+					watchedMenuItem.title = "Mark selected as Watched"
+					unwatchedMenuItem.title = "Mark selected as Unwatched"
+					
+					addToFavoritesMenuItem.title = "Add selected to Favorites"
+					removeFromFavoritesMenuItem.title = "Remove selected from Favorites"
+					
+					deleteFilesMenuItem.title = "Delete All Files from selected Sessions"
+				}
+				else {
+					openInSessionViewerMenuItem.title = "Open \(wwdcSession.sessionID) in Session Viewer"
+					openInSessionViewerMenuItem.enabled = true
+					
+					watchedMenuItem.title = "Mark as Watched"
+					unwatchedMenuItem.title = "Mark as Unwatched"
+
+					addToFavoritesMenuItem.title = "Add to Favorites"
+					removeFromFavoritesMenuItem.title = "Remove from Favorites"
+
+					deleteFilesMenuItem.title = "Delete All Files from Session"
 				}
 				
 				addToFavoritesMenuItem.enabled = activateAddFavorite
@@ -2190,7 +2176,10 @@ class ViewController: NSViewController, NSURLSessionDelegate, NSURLSessionDataDe
     }
 
     private func deregisterForKeyboard() {
-        
+		
+		if let eventMonitor = keyboardEventMonitor {
+			NSEvent.removeMonitor(eventMonitor)
+		}
     }
 }
 

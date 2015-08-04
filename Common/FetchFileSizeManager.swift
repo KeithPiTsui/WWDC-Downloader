@@ -22,10 +22,11 @@ class FetchFileSizeManager : NSObject, NSURLSessionDownloadDelegate {
         super.init()
         
         let headerconfig = NSURLSessionConfiguration.defaultSessionConfiguration()
+		headerconfig.timeoutIntervalForRequest = NSTimeInterval(300)
         headerSessionManager = NSURLSession(configuration: headerconfig, delegate: self, delegateQueue: nil)
     }
 
-    func fetchFileSize(file : FileInfo, completion: (success: Bool, errorCode:Int?) -> Void) {
+    func fetchFileSize(file : FileInfo, completion: HeaderCompletionHandler) {
         
         guard let remotefileURL = file.remoteFileURL else { completion(success: false, errorCode: 400); return }
         
@@ -43,10 +44,7 @@ class FetchFileSizeManager : NSObject, NSURLSessionDownloadDelegate {
                         }
                     }
                     else {
-                        if let task = self.headerSessionManager?.downloadTaskWithRequest(NSURLRequest(URL: remotefileURL)) {       // Couldnt get with HEAD so download part of file and use that response header!
-                            self.downloadHandlers[task.taskIdentifier] = (file,completion)
-                            task.resume()
-                        }
+                        self.startDownload(file, completion: completion)      // Couldnt get with HEAD so download part of file and use that response header!
                     }
                 }
             }
@@ -56,7 +54,17 @@ class FetchFileSizeManager : NSObject, NSURLSessionDownloadDelegate {
         }
         fileSizeTask?.resume()
     }
-    
+	
+	private func startDownload(fileInfo:FileInfo, completion: HeaderCompletionHandler) {
+		
+		guard let remotefileURL = fileInfo.remoteFileURL else { completion(success: false, errorCode: 400); return }
+
+		if let task = self.headerSessionManager?.downloadTaskWithRequest(NSURLRequest(URL: remotefileURL)) {       // Couldnt get with HEAD so download part of file and use that response header!
+			self.downloadHandlers[task.taskIdentifier] = (fileInfo,completion)
+			task.resume()
+		}
+	}
+	
     func stopAllFileSizeFetchs() {
 		headerSessionManager?.getAllTasksWithCompletionHandler({ (tasks) -> Void in
 			for task in tasks {
@@ -105,14 +113,21 @@ class FetchFileSizeManager : NSObject, NSURLSessionDownloadDelegate {
     func URLSession(session: NSURLSession, task: NSURLSessionTask, didCompleteWithError error: NSError?) {
         
         if session == headerSessionManager {
-            if let (_,completion) = downloadHandlers[task.taskIdentifier] {
+            if let (fileInfo,completion) = downloadHandlers[task.taskIdentifier] {
+				
+				downloadHandlers[task.taskIdentifier] = nil
+
                 if let error = error {
-                    completion(success: false, errorCode:error.code)
+					switch error.code {
+					case NSURLErrorTimedOut:
+						print("Retrying - \(fileInfo.displayName!)")
+						startDownload(fileInfo, completion: completion)
+					default:
+						print("Download Fail Code-\(error.code) - \(fileInfo.displayName!)")
+						completion(success: false, errorCode:error.code)
+					}
                 }
             }
-            downloadHandlers[task.taskIdentifier] = nil
         }
     }
-    
-   
 }
