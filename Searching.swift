@@ -13,46 +13,52 @@ class Searching {
 	static let sharedManager = Searching()
 	
     func countOfStringsFor(wwdcSession : WWDCSession, searchString: String) -> Int {
-        
-        if let rangeArray = rangeArrayFor(wwdcSession, searchString: searchString) {
-            return rangeArray.count
-        }
-        else {
-            return 0
-        }
+		
+		if searchTranscriptReference.indexForKey("\(wwdcSession.sessionYear)-\(wwdcSession.sessionID)-\(searchString)") == nil {
+
+			var count = 0
+			
+			if let rangeArray = rangeArrayFor(wwdcSession, searchString: searchString) {
+				count = rangeArray.count
+			}
+			
+			searchTranscriptReference["\(wwdcSession.sessionYear)-\(wwdcSession.sessionID)-\(searchString)"] = NSNumber(integer: count)
+			
+			return count
+		}
+		else {
+			if let count = searchTranscriptReference["\(wwdcSession.sessionYear)-\(wwdcSession.sessionID)-\(searchString)"] {
+				return count.integerValue
+			}
+			else {
+				return 0
+			}
+		}
     }
     
     func rangeArrayFor(wwdcSession : WWDCSession, searchString: String) -> NSArray? {
         
         if let transcript = wwdcSession.fullTranscriptPrettyPrint {
-            if searchTranscriptReference.indexForKey("\(wwdcSession.sessionYear)-\(wwdcSession.sessionID)-\(searchString)") == nil {
-                
-                let length = transcript.characters.count
-                var range = NSMakeRange(0, length)
-                
-                let rangeArray = NSMutableArray()
-                
-                while(range.location != NSNotFound)
-                {
-                    range = (transcript as NSString).rangeOfString(searchString, options: NSStringCompareOptions.CaseInsensitiveSearch, range: range)
-                    
-                    if(range.location != NSNotFound)
-                    {
-                        rangeArray.addObject(NSValue(range: range))
-                        
-                        range = NSMakeRange(range.location + range.length, length - (range.location + range.length));
-                    }
-                }
-                
-                searchTranscriptReference["\(wwdcSession.sessionYear)-\(wwdcSession.sessionID)-\(searchString)"] = rangeArray
-                
-                return rangeArray
-            }
-            else {
-                if let rangeArray = searchTranscriptReference["\(wwdcSession.sessionYear)-\(wwdcSession.sessionID)-\(searchString)"] {
-                    return rangeArray
-                }
-            }
+			
+			let length = transcript.characters.count
+			var range = NSMakeRange(0, length)
+			
+			let rangeArray = NSMutableArray()
+			
+			while(range.location != NSNotFound)
+			{
+				range = (transcript as NSString).rangeOfString(searchString, options: NSStringCompareOptions.CaseInsensitiveSearch, range: range)
+				
+				if(range.location != NSNotFound)
+				{
+					rangeArray.addObject(NSValue(range: range))
+					
+					range = NSMakeRange(range.location + range.length, length - (range.location + range.length));
+				}
+			}
+		
+			return rangeArray
+    
         }
         return nil
     }
@@ -86,7 +92,7 @@ class Searching {
 	}
 	
 	// MARK: Private
-	private var searchTranscriptReference : [NSString:NSArray] = [:]
+	private var searchTranscriptReference : [NSString:NSNumber] = [:]
 
 	private init() {
 		unArchiveSearchData { (success) -> Void in
@@ -108,7 +114,7 @@ class Searching {
         do {
             let data = try NSData(contentsOfFile: pathForSearchFile(), options: NSDataReadingOptions.DataReadingMappedIfSafe)
             
-            if let unarchived = NSKeyedUnarchiver.unarchiveObjectWithData(data) as? [NSString:NSArray] {
+            if let unarchived = NSKeyedUnarchiver.unarchiveObjectWithData(data) as? [NSString:NSNumber] {
                 searchTranscriptReference = unarchived
                 completionSuccess(success: true)
                 return

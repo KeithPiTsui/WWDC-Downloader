@@ -20,8 +20,11 @@ class TranscriptInfo : NSObject, NSCoding {
 	}
 	
 	required init(coder aDecoder: NSCoder) {
-		self.timeStamp  = aDecoder.decodeDoubleForKey("timeStamp")
-		self.caption = aDecoder.decodeObjectForKey("caption") as! String
+		let timestamp = aDecoder.decodeDoubleForKey("timeStamp")
+		self.timeStamp  = timestamp
+		let caption = aDecoder.decodeObjectForKey("caption") as! String
+		self.caption = caption
+		super.init()
 	}
 	
 	func encodeWithCoder(aCoder: NSCoder) {
