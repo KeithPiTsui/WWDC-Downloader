@@ -8,7 +8,7 @@ Note: **App uses entitlements for Mac App Store Folder Sandbox access so needs t
 Disappointed? Look to the future - embrace it.
 
 ### Features
-- Covers - 2015, 2014, 2013
+- 2015, 2014, 2013
 - Download and view PDFs, HD video, SD video and Code (2015 only)
 - Downloads can be stopped and resumed
 - Full description of sessions included
