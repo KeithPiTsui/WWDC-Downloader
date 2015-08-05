@@ -11,7 +11,7 @@ Disappointed? Look to the future - embrace it.
 - 2015, 2014, 2013
 - Download and view PDFs, HD video, SD video and Code (2015 only)
 - Downloads can be stopped and resumed
-- Full description of sessions included
+- Full description of sessions
 - Searchable (title, description and session transcripts)
 - Show/Hide Descriptions
 - Visual progress of downloads
@@ -28,6 +28,7 @@ Disappointed? Look to the future - embrace it.
 - Transcript time clickable to jump video to timestamp
 - Transcript can auto follow video
 - When is fullscreen the thumbnail pdf view will collapse, hover by edge to redisplay
+- Session video progress saved
 - Download folder is monitored for changes
 
 ### Interesting Areas
