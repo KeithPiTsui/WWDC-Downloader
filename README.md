@@ -42,6 +42,10 @@ PDF Merging (PDFMerge.swift)
 ### 3rd Party libraries
 I purposely avoided using external libraries as much as possible to expose myself to as many parts of AppKit and Cocoa as possible. Even AFNetworking?! I wanted to understand how it could be done with only NSURLSession as Apple seem to stress its usefulness and importance. So, only one 3rd party library is included as a shortcut to parse the html - Hpple (https://github.com/topfunky/hpple)
 
+## Where does the data come from?
+- Apple for PDFs, Videos, Code
+- NSHipster - ASCIIwwdc full-text transcripts api ([http://asciiwwdc.com](http://asciiwwdc.com))
+
 ### Where is the data stored?
 - Downloads are in the folder chosen in preferences (default: Downloads)
 - App data in Application Support in Containers i.e /Users/######/Library/Containers/com.serendipityappcompany.wwdcdownloader/Data/Library/Application Support/
