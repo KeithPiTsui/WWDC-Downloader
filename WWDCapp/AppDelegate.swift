@@ -46,7 +46,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
 			if Preferences.sharedPreferences.downloadFolderURL == nil {
 				Preferences.sharedPreferences.populateFolderURL()
 				
-				guard let _ = Preferences.sharedPreferences.downloadFolderURL else { assertionFailure("No Directory Available to Download to! - You may need to choose a Team in xcode to sign the app as it needs entitlements for directory access!"); return }
+				guard let _ = Preferences.sharedPreferences.downloadFolderURL else { assertionFailure("No Directory Available to Download to! - You may need to choose Developer ID and a Team in xcode to sign the app as it needs entitlements for directory access!"); return }
 			}
 		}
     }
