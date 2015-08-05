@@ -19,14 +19,11 @@ Disappointed? Look to the future - embrace it.
 - Preferences to change concurrent number of downloads and the Folder where downloads are saved (Mac app store compliant but obviously this app wouldn't be allowed in store as it scrapes Apple site for info/assets)
 - Fullscreen compatible
 - Right click or swipe along session row for options for watched, favourites and deletion of files
-
 - Double Click session row to launch Session Viewer
-
 - If session video not downloaded then URL for SD video is queued up to attempt streaming
 - Transcript time clickable to jump video to timestamp
 - Transcript can auto follow video
 - When is fullscreen the thumbnail pdf view will collapse, hover by edge to redisplay
-
 - Download folder is monitored for changes
 
 ### Interesting Areas
