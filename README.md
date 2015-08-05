@@ -1,7 +1,7 @@
 ## WWDC Downloader
 Started out as quick class to learn some Swift 2 and Mac OSX Cocoa, it spiralled a little out of control.
 
-Note: **App uses entitlements for Mac App Store Folder Sandbox access so needs to be signed - Select a Team to build.**
+Note: **App uses entitlements for Mac App Store Folder Sandbox access so needs to be signed - Select Developer ID and a Team to build.**
 
 
 ### It's in Swift 2 / Xcode 7 and only for El Capitan
