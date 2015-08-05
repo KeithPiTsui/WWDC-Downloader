@@ -3,11 +3,7 @@
 ### It's in Swift 2 / Xcode 7 and only for El Capitan
 Disappointed? Look to the future - embrace it.
 
-### 3rd Party libraries
-I purposely avoided using external libraries as much as possible to expose myself to as many parts of AppKit and Cocoa as possible. Even AFNetworking?! I wanted to understand how it could be done with only NSURLSession as Apple seem to stress its usefulness and importance. So, only one 3rd party library is included as a shortcut to parse the html - Hpple (https://github.com/topfunky/hpple)
-
 ### Features
-
 - Covers - 2015, 2014, 2013
 - Download and view PDFs, HD video, SD video and Code (2015 only)
 - Downloads can be stopped and resumed
@@ -41,6 +37,9 @@ PDF Merging (PDFMerge.swift)
 - Mac app store sandbox folder access (Preferences.swift)
 - WKWebView and Javascripting (SessionViewerController.swift - TranscriptViewController)
 - NSMenu (right click menu) and NSEvent keyboard monitoring, such as ⌘F. (MainViewController.swift)
+
+### 3rd Party libraries
+I purposely avoided using external libraries as much as possible to expose myself to as many parts of AppKit and Cocoa as possible. Even AFNetworking?! I wanted to understand how it could be done with only NSURLSession as Apple seem to stress its usefulness and importance. So, only one 3rd party library is included as a shortcut to parse the html - Hpple (https://github.com/topfunky/hpple)
 
 ### Where is the data stored?
 - Downloads are in the folder chosen in preferences (default: Downloads)
