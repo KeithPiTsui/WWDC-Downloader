@@ -1,17 +1,17 @@
 ## WWDC Downloader
-Started out as quick class to learn some Swift 2 and Mac OSX Cocoa, it spiralled a little out of control.
+Started out as quick class to learn Swift 2, Mac OSX Cocoa and download some WWDC assets, it spiralled a little out of control.
 
-Note: **App uses entitlements for Mac App Store Folder Sandbox access so needs to be signed - Select a Team to build.**
+Note: **App uses entitlements for Mac App Store Folder Sandbox access so needs to be signed - Select Developer ID and a Team to build.**
 
 
 ### It's in Swift 2 / Xcode 7 and only for El Capitan
 Disappointed? Look to the future - embrace it.
 
 ### Features
-- Covers - 2015, 2014, 2013
+- 2015, 2014, 2013
 - Download and view PDFs, HD video, SD video and Code (2015 only)
 - Downloads can be stopped and resumed
-- Full description of sessions included
+- Full description of sessions
 - Searchable (title, description and session transcripts)
 - Show/Hide Descriptions
 - Visual progress of downloads
@@ -28,6 +28,7 @@ Disappointed? Look to the future - embrace it.
 - Transcript time clickable to jump video to timestamp
 - Transcript can auto follow video
 - When is fullscreen the thumbnail pdf view will collapse, hover by edge to redisplay
+- Session video progress saved
 - Download folder is monitored for changes
 
 ### Interesting Areas
@@ -42,9 +43,13 @@ PDF Merging (PDFMerge.swift)
 ### 3rd Party libraries
 I purposely avoided using external libraries as much as possible to expose myself to as many parts of AppKit and Cocoa as possible. Even AFNetworking?! I wanted to understand how it could be done with only NSURLSession as Apple seem to stress its usefulness and importance. So, only one 3rd party library is included as a shortcut to parse the html - Hpple (https://github.com/topfunky/hpple)
 
+### Where does the data come from?
+- Apple for Inital WWDC Session Data, PDFs, Videos, Code
+- NSHipster - ASCIIwwdc full-text transcripts api ([http://asciiwwdc.com](http://asciiwwdc.com))
+
 ### Where is the data stored?
 - Downloads are in the folder chosen in preferences (default: Downloads)
-- App data in Application Support in Containers i.e /Users/######/Library/Containers/com.serendipityappcompany.wwdcdownloader/Data/Library/Application Support/
+- App data in Application Support in Containers i.e /Users/######/Library/Containers/com.macosx.wwdcdownloader/Data/Library/Application Support/
 
 ### Support or Contact
 File bugs, request enhancements, issue pull requests
