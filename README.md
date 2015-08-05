@@ -48,7 +48,7 @@ I purposely avoided using external libraries as much as possible to expose mysel
 
 ### Where is the data stored?
 - Downloads are in the folder chosen in preferences (default: Downloads)
-- App data in Application Support in Containers i.e /Users/######/Library/Containers/com.serendipityappcompany.wwdcdownloader/Data/Library/Application Support/
+- App data in Application Support in Containers i.e /Users/######/Library/Containers/com.macosx.wwdcdownloader/Data/Library/Application Support/
 
 ### Support or Contact
 File bugs, request enhancements, issue pull requests
