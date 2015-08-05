@@ -1,5 +1,5 @@
 ## WWDC Downloader
-Started out as quick class to learn Swift 2 and Mac OSX Cocoa, it spiralled a little out of control.
+Started out as quick class to learn Swift 2, Mac OSX Cocoa and download some WWDC assets, it spiralled a little out of control.
 
 Note: **App uses entitlements for Mac App Store Folder Sandbox access so needs to be signed - Select Developer ID and a Team to build.**
 
