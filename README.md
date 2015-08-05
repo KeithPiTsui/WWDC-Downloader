@@ -1,4 +1,5 @@
-[http://serendipityapps.github.io/WWDC-Downloader/](http://serendipityapps.github.io/WWDC-Downloader/)
+### WWDC Downloader
+Started as quick class to learn some Swift 2 and Mac OSX Cocoa, it spiralled a little out of control.
 
 ### It's in Swift 2 / Xcode 7 and only for El Capitan
 Disappointed? Look to the future - embrace it.
