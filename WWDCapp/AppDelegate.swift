@@ -41,7 +41,14 @@ class AppDelegate: NSObject, NSApplicationDelegate {
                 
                 window.standardWindowButton(NSWindowButton.CloseButton)?.enabled = true
             })
-		}        
+			
+			// populate download url and check
+			if Preferences.sharedPreferences.downloadFolderURL == nil {
+				Preferences.sharedPreferences.populateFolderURL()
+				
+				guard let _ = Preferences.sharedPreferences.downloadFolderURL else { assertionFailure("No Directory Available to Download to! - You may need to choose a Team in xcode to sign the app as it needs entitlements for directory access!"); return }
+			}
+		}
     }
 
 	
