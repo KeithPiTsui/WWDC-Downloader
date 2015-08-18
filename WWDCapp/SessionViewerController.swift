@@ -275,8 +275,8 @@ class TranscriptViewController : NSViewController, NSTextFinderClient, WKScriptM
     
     private var baseURL : NSURL? {
         get {
-            if let path = transcriptURL?.path?.stringByDeletingLastPathComponent {
-                return NSURL.fileURLWithPath(path)
+            if let path = transcriptURL?.path {
+                return NSURL.fileURLWithPath((path as NSString).stringByDeletingLastPathComponent)
             }
             return nil
         }

@@ -143,6 +143,6 @@ class Searching {
 			}
 		}
 		
-        return folder.stringByAppendingPathComponent("SearchArchive")
+        return (folder as NSString).stringByAppendingPathComponent("SearchArchive")
     }
 }

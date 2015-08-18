@@ -530,8 +530,10 @@ class ViewController: NSViewController, NSURLSessionDelegate, NSURLSessionDataDe
                 NSWorkspace.sharedWorkspace().openURL(localFileURL)
             case .HD:
                 NSWorkspace.sharedWorkspace().openURL(localFileURL)
-            case .SampleCode:
-                NSWorkspace.sharedWorkspace().selectFile(localFileURL.filePathURL?.path, inFileViewerRootedAtPath: (localFileURL.filePathURL?.absoluteString.stringByDeletingLastPathComponent)!)
+            case .SampleCode:				
+				if let filePathAbsoluteString = localFileURL.filePathURL?.absoluteString, let path = localFileURL.filePathURL?.path {
+					NSWorkspace.sharedWorkspace().selectFile(path, inFileViewerRootedAtPath: (filePathAbsoluteString as NSString).stringByDeletingLastPathComponent)
+				}
             }
 		}
 	}
@@ -630,8 +632,10 @@ class ViewController: NSViewController, NSURLSessionDelegate, NSURLSessionDataDe
         if let fileInfo = menu.menuCalledFromView?.containedInCell?.fileArray?.first {
                 
             guard let localFileURL = fileInfo.localFileURL else { return }
-            
-            NSWorkspace.sharedWorkspace().selectFile(localFileURL.filePathURL?.path, inFileViewerRootedAtPath: (localFileURL.filePathURL?.absoluteString.stringByDeletingLastPathComponent)!)					
+			
+			if let filePathAbsoluteString = localFileURL.filePathURL?.absoluteString, let path = localFileURL.filePathURL?.path {
+				NSWorkspace.sharedWorkspace().selectFile(path, inFileViewerRootedAtPath: (filePathAbsoluteString as NSString).stringByDeletingLastPathComponent)
+			}
         }
 	}
 
@@ -1928,7 +1932,7 @@ class ViewController: NSViewController, NSURLSessionDelegate, NSURLSessionDataDe
     private func updateUIAfterCombiningPDFAndDisplay(url:NSURL?) {
         
         if let url = url {
-            NSWorkspace.sharedWorkspace().selectFile(url.path, inFileViewerRootedAtPath: url.absoluteString.stringByDeletingLastPathComponent)
+            NSWorkspace.sharedWorkspace().selectFile(url.path, inFileViewerRootedAtPath: (url.absoluteString as NSString).stringByDeletingLastPathComponent)
         }
 		
 		combineProgressLabel.stringValue = ""

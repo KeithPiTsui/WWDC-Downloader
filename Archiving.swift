@@ -66,6 +66,6 @@ class Archiving {
 		}
 		
 		let fileName = year.description
-		return folder.stringByAppendingPathComponent(fileName)
+		return (folder as NSString).stringByAppendingPathComponent(fileName)
 	}
 }

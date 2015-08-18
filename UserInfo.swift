@@ -147,6 +147,6 @@ class UserInfo {
 			}
 		}
 		
-		return folder.stringByAppendingPathComponent("UserInfo")
+		return (folder as NSString).stringByAppendingPathComponent("UserInfo")
 	}
 }
