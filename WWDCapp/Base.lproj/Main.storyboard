@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.Storyboard.XIB" version="3.0" toolsVersion="8164.2" systemVersion="15A235d" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" initialViewController="B8D-0N-5wS">
+<document type="com.apple.InterfaceBuilder3.Cocoa.Storyboard.XIB" version="3.0" toolsVersion="8187.4" systemVersion="15A263e" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" initialViewController="B8D-0N-5wS">
     <dependencies>
         <deployment identifier="macosx"/>
-        <plugIn identifier="com.apple.AVKitIBPlugin" version="8164.2"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="8164.2"/>
-        <plugIn identifier="com.apple.pdfkit.ibplugin" version="8164.2"/>
+        <plugIn identifier="com.apple.AVKitIBPlugin" version="8187.4"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="8187.4"/>
+        <plugIn identifier="com.apple.pdfkit.ibplugin" version="8187.4"/>
     </dependencies>
     <scenes>
         <!--Application-->
@@ -654,7 +654,7 @@ CA
                                             <outlet property="delegate" destination="YJS-3Z-qZ0" id="qTZ-78-5Z5"/>
                                         </connections>
                                     </searchField>
-                                    <segmentedControl verticalHuggingPriority="750" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="SoY-Cx-5tD">
+                                    <segmentedControl verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="SoY-Cx-5tD">
                                         <rect key="frame" x="266" y="7" width="57" height="25"/>
                                         <constraints>
                                             <constraint firstAttribute="height" constant="22" id="H94-EB-xkB"/>
@@ -954,9 +954,9 @@ CA
                                                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                                     <subviews>
                                                                         <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" translatesAutoresizingMaskIntoConstraints="NO" id="y3w-TZ-YZi" userLabel="Session ID Field">
-                                                                            <rect key="frame" x="-2" y="17" width="74" height="17"/>
+                                                                            <rect key="frame" x="0.0" y="17" width="70" height="17"/>
                                                                             <animations/>
-                                                                            <textFieldCell key="cell" lineBreakMode="truncatingTail" sendsActionOnEndEditing="YES" alignment="center" title="Table View Cell" id="erZ-ME-7Gm">
+                                                                            <textFieldCell key="cell" lineBreakMode="truncatingTail" sendsActionOnEndEditing="YES" alignment="center" title="Table View Cell" drawsBackground="YES" id="erZ-ME-7Gm">
                                                                                 <font key="font" metaFont="system"/>
                                                                                 <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
                                                                                 <color key="backgroundColor" white="1" alpha="0.0" colorSpace="calibratedWhite"/>
@@ -1033,12 +1033,12 @@ CA
                                                                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                                                             </clipView>
                                                                             <animations/>
-                                                                            <scroller key="horizontalScroller" hidden="YES" wantsLayer="YES" verticalHuggingPriority="750" doubleValue="1" horizontal="YES" id="mhi-I4-Qaz">
+                                                                            <scroller key="horizontalScroller" hidden="YES" verticalHuggingPriority="750" doubleValue="1" horizontal="YES" id="mhi-I4-Qaz">
                                                                                 <rect key="frame" x="-100" y="-100" width="87" height="18"/>
                                                                                 <autoresizingMask key="autoresizingMask"/>
                                                                                 <animations/>
                                                                             </scroller>
-                                                                            <scroller key="verticalScroller" hidden="YES" wantsLayer="YES" verticalHuggingPriority="750" horizontal="NO" id="9bK-NM-vjs">
+                                                                            <scroller key="verticalScroller" hidden="YES" verticalHuggingPriority="750" horizontal="NO" id="9bK-NM-vjs">
                                                                                 <rect key="frame" x="-100" y="-100" width="16" height="20"/>
                                                                                 <autoresizingMask key="autoresizingMask"/>
                                                                                 <animations/>
@@ -1072,12 +1072,12 @@ CA
                                                                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                                                             </clipView>
                                                                             <animations/>
-                                                                            <scroller key="horizontalScroller" hidden="YES" wantsLayer="YES" verticalHuggingPriority="750" doubleValue="1" horizontal="YES" id="BSA-pi-1DR">
+                                                                            <scroller key="horizontalScroller" hidden="YES" verticalHuggingPriority="750" doubleValue="1" horizontal="YES" id="BSA-pi-1DR">
                                                                                 <rect key="frame" x="-100" y="-100" width="87" height="18"/>
                                                                                 <autoresizingMask key="autoresizingMask"/>
                                                                                 <animations/>
                                                                             </scroller>
-                                                                            <scroller key="verticalScroller" hidden="YES" wantsLayer="YES" verticalHuggingPriority="750" horizontal="NO" id="aC2-k3-Mvy">
+                                                                            <scroller key="verticalScroller" hidden="YES" verticalHuggingPriority="750" horizontal="NO" id="aC2-k3-Mvy">
                                                                                 <rect key="frame" x="-100" y="-100" width="16" height="15"/>
                                                                                 <autoresizingMask key="autoresizingMask"/>
                                                                                 <animations/>
@@ -1087,12 +1087,12 @@ CA
                                                                             </connections>
                                                                         </scrollView>
                                                                         <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="0PV-Zl-SQ7">
-                                                                            <rect key="frame" x="3" y="0.0" width="396" height="11"/>
+                                                                            <rect key="frame" x="5" y="0.0" width="392" height="11"/>
                                                                             <animations/>
-                                                                            <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" alignment="right" title="Label" id="MYs-2M-dc0">
+                                                                            <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" alignment="right" title="Label" drawsBackground="YES" id="MYs-2M-dc0">
                                                                                 <font key="font" metaFont="miniSystem"/>
                                                                                 <color key="textColor" name="secondaryLabelColor" catalog="System" colorSpace="catalog"/>
-                                                                                <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
+                                                                                <color key="backgroundColor" white="1" alpha="0.0" colorSpace="calibratedWhite"/>
                                                                             </textFieldCell>
                                                                         </textField>
                                                                     </subviews>
@@ -1155,9 +1155,9 @@ CA
                                                                                     </connections>
                                                                                 </button>
                                                                                 <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="djj-Az-BU3">
-                                                                                    <rect key="frame" x="1" y="14" width="98" height="17"/>
+                                                                                    <rect key="frame" x="3" y="14" width="94" height="17"/>
                                                                                     <animations/>
-                                                                                    <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" alignment="center" id="Jsd-Oo-x4U">
+                                                                                    <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" alignment="center" drawsBackground="YES" id="Jsd-Oo-x4U">
                                                                                         <font key="font" metaFont="smallSystem"/>
                                                                                         <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
                                                                                         <color key="backgroundColor" white="1" alpha="0.0" colorSpace="calibratedWhite"/>
@@ -1255,12 +1255,12 @@ CA
                                                                                     </connections>
                                                                                 </button>
                                                                                 <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="uwa-vg-dVW">
-                                                                                    <rect key="frame" x="1" y="14" width="98" height="17"/>
+                                                                                    <rect key="frame" x="3" y="14" width="94" height="17"/>
                                                                                     <animations/>
-                                                                                    <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" alignment="center" id="rDb-Wk-z0d">
+                                                                                    <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" alignment="center" drawsBackground="YES" id="rDb-Wk-z0d">
                                                                                         <font key="font" metaFont="smallSystem"/>
                                                                                         <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
-                                                                                        <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                                                                        <color key="backgroundColor" white="1" alpha="0.0" colorSpace="calibratedWhite"/>
                                                                                     </textFieldCell>
                                                                                 </textField>
                                                                                 <progressIndicator wantsLayer="YES" maxValue="1" style="bar" translatesAutoresizingMaskIntoConstraints="NO" id="iuT-PE-Bxv">
@@ -1355,12 +1355,12 @@ CA
                                                                                     </connections>
                                                                                 </button>
                                                                                 <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="RTl-b9-Pcu">
-                                                                                    <rect key="frame" x="1" y="14" width="98" height="17"/>
+                                                                                    <rect key="frame" x="3" y="14" width="94" height="17"/>
                                                                                     <animations/>
-                                                                                    <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" alignment="center" id="A9B-B0-997">
+                                                                                    <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" alignment="center" drawsBackground="YES" id="A9B-B0-997">
                                                                                         <font key="font" metaFont="smallSystem"/>
                                                                                         <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
-                                                                                        <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                                                                        <color key="backgroundColor" white="1" alpha="0.0" colorSpace="calibratedWhite"/>
                                                                                     </textFieldCell>
                                                                                 </textField>
                                                                                 <progressIndicator wantsLayer="YES" maxValue="1" style="bar" translatesAutoresizingMaskIntoConstraints="NO" id="YQ9-Gz-LAK">
@@ -1455,12 +1455,12 @@ CA
                                                                                     </connections>
                                                                                 </button>
                                                                                 <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="dS8-HG-4eW">
-                                                                                    <rect key="frame" x="1" y="14" width="98" height="17"/>
+                                                                                    <rect key="frame" x="3" y="14" width="94" height="17"/>
                                                                                     <animations/>
-                                                                                    <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" alignment="center" id="gD9-Fu-OyN">
+                                                                                    <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" alignment="center" drawsBackground="YES" id="gD9-Fu-OyN">
                                                                                         <font key="font" metaFont="smallSystem"/>
                                                                                         <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
-                                                                                        <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                                                                        <color key="backgroundColor" white="1" alpha="0.0" colorSpace="calibratedWhite"/>
                                                                                     </textFieldCell>
                                                                                 </textField>
                                                                                 <progressIndicator wantsLayer="YES" maxValue="1" style="bar" translatesAutoresizingMaskIntoConstraints="NO" id="nee-rf-5ea">
@@ -1532,12 +1532,12 @@ CA
                                             <nil key="backgroundColor"/>
                                         </clipView>
                                         <animations/>
-                                        <scroller key="horizontalScroller" hidden="YES" wantsLayer="YES" verticalHuggingPriority="750" horizontal="YES" id="EQ4-3v-gQf">
+                                        <scroller key="horizontalScroller" hidden="YES" verticalHuggingPriority="750" horizontal="YES" id="EQ4-3v-gQf">
                                             <rect key="frame" x="1" y="463" width="888" height="16"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <animations/>
                                         </scroller>
-                                        <scroller key="verticalScroller" hidden="YES" wantsLayer="YES" verticalHuggingPriority="750" horizontal="NO" id="t7w-2f-sjm">
+                                        <scroller key="verticalScroller" hidden="YES" verticalHuggingPriority="750" horizontal="NO" id="t7w-2f-sjm">
                                             <rect key="frame" x="224" y="17" width="15" height="102"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <animations/>

@@ -70,8 +70,8 @@ class SessionViewerWindowController : NSWindowController, NSWindowDelegate {
 			window.titleVisibility = NSWindowTitleVisibility.Hidden
 		}
 		
-		segmentedPaneControl.setImage(NSImage(imageLiteral: "bottom_button")?.tintImageToBrightBlurColor(), forSegment: 0)
-		segmentedPaneControl.setImage(NSImage(imageLiteral: "pdf_Button")?.tintImageToBrightBlurColor(), forSegment: 1)
+		segmentedPaneControl.setImage(NSImage(named: "bottom_button")?.tintImageToBrightBlurColor(), forSegment: 0)
+		segmentedPaneControl.setImage(NSImage(named: "pdf_Button")?.tintImageToBrightBlurColor(), forSegment: 1)
         
         NSNotificationCenter.defaultCenter().postNotificationName(SessionViewerDidLaunchNotification, object: nil)
 
@@ -141,12 +141,12 @@ class SessionViewerWindowController : NSWindowController, NSWindowDelegate {
 			if splitItems.last!.collapsed == true {
 				splitItems.last!.animator().collapsed = false
 				
-				sender.setImage(NSImage(imageLiteral: "bottom_button")?.tintImageToBrightBlurColor(), forSegment: 0)
+				sender.setImage(NSImage(named: "bottom_button")?.tintImageToBrightBlurColor(), forSegment: 0)
 			}
 			else {
 				splitItems.last!.animator().collapsed = true
 				
-				sender.setImage(NSImage(imageLiteral: "bottom_button"), forSegment: 0)
+				sender.setImage(NSImage(named: "bottom_button"), forSegment: 0)
 			}
 		}
 		
@@ -157,12 +157,12 @@ class SessionViewerWindowController : NSWindowController, NSWindowDelegate {
 			if splitItems.last!.collapsed == true {
 				splitItems.last!.animator().collapsed = false
 				
-				sender.setImage(NSImage(imageLiteral: "pdf_Button")?.tintImageToBrightBlurColor(), forSegment: 1)
+				sender.setImage(NSImage(named: "pdf_Button")?.tintImageToBrightBlurColor(), forSegment: 1)
 			}
 			else {
 				splitItems.last!.animator().collapsed = true
 				
-				sender.setImage(NSImage(imageLiteral: "pdf_Button"), forSegment: 1)
+				sender.setImage(NSImage(named: "pdf_Button"), forSegment: 1)
 			}
 		}
 	}

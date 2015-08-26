@@ -52,7 +52,7 @@ class DockProgressBar : NSProgressIndicator {
         let widthOfProgress = floor(CGFloat(insideRect.size.width) * (CGFloat(self.doubleValue) / CGFloat(self.maxValue)))
         var rectToDraw = insideRect
         rectToDraw.size.width = widthOfProgress
-        NSColor(colorLiteralRed: 0.2, green: 0.6, blue: 1, alpha: 1).set()
+        NSColor(red: 0.2, green: 0.6, blue: 1.0, alpha: 1.0).set()
         NSRectFill(rectToDraw)
     }
     

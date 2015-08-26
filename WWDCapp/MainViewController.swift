@@ -428,10 +428,10 @@ class ViewController: NSViewController, NSURLSessionDelegate, NSURLSessionDataDe
 	@IBAction func allPDFChecked(sender: NSButton) {
 		
 		resetDownloadUI()
-        
-        allWWDCSessionsArray.map { wwdcSession in
-            wwdcSession.pdfFile?.shouldDownloadFile = Bool(sender.state)
-        }
+		
+		for wwdcSession in allWWDCSessionsArray {
+			wwdcSession.pdfFile?.shouldDownloadFile = Bool(sender.state)
+		}
 		
 		myTableView.reloadDataForRowIndexes(NSIndexSet(indexesInRange: NSMakeRange(0,allWWDCSessionsArray.count)) , columnIndexes:NSIndexSet(index: 2))
 		
@@ -444,10 +444,9 @@ class ViewController: NSViewController, NSURLSessionDelegate, NSURLSessionDataDe
 		
 		resetDownloadUI()
 
-        allWWDCSessionsArray.map { wwdcSession in
-            wwdcSession.sdFile?.shouldDownloadFile = Bool(sender.state)
-        }
-
+		for wwdcSession in allWWDCSessionsArray {
+			wwdcSession.sdFile?.shouldDownloadFile = Bool(sender.state)
+		}
 		
 		myTableView.reloadDataForRowIndexes(NSIndexSet(indexesInRange: NSMakeRange(0,allWWDCSessionsArray.count)) , columnIndexes:NSIndexSet(index: 3))
 		
@@ -460,11 +459,10 @@ class ViewController: NSViewController, NSURLSessionDelegate, NSURLSessionDataDe
 		
 		resetDownloadUI()
 
-        allWWDCSessionsArray.map { wwdcSession in
-            wwdcSession.hdFile?.shouldDownloadFile = Bool(sender.state)
-        }
+		for wwdcSession in allWWDCSessionsArray {
+			wwdcSession.hdFile?.shouldDownloadFile = Bool(sender.state)
+		}
 
-		
 		myTableView.reloadDataForRowIndexes(NSIndexSet(indexesInRange: NSMakeRange(0,allWWDCSessionsArray.count)) , columnIndexes:NSIndexSet(index: 4))
 		
 		checkDownloadButtonState()
@@ -1102,15 +1100,6 @@ class ViewController: NSViewController, NSURLSessionDelegate, NSURLSessionDataDe
 			
 			cell.textField?.stringValue = wwdcSession.sessionID
 			
-            if row % 2 == 0
-            {
-                cell.textField?.backgroundColor = NSColor.whiteColor()
-            }
-            else {
-                let rowView = tableView.rowViewAtRow(row, makeIfNecessary: false)
-                cell.textField?.backgroundColor = rowView?.backgroundColor
-            }
-            
 			cell.updateUserInfo(UserInfo.sharedManager.userInfo(wwdcSession))
             
 			return cell
@@ -1141,15 +1130,7 @@ class ViewController: NSViewController, NSURLSessionDelegate, NSURLSessionDataDe
 			if let file = wwdcSession.pdfFile {
 				cell.fileArray = [file]
 				cell.updateCell(isYearInfoFetchComplete, isDownloadSessionActive: isDownloading)
-                
-                if row % 2 == 0
-                {
-                    cell.label?.backgroundColor = NSColor.whiteColor()
-                }
-                else {
-                    let rowView = tableView.rowViewAtRow(row, makeIfNecessary: false)
-                    cell.label?.backgroundColor = rowView?.backgroundColor
-                }
+				
 			}
             			
 			return cell
@@ -1164,14 +1145,6 @@ class ViewController: NSViewController, NSURLSessionDelegate, NSURLSessionDataDe
 				cell.fileArray = [file]
 				cell.updateCell(isYearInfoFetchComplete, isDownloadSessionActive: isDownloading)
                 
-                if row % 2 == 0
-                {
-                    cell.label?.backgroundColor = NSColor.whiteColor()
-                }
-                else {
-                    let rowView = tableView.rowViewAtRow(row, makeIfNecessary: false)
-                    cell.label?.backgroundColor = rowView?.backgroundColor
-                }
 			}
 			
 			return cell
@@ -1186,14 +1159,6 @@ class ViewController: NSViewController, NSURLSessionDelegate, NSURLSessionDataDe
 				cell.fileArray = [file]
 				cell.updateCell(isYearInfoFetchComplete, isDownloadSessionActive: isDownloading)
                 
-                if row % 2 == 0
-                {
-                    cell.label?.backgroundColor = NSColor.whiteColor()
-                }
-                else {
-                    let rowView = tableView.rowViewAtRow(row, makeIfNecessary: false)
-                    cell.label?.backgroundColor = rowView?.backgroundColor
-                }
 			}
         
 			return cell
@@ -1208,14 +1173,6 @@ class ViewController: NSViewController, NSURLSessionDelegate, NSURLSessionDataDe
 				cell.fileArray = wwdcSession.sampleCodeArray
 				cell.updateCell(isYearInfoFetchComplete, isDownloadSessionActive: isDownloading)
                 
-                if row % 2 == 0
-                {
-                    cell.label?.backgroundColor = NSColor.whiteColor()
-                }
-                else {
-                    let rowView = tableView.rowViewAtRow(row, makeIfNecessary: false)
-                    cell.label?.backgroundColor = rowView?.backgroundColor
-                }
 			}
 			
 			return cell

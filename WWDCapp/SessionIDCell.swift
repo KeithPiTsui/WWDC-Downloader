@@ -21,11 +21,11 @@ class SessionIDCell: NSTableCellView {
                 
         switch userInfo.currentProgress {
         case 1.0:
-            imageView?.image = (userInfo.markAsFavorite ? NSImage(imageLiteral: "Star-Outline")?.tintImageToBrightBlurColor() : nil)
+            imageView?.image = (userInfo.markAsFavorite ? NSImage(named: "Star-Outline")?.tintImageToBrightBlurColor() : nil)
         case 0:
-            imageView?.image = (userInfo.markAsFavorite ? NSImage(imageLiteral: "Star-Solid")?.tintImageToBrightBlurColor() : NSImage(imageLiteral: "Circle-Solid")?.tintImageToBrightBlurColor())
+            imageView?.image = (userInfo.markAsFavorite ? NSImage(named: "Star-Solid")?.tintImageToBrightBlurColor() : NSImage(named: "Circle-Solid")?.tintImageToBrightBlurColor())
         default:
-            imageView?.image = (userInfo.markAsFavorite ? NSImage(imageLiteral: "Star-Half")?.tintImageToBrightBlurColor() : NSImage(imageLiteral: "Circle-Half")?.tintImageToBrightBlurColor())
+            imageView?.image = (userInfo.markAsFavorite ? NSImage(named: "Star-Half")?.tintImageToBrightBlurColor() : NSImage(named: "Circle-Half")?.tintImageToBrightBlurColor())
         }
 
     }
